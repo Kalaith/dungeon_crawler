@@ -7,42 +7,43 @@ export default {
   theme: {
     extend: {
       colors: {
-        'cream': {
-          50: '#fcfcf9',
-          100: '#fffffd',
+        'parchment': {
+          100: '#f4e4bc', // Lightest
+          200: '#e6d2a0',
+          300: '#d4b483', // Base parchment
+          400: '#c19a6b',
+          500: '#a37f55',
         },
-        'charcoal': {
-          700: '#1f2121',
-          800: '#262828',
+        'stone': {
+          100: '#9ca3af',
+          200: '#6b7280',
+          300: '#4b5563',
+          400: '#374151',
+          500: '#1f2937', // Base stone
+          600: '#111827',
+          700: '#0f1115', // Deep stone
         },
-        'teal': {
-          300: '#32b8c6',
-          400: '#2da6b2', 
-          500: '#21808d',
-          600: '#1d7480',
-          700: '#1a6873',
+        'dungeon': {
+          800: '#1a1a1a',
+          900: '#0a0a0a', // Void
         },
-        'slate': {
-          500: '#626c71',
-          900: '#13343b',
+        'gold': {
+          400: '#facc15',
+          500: '#eab308', // Base gold
+          600: '#ca8a04',
         },
-        'gray': {
-          200: '#f5f5f5',
-          300: '#a7a9a9',
-          400: '#777c7c',
+        'blood': {
+          500: '#ef4444', // Brighter red for text
+          600: '#dc2626',
         },
-        'red': {
-          400: '#ff5459',
-          500: '#c0152f',
-        },
-        'orange': {
-          400: '#e6815f',
-          500: '#a84b2f',
+        'mana': {
+          500: '#60a5fa', // Brighter blue for text
+          600: '#3b82f6',
         }
       },
       fontFamily: {
-        'sans': ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-        'mono': ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+        'sans': ['"Press Start 2P"', 'Inter', 'sans-serif'], // Fallback to Inter
+        'mono': ['"VT323"', 'monospace'],
       }
     },
   },

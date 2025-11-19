@@ -18,7 +18,7 @@ export const CombatInterface: React.FC = () => {
     console.log('InCombat:', inCombat);
     console.log('Turn order length:', combatTurnOrder.length);
     console.log('Current turn index:', currentTurn);
-    
+
     if (inCombat && combatTurnOrder.length > 0) {
       const currentParticipant = combatTurnOrder[currentTurn];
       console.log('Current participant:', {
@@ -28,17 +28,17 @@ export const CombatInterface: React.FC = () => {
         alive: currentParticipant?.type === 'party' ? (currentParticipant.character as Character).alive : 'N/A',
         hp: currentParticipant?.character.hp
       });
-      
+
       if (currentParticipant) {
         if (currentParticipant.type === 'enemy') {
           console.log('👹 Processing ENEMY turn');
-          
+
           // Prevent multiple processTurn calls for the same turn
           if (lastProcessedTurn.current === currentTurn) {
             console.log('🚫 BLOCKED: Already processed enemy turn', currentTurn);
             return;
           }
-          
+
           console.log('✅ ALLOWING: Enemy turn', currentTurn, '(last processed:', lastProcessedTurn.current, ')');
           lastProcessedTurn.current = currentTurn;
           processTurn();
@@ -50,10 +50,10 @@ export const CombatInterface: React.FC = () => {
             alive: character.alive,
             hp: character.hp
           });
-          
+
           if (!character.alive || character.hp <= 0) {
             console.log('❌ Party member is unconscious, checking if should skip...');
-            
+
             // Check if all party members are unconscious before skipping
             const alivePartyMembers = combatTurnOrder.filter(p => {
               if (p.type === 'party') {
@@ -62,14 +62,14 @@ export const CombatInterface: React.FC = () => {
               }
               return false;
             });
-            
+
             console.log('Alive party members:', alivePartyMembers.length);
-            
+
             if (alivePartyMembers.length === 0) {
               console.log('⚠️ All party members defeated - not skipping');
               return;
             }
-            
+
             console.log('🚀 Skipping unconscious party member in 100ms');
             setTimeout(() => nextTurn(), 100);
           } else {
@@ -90,13 +90,13 @@ export const CombatInterface: React.FC = () => {
   if (!inCombat) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur">
-      <div className="bg-cream-100 dark:bg-charcoal-800 rounded-xl shadow-lg border border-gray-400/20 w-[90%] max-w-4xl max-h-[90vh] overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90">
+      <div className="bg-stone-600 rounded-sm shadow-2xl border-4 border-stone-400 w-[95%] max-w-5xl max-h-[95vh] overflow-hidden flex flex-col">
         <CombatHeader />
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 h-96">
+
+        <div className="grid grid-cols-1 md:grid-cols-2 flex-1 min-h-0">
           <EnemyDisplay />
-          <div className="flex flex-col p-5">
+          <div className="flex flex-col p-4 bg-stone-700 border-l-4 border-stone-500">
             <CombatLog />
             <ActionMenu />
           </div>

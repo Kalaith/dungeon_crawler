@@ -53,7 +53,8 @@ export const CharacterCreationModal: React.FC<CharacterCreationModalProps> = ({
       alive: true,
       gold: 50, // Starting gold
       equipment: {}, // No starting equipment
-      abilities: selectedClass.abilities.filter(a => a.unlockLevel <= 1) // Level 1 abilities
+      abilities: selectedClass.abilities.filter(a => a.unlockLevel <= 1), // Level 1 abilities
+      statusEffects: [] // No starting status effects
     };
 
     onCreateCharacter(character);

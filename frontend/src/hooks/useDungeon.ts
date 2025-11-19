@@ -1,7 +1,7 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { useUIStore } from '../stores/uiStore';
-import { dungeonMap, enemies } from '../data/gameData';
+import { enemies } from '../data/gameData';
 import type { Direction } from '../types';
 
 export const useDungeon = () => {
@@ -15,17 +15,38 @@ export const useDungeon = () => {
     inCombat,
     startCombat,
     generateLoot,
-    addGoldToParty
+    addGoldToParty,
+    currentDungeonMap,
+    generateFloor,
+    changeFloor,
+    currentFloor
   } = useGameStore();
 
   const { showMessage } = useUIStore();
+  const hasGenerated = useRef(false);
+
+  // Generate initial floor if no dungeon exists
+  useEffect(() => {
+    if (!currentDungeonMap && !hasGenerated.current) {
+      console.log('🏗️ Generating initial dungeon floor 1...');
+      hasGenerated.current = true;
+      try {
+        generateFloor(1);
+        console.log('✅ Dungeon generation complete');
+      } catch (error) {
+        console.error('❌ Error generating dungeon:', error);
+        hasGenerated.current = false; // Reset on error
+      }
+    }
+  }, [currentDungeonMap, generateFloor]); // Include all dependencies
 
   const getTile = useCallback((x: number, y: number): string => {
-    if (y < 0 || y >= dungeonMap.layout.length || x < 0 || x >= dungeonMap.layout[0].length) {
+    if (!currentDungeonMap) return '#';
+    if (y < 0 || y >= currentDungeonMap.layout.length || x < 0 || x >= currentDungeonMap.layout[0].length) {
       return '#';
     }
-    return dungeonMap.layout[y][x];
-  }, []);
+    return currentDungeonMap.layout[y][x];
+  }, [currentDungeonMap]);
 
   const getDirectionVector = useCallback((direction: Direction): [number, number] => {
     const directions: [number, number][] = [[0, -1], [1, 0], [0, 1], [-1, 0]]; // N, E, S, W
@@ -63,24 +84,40 @@ export const useDungeon = () => {
 
       // Handle special tiles
       if (tile === '<') {
-        showMessage('You found stairs going up to the previous floor!');
+        showMessage('You found stairs going up! Press Enter to ascend.');
+        // Check if player wants to go up
+        setTimeout(() => {
+          if (currentFloor > 1) {
+            changeFloor('up');
+            showMessage(`Ascending to floor ${currentFloor - 1}...`);
+          } else {
+            showMessage('These stairs lead to the surface.');
+          }
+        }, 100);
       } else if (tile === '>') {
-        showMessage('You found stairs going down to the next floor!');
+        showMessage('You found stairs going down! Press Enter to descend.');
+        setTimeout(() => {
+          changeFloor('down');
+          showMessage(`Descending to floor ${currentFloor + 1}...`);
+        }, 100);
       } else if (tile === '$') {
         showMessage('You found treasure!');
       } else if (tile === '+') {
         showMessage('You opened a door!');
       }
 
-      // Random encounter check
-      if (Math.random() < 0.15 && tile === '.') {
+      // Random encounter check (scaled by floor)
+      const encounterChance = 0.10 + (currentFloor * 0.02);
+      if (Math.random() < encounterChance && tile === '.') {
         setTimeout(() => {
-          const enemy = {...enemies[Math.floor(Math.random() * enemies.length)]};
+          // Scale enemies by floor
+          const floorEnemies = enemies.filter(e => e.level <= currentFloor + 1);
+          const enemy = { ...floorEnemies[Math.floor(Math.random() * floorEnemies.length)] };
           startCombat(enemy);
         }, 500);
       } else if (tile === '$') {
-        // Generate treasure loot
-        const loot = generateLoot(1); // Base treasure level
+        // Generate treasure loot scaled by floor
+        const loot = generateLoot(currentFloor);
         addGoldToParty(loot.gold);
         showMessage(`You found ${loot.gold} gold!`);
         if (loot.items.length > 0) {
@@ -88,7 +125,7 @@ export const useDungeon = () => {
         }
       }
     }
-  }, [inCombat, playerPosition, playerFacing, getDirectionVector, getTile, setPlayerPosition, addExploredTile, incrementStepCount, showMessage, startCombat, generateLoot, addGoldToParty]);
+  }, [inCombat, playerPosition, playerFacing, getDirectionVector, getTile, setPlayerPosition, addExploredTile, incrementStepCount, showMessage, startCombat, generateLoot, addGoldToParty, changeFloor, currentFloor]);
 
   const moveBackward = useCallback(() => {
     if (inCombat) return;

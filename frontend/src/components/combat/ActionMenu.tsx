@@ -16,7 +16,7 @@ export const ActionMenu: React.FC = () => {
   }
 
   const character = currentParticipant.character as Character;
-  const availableAbilities = character.abilities.filter(ability => 
+  const availableAbilities = character.abilities.filter(ability =>
     character.mp >= ability.mpCost
   );
 
@@ -68,45 +68,41 @@ export const ActionMenu: React.FC = () => {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-3">
-        <h4 className="text-base font-medium text-slate-900 dark:text-gray-200">
+      <div className="flex items-center justify-between mb-3 border-b-2 border-stone-500 pb-1">
+        <h4 className="text-base font-bold text-gold-500 tracking-wide">
           {character.name}'s Turn
         </h4>
-        <div className="text-xs text-slate-500 dark:text-gray-400">
+        <div className="text-xs font-mono text-mana-500">
           MP: {character.mp}/{character.maxMp}
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-2">
-        <Button
-          variant="secondary"
+      <div className="grid grid-cols-2 gap-3">
+        <button
           onClick={() => handleCombatAction('attack')}
-          className="text-sm font-medium"
+          className="p-3 bg-stone-600 border-2 border-stone-400 text-parchment-100 font-bold text-sm uppercase tracking-wider hover:bg-stone-500 hover:border-gold-500 hover:text-gold-400 transition-colors active:translate-y-0.5 shadow-md"
         >
-          Attack
-        </Button>
-        <Button
-          variant="secondary"
+          ⚔️ Attack
+        </button>
+        <button
           onClick={() => setShowingAbilities(true)}
-          className="text-sm font-medium"
           disabled={availableAbilities.length === 0}
+          className="p-3 bg-stone-600 border-2 border-stone-400 text-parchment-100 font-bold text-sm uppercase tracking-wider hover:bg-stone-500 hover:border-gold-500 hover:text-gold-400 transition-colors active:translate-y-0.5 shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
           title={availableAbilities.length === 0 ? "No abilities available" : "Use special abilities"}
         >
-          Abilities ({availableAbilities.length})
-        </Button>
-        <Button
-          variant="secondary"
+          ✨ Magic
+        </button>
+        <button
           onClick={() => handleCombatAction('defend')}
-          className="text-sm font-medium"
+          className="p-3 bg-stone-600 border-2 border-stone-400 text-parchment-100 font-bold text-sm uppercase tracking-wider hover:bg-stone-500 hover:border-gold-500 hover:text-gold-400 transition-colors active:translate-y-0.5 shadow-md"
         >
-          Defend
-        </Button>
-        <Button
-          variant="secondary"
+          🛡️ Defend
+        </button>
+        <button
           onClick={() => handleCombatAction('escape')}
-          className="text-sm font-medium"
+          className="p-3 bg-stone-600 border-2 border-stone-400 text-parchment-100 font-bold text-sm uppercase tracking-wider hover:bg-stone-500 hover:border-gold-500 hover:text-gold-400 transition-colors active:translate-y-0.5 shadow-md"
         >
-          Escape
-        </Button>
+          🏃 Flee
+        </button>
       </div>
     </div>
   );

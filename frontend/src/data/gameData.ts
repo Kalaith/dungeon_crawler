@@ -20,7 +20,7 @@ export const abilities: Record<string, Ability> = {
     effect: { type: 'buff_def', duration: 3, value: 5 },
     unlockLevel: 2
   },
-  
+
   // Mage abilities
   fireball: {
     id: 'fireball',
@@ -41,7 +41,7 @@ export const abilities: Record<string, Ability> = {
     effect: { type: 'sleep', duration: 1 },
     unlockLevel: 3
   },
-  
+
   // Cleric abilities
   heal: {
     id: 'heal',
@@ -61,7 +61,7 @@ export const abilities: Record<string, Ability> = {
     target: 'all_allies',
     unlockLevel: 4
   },
-  
+
   // Rogue abilities
   backstab: {
     id: 'backstab',
@@ -82,7 +82,7 @@ export const abilities: Record<string, Ability> = {
     effect: { type: 'poison', duration: 3, value: 5 },
     unlockLevel: 3
   },
-  
+
   // Archer abilities
   aimed_shot: {
     id: 'aimed_shot',
@@ -147,6 +147,118 @@ export const gameData: GameData = {
   }
 };
 
+export const craftingMaterials: Record<string, Item> = {
+  iron_ore: {
+    id: 'iron_ore',
+    name: 'Iron Ore',
+    type: 'material',
+    rarity: 'common',
+    stats: {},
+    value: 5,
+    description: 'Raw iron ore, used for smithing.'
+  },
+  leather_scraps: {
+    id: 'leather_scraps',
+    name: 'Leather Scraps',
+    type: 'material',
+    rarity: 'common',
+    stats: {},
+    value: 4,
+    description: 'Scraps of leather, used for armor.'
+  },
+  magic_dust: {
+    id: 'magic_dust',
+    name: 'Magic Dust',
+    type: 'material',
+    rarity: 'rare',
+    stats: {},
+    value: 15,
+    description: 'Sparkling dust with magical properties.'
+  },
+  ancient_rune: {
+    id: 'ancient_rune',
+    name: 'Ancient Rune',
+    type: 'material',
+    rarity: 'epic',
+    stats: {},
+    value: 50,
+    description: 'A stone carved with ancient power.'
+  }
+};
+
+export const craftingRecipes: import('../types').CraftingRecipe[] = [
+  {
+    id: 'craft_iron_sword',
+    resultItem: {
+      id: 'crafted_iron_sword',
+      name: 'Reinforced Iron Sword',
+      type: 'weapon',
+      rarity: 'common',
+      stats: { str: 5 },
+      value: 35,
+      description: 'A well-crafted iron sword.'
+    },
+    materials: [
+      { materialId: 'iron_ore', count: 3 }
+    ],
+    goldCost: 20,
+    levelReq: 1
+  },
+  {
+    id: 'craft_leather_armor',
+    resultItem: {
+      id: 'crafted_leather_armor',
+      name: 'Studded Leather',
+      type: 'armor',
+      rarity: 'common',
+      stats: { def: 4, hp: 15 },
+      value: 30,
+      description: 'Leather armor reinforced with metal studs.'
+    },
+    materials: [
+      { materialId: 'leather_scraps', count: 3 }
+    ],
+    goldCost: 20,
+    levelReq: 1
+  },
+  {
+    id: 'craft_steel_sword',
+    resultItem: {
+      id: 'crafted_steel_sword',
+      name: 'Fine Steel Sword',
+      type: 'weapon',
+      rarity: 'rare',
+      stats: { str: 8, agi: 3 },
+      value: 100,
+      description: 'A finely balanced steel sword.'
+    },
+    materials: [
+      { materialId: 'iron_ore', count: 5 },
+      { materialId: 'magic_dust', count: 1 }
+    ],
+    goldCost: 100,
+    levelReq: 3
+  },
+  {
+    id: 'craft_magic_wand',
+    resultItem: {
+      id: 'crafted_magic_wand',
+      name: 'Apprentice Wand',
+      type: 'weapon',
+      rarity: 'rare',
+      stats: { mp: 20, luc: 5 },
+      value: 80,
+      description: 'A wand that channels magical energy.'
+    },
+    materials: [
+      { materialId: 'magic_dust', count: 3 },
+      { materialId: 'iron_ore', count: 1 }
+    ],
+    goldCost: 50,
+    levelReq: 2
+  }
+];
+
 export const lootTables: Record<string, Item[]> = {
   common: [
     {
@@ -175,7 +287,9 @@ export const lootTables: Record<string, Item[]> = {
       stats: {},
       value: 10,
       description: 'Restores 30 HP'
-    }
+    },
+    craftingMaterials.iron_ore,
+    craftingMaterials.leather_scraps
   ],
   rare: [
     {
@@ -195,41 +309,130 @@ export const lootTables: Record<string, Item[]> = {
       stats: { def: 5, hp: 20 },
       value: 60,
       description: 'Interlocked metal rings'
-    }
+    },
+    craftingMaterials.magic_dust
   ]
 };
 
-export const enemies: Enemy[] = [
-  { name: "Goblin", level: 1, hp: 25, maxHp: 25, exp: 15, str: 8, def: 4, agi: 12 },
-  { name: "Skeleton", level: 2, hp: 35, maxHp: 35, exp: 25, str: 10, def: 8, agi: 6 },
-  { name: "Orc", level: 3, hp: 50, maxHp: 50, exp: 40, str: 15, def: 10, agi: 8 },
-  { name: "Troll", level: 4, hp: 80, maxHp: 80, exp: 60, str: 20, def: 15, agi: 5 },
-  { name: "Dark Mage", level: 5, hp: 65, maxHp: 65, exp: 75, str: 12, def: 8, agi: 15 }
-];
-
+// Deprecated: Use generated dungeon maps instead
 export const dungeonMap: DungeonMap = {
   width: 20,
   height: 20,
-  layout: [
-    "####################",
-    "#..................#",
-    "#.####.......####..#",
-    "#.#..#.......#..#..#",
-    "#.#..+.......+..#..#",
-    "#.####.......####..#",
-    "#..................#",
-    "#.......<..........#",
-    "#..................#",
-    "#.####.......####..#",
-    "#.#..#.......#..#..#",
-    "#.#..+.......+..#..#",
-    "#.####.......####..#",
-    "#..................#",
-    "#..................#",
-    "#.####.......####..#",
-    "#.#$##.......##$#..#",
-    "#..................#",
-    "#.........>........#",
-    "####################"
-  ]
+  layout: [],
+  floor: 1,
+  playerStart: { x: 1, y: 1 },
+  treasureLocations: []
 };
+
+// Enemy abilities
+const enemyAbilities: Record<string, Ability> = {
+  goblin_stab: {
+    id: 'goblin_stab',
+    name: 'Vicious Stab',
+    description: 'A quick stabbing attack',
+    mpCost: 0,
+    damage: 1.3,
+    target: 'enemy',
+    unlockLevel: 1
+  },
+  skeleton_bone_throw: {
+    id: 'skeleton_bone_throw',
+    name: 'Bone Throw',
+    description: 'Throws a bone at the enemy, inflicting poison',
+    mpCost: 0,
+    damage: 1.2,
+    target: 'enemy',
+    effect: { type: 'poison', duration: 3, value: 3 },
+    unlockLevel: 1
+  },
+  orc_smash: {
+    id: 'orc_smash',
+    name: 'Brutal Smash',
+    description: 'A devastating overhead smash',
+    mpCost: 0,
+    damage: 1.6,
+    target: 'enemy',
+    unlockLevel: 1
+  },
+  troll_regenerate: {
+    id: 'troll_regenerate',
+    name: 'Regenerate',
+    description: 'Heals some HP',
+    mpCost: 0,
+    heal: 15,
+    target: 'self',
+    unlockLevel: 1
+  },
+  dark_mage_shadow_bolt: {
+    id: 'dark_mage_shadow_bolt',
+    name: 'Shadow Bolt',
+    description: 'Fires a bolt of dark energy',
+    mpCost: 0,
+    damage: 2.0,
+    target: 'enemy',
+    unlockLevel: 1
+  }
+};
+
+export const enemies: Enemy[] = [
+  {
+    name: "Goblin",
+    level: 1,
+    hp: 25,
+    maxHp: 25,
+    exp: 15,
+    str: 8,
+    def: 4,
+    agi: 12,
+    abilities: [enemyAbilities.goblin_stab],
+    statusEffects: []
+  },
+  {
+    name: "Skeleton",
+    level: 2,
+    hp: 35,
+    maxHp: 35,
+    exp: 25,
+    str: 10,
+    def: 8,
+    agi: 6,
+    abilities: [enemyAbilities.skeleton_bone_throw],
+    statusEffects: []
+  },
+  {
+    name: "Orc",
+    level: 3,
+    hp: 50,
+    maxHp: 50,
+    exp: 40,
+    str: 15,
+    def: 10,
+    agi: 8,
+    abilities: [enemyAbilities.orc_smash],
+    statusEffects: []
+  },
+  {
+    name: "Troll",
+    level: 4,
+    hp: 80,
+    maxHp: 80,
+    exp: 60,
+    str: 20,
+    def: 15,
+    agi: 5,
+    abilities: [enemyAbilities.troll_regenerate],
+    statusEffects: []
+  },
+  {
+    name: "Dark Mage",
+    level: 5,
+    hp: 65,
+    maxHp: 65,
+    exp: 75,
+    str: 12,
+    def: 8,
+    agi: 15,
+    abilities: [enemyAbilities.dark_mage_shadow_bolt],
+    statusEffects: []
+  }
+];

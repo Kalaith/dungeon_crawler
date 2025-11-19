@@ -16,6 +16,7 @@ export interface Character {
   gold: number;
   equipment: Equipment;
   abilities: Ability[];
+  statusEffects: ActiveStatusEffect[];
 }
 
 export interface CharacterClass {
@@ -49,6 +50,8 @@ export interface Enemy {
   str: number;
   def: number;
   agi: number;
+  abilities?: Ability[];
+  statusEffects: ActiveStatusEffect[];
 }
 
 export interface Position {
@@ -68,15 +71,21 @@ export interface GameData {
     max_party_size: number;
     character_classes: CharacterClass[];
   };
+  craftingRecipes?: CraftingRecipe[];
 }
 
-export type GameState = 'party-creation' | 'exploring' | 'combat';
+export type GameState = 'party-creation' | 'exploring' | 'combat' | 'game-over';
 export type Direction = 0 | 1 | 2 | 3; // North, East, South, West
 
 export interface DungeonMap {
   width: number;
   height: number;
   layout: string[];
+  floor: number;
+  playerStart: Position;
+  stairsUp?: Position;
+  stairsDown?: Position;
+  treasureLocations: Position[];
 }
 
 export interface Equipment {
@@ -88,7 +97,7 @@ export interface Equipment {
 export interface Item {
   id: string;
   name: string;
-  type: 'weapon' | 'armor' | 'accessory' | 'consumable';
+  type: 'weapon' | 'armor' | 'accessory' | 'consumable' | 'material';
   rarity: 'common' | 'rare' | 'epic' | 'legendary';
   stats: Partial<{
     str: number;
@@ -100,6 +109,21 @@ export interface Item {
   }>;
   value: number;
   description: string;
+}
+
+export interface CraftingMaterial extends Item {
+  type: 'material';
+}
+
+export interface CraftingRecipe {
+  id: string;
+  resultItem: Item;
+  materials: {
+    materialId: string;
+    count: number;
+  }[];
+  goldCost: number;
+  levelReq: number;
 }
 
 export interface Ability {
@@ -118,6 +142,10 @@ export interface StatusEffect {
   type: 'poison' | 'sleep' | 'buff_str' | 'buff_def' | 'buff_agi';
   duration: number;
   value?: number;
+}
+
+export interface ActiveStatusEffect extends StatusEffect {
+  remainingTurns: number;
 }
 
 export interface LootDrop {

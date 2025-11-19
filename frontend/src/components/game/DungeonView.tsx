@@ -5,7 +5,7 @@ import { useGameStore } from '../../stores/gameStore';
 export const DungeonView: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { getTileAhead, getTileFarAhead, getTileLeft, getTileRight, getTile } = useDungeon();
-  const { currentFloor, playerPosition, playerFacing } = useGameStore();
+  const { currentFloor, playerPosition, playerFacing, currentDungeonMap } = useGameStore();
 
   // Helper function to get direction vectors
   const getDirectionVector = (direction: number): [number, number] => {
@@ -15,201 +15,266 @@ export const DungeonView: React.FC = () => {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || !currentDungeonMap) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Clear canvas
-    ctx.fillStyle = '#1f2121';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
     const width = canvas.width;
     const height = canvas.height;
 
-    // Get tile information with enhanced checking
+    // Geometry Constants for 3D perspective
+    // Rect 0: The screen edges (Player's current position)
+    const r0 = { x: 0, y: 0, w: width, h: height };
+
+    // Rect 1: The end of the current tile / start of next tile
+    const r1 = { x: 60, y: 40, w: 280, h: 220 };
+
+    // Rect 2: The end of the next tile / start of the far tile
+    const r2 = { x: 130, y: 100, w: 140, h: 100 };
+
+    // Rect 3: The vanishing point area (far distance)
+    const r3 = { x: 170, y: 130, w: 60, h: 40 };
+
+    // Colors
+    const colors = {
+      wallFace: '#4a5568', // Gray 600
+      wallSide: '#2d3748', // Gray 700
+      floor: '#1a202c',    // Gray 900
+      ceiling: '#0f1115',  // Very dark
+      door: '#8b5cf6',     // Purple
+      stairs: '#22d3ee',   // Cyan
+      treasure: '#eab308', // Yellow
+    };
+
+    // Helper to draw a filled polygon (trapezoid)
+    const drawPoly = (points: [number, number][], color: string) => {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(points[0][0], points[0][1]);
+      for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i][0], points[i][1]);
+      }
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    };
+
+    // Helper to draw a wall face
+    const drawRect = (rect: { x: number, y: number, w: number, h: number }, color: string) => {
+      ctx.fillStyle = color;
+      ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
+    };
+
+    // Clear canvas
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, width, height);
+
+    // --- DATA GATHERING ---
     const ahead = getTileAhead();
     const left = getTileLeft();
     const right = getTileRight();
-    
-    // Debug: Show what we're seeing
-    console.log('\ud83c\udfae DUNGEON VIEW DEBUG:');
-    console.log('Player position:', playerPosition);
-    console.log('Player facing:', playerFacing, ['North', 'East', 'South', 'West'][playerFacing]);
-    console.log('Tiles:', { ahead, left, right });
-    
-    // Check what's actually around the player in all 4 directions
-    const [currentX, currentY] = [playerPosition.x, playerPosition.y];
-    const northTile = getTile(currentX, currentY - 1);
-    const eastTile = getTile(currentX + 1, currentY);
-    const southTile = getTile(currentX, currentY + 1);
-    const westTile = getTile(currentX - 1, currentY);
-    
-    console.log('Actual surrounding tiles:');
-    console.log('North:', northTile, 'East:', eastTile, 'South:', southTile, 'West:', westTile);
-    
-    // Map facing direction to actual compass directions
-    let actualAhead, actualLeft, actualRight;
-    switch (playerFacing) {
-      case 0: // North
-        actualAhead = northTile;
-        actualLeft = westTile;
-        actualRight = eastTile;
-        break;
-      case 1: // East
-        actualAhead = eastTile;
-        actualLeft = northTile;
-        actualRight = southTile;
-        break;
-      case 2: // South
-        actualAhead = southTile;
-        actualLeft = eastTile;
-        actualRight = westTile;
-        break;
-      case 3: // West
-        actualAhead = westTile;
-        actualLeft = southTile;
-        actualRight = northTile;
-        break;
-      default:
-        actualAhead = ahead;
-        actualLeft = left;
-        actualRight = right;
-    }
-    
-    console.log('What player should see:');
-    console.log('Ahead:', actualAhead, 'Left:', actualLeft, 'Right:', actualRight);
-    console.log('Functions return:', { ahead, left, right });
-    console.log('Mismatch?', { 
-      ahead: actualAhead !== ahead,
-      left: actualLeft !== left, 
-      right: actualRight !== right 
-    });
+    const farAhead = getTileFarAhead();
 
-    // Use the correct tile information for rendering
-    const renderAhead = actualAhead;
-    const renderLeft = actualLeft;
-    const renderRight = actualRight;
-    
-    // Draw perspective corridor
-    if (renderAhead !== '#') {
-      // Passable tile ahead - draw corridor extending forward
-      ctx.fillStyle = '#2d3748';
-      ctx.fillRect(width * 0.3, height * 0.4, width * 0.4, height * 0.2);
+    // Calculate "Left of Ahead" and "Right of Ahead" for the middle section
+    const [dx, dy] = getDirectionVector(playerFacing);
+    const aheadX = playerPosition.x + dx;
+    const aheadY = playerPosition.y + dy;
 
-      // Check tiles further ahead
-      const [dx, dy] = getDirectionVector(playerFacing);
-      const farTile = getTile(currentX + dx * 2, currentY + dy * 2);
-      if (farTile !== '#') {
-        ctx.fillRect(width * 0.35, height * 0.45, width * 0.3, height * 0.1);
-      } else {
+    const [lx, ly] = getDirectionVector((playerFacing + 3) % 4); // Left vector
+    const leftOfAhead = getTile(aheadX + lx, aheadY + ly);
+
+    const [rx, ry] = getDirectionVector((playerFacing + 1) % 4); // Right vector
+    const rightOfAhead = getTile(aheadX + rx, aheadY + ry);
+
+    // --- RENDERING (Back to Front) ---
+
+    // 1. Background (Ceiling and Floor)
+    // Ceiling
+    ctx.fillStyle = colors.ceiling;
+    ctx.fillRect(0, 0, width, height / 2);
+    // Floor
+    ctx.fillStyle = colors.floor;
+    ctx.fillRect(0, height / 2, width, height / 2);
+
+    // 2. FAR LAYER (2 steps away)
+    // We only see this if the tile ahead is NOT a wall
+    if (ahead !== '#') {
+      if (farAhead === '#') {
         // Wall at distance
-        ctx.fillStyle = '#4a5568';
-        ctx.fillRect(width * 0.35, height * 0.3, width * 0.3, height * 0.4);
+        drawRect(r2, '#374151'); // Darker gray
+      } else {
+        // Passage continues - draw vanishing point darkness
+        drawRect(r3, '#111827');
+      }
+
+      // Special tiles at distance
+      if (farAhead === '<' || farAhead === '>' || farAhead === '$' || farAhead === '+') {
+        const color = farAhead === '+' ? colors.door : (farAhead === '$' ? colors.treasure : colors.stairs);
+        ctx.fillStyle = color;
+        ctx.fillRect(r2.x + r2.w * 0.4, r2.y + r2.h * 0.4, r2.w * 0.2, r2.h * 0.2);
+      }
+    }
+
+    // 3. MIDDLE LAYER (1 step away)
+    // This is the "corridor" we are looking into
+    if (ahead !== '#') {
+      // Floor of the tile ahead
+      drawPoly([
+        [r1.x, r1.y + r1.h], [r1.x + r1.w, r1.y + r1.h], // Bottom of R1
+        [r2.x + r2.w, r2.y + r2.h], [r2.x, r2.y + r2.h]  // Bottom of R2
+      ], '#2d3748');
+
+      // Ceiling of the tile ahead
+      drawPoly([
+        [r1.x, r1.y], [r1.x + r1.w, r1.y], // Top of R1
+        [r2.x + r2.w, r2.y], [r2.x, r2.y]  // Top of R2
+      ], '#1a202c');
+
+      // Left wall of the tile ahead
+      if (leftOfAhead === '#') {
+        drawPoly([
+          [r1.x, r1.y], [r2.x, r2.y],           // Top-Lefts
+          [r2.x, r2.y + r2.h], [r1.x, r1.y + r1.h] // Bottom-Lefts
+        ], '#374151');
+      } else if (leftOfAhead === '+') {
+        // Door to the left
+        drawPoly([
+          [r1.x, r1.y], [r2.x, r2.y],           // Top-Lefts
+          [r2.x, r2.y + r2.h], [r1.x, r1.y + r1.h] // Bottom-Lefts
+        ], colors.door);
+      }
+
+      // Right wall of the tile ahead
+      if (rightOfAhead === '#') {
+        drawPoly([
+          [r1.x + r1.w, r1.y], [r2.x + r2.w, r2.y],           // Top-Rights
+          [r2.x + r2.w, r2.y + r2.h], [r1.x + r1.w, r1.y + r1.h] // Bottom-Rights
+        ], '#374151');
+      } else if (rightOfAhead === '+') {
+        // Door to the right
+        drawPoly([
+          [r1.x + r1.w, r1.y], [r2.x + r2.w, r2.y],           // Top-Rights
+          [r2.x + r2.w, r2.y + r2.h], [r1.x + r1.w, r1.y + r1.h] // Bottom-Rights
+        ], colors.door);
       }
     } else {
-      // Wall directly ahead
-      ctx.fillStyle = '#4a5568';
-      ctx.fillRect(width * 0.2, height * 0.2, width * 0.6, height * 0.6);
+      // Wall directly ahead (Face)
+      drawRect(r1, colors.wallFace);
 
-      // Add wall details
+      // Add detail to wall
       ctx.fillStyle = '#2d3748';
-      ctx.fillRect(width * 0.25, height * 0.25, width * 0.1, height * 0.5);
-      ctx.fillRect(width * 0.65, height * 0.25, width * 0.1, height * 0.5);
+      ctx.fillRect(r1.x + 20, r1.y + 20, r1.w - 40, r1.h - 40);
     }
 
-    // Draw side passages or walls
-    if (renderLeft !== '#') {
-      // Left passage exists - draw opening
-      ctx.fillStyle = '#1a365d'; // Darker to show depth
-      ctx.fillRect(0, height * 0.35, width * 0.25, height * 0.3);
-      
-      // Add passage indicator
-      ctx.fillStyle = '#2d3748';
-      ctx.fillRect(width * 0.02, height * 0.37, width * 0.08, height * 0.26);
-    } else {
-      // Left wall
-      ctx.fillStyle = '#374151';
-      ctx.fillRect(0, height * 0.3, width * 0.3, height * 0.4);
-    }
-
-    if (renderRight !== '#') {
-      // Right passage exists - draw opening  
-      ctx.fillStyle = '#1a365d'; // Darker to show depth
-      ctx.fillRect(width * 0.75, height * 0.35, width * 0.25, height * 0.3);
-      
-      // Add passage indicator
-      ctx.fillStyle = '#2d3748';
-      ctx.fillRect(width * 0.9, height * 0.37, width * 0.08, height * 0.26);
-    } else {
-      // Right wall
-      ctx.fillStyle = '#374151';
-      ctx.fillRect(width * 0.7, height * 0.3, width * 0.3, height * 0.4);
-    }
-
-    // Draw floor
-    ctx.fillStyle = '#1a202c';
-    ctx.fillRect(0, height * 0.7, width, height * 0.3);
-
-    // Draw ceiling
-    ctx.fillStyle = '#0d1117';
-    ctx.fillRect(0, 0, width, height * 0.3);
-
-    // Special tile indicators
-    const drawSpecialTile = (text: string, color: string) => {
-      ctx.fillStyle = color;
-      ctx.fillRect(width * 0.35, height * 0.35, width * 0.3, width * 0.3);
-
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '12px monospace';
+    // Special items ahead (1 step)
+    if (ahead === '<') {
+      // Stairs Up
+      ctx.fillStyle = colors.stairs;
+      ctx.beginPath();
+      ctx.moveTo(r1.x + r1.w / 2, r1.y + r1.h * 0.2);
+      ctx.lineTo(r1.x + r1.w * 0.2, r1.y + r1.h * 0.8);
+      ctx.lineTo(r1.x + r1.w * 0.8, r1.y + r1.h * 0.8);
+      ctx.fill();
+      ctx.fillStyle = 'white';
       ctx.textAlign = 'center';
-      ctx.fillText(text, width * 0.5, height * 0.5);
-    };
-
-    // Special tile indicators using the correct tile data
-    if (renderAhead === '<') {
-      drawSpecialTile('Stairs Up', '#22d3ee');
-    } else if (renderAhead === '>') {
-      drawSpecialTile('Stairs Down', '#f59e0b');
-    } else if (renderAhead === '$') {
-      drawSpecialTile('Treasure', '#eab308');
-    } else if (renderAhead === '+') {
-      drawSpecialTile('Door', '#8b5cf6');
-    }
-    
-    // Show side passages with indicators
-    if (renderLeft === '+') {
-      ctx.fillStyle = '#8b5cf6';
-      ctx.fillRect(width * 0.05, height * 0.45, width * 0.15, height * 0.1);
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '10px monospace';
+      ctx.fillText('UP', r1.x + r1.w / 2, r1.y + r1.h / 2);
+    } else if (ahead === '>') {
+      // Stairs Down
+      ctx.fillStyle = colors.stairs;
+      ctx.beginPath();
+      ctx.moveTo(r1.x + r1.w / 2, r1.y + r1.h * 0.8);
+      ctx.lineTo(r1.x + r1.w * 0.2, r1.y + r1.h * 0.2);
+      ctx.lineTo(r1.x + r1.w * 0.8, r1.y + r1.h * 0.2);
+      ctx.fill();
+      ctx.fillStyle = 'white';
       ctx.textAlign = 'center';
-      ctx.fillText('DOOR', width * 0.125, height * 0.52);
-    }
-    
-    if (renderRight === '+') {
-      ctx.fillStyle = '#8b5cf6';
-      ctx.fillRect(width * 0.8, height * 0.45, width * 0.15, height * 0.1);
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '10px monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText('DOOR', width * 0.875, height * 0.52);
+      ctx.fillText('DOWN', r1.x + r1.w / 2, r1.y + r1.h / 2);
+    } else if (ahead === '$') {
+      // Treasure
+      ctx.fillStyle = colors.treasure;
+      ctx.fillRect(r1.x + r1.w * 0.3, r1.y + r1.h * 0.6, r1.w * 0.4, r1.h * 0.3);
+      ctx.strokeStyle = '#fff';
+      ctx.strokeRect(r1.x + r1.w * 0.3, r1.y + r1.h * 0.6, r1.w * 0.4, r1.h * 0.3);
+    } else if (ahead === '+') {
+      // Door
+      ctx.fillStyle = colors.door;
+      ctx.fillRect(r1.x + r1.w * 0.2, r1.y + r1.h * 0.2, r1.w * 0.6, r1.h * 0.8);
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(r1.x + r1.w * 0.7, r1.y + r1.h * 0.6, 5, 0, Math.PI * 2);
+      ctx.fill();
     }
 
-  }, [getTileAhead, getTileFarAhead, getTileLeft, getTileRight, getTile, playerPosition, playerFacing]);
+    // 4. NEAR LAYER (Current tile)
+    // Floor
+    drawPoly([
+      [r0.x, r0.y + r0.h], [r0.x + r0.w, r0.y + r0.h], // Bottom of Screen
+      [r1.x + r1.w, r1.y + r1.h], [r1.x, r1.y + r1.h]  // Bottom of R1
+    ], '#2d3748'); // Slightly lighter floor
+
+    // Ceiling
+    drawPoly([
+      [r0.x, r0.y], [r0.x + r0.w, r0.y], // Top of Screen
+      [r1.x + r1.w, r1.y], [r1.x, r1.y]  // Top of R1
+    ], '#111827');
+
+    // Left Wall (Current Tile)
+    if (left === '#') {
+      drawPoly([
+        [r0.x, r0.y], [r1.x, r1.y],           // Top-Lefts
+        [r1.x, r1.y + r1.h], [r0.x, r0.y + r0.h] // Bottom-Lefts
+      ], colors.wallSide);
+    } else if (left === '+') {
+      // Door Left
+      drawPoly([
+        [r0.x, r0.y], [r1.x, r1.y],           // Top-Lefts
+        [r1.x, r1.y + r1.h], [r0.x, r0.y + r0.h] // Bottom-Lefts
+      ], colors.door);
+    }
+
+    // Right Wall (Current Tile)
+    if (right === '#') {
+      drawPoly([
+        [r0.x + r0.w, r0.y], [r1.x + r1.w, r1.y],           // Top-Rights
+        [r1.x + r1.w, r1.y + r1.h], [r0.x + r0.w, r0.y + r0.h] // Bottom-Rights
+      ], colors.wallSide);
+    } else if (right === '+') {
+      // Door Right
+      drawPoly([
+        [r0.x + r0.w, r0.y], [r1.x + r1.w, r1.y],           // Top-Rights
+        [r1.x + r1.w, r1.y + r1.h], [r0.x + r0.w, r0.y + r0.h] // Bottom-Rights
+      ], colors.door);
+    }
+
+  }, [getTileAhead, getTileFarAhead, getTileLeft, getTileRight, getTile, playerPosition, playerFacing, currentDungeonMap]);
 
   const directions = ['North', 'East', 'South', 'West'];
 
+  // Show loading state if dungeon not generated
+  if (!currentDungeonMap) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-stone-900 border-4 border-stone-600">
+        <div className="text-parchment-100 text-xl font-bold">Generating dungeon...</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="relative flex flex-col items-center justify-center p-4 bg-gradient-to-b from-cyan-400/8 to-blue-400/8 dark:from-cyan-400/15 dark:to-blue-400/15 rounded-lg">
+    <div className="relative flex flex-col items-center justify-center p-4 bg-stone-700 rounded-sm border-4 border-stone-500 shadow-2xl">
       <canvas
         ref={canvasRef}
         width={400}
         height={300}
-        className="border-2 border-gray-400/30 rounded-md bg-charcoal-800"
+        className="border-4 border-stone-600 rounded-sm bg-black shadow-inner"
         style={{ imageRendering: 'pixelated' }}
       />
-      <div className="absolute top-4 left-4 bg-black/70 text-white px-2 py-1 rounded text-xs space-y-1">
+      <div className="absolute top-4 left-4 bg-stone-800/90 text-gold-500 px-3 py-2 rounded-sm text-xs space-y-1 border border-gold-600/30 font-mono">
         <div>Floor {currentFloor}</div>
         <div>Position: {playerPosition.x},{playerPosition.y}</div>
         <div>Facing: {directions[playerFacing]}</div>
