@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useGameStore } from '../../stores/gameStore';
+import { useCombatStore } from '../../stores/useCombatStore';
 import { useCombat } from '../../hooks/useCombat';
 import type { Character } from '../../types';
 import { CombatHeader } from './CombatHeader';
@@ -8,7 +8,7 @@ import { CombatLog } from './CombatLog';
 import { ActionMenu } from './ActionMenu';
 
 export const CombatInterface: React.FC = () => {
-  const { inCombat, combatTurnOrder, currentTurn, nextTurn } = useGameStore();
+  const { inCombat, combatTurnOrder, currentTurn, nextTurn } = useCombatStore();
   const { processTurn } = useCombat();
   const lastProcessedTurn = useRef<number | null>(null);
 

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useGameStore } from '../../stores/gameStore';
+import { useCombatStore } from '../../stores/useCombatStore';
 import { useCombat } from '../../hooks/useCombat';
 import { Button } from '../ui/Button';
 import type { Character } from '../../types';
 
 export const ActionMenu: React.FC = () => {
-  const { combatTurnOrder, currentTurn } = useGameStore();
+  const { combatTurnOrder, currentTurn } = useCombatStore();
   const { handleCombatAction } = useCombat();
   const [showingAbilities, setShowingAbilities] = useState(false);
 

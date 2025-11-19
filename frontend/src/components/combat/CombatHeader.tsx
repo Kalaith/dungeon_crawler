@@ -1,8 +1,8 @@
 import React from 'react';
-import { useGameStore } from '../../stores/gameStore';
+import { useCombatStore } from '../../stores/useCombatStore';
 
 export const CombatHeader: React.FC = () => {
-  const { combatTurnOrder, currentTurn } = useGameStore();
+  const { combatTurnOrder, currentTurn } = useCombatStore();
 
   return (
     <div className="bg-stone-700 p-4 border-b-4 border-stone-500 text-center">
@@ -14,8 +14,8 @@ export const CombatHeader: React.FC = () => {
           <div
             key={index}
             className={`px-3 py-1.5 rounded-sm text-xs font-bold border-2 ${index === currentTurn
-                ? 'bg-gold-500 border-gold-600 text-stone-700'
-                : 'bg-stone-600 border-stone-500 text-stone-400'
+              ? 'bg-gold-500 border-gold-600 text-stone-700'
+              : 'bg-stone-600 border-stone-500 text-stone-400'
               }`}
           >
             {participant.character.name}

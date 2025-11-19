@@ -1,30 +1,41 @@
 import React, { useState } from 'react';
-import { useGameStore } from '../../stores/gameStore';
+import { useCombatStore } from '../../stores/useCombatStore';
+import { usePartyStore } from '../../stores/usePartyStore';
 import { enemies } from '../../data/gameData';
+import type { CombatParticipant } from '../../types';
 
 export const DebugPanel: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const {
         startCombat,
+        currentEnemy,
+        updateEnemyHP,
+        inCombat
+    } = useCombatStore();
+
+    const {
         party,
         updatePartyMemberHP,
         restParty,
-        currentEnemy,
-        updateEnemyHP,
-        inCombat,
         equipItem
-    } = useGameStore();
+    } = usePartyStore();
 
     const handleTriggerCombat = () => {
         if (inCombat) return;
         const goblin = enemies[0];
-        startCombat(goblin);
+        const partyParticipants = party
+            .map((c, i) => c ? { type: 'party', character: c, index: i, agi: c.agi } as CombatParticipant : null)
+            .filter((p): p is CombatParticipant => p !== null);
+        startCombat(goblin, partyParticipants);
     };
 
     const handleTriggerRandomEncounter = () => {
         if (inCombat) return;
         const randomEnemy = enemies[Math.floor(Math.random() * enemies.length)];
-        startCombat(randomEnemy);
+        const partyParticipants = party
+            .map((c, i) => c ? { type: 'party', character: c, index: i, agi: c.agi } as CombatParticipant : null)
+            .filter((p): p is CombatParticipant => p !== null);
+        startCombat(randomEnemy, partyParticipants);
     };
 
     const handleKillParty = () => {

@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { useGameStore } from '../../stores/gameStore';
+import { useDungeonStore } from '../../stores/useDungeonStore';
 import { DungeonView } from './DungeonView';
 import { Minimap } from './Minimap';
 import { PartyStatus } from './PartyStatus';
 import { GameControls } from './GameControls';
 
 export const GameScreen: React.FC = () => {
-  const { addExploredTile, playerPosition } = useGameStore();
+  const { addExploredTile, playerPosition } = useDungeonStore();
 
   useEffect(() => {
     // Initialize explored map with starting position

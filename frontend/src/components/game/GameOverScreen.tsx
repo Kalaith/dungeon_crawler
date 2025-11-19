@@ -1,9 +1,25 @@
 import React from 'react';
-import { useGameStore } from '../../stores/gameStore';
+import { useGameStateStore } from '../../stores/useGameStateStore';
+import { usePartyStore } from '../../stores/usePartyStore';
+import { useDungeonStore } from '../../stores/useDungeonStore';
+import { useCombatStore } from '../../stores/useCombatStore';
+import { useInventoryStore } from '../../stores/useInventoryStore';
 import { Button } from '../ui/Button';
 
 export const GameOverScreen: React.FC = () => {
-    const { resetGame } = useGameStore();
+    const { resetGame: resetGameState } = useGameStateStore();
+    const { resetParty } = usePartyStore();
+    const { resetDungeon } = useDungeonStore();
+    const { resetCombat } = useCombatStore();
+    const { resetInventory } = useInventoryStore();
+
+    const handleReset = () => {
+        resetParty();
+        resetDungeon();
+        resetCombat();
+        resetInventory();
+        resetGameState();
+    };
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-dungeon-900 text-parchment-100 p-8">
@@ -17,7 +33,7 @@ export const GameOverScreen: React.FC = () => {
                 </p>
 
                 <Button
-                    onClick={resetGame}
+                    onClick={handleReset}
                     className="w-full py-4 text-lg font-bold bg-stone-600 border-2 border-gold-600 text-gold-500 hover:bg-stone-500 hover:text-gold-400 transition-colors"
                 >
                     Start New Adventure

@@ -1,8 +1,8 @@
 import React from 'react';
-import { useGameStore } from '../../stores/gameStore';
+import { usePartyStore } from '../../stores/usePartyStore';
 
 export const PartyStatus: React.FC = () => {
-  const { party } = useGameStore();
+  const { party } = usePartyStore();
 
   const partyMembers = party.filter(character => character !== null);
 
@@ -25,9 +25,8 @@ export const PartyStatus: React.FC = () => {
           return (
             <div
               key={index}
-              className={`bg-purple-400/8 dark:bg-purple-400/15 border border-gray-400/20 rounded-lg p-3 ${
-                !character.alive ? 'opacity-50' : ''
-              }`}
+              className={`bg-purple-400/8 dark:bg-purple-400/15 border border-gray-400/20 rounded-lg p-3 ${!character.alive ? 'opacity-50' : ''
+                }`}
             >
               <div className="flex justify-between items-center mb-2">
                 <div className="font-semibold text-slate-900 dark:text-gray-200 text-sm">

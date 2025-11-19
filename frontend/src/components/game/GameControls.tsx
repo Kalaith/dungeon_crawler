@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 import { useDungeon } from '../../hooks/useDungeon';
-import { useGameStore } from '../../stores/gameStore';
+import { useGameStateStore } from '../../stores/useGameStateStore';
+import { usePartyStore } from '../../stores/usePartyStore';
 import { Button } from '../ui/Button';
 
 export const GameControls: React.FC = () => {
   const { moveForward, moveBackward, turnLeft, turnRight } = useDungeon();
-  const { restParty, gameState } = useGameStore();
+  const { gameState } = useGameStateStore();
+  const { restParty } = usePartyStore();
 
   useEffect(() => {
     if (gameState !== 'exploring') return;
@@ -48,7 +50,7 @@ export const GameControls: React.FC = () => {
       <h4 className="text-base font-medium text-slate-900 dark:text-gray-200 text-center mb-0">
         Actions
       </h4>
-      
+
       <div className="flex flex-col gap-4">
         {/* Movement Controls */}
         <div className="flex flex-col items-center gap-2">

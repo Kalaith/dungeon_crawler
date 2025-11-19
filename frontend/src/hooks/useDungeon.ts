@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { useGameStore } from '../stores/gameStore';
+import { useDungeonStore } from '../stores/useDungeonStore';
+import { useCombatStore } from '../stores/useCombatStore';
+import { usePartyStore } from '../stores/usePartyStore';
+import { useInventoryStore } from '../stores/useInventoryStore';
+import { useProgressionStore } from '../stores/useProgressionStore';
 import { useUIStore } from '../stores/uiStore';
-import { enemies } from '../data/gameData';
+import { enemies } from '../data/enemies';
 import type { Direction } from '../types';
 
 export const useDungeon = () => {
@@ -12,17 +16,18 @@ export const useDungeon = () => {
     setPlayerFacing,
     addExploredTile,
     incrementStepCount,
-    inCombat,
-    startCombat,
-    generateLoot,
-    addGoldToParty,
     currentDungeonMap,
     generateFloor,
     changeFloor,
     currentFloor
-  } = useGameStore();
+  } = useDungeonStore();
 
+  const { inCombat, startCombat } = useCombatStore();
+  const { addGoldToParty, getAlivePartyMembers, party } = usePartyStore();
+  const { addItemsToInventory } = useInventoryStore();
+  const { generateLoot } = useProgressionStore();
   const { showMessage } = useUIStore();
+
   const hasGenerated = useRef(false);
 
   // Generate initial floor if no dungeon exists
@@ -38,7 +43,7 @@ export const useDungeon = () => {
         hasGenerated.current = false; // Reset on error
       }
     }
-  }, [currentDungeonMap, generateFloor]); // Include all dependencies
+  }, [currentDungeonMap, generateFloor]);
 
   const getTile = useCallback((x: number, y: number): string => {
     if (!currentDungeonMap) return '#';
@@ -85,7 +90,21 @@ export const useDungeon = () => {
       // Handle special tiles
       if (tile === '<') {
         showMessage('You found stairs going up! Press Enter to ascend.');
-        // Check if player wants to go up
+        // Check if player wants to go up - simplified for now, auto-trigger or wait for input?
+        // The original code had a timeout to simulate interaction or just prompt.
+        // Let's keep the prompt. Actual interaction usually requires a key press.
+        // But here we just show message. The key handler in GameControls handles the actual floor change?
+        // No, GameControls calls moveForward.
+        // Wait, the original code had:
+        /*
+          setTimeout(() => {
+            if (currentFloor > 1) {
+              changeFloor('up');
+              showMessage(`Ascending to floor ${currentFloor - 1}...`);
+            } ...
+          }, 100);
+        */
+        // This means walking onto stairs triggers them immediately.
         setTimeout(() => {
           if (currentFloor > 1) {
             changeFloor('up');
@@ -112,20 +131,39 @@ export const useDungeon = () => {
         setTimeout(() => {
           // Scale enemies by floor
           const floorEnemies = enemies.filter(e => e.level <= currentFloor + 1);
-          const enemy = { ...floorEnemies[Math.floor(Math.random() * floorEnemies.length)] };
-          startCombat(enemy);
+          if (floorEnemies.length > 0) {
+            const enemy = { ...floorEnemies[Math.floor(Math.random() * floorEnemies.length)] };
+
+            // Prepare combat participants
+            const partyMembers = getAlivePartyMembers();
+            const participants = [
+              { type: 'enemy' as const, character: { ...enemy, hp: enemy.maxHp }, agi: enemy.agi },
+              ...partyMembers.map((char) => ({
+                type: 'party' as const,
+                character: char,
+                index: party.indexOf(char),
+                agi: char.agi
+              }))
+            ];
+
+            startCombat(enemy, participants);
+          }
         }, 500);
       } else if (tile === '$') {
         // Generate treasure loot scaled by floor
         const loot = generateLoot(currentFloor);
         addGoldToParty(loot.gold);
+        if (loot.items.length > 0) {
+          addItemsToInventory(loot.items);
+        }
+
         showMessage(`You found ${loot.gold} gold!`);
         if (loot.items.length > 0) {
           showMessage(`You also found: ${loot.items.map(i => i.name).join(', ')}`);
         }
       }
     }
-  }, [inCombat, playerPosition, playerFacing, getDirectionVector, getTile, setPlayerPosition, addExploredTile, incrementStepCount, showMessage, startCombat, generateLoot, addGoldToParty, changeFloor, currentFloor]);
+  }, [inCombat, playerPosition, playerFacing, getDirectionVector, getTile, setPlayerPosition, addExploredTile, incrementStepCount, showMessage, startCombat, generateLoot, addGoldToParty, changeFloor, currentFloor, getAlivePartyMembers, party, addItemsToInventory]);
 
   const moveBackward = useCallback(() => {
     if (inCombat) return;

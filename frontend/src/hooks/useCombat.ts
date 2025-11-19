@@ -1,30 +1,75 @@
 import { useCallback } from 'react';
-import { useGameStore } from '../stores/gameStore';
+import { useCombatStore } from '../stores/useCombatStore';
+import { usePartyStore } from '../stores/usePartyStore';
+import { useInventoryStore } from '../stores/useInventoryStore';
+import { useProgressionStore } from '../stores/useProgressionStore';
 import { useUIStore } from '../stores/uiStore';
 import type { Character, Enemy } from '../types';
-
 import { calculateEffectiveStats } from '../utils/characterUtils';
 import { applyStatusEffect, processStatusEffects, updateStatusEffects, hasStatusEffect } from '../utils/statusEffectUtils';
+import { calculateLevelUp } from '../utils/progressionUtils';
 
 export const useCombat = () => {
   const {
-    party,
     currentEnemy,
     combatTurnOrder,
     currentTurn,
     addCombatLog,
     nextTurn,
-    endCombat,
-    generateLoot,
-    updatePartyMemberHP,
+    endCombat: endCombatStore,
     updateEnemyHP,
-    applyStatusEffectToPartyMember,
-    applyStatusEffectToEnemy,
-    updatePartyMemberStatusEffects,
     updateEnemyStatusEffects
-  } = useGameStore();
+  } = useCombatStore();
 
+  const {
+    party,
+    updatePartyMemberHP,
+    updatePartyMemberStatusEffects,
+    updatePartyMember,
+    addGoldToParty
+  } = usePartyStore();
+
+  const { addItemsToInventory } = useInventoryStore();
+  const { generateLoot } = useProgressionStore();
   const { showMessage } = useUIStore();
+
+  // Helper to end combat and distribute rewards
+  const endCombat = useCallback((victory: boolean, loot?: import('../types').LootDrop) => {
+    if (victory) {
+      // Award experience
+      const exp = currentEnemy?.exp || 0;
+
+      // Update party with XP and check for level ups
+      party.forEach((character, index) => {
+        if (character && character.alive) {
+          const { character: updatedCharacter, leveledUp, levelsGained } = calculateLevelUp(character, exp);
+
+          updatePartyMember(index, updatedCharacter);
+
+          if (leveledUp) {
+            addCombatLog(`${character.name} gained ${levelsGained} level(s)!`);
+          }
+        }
+      });
+
+      // Add loot rewards
+      if (loot) {
+        addGoldToParty(loot.gold);
+        if (loot.items && loot.items.length > 0) {
+          addItemsToInventory(loot.items);
+        }
+      }
+
+      // Reset combat state
+      endCombatStore();
+
+    } else {
+      // Game Over
+      endCombatStore();
+      // Ideally trigger game over state in a main game store or UI
+      // For now, just reset combat
+    }
+  }, [currentEnemy, party, updatePartyMember, addCombatLog, addGoldToParty, addItemsToInventory, endCombatStore]);
 
   const performAttack = useCallback((attacker: Character | Enemy, target: Character | Enemy) => {
     // Calculate effective stats for attacker
@@ -110,7 +155,7 @@ export const useCombat = () => {
           // Apply status effect if ability has one
           if (ability.effect) {
             const newEffects = applyStatusEffect(target, ability.effect);
-            applyStatusEffectToPartyMember(characterIndex, newEffects);
+            updatePartyMemberStatusEffects(characterIndex, newEffects);
             addCombatLog(`${target.name} is ${ability.effect.type}ed!`);
           }
 
@@ -147,7 +192,7 @@ export const useCombat = () => {
       console.log('🔄 Enemy calling nextTurn() after attack');
       nextTurn();
     }, 1000);
-  }, [currentEnemy, party, performAttack, addCombatLog, showMessage, nextTurn, endCombat, updatePartyMemberHP, updateEnemyHP]);
+  }, [currentEnemy, party, performAttack, addCombatLog, showMessage, nextTurn, endCombat, updatePartyMemberHP, updateEnemyHP, updatePartyMemberStatusEffects]);
 
   const processTurn = useCallback(() => {
     console.log('🎲 PROCESS TURN CALLED');
@@ -206,16 +251,11 @@ export const useCombat = () => {
       }, 500);
     }
     // Player turns are handled by ActionMenu component
-  }, [combatTurnOrder, currentTurn, enemyAction, processStatusEffects, updateStatusEffects, hasStatusEffect, addCombatLog, updatePartyMemberHP, updateEnemyHP, updatePartyMemberStatusEffects, updateEnemyStatusEffects, currentEnemy, nextTurn]);
+  }, [combatTurnOrder, currentTurn, enemyAction, addCombatLog, updatePartyMemberHP, updateEnemyHP, updatePartyMemberStatusEffects, updateEnemyStatusEffects, currentEnemy, nextTurn]);
 
   const handleCombatAction = useCallback((action: string, options?: { abilityId?: string }) => {
     console.log('⚔️ COMBAT ACTION TRIGGERED:', action);
     const currentParticipant = combatTurnOrder[currentTurn];
-    console.log('Current participant in action:', {
-      index: currentTurn,
-      type: currentParticipant?.type,
-      name: currentParticipant?.character.name
-    });
 
     if (!currentParticipant || currentParticipant.type === 'enemy') {
       console.log('❌ Action blocked: no participant or enemy turn');
@@ -224,7 +264,6 @@ export const useCombat = () => {
 
     const character = currentParticipant.character as Character;
     const characterIndex = currentParticipant.index;
-    console.log('Processing action for character:', character.name, 'at index:', characterIndex);
 
     switch (action) {
       case 'attack':
@@ -237,31 +276,23 @@ export const useCombat = () => {
           const ability = character.abilities.find(a => a.id === options.abilityId);
           if (ability && character.mp >= ability.mpCost) {
             // Deduct MP cost
-            const updatedParty = [...party];
-            updatedParty[characterIndex] = {
+            const updatedCharacter = {
               ...character,
               mp: character.mp - ability.mpCost
             };
-            // Note: This should be handled through proper state management
-            // For now, we'll handle the MP deduction in the ability logic below
+            updatePartyMember(characterIndex, updatedCharacter);
 
             // Handle different ability effects
             if (ability.damage && currentEnemy) {
-              // Calculate effective stats for ability user
               const stats = calculateEffectiveStats(character);
               const baseDamage = Math.max(1, stats.str - currentEnemy.def + Math.floor(Math.random() * 5));
-
-              // For magic abilities, we might want to use INT/MAG stat if we had one, 
-              // but for now we'll use STR or a flat bonus based on the ability type?
-              // Actually, let's just use STR for physical and maybe add a magic stat later.
-              // For now, abilities scale off STR which is modified by gear.
-
               const abilityDamage = Math.floor(baseDamage * ability.damage);
-              currentEnemy.hp = Math.max(0, currentEnemy.hp - abilityDamage);
+              const newHp = Math.max(0, currentEnemy.hp - abilityDamage);
+              updateEnemyHP(newHp);
 
               addCombatLog(`${character.name} uses ${ability.name} for ${abilityDamage} damage!`);
 
-              if (currentEnemy.hp <= 0) {
+              if (newHp <= 0) {
                 addCombatLog(`${currentEnemy.name} is defeated!`);
                 const loot = generateLoot(currentEnemy.level);
                 setTimeout(() => {
@@ -277,7 +308,8 @@ export const useCombat = () => {
 
             if (ability.heal) {
               const healAmount = ability.heal;
-              character.hp = Math.min(character.maxHp, character.hp + healAmount);
+              const newHp = Math.min(character.maxHp, character.hp + healAmount);
+              updatePartyMemberHP(characterIndex, newHp);
               addCombatLog(`${character.name} uses ${ability.name} and heals ${healAmount} HP!`);
             }
 
@@ -292,7 +324,6 @@ export const useCombat = () => {
         break;
       case 'defend':
         addCombatLog(`${character.name} defends!`);
-        // Could add temporary defense boost here
         break;
       case 'item':
         addCombatLog(`${character.name} uses an item! (Not implemented)`);
@@ -313,7 +344,7 @@ export const useCombat = () => {
       console.log('🔄 Calling nextTurn() after player action:', action);
       nextTurn();
     }, 500);
-  }, [combatTurnOrder, currentTurn, currentEnemy, performAttack, addCombatLog, endCombat, nextTurn, generateLoot, party]);
+  }, [combatTurnOrder, currentTurn, currentEnemy, performAttack, addCombatLog, endCombat, nextTurn, generateLoot, party, updatePartyMember, updateEnemyHP, updatePartyMemberHP]);
 
   return {
     handleCombatAction,

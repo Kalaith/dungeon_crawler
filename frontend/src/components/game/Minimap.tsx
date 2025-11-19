@@ -1,10 +1,10 @@
 import React, { useRef, useEffect } from 'react';
-import { useGameStore } from '../../stores/gameStore';
+import { useDungeonStore } from '../../stores/useDungeonStore';
 import { dungeonMap } from '../../data/gameData';
 
 export const Minimap: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { playerPosition, playerFacing, exploredMap } = useGameStore();
+  const { playerPosition, playerFacing, exploredMap } = useDungeonStore();
 
   useEffect(() => {
     const canvas = canvasRef.current;

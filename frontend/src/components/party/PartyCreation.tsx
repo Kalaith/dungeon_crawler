@@ -1,5 +1,6 @@
 import React from 'react';
-import { useGameStore } from '../../stores/gameStore';
+import { usePartyStore } from '../../stores/usePartyStore';
+import { useGameStateStore } from '../../stores/useGameStateStore';
 import { useUIStore } from '../../stores/uiStore';
 import { CharacterSlot } from './CharacterSlot';
 import { CharacterCreationModal } from './CharacterCreationModal';
@@ -11,8 +12,8 @@ export const PartyCreation: React.FC = () => {
     party,
     canStartAdventure,
     addCharacterToParty,
-    setGameState
-  } = useGameStore();
+  } = usePartyStore();
+  const { setGameState } = useGameStateStore();
 
   const {
     isCharacterModalOpen,

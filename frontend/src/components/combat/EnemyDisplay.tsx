@@ -1,8 +1,8 @@
 import React from 'react';
-import { useGameStore } from '../../stores/gameStore';
+import { useCombatStore } from '../../stores/useCombatStore';
 
 export const EnemyDisplay: React.FC = () => {
-  const { currentEnemy } = useGameStore();
+  const { currentEnemy } = useCombatStore();
 
   if (!currentEnemy) return null;
 

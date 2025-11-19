@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import { useGameStore } from '../../stores/gameStore';
+import { useCombatStore } from '../../stores/useCombatStore';
 
 export const CombatLog: React.FC = () => {
-  const { combatLog } = useGameStore();
+  const { combatLog } = useCombatStore();
   const logRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
