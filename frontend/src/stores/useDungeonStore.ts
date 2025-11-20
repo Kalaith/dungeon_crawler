@@ -29,7 +29,7 @@ export const useDungeonStore = create<DungeonStore>()(
             currentFloor: 1,
             playerPosition: { x: 1, y: 1 },
             playerFacing: 0,
-            exploredMap: new Set(['1,1']),
+            exploredMap: new Set(),
             stepCount: 0,
             currentDungeonMap: null,
 
@@ -86,7 +86,7 @@ export const useDungeonStore = create<DungeonStore>()(
                 currentFloor: 1,
                 playerPosition: { x: 1, y: 1 },
                 playerFacing: 0,
-                exploredMap: new Set(['1,1']),
+                exploredMap: new Set(),
                 stepCount: 0,
                 currentDungeonMap: null
             })
@@ -105,7 +105,7 @@ export const useDungeonStore = create<DungeonStore>()(
                 return {
                     ...currentState,
                     ...(state || {}),
-                    exploredMap: new Set(state?.exploredMap || ['1,1'])
+                    exploredMap: new Set(state?.exploredMap || [])
                 };
             }
         }

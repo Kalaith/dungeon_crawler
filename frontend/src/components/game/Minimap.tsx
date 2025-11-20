@@ -1,14 +1,13 @@
 import React, { useRef, useEffect } from 'react';
 import { useDungeonStore } from '../../stores/useDungeonStore';
-import { dungeonMap } from '../../data/gameData';
 
 export const Minimap: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { playerPosition, playerFacing, exploredMap } = useDungeonStore();
+  const { playerPosition, playerFacing, exploredMap, currentDungeonMap } = useDungeonStore();
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || !currentDungeonMap) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
@@ -17,10 +16,13 @@ export const Minimap: React.FC = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Draw explored tiles
-    for (let y = 0; y < dungeonMap.layout.length; y++) {
-      for (let x = 0; x < dungeonMap.layout[0].length; x++) {
+    for (let y = 0; y < currentDungeonMap.layout.length; y++) {
+      const row = currentDungeonMap.layout[y];
+      if (!row) continue;
+
+      for (let x = 0; x < row.length; x++) {
         if (exploredMap.has(`${x},${y}`)) {
-          const tile = dungeonMap.layout[y][x];
+          const tile = row[x];
           const drawX = x * tileSize;
           const drawY = y * tileSize;
 
@@ -62,11 +64,14 @@ export const Minimap: React.FC = () => {
     ctx.fillStyle = '#ffffff';
     const centerX = playerX + tileSize / 2;
     const centerY = playerY + tileSize / 2;
-    const directions = [[0, -1], [1, 0], [0, 1], [-1, 0]]; // N, E, S, W
-    const [dx, dy] = directions[playerFacing];
-    ctx.fillRect(centerX + dx * 2 - 1, centerY + dy * 2 - 1, 2, 2);
+    const directions: Array<[number, number]> = [[0, -1], [1, 0], [0, 1], [-1, 0]]; // N, E, S, W
+    const direction = directions[playerFacing];
+    if (direction) {
+      const [dx, dy] = direction;
+      ctx.fillRect(centerX + dx * 2 - 1, centerY + dy * 2 - 1, 2, 2);
+    }
 
-  }, [playerPosition, playerFacing, exploredMap]);
+  }, [playerPosition, playerFacing, exploredMap, currentDungeonMap]);
 
   return (
     <div className="flex flex-col items-center p-4 bg-cream-100 dark:bg-charcoal-800 rounded-lg border border-gray-400/20">
