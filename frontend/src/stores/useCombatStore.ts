@@ -29,8 +29,8 @@ export const useCombatStore = create<CombatStore>((set, get) => ({
     combatLog: [],
 
     startCombat: (enemy, participants) => {
-        // Sort by agility
-        const sortedParticipants = [...participants].sort((a, b) => b.agi - a.agi);
+        // Sort by initiative
+        const sortedParticipants = [...participants].sort((a, b) => b.initiative - a.initiative);
 
         set({
             inCombat: true,
@@ -64,7 +64,7 @@ export const useCombatStore = create<CombatStore>((set, get) => ({
     }),
 
     resetTurnOrder: (participants) => {
-        const sortedParticipants = [...participants].sort((a, b) => b.agi - a.agi);
+        const sortedParticipants = [...participants].sort((a, b) => b.initiative - a.initiative);
         set({ combatTurnOrder: sortedParticipants, currentTurn: 0 });
     },
 

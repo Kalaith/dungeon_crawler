@@ -8,7 +8,7 @@ export const lootTables: Record<string, Item[]> = {
             name: 'Iron Sword',
             type: 'weapon',
             rarity: 'common',
-            stats: { str: 3 },
+            stats: { ST: 3 },
             value: 25,
             description: 'A sturdy iron sword'
         },
@@ -17,7 +17,7 @@ export const lootTables: Record<string, Item[]> = {
             name: 'Leather Armor',
             type: 'armor',
             rarity: 'common',
-            stats: { def: 2, hp: 10 },
+            stats: { AC: 2, HP: 10 },
             value: 20,
             description: 'Basic leather protection'
         },
@@ -30,8 +30,8 @@ export const lootTables: Record<string, Item[]> = {
             value: 10,
             description: 'Restores 30 HP'
         },
-        craftingMaterials.iron_ore,
-        craftingMaterials.leather_scraps
+        craftingMaterials['iron_ore'] as Item,
+        craftingMaterials['leather_scraps'] as Item
     ],
     rare: [
         {
@@ -39,7 +39,7 @@ export const lootTables: Record<string, Item[]> = {
             name: 'Steel Sword',
             type: 'weapon',
             rarity: 'rare',
-            stats: { str: 6, agi: 2 },
+            stats: { ST: 6, AG: 2 },
             value: 75,
             description: 'A sharp steel blade'
         },
@@ -48,10 +48,10 @@ export const lootTables: Record<string, Item[]> = {
             name: 'Chain Mail',
             type: 'armor',
             rarity: 'rare',
-            stats: { def: 5, hp: 20 },
+            stats: { AC: 5, HP: 20 },
             value: 60,
             description: 'Interlocked metal rings'
         },
-        craftingMaterials.magic_dust
+        craftingMaterials['magic_dust'] as Item
     ]
 };

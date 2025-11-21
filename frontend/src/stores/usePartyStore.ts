@@ -10,10 +10,10 @@ interface PartyStore {
     addCharacterToParty: (character: Character, slot: number) => void;
     removeCharacterFromParty: (slot: number) => void;
     updatePartyMemberHP: (characterIndex: number, newHp: number) => void;
-    updatePartyMemberMP: (characterIndex: number, newMp: number) => void;
+    updatePartyMemberAP: (characterIndex: number, newAp: number) => void;
     updatePartyMemberStatusEffects: (characterIndex: number, effects: ActiveStatusEffect[]) => void;
     updatePartyMember: (characterIndex: number, updates: Partial<Character>) => void;
-    equipItem: (characterIndex: number, item: Item) => void;
+    equipItem: (characterIndex: number, item: Item, slot: keyof Character['equipment']) => void;
     addGoldToParty: (amount: number) => void;
     restParty: () => void;
     resetParty: () => void;
@@ -47,20 +47,32 @@ export const usePartyStore = create<PartyStore>()(
                 if (character) {
                     updatedParty[characterIndex] = {
                         ...character,
-                        hp: Math.max(0, Math.min(character.maxHp, newHp)),
+                        derivedStats: {
+                            ...character.derivedStats,
+                            HP: {
+                                ...character.derivedStats.HP,
+                                current: Math.max(0, Math.min(character.derivedStats.HP.max, newHp))
+                            }
+                        },
                         alive: newHp > 0
                     };
                 }
                 return { party: updatedParty };
             }),
 
-            updatePartyMemberMP: (characterIndex, newMp) => set((state) => {
+            updatePartyMemberAP: (characterIndex, newAp) => set((state) => {
                 const updatedParty = [...state.party];
                 const character = updatedParty[characterIndex];
                 if (character) {
                     updatedParty[characterIndex] = {
                         ...character,
-                        mp: Math.max(0, Math.min(character.maxMp, newMp))
+                        derivedStats: {
+                            ...character.derivedStats,
+                            AP: {
+                                ...character.derivedStats.AP,
+                                current: Math.max(0, Math.min(character.derivedStats.AP.max, newAp))
+                            }
+                        }
                     };
                 }
                 return { party: updatedParty };
@@ -90,20 +102,14 @@ export const usePartyStore = create<PartyStore>()(
                 return { party: updatedParty };
             }),
 
-            equipItem: (characterIndex, item) => set((state) => {
+            equipItem: (characterIndex, item, slot) => set((state) => {
                 const character = state.party[characterIndex];
                 if (!character) return state;
 
                 const updatedParty = [...state.party];
                 const newEquipment = { ...character.equipment };
 
-                if (item.type === 'weapon') {
-                    newEquipment.weapon = item;
-                } else if (item.type === 'armor') {
-                    newEquipment.armor = item;
-                } else if (item.type === 'accessory') {
-                    newEquipment.accessory = item;
-                }
+                newEquipment[slot] = item;
 
                 updatedParty[characterIndex] = {
                     ...character,
@@ -132,8 +138,11 @@ export const usePartyStore = create<PartyStore>()(
                     if (character) {
                         return {
                             ...character,
-                            hp: character.maxHp,
-                            mp: character.maxMp,
+                            derivedStats: {
+                                ...character.derivedStats,
+                                HP: { ...character.derivedStats.HP, current: character.derivedStats.HP.max },
+                                AP: { ...character.derivedStats.AP, current: character.derivedStats.AP.max }
+                            },
                             alive: true,
                             statusEffects: []
                         };

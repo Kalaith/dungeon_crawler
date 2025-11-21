@@ -1,4 +1,4 @@
-import type { GameData, DungeonMap } from '../types';
+import type { StaticGameData, DungeonMap } from '../types';
 import { characterClasses } from './classes';
 import { craftingRecipes } from './crafting';
 import { GAME_CONFIG } from './constants';
@@ -11,7 +11,7 @@ export * from './crafting';
 export * from './loot';
 export * from './constants';
 
-export const gameData: GameData = {
+export const gameData: StaticGameData = {
   party_system: {
     max_party_size: GAME_CONFIG.PARTY.MAX_SIZE,
     character_classes: characterClasses
@@ -26,5 +26,6 @@ export const dungeonMap: DungeonMap = {
   layout: [],
   floor: 1,
   playerStart: { x: 1, y: 1 },
-  treasureLocations: []
+  treasureLocations: [],
+  explored: [] // Add missing property
 };

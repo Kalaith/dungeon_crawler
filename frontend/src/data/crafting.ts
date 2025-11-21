@@ -1,6 +1,6 @@
 import type { Item, CraftingRecipe } from '../types';
 
-export const craftingMaterials: Record<string, Item> = {
+export const craftingMaterials = {
     iron_ore: {
         id: 'iron_ore',
         name: 'Iron Ore',
@@ -9,7 +9,7 @@ export const craftingMaterials: Record<string, Item> = {
         stats: {},
         value: 5,
         description: 'Raw iron ore, used for smithing.'
-    },
+    } as Item,
     leather_scraps: {
         id: 'leather_scraps',
         name: 'Leather Scraps',
@@ -18,7 +18,7 @@ export const craftingMaterials: Record<string, Item> = {
         stats: {},
         value: 4,
         description: 'Scraps of leather, used for armor.'
-    },
+    } as Item,
     magic_dust: {
         id: 'magic_dust',
         name: 'Magic Dust',
@@ -27,7 +27,7 @@ export const craftingMaterials: Record<string, Item> = {
         stats: {},
         value: 15,
         description: 'Sparkling dust with magical properties.'
-    },
+    } as Item,
     ancient_rune: {
         id: 'ancient_rune',
         name: 'Ancient Rune',
@@ -36,7 +36,7 @@ export const craftingMaterials: Record<string, Item> = {
         stats: {},
         value: 50,
         description: 'A stone carved with ancient power.'
-    }
+    } as Item
 };
 
 export const craftingRecipes: CraftingRecipe[] = [
@@ -47,7 +47,7 @@ export const craftingRecipes: CraftingRecipe[] = [
             name: 'Reinforced Iron Sword',
             type: 'weapon',
             rarity: 'common',
-            stats: { str: 5 },
+            stats: { ST: 5 },
             value: 35,
             description: 'A well-crafted iron sword.'
         },
@@ -64,7 +64,7 @@ export const craftingRecipes: CraftingRecipe[] = [
             name: 'Studded Leather',
             type: 'armor',
             rarity: 'common',
-            stats: { def: 4, hp: 15 },
+            stats: { AC: 4, HP: 15 },
             value: 30,
             description: 'Leather armor reinforced with metal studs.'
         },
@@ -81,7 +81,7 @@ export const craftingRecipes: CraftingRecipe[] = [
             name: 'Fine Steel Sword',
             type: 'weapon',
             rarity: 'rare',
-            stats: { str: 8, agi: 3 },
+            stats: { ST: 8, AG: 3 },
             value: 100,
             description: 'A finely balanced steel sword.'
         },
@@ -99,7 +99,7 @@ export const craftingRecipes: CraftingRecipe[] = [
             name: 'Apprentice Wand',
             type: 'weapon',
             rarity: 'rare',
-            stats: { mp: 20, luc: 5 },
+            stats: { AP: 20, CH: 5 },
             value: 80,
             description: 'A wand that channels magical energy.'
         },
