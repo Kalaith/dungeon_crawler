@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monster Manual - Game Systems Manual</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="monsters.css">
+</head>
+
+<body>
+    <div class="container">
+        <a href="../index.html" class="nav-home">← Back to Manual</a>
+
+        <header>
+            <h1>Monster Manual</h1>
+            <p style="text-align: center; font-style: italic;">A comprehensive bestiary of creatures from the 5th
+                Edition SRD</p>
+        </header>
+
+        <main>
+            <section class="search-section">
+                <h2>Search & Filter</h2>
+                <div class="search-controls">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search by name..." />
+                    </div>
+                    <div class="filter-grid">
+                        <div class="filter-group">
+                            <label for="typeFilter">Type:</label>
+                            <select id="typeFilter">
+                                <option value="">All Types</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="sizeFilter">Size:</label>
+                            <select id="sizeFilter">
+                                <option value="">All Sizes</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="crFilter">Challenge Rating:</label>
+                            <select id="crFilter">
+                                <option value="">All CRs</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="alignmentFilter">Alignment:</label>
+                            <select id="alignmentFilter">
+                                <option value="">All Alignments</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="resetFilters" class="reset-btn">Reset Filters</button>
+                </div>
+                <div class="results-info">
+                    <span id="resultCount">Loading monsters...</span>
+                </div>
+            </section>
+
+            <section class="monsters-section">
+                <div id="monsterList" class="monster-grid">
+                    <!-- Monsters will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Monster Detail Modal -->
+            <div id="monsterModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <div id="monsterDetail">
+                        <!-- Monster details will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Monster Manual - 5th Edition SRD Creatures</p>
+        </footer>
+    </div>
+
+    <!-- Data loaded via fetch in monsters.js -->
+    <script src="monsters.js"></script>
+</body>
+
+</html>

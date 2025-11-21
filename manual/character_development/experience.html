@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experience & Leveling - Game Systems Manual</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+    <div class="container">
+        <a href="../index.html" class="nav-home">← Back to Index</a>
+
+        <header>
+            <h1>Experience & Leveling</h1>
+        </header>
+
+        <main>
+            <h2>Gaining Levels</h2>
+            <p>As your characters travel, they will gain experience points as they face numerous foes, perform herculean
+                tasks, and overcome other perils. When your characters accumulate enough experience points, they become
+                eligible for new experience levels. These levels, along with all their benefits, are granted in towns.
+            </p>
+
+            <h2>Experience Point Requirements</h2>
+            <p>There is no maximum level in the game. Experience requirements follow a progressive formula, allowing
+                characters to grow indefinitely as long as they continue their adventures.</p>
+
+            <div class="info-box">
+                <h3>The Experience Formula</h3>
+                <p>The experience points (EP) required to reach a specific level (L) are calculated as follows:</p>
+                <div class="formula">
+                    EP = 5000 × (L - 1) × L / 2
+                </div>
+                <p><em>Where L is the target level.</em></p>
+                <p>For example, to reach Level 4:</p>
+                <ul>
+                    <li>L = 4</li>
+                    <li>EP = 5000 × (3) × 4 / 2</li>
+                    <li>EP = 5000 × 12 / 2</li>
+                    <li>EP = 30,000</li>
+                </ul>
+            </div>
+
+            <h3>Experience Calculator</h3>
+            <div class="system-card">
+                <div class="calculator-container">
+                    <label for="target-level">Target Level:</label>
+                    <input type="number" id="target-level" min="1" value="2" oninput="calculateXP()">
+                    <p>Required Experience: <span id="xp-result"
+                            style="font-weight: bold; color: var(--primary-color);">5,000</span></p>
+                </div>
+            </div>
+
+            <script>
+                function calculateXP() {
+                    const level = parseInt(document.getElementById('target-level').value);
+                    if (level < 1 || isNaN(level)) {
+                        document.getElementById('xp-result').textContent = "Invalid Level";
+                        return;
+                    }
+                    // Formula: 5000 * (L-1) * L / 2
+                    const xp = 5000 * (level - 1) * level / 2;
+                    document.getElementById('xp-result').textContent = xp.toLocaleString();
+                }
+            </script>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>Experience Points Required</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>5,000</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>15,000</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>30,000</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>50,000</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>75,000</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>225,000</td>
+                    </tr>
+                    <tr>
+                        <td>20</td>
+                        <td>950,000</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Level-Up Benefits</h2>
+            <p>When your character gains a level, they will enjoy numerous benefits:</p>
+
+            <h3>Attribute Improvements</h3>
+            <div class="info-box">
+                <p>You may choose to increase any positive attribute by 1 point, followed by a decrease of 2 points to
+                    your negative attributes.</p>
+                <ul>
+                    <li>Select one positive attribute to increase</li>
+                    <li>Decrease negative attributes by a total of 2 points</li>
+                    <li>Follow the same trading rules as character creation</li>
+                </ul>
+            </div>
+
+            <h3>Life Points Increase</h3>
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Character Type</th>
+                        <th>LP Increase</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Non-Magic Users</td>
+                        <td>Up to 6 points</td>
+                    </tr>
+                    <tr>
+                        <td>Magic Users</td>
+                        <td>Up to 8 points (can be divided between LP and AP)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="note">
+                <p><strong>Magic Users:</strong> May divide the 8 points between Life Points (LP) and Astral Points (AP)
+                    as desired.</p>
+            </div>
+
+            <h2>Advanced Mode Level-Up</h2>
+            <p>If you are playing in the Advanced mode, you will have the opportunity to use skill and spell increase
+                attempts to continue shaping the ideal character, much as you may have done in Advanced Character
+                Generation.</p>
+
+            <h3>Skill Increase Attempts</h3>
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Class</th>
+                        <th>Skill Attempts</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Most Archetypes</td>
+                        <td>20 attempts</td>
+                    </tr>
+                    <tr>
+                        <td>Magician and Magician</td>
+                        <td>15 attempts</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box">
+                <h4>Skill Increase Rules:</h4>
+                <ul>
+                    <li>When increasing combat skills, you will have the opportunity to adjust AT and PA values</li>
+                    <li>Follow the same skill increase limits as character creation</li>
+                    <li>Combat and Intuitive skills: Max +1 per level</li>
+                    <li>Knowledge skills: Max +3 per level</li>
+                    <li>All other skills: Max +2 per level</li>
+                </ul>
+            </div>
+
+            <h3>Spell Increase Attempts</h3>
+            <p>Spell increase attempts depend on Class:</p>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Class</th>
+                        <th>Spell Attempts</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Magician and Magician</td>
+                        <td>40 attempts</td>
+                    </tr>
+                    <tr>
+                        <td>Druid, Druid, Warlock, Warlock</td>
+                        <td>25 attempts</td>
+                    </tr>
+                    <tr>
+                        <td>All Elves</td>
+                        <td>20 attempts</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Conversion Options</h3>
+            <div class="info-box">
+                <h4>Skill and Spell Conversion:</h4>
+                <p>With the exception of Elves, magic users may convert between skill increase attempts and spell
+                    increase attempts:</p>
+                <ul>
+                    <li>Convert skill increase attempts into spell increase attempts</li>
+                    <li>Convert spell increase attempts into skill increase attempts</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h4>Astral Point Conversion (Magicians and Magiciennes Only):</h4>
+                <p>Magicians and Magiciennes may forgo some spell increase attempts in return for astral points.</p>
+                <ul>
+                    <li>Trade spell increase attempts for permanent AP increases</li>
+                    <li>Strategic choice between immediate power (AP) and long-term versatility (spell increases)</li>
+                </ul>
+            </div>
+
+            <h2>Level-Up Process</h2>
+            <ol>
+                <li><strong>Accumulate Experience:</strong> Gain EP through combat, quests, and overcoming challenges
+                </li>
+                <li><strong>Reach Town:</strong> Levels are granted only in towns where citizens recognize your deeds
+                </li>
+                <li><strong>Level Up:</strong> Character automatically levels when EP threshold is reached in town</li>
+                <li><strong>Attribute Increase:</strong> Choose one positive attribute to increase (decrease 2 negative
+                    points)</li>
+                <li><strong>Life/Astral Points:</strong> Receive LP increase (and possibly AP for magic users)</li>
+                <li><strong>Advanced Mode Only:</strong> Use skill and spell increase attempts</li>
+                <li><strong>Save Game:</strong> It's a good idea to save your game at the nearest temple after gaining a
+                    level</li>
+            </ol>
+
+            <div class="note">
+                <p><strong>Important:</strong> Levels are granted in towns only. Creatures in the wilderness do not
+                    recognize your achievements. Plan your journeys to ensure you can reach a town when close to
+                    leveling up.</p>
+            </div>
+
+            <h2>Strategic Considerations</h2>
+
+            <h3>Attribute Choices</h3>
+            <p>When choosing which positive attribute to increase, consider:</p>
+            <ul>
+                <li>Your character's role in the party</li>
+                <li>Weaknesses that need shoring up</li>
+                <li>Strengths that could be enhanced</li>
+                <li>Requirements for future Class abilities</li>
+                <li>Which negative attributes you can afford to increase</li>
+            </ul>
+
+            <h3>Skill vs. Spell Priorities</h3>
+            <p>For magic users in Advanced mode, decide between:</p>
+            <ul>
+                <li><strong>Spell Focus:</strong> Use all attempts on spells for powerful magic</li>
+                <li><strong>Balanced Approach:</strong> Split between skills and spells for versatility</li>
+                <li><strong>Skill Focus:</strong> Prioritize non-magical abilities for a hybrid character</li>
+                <li><strong>AP Investment:</strong> Trade spell attempts for permanent astral power</li>
+            </ul>
+
+            <h3>Combat Skill Development</h3>
+            <p>When increasing combat skills, you can adjust AT and PA values:</p>
+            <ul>
+                <li><strong>Offensive Build:</strong> Maximize AT for aggressive combat style</li>
+                <li><strong>Defensive Build:</strong> Maximize PA for survivability</li>
+                <li><strong>Balanced Build:</strong> Split evenly between AT and PA</li>
+            </ul>
+
+        </main>
+
+        <footer>
+            <p><a href="../index.html">Back to Index</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attributes - Game Systems Manual</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+    <div class="container">
+        <a href="../index.html" class="nav-home">← Back to Index</a>
+
+        <header>
+            <h1>Attributes</h1>
+        </header>
+
+        <main>
+            <h2>Overview</h2>
+            <p>Characters have certain levels of wisdom, dexterity, and strength among other statistics. Attributes are
+                split into two categories: positive attributes and negative attributes. Both types are tracked
+                numerically and affect various aspects of gameplay.</p>
+
+            <h2>Positive Attributes</h2>
+            <p>The eight positive attributes are tracked numerically and, for newly created characters, range from 8 to
+                13.</p>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Attribute</th>
+                        <th>Code</th>
+                        <th>Range</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Courage</td>
+                        <td>CR</td>
+                        <td>8-13</td>
+                        <td>Represents willpower, mental fortitude, and bravery. Valuable in combat, when trying to
+                            resist fear or mind-affecting spells, and for maintaining resolve in difficult
+                            conversations.</td>
+                    </tr>
+                    <tr>
+                        <td>Wisdom</td>
+                        <td>WD</td>
+                        <td>8-13</td>
+                        <td>Reflects how attuned you are to the world around you, representing perceptiveness, insight,
+                            and intuition. It helps in reading body language, noticing environmental details, and is the
+                            basis for nature-based magic (Druids).</td>
+                    </tr>
+                    <tr>
+                        <td>Intelligence</td>
+                        <td>IT</td>
+                        <td>8-13</td>
+                        <td>Measures mental acuity, accuracy of recall, and the ability to reason. It represents logic,
+                            education, memory, and deductive reasoning. This is the primary attribute for "bookish" or
+                            formula-based magic (Magicians).</td>
+                    </tr>
+                    <tr>
+                        <td>Charisma</td>
+                        <td>CH</td>
+                        <td>8-13</td>
+                        <td>Measures your ability to interact effectively with others. It includes factors such as
+                            confidence, eloquence, and commanding personality. High charisma makes it easier to
+                            influence others and lead the party.</td>
+                    </tr>
+                    <tr>
+                        <td>Dexterity</td>
+                        <td>DX</td>
+                        <td>8-13</td>
+                        <td>Measures fine motor skills and hand-eye coordination. Essential for manipulating small
+                            objects, disarming traps, opening locks, and performing the complex gestures required for
+                            spell weaving.</td>
+                    </tr>
+                    <tr>
+                        <td>Agility</td>
+                        <td>AG</td>
+                        <td>8-13</td>
+                        <td>Measures reflexes, balance, and bodily coordination. Crucial for dodging blows in combat,
+                            moving stealthily, and performing acrobatic maneuvers to avoid obstacles.</td>
+                    </tr>
+                    <tr>
+                        <td>Strength</td>
+                        <td>ST</td>
+                        <td>8-13</td>
+                        <td>Measures bodily power, athletic training, and raw physical force. Necessary for moving heavy
+                            objects, using heavy weapons effectively, and determines a character's maximum carrying
+                            capacity.</td>
+                    </tr>
+                    <tr>
+                        <td>Constitution</td>
+                        <td>CO</td>
+                        <td>8-13</td>
+                        <td>Measures health, stamina, and vital force. Determines Hit Points and resistance to poison,
+                            disease, and fatigue.</td>
+                    </tr>
+                    <tr>
+                        <td>Intuition</td>
+                        <td>IN</td>
+                        <td>8-13</td>
+                        <td>A "sixth sense" or gut feeling that warns of danger before it happens. It represents
+                            subconscious processing and luck. This attribute is vital for intuitive magic users
+                            (Warlocks, Witches, Elves) who rely on feeling rather than formula.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Attribute Modifiers</h2>
+            <p>Each attribute generates a <strong>modifier</strong> used for skill checks, attack rolls, saving throws,
+                and other game mechanics. This bridges RoA's attribute system with D&D's resolution mechanics.</p>
+
+            <div class="formula">
+                <p><strong>Modifier Formula:</strong><br>
+                    Modifier = (Attribute - 10) / 2 (rounded down)</p>
+            </div>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Attribute Value</th>
+                        <th>Modifier</th>
+                        <th>Attribute Value</th>
+                        <th>Modifier</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>8-9</td>
+                        <td>+0</td>
+                        <td>14-15</td>
+                        <td>+2</td>
+                    </tr>
+                    <tr>
+                        <td>10-11</td>
+                        <td>+0</td>
+                        <td>16-17</td>
+                        <td>+3</td>
+                    </tr>
+                    <tr>
+                        <td>12-13</td>
+                        <td>+1</td>
+                        <td>18-19</td>
+                        <td>+4</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="note">
+                <p><strong>Note:</strong> Starting characters have attributes 8-13 (modifiers +0 to +1). As characters
+                    level up, attributes can increase beyond 13, providing higher modifiers.</p>
+            </div>
+
+            <h2>Derived Stats</h2>
+            <p>Derived statistics like Health Points (HP), Astral Points (AP), and Armor Class (AC) are calculated
+                directly from these RoA attributes and their modifiers. Monsters also use this same attribute scale,
+                though powerful
+                creatures like Dragons may exceed the standard 8-13 range.</p>
+
+            <h2>Saving Throws</h2>
+            <p>When you need to resist effects (poison, spells, traps), you make a saving throw using the appropriate
+                attribute modifier:</p>
+            <ul>
+                <li><strong>Strength Saves:</strong> Use ST modifier (resisting being pushed, grappled)</li>
+                <li><strong>Dexterity Saves:</strong> Use AG modifier (dodging fireballs, avoiding traps)</li>
+                <li><strong>Constitution Saves:</strong> Use CO modifier (resisting poison, disease, death)</li>
+                <li><strong>Intelligence Saves:</strong> Use IT modifier (resisting mental illusions)</li>
+                <li><strong>Wisdom Saves:</strong> Use WD modifier (resisting charms, fear)</li>
+                <li><strong>Charisma Saves:</strong> Use CH modifier (resisting possession, banishment)</li>
+            </ul>
+
+            <h2>Magic System (Hybrid)</h2>
+            <p>Spells use <strong>Astral Points (AP)</strong> as the resource pool. The spell's effectiveness is
+                determined by your <strong>Spell Save DC</strong> and <strong>Spell Attack Bonus</strong>, which are
+                calculated from your spellcasting attribute (Intelligence for Wizards, Wisdom for Clerics, etc.).</p>
+
+            <h2>Negative Attributes</h2>
+            <p>The seven negative attributes range from 2 to 8 for new characters. Archetypes have negative attribute
+                requirements as well.</p>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Attribute</th>
+                        <th>Code</th>
+                        <th>Range</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Superstition</td>
+                        <td>SN</td>
+                        <td>2-8</td>
+                        <td>Characters with high superstition notice certain omens and instantly understand their
+                            meaning. High superstition often makes a character particularly susceptible to magic.</td>
+                    </tr>
+                    <tr>
+                        <td>Acrophobia</td>
+                        <td>AC</td>
+                        <td>2-8</td>
+                        <td>Fear of heights, leading to a distinct feeling of vertigo. A large acrophobia value can be a
+                            severe handicap when forced to cross a suspension bridge or stand at a cliff edge.</td>
+                    </tr>
+                    <tr>
+                        <td>Claustrophobia</td>
+                        <td>CL</td>
+                        <td>2-8</td>
+                        <td>Fear of being buried alive which can close in when traveling through narrow halls and low
+                            corridors.</td>
+                    </tr>
+                    <tr>
+                        <td>Avarice</td>
+                        <td>AV</td>
+                        <td>2-8</td>
+                        <td>The urge to gather gold, jewelry, and other precious items. A character gripped by avarice
+                            will often forget all else happening around them just to loot something that has caught
+                            their eye.</td>
+                    </tr>
+                    <tr>
+                        <td>Necrophobia</td>
+                        <td>NE</td>
+                        <td>2-8</td>
+                        <td>A particularly terrifying fear of death and anything connected with it, especially the
+                            undead, mummies, zombies, and skeletons. A character with high necrophobia will sometimes
+                            refuse to fight against undead and may run away instead.</td>
+                    </tr>
+                    <tr>
+                        <td>Curiosity</td>
+                        <td>CU</td>
+                        <td>2-8</td>
+                        <td>A healthy amount of curiosity is a prerequisite for a true hero, but too much is a curse.
+                            Magicians especially are often overcome with curiosity upon discovering old scrolls and
+                            magical artifacts.</td>
+                    </tr>
+                    <tr>
+                        <td>Violent Temper</td>
+                        <td>VT</td>
+                        <td>2-8</td>
+                        <td>A character with a violent temper is easily insulted and quick to draw a weapon to right any
+                            perceived wrong.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Negative Attribute Mechanical Effects</h3>
+            <p>Negative attributes have real mechanical consequences when they reach certain thresholds. Effects trigger
+                when the attribute value is <strong>6 or higher</strong>.</p>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Attribute</th>
+                        <th>Trigger</th>
+                        <th>Save</th>
+                        <th>Failure Effect</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Superstition (SN)</td>
+                        <td>Facing illusion/enchantment spells</td>
+                        <td>-</td>
+                        <td>Disadvantage on saves vs. those spells</td>
+                    </tr>
+                    <tr>
+                        <td>Acrophobia (AC)</td>
+                        <td>At heights (10+ feet)</td>
+                        <td>WD DC 15</td>
+                        <td>Frightened condition</td>
+                    </tr>
+                    <tr>
+                        <td>Claustrophobia (CL)</td>
+                        <td>In tight/enclosed spaces</td>
+                        <td>WD DC 15</td>
+                        <td>Frightened condition</td>
+                    </tr>
+                    <tr>
+                        <td>Avarice (AV)</td>
+                        <td>Seeing valuable treasure</td>
+                        <td>WD DC 15</td>
+                        <td>Must attempt to take it (even if dangerous)</td>
+                    </tr>
+                    <tr>
+                        <td>Necrophobia (NE)</td>
+                        <td>Facing undead creatures</td>
+                        <td>CR DC 15</td>
+                        <td>Frightened of undead (cannot move closer)</td>
+                    </tr>
+                    <tr>
+                        <td>Curiosity (CU)</td>
+                        <td>Encountering mysteries/puzzles</td>
+                        <td>WD DC 15</td>
+                        <td>Must investigate (even if dangerous)</td>
+                    </tr>
+                    <tr>
+                        <td>Violent Temper (VT)</td>
+                        <td>Being insulted or provoked</td>
+                        <td>WD DC 15</td>
+                        <td>Must attack the provoker</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box">
+                <h4>Frightened Condition</h4>
+                <ul>
+                    <li>Disadvantage on ability checks and attack rolls while source of fear is visible</li>
+                    <li>Cannot willingly move closer to the source of fear</li>
+                    <li>Lasts until you leave the triggering situation or succeed on a save (can retry each turn)</li>
+                </ul>
+            </div>
+
+            <div class="note">
+                <p><strong>Magic Resistance Bonus:</strong> CR Modifier + WD Modifier - (SN - 5)</p>
+                <p>This bonus applies to saving throws against magic. Higher Superstition (SN) reduces your resistance,
+                    as intended.</p>
+                <p><strong>Example:</strong> CR 12 (+1), WD 13 (+1), SN 3: Bonus = +1 +1 - (-2) = +4 to magic saves</p>
+            </div>
+
+            <h2>Attribute Assignment During Character Creation</h2>
+
+            <h3>Rolling and Placing Attributes</h3>
+            <p>When creating a character, you'll see an initial roll on your screen. This roll can be used for any of
+                the eight positive attributes; you select which one depending on the Class you're hoping to create.
+                After placing the first value, the system will roll again until you have placed each roll with a
+                positive statistic.</p>
+
+            <p>Next, you'll assign values for the negative statistics just like you did for positive attributes. Keep in
+                mind that Archetypes have negative attribute requirements as well.</p>
+
+            <h3>Selecting Class</h3>
+            <p>After assigning your character's attribute values, choose Select Class. The system will show you a
+                list of Archetypes your character qualifies for. Just select one to make it official.</p>
+
+            <p>At times, however, you may see that the character you've created doesn't qualify for any Class at
+                all. The system will tell you that you've failed to meet the minimum entrance requirements. You don't
+                need to start over - select the Change Attribute option to modify current values, or select New
+                Attributes to re-roll.</p>
+
+            <h2>Change Attributes System</h2>
+
+            <p>When you've placed all of your rolls and are still just one or two points away from your desired
+                Class, Change Attributes allows you to alter both positive and negative attributes by trading off
+                points between the two.</p>
+
+            <h3>How Trading Works</h3>
+
+            <div class="info-box">
+                <h4>Increasing Positive Attributes</h4>
+                <p>For every 1 point increase to a positive attribute, you must make a 2 point increase to negative
+                    attributes.</p>
+                <ul>
+                    <li>Select the positive attribute to increase</li>
+                    <li>The system shows you a menu of negative attributes</li>
+                    <li>Choose to increase your negative attributes by 2 points total</li>
+                    <li>You may put both increases in one attribute or split them between two different attributes</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h4>Decreasing Negative Attributes</h4>
+                <p>You can decrease 2 points from your negative attributes by choosing to remove 1 point from a positive
+                    attribute.</p>
+            </div>
+
+            <h3>Trading Restrictions</h3>
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Restriction</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Positive Attribute Range</td>
+                        <td>Cannot be decreased below 8 or increased above 13</td>
+                    </tr>
+                    <tr>
+                        <td>Negative Attribute Range</td>
+                        <td>Cannot go below 2 or above 8</td>
+                    </tr>
+                    <tr>
+                        <td>Direction Lock</td>
+                        <td>Once you begin to change an attribute in one direction, you may not reverse it. Values that
+                            are lowered may not be raised later. Values that are raised may not be lowered.</td>
+                    </tr>
+                    <tr>
+                        <td>Continued Adjustment</td>
+                        <td>You may continue heading in the same direction with multiple changes</td>
+                    </tr>
+                    <tr>
+                        <td>Class Requirements</td>
+                        <td>Be careful not to alter attributes above or below the minimum entrance requirements for the
+                            Class you're hoping to create</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="note">
+                <p><strong>Note:</strong> When you have completed the adjustment to your character's negative
+                    attributes, the system will return you to the character screen. If you have further changes, select
+                    Change Attributes again.</p>
+            </div>
+
+            <h2>Attribute Impact on Gameplay</h2>
+
+            <h3>Positive Attributes Affect:</h3>
+            <ul>
+                <li><strong>Courage:</strong> Combat resolve, resisting fear, social fortitude</li>
+                <li><strong>Wisdom:</strong> Perception, insight, nature magic (Druids), healing</li>
+                <li><strong>Intelligence:</strong> Logic, memory, formula magic (Magicians), lore knowledge</li>
+                <li><strong>Charisma:</strong> Persuasion, leadership, deception, intimidation</li>
+                <li><strong>Dexterity:</strong> Fine manipulation, lockpicking, spell gestures</li>
+                <li><strong>Agility:</strong> Evasion, stealth, acrobatics, balance</li>
+                <li><strong>Strength:</strong> Melee damage, carrying capacity, athletics</li>
+                <li><strong>Constitution:</strong> Health Points (HP), disease/poison resistance, endurance</li>
+                <li><strong>Intuition:</strong> Luck, sensing danger, intuitive magic (Warlocks/Elves)</li>
+            </ul>
+
+            <h3>Negative Attributes Affect:</h3>
+            <ul>
+                <li><strong>Superstition:</strong> Omen recognition, magic susceptibility</li>
+                <li><strong>Acrophobia:</strong> Performance at heights, bridge crossing, cliff edges</li>
+                <li><strong>Claustrophobia:</strong> Performance in narrow spaces, low corridors</li>
+                <li><strong>Avarice:</strong> Focus when treasure is present, looting behavior</li>
+                <li><strong>Necrophobia:</strong> Combat against undead, death-related situations</li>
+                <li><strong>Curiosity:</strong> Behavior around scrolls, artifacts, unknowns</li>
+                <li><strong>Violent Temper:</strong> Response to insults, conflict escalation</li>
+            </ul>
+
+        </main>
+
+        <footer>
+            <p><a href="../index.html">Back to Index</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>

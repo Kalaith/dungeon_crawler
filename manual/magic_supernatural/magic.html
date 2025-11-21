@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic & Spells - Game Systems Manual</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+    <div class="container">
+        <a href="../index.html" class="nav-home">← Back to Index</a>
+        <header>
+            <h1>Magic & Spells</h1>
+        </header>
+        <main>
+            <h2>Overview</h2>
+            <p>A well-honed blade is not the only way to face the powers of a fantasy world. A well-crafted magic spell
+                can work miracles as well. Your team can use the arcane powers of the cosmos for their benefit or
+                another's demise.</p>
+
+            <div class="info-box">
+                <h3>New Magic System (D&D 5e)</h3>
+                <p>With the introduction of new classes like Cleric and Paladin, we have expanded our magic system to
+                    include the full 5th Edition spell list and schools of magic.</p>
+                <ul>
+                    <li><a href="magic_schools.html"><strong>Schools of Magic</strong></a> - Learn about the 8 schools
+                        of magic.</li>
+                    <li><a href="spell_list.html"><strong>Complete Spell List</strong></a> - Browse and filter all
+                        available spells by class, level, and school.</li>
+                </ul>
+            </div>
+
+            <h2>Arcane Lore</h2>
+            <p>If you created a magician or Magician, you will be asked to choose the character's preferred arcane
+                lore. Arcane lore influences the character's magical focus and affects spell casting skill for the
+                selected category.</p>
+
+            <h2>Astral Points (AP) System</h2>
+            <p>All magic is powered by astral energy measured in Astral Points (AP). This resource pool replaces D&D's
+                spell slot system, providing more flexibility while maintaining balance.</p>
+
+            <h3>AP Pool Calculation</h3>
+            <div class="formula">
+                <p><strong>Base AP = 10 + (Intelligence Modifier × 2) + Class Bonus</strong></p>
+            </div>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Class</th>
+                        <th>AP Bonus (Level 1)</th>
+                        <th>Spellcasting Attribute</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Wizard/Magician</td>
+                        <td>+20 AP</td>
+                        <td>Intelligence (IT)</td>
+                    </tr>
+                    <tr>
+                        <td>Cleric</td>
+                        <td>+15 AP</td>
+                        <td>Wisdom (WD)</td>
+                    </tr>
+                    <tr>
+                        <td>Druid</td>
+                        <td>+15 AP</td>
+                        <td>Wisdom (WD)</td>
+                    </tr>
+                    <tr>
+                        <td>Warlock</td>
+                        <td>+12 AP</td>
+                        <td>Intuition (IN)</td>
+                    </tr>
+                    <tr>
+                        <td>Sorcerer</td>
+                        <td>+12 AP</td>
+                        <td>Charisma (CH)</td>
+                    </tr>
+                    <tr>
+                        <td>Bard</td>
+                        <td>+10 AP</td>
+                        <td>Charisma (CH)</td>
+                    </tr>
+                    <tr>
+                        <td>Paladin</td>
+                        <td>+8 AP</td>
+                        <td>Charisma (CH)</td>
+                    </tr>
+                    <tr>
+                        <td>Ranger</td>
+                        <td>+5 AP</td>
+                        <td>Wisdom (WD)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box">
+                <h4>Example: Level 1 Wizard</h4>
+                <p><strong>Intelligence:</strong> 13 (Modifier +1)</p>
+                <p><strong>Calculation:</strong> 10 + (1 × 2) + 20 = 32 AP</p>
+                <p><strong>Result:</strong> Can cast six Level 1 spells (5 AP each) or two Level 3 spells (12 AP each)
+                </p>
+            </div>
+
+            <h3>Spell AP Costs (Balanced)</h3>
+            <p>Spell costs are carefully balanced to prevent unlimited casting while maintaining flexibility:</p>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Spell Level</th>
+                        <th>AP Cost</th>
+                        <th>Example Spells</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Cantrip</td>
+                        <td>0</td>
+                        <td>Fire Bolt, Mage Hand, Sacred Flame</td>
+                    </tr>
+                    <tr>
+                        <td>1st Level</td>
+                        <td>5</td>
+                        <td>Magic Missile, Cure Wounds, Shield</td>
+                    </tr>
+                    <tr>
+                        <td>2nd Level</td>
+                        <td>8</td>
+                        <td>Scorching Ray, Hold Person, Invisibility</td>
+                    </tr>
+                    <tr>
+                        <td>3rd Level</td>
+                        <td>12</td>
+                        <td>Fireball, Lightning Bolt, Dispel Magic</td>
+                    </tr>
+                    <tr>
+                        <td>4th Level</td>
+                        <td>18</td>
+                        <td>Ice Storm, Wall of Fire, Polymorph</td>
+                    </tr>
+                    <tr>
+                        <td>5th Level</td>
+                        <td>25</td>
+                        <td>Cone of Cold, Raise Dead, Teleportation Circle</td>
+                    </tr>
+                    <tr>
+                        <td>6th Level</td>
+                        <td>35</td>
+                        <td>Chain Lightning, Disintegrate, Heal</td>
+                    </tr>
+                    <tr>
+                        <td>7th Level</td>
+                        <td>45</td>
+                        <td>Finger of Death, Plane Shift, Resurrection</td>
+                    </tr>
+                    <tr>
+                        <td>8th Level</td>
+                        <td>60</td>
+                        <td>Sunburst, Earthquake, Mind Blank</td>
+                    </tr>
+                    <tr>
+                        <td>9th Level</td>
+                        <td>80</td>
+                        <td>Meteor Swarm, Wish, True Resurrection</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="note">
+                <h4>Design Rationale</h4>
+                <p>Lower level spells (1-3) are more affordable, allowing multiple casts per combat. Higher level spells
+                    (6-9) are expensive, limiting them to 1-2 casts per day even for high-level casters. This maintains
+                    D&D's power balance while providing AP system flexibility.</p>
+            </div>
+
+            <h3>AP Recovery</h3>
+            <ul>
+                <li><strong>Long Rest (8 hours):</strong> Restore all AP</li>
+                <li><strong>Short Rest (1 hour):</strong> Restore 25% of max AP (once per day)</li>
+                <li><strong>Meditation (Magicians only):</strong> Convert 5 HP to 5 AP (can be done multiple times, 10
+                    minutes each)</li>
+                <li><strong>Mana Potions:</strong> Restore varying amounts of AP (Minor: 10 AP, Standard: 25 AP,
+                    Greater: 50 AP)</li>
+            </ul>
+
+            <h2>Spell Casting Mechanics</h2>
+
+            <h3>Spell Save DC & Attack Rolls</h3>
+            <p>The effectiveness of your spells is determined by your spellcasting attribute and proficiency:</p>
+
+            <div class="formula">
+                <p><strong>Spell Save DC = 8 + Proficiency Bonus + Spellcasting Attribute Modifier</strong></p>
+                <p><strong>Spell Attack Bonus = Proficiency Bonus + Spellcasting Attribute Modifier</strong></p>
+            </div>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Class</th>
+                        <th>Spellcasting Attribute</th>
+                        <th>Magic Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Wizard/Magician</td>
+                        <td>Intelligence (IT)</td>
+                        <td>Arcane/Formula Magic</td>
+                    </tr>
+                    <tr>
+                        <td>Cleric</td>
+                        <td>Wisdom (WD)</td>
+                        <td>Divine Magic</td>
+                    </tr>
+                    <tr>
+                        <td>Druid</td>
+                        <td>Wisdom (WD)</td>
+                        <td>Nature Magic</td>
+                    </tr>
+                    <tr>
+                        <td>Warlock</td>
+                        <td>Intuition (IN)</td>
+                        <td>Pact Magic</td>
+                    </tr>
+                    <tr>
+                        <td>Sorcerer</td>
+                        <td>Charisma (CH)</td>
+                        <td>Innate Magic</td>
+                    </tr>
+                    <tr>
+                        <td>Bard</td>
+                        <td>Charisma (CH)</td>
+                        <td>Performance Magic</td>
+                    </tr>
+                    <tr>
+                        <td>Paladin</td>
+                        <td>Charisma (CH)</td>
+                        <td>Divine Oath Magic</td>
+                    </tr>
+                    <tr>
+                        <td>Ranger</td>
+                        <td>Wisdom (WD)</td>
+                        <td>Nature Magic</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box">
+                <h4>Example: Level 3 Wizard</h4>
+                <p><strong>Intelligence:</strong> 14 (Modifier +2)</p>
+                <p><strong>Proficiency Bonus:</strong> +2 (Level 3)</p>
+                <p><strong>Spell Save DC:</strong> 8 + 2 + 2 = 12</p>
+                <p><strong>Spell Attack Bonus:</strong> +2 + 2 = +4</p>
+                <p>When casting Fireball, enemies must roll d20 + DEX save ≥ 12 to take half damage.</p>
+            </div>
+
+            <h3>Spell Learning System</h3>
+            <p>Classes learn spells in two ways: <strong>Prepared Casting</strong> or <strong>Known Casting</strong>.
+            </p>
+
+            <h4>Prepared Casters (Flexible)</h4>
+            <p>These classes know all spells on their class list but must prepare a subset each day:</p>
+            <ul>
+                <li><strong>Classes:</strong> Cleric, Druid, Paladin</li>
+                <li><strong>Spells Prepared:</strong> Spellcasting Modifier + Character Level</li>
+                <li><strong>Change Prepared Spells:</strong> After each long rest</li>
+                <li><strong>Advantage:</strong> Maximum flexibility, can adapt to any situation</li>
+            </ul>
+
+            <div class="info-box">
+                <h4>Example: Level 5 Cleric</h4>
+                <p><strong>Wisdom:</strong> 15 (Modifier +2)</p>
+                <p><strong>Spells Prepared:</strong> 2 + 5 = 7 spells</p>
+                <p>Can prepare any 7 spells from the entire Cleric spell list each day.</p>
+            </div>
+
+            <h4>Known Casters (Specialized)</h4>
+            <p>These classes learn specific spells permanently:</p>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Class</th>
+                        <th>Spells Known (Level 1)</th>
+                        <th>Spells Learned Per Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Wizard/Magician</td>
+                        <td>6 spells</td>
+                        <td>2 spells</td>
+                    </tr>
+                    <tr>
+                        <td>Sorcerer</td>
+                        <td>4 spells</td>
+                        <td>1 spell</td>
+                    </tr>
+                    <tr>
+                        <td>Warlock</td>
+                        <td>2 spells</td>
+                        <td>1 spell</td>
+                    </tr>
+                    <tr>
+                        <td>Bard</td>
+                        <td>4 spells</td>
+                        <td>1 spell</td>
+                    </tr>
+                    <tr>
+                        <td>Ranger</td>
+                        <td>2 spells (Level 2+)</td>
+                        <td>1 spell</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <ul>
+                <li><strong>Permanent:</strong> Once learned, spells are always available</li>
+                <li><strong>Swap:</strong> Can swap 1 known spell when leveling up</li>
+                <li><strong>Wizards:</strong> Can also learn spells from scrolls and spellbooks</li>
+            </ul>
+
+            <h4>Magician Arcane Lore Specialization</h4>
+            <p>Magicians choose one school of magic at level 1:</p>
+            <ul>
+                <li><strong>Schools:</strong> Clairvoyance, Combat, Demonology, Elemental, Healing, Illusion, Metamagic,
+                    Transformation</li>
+                <li><strong>Benefit:</strong> Learn +1 extra spell from chosen school per level</li>
+                <li><strong>AP Discount:</strong> Spells from chosen school cost -2 AP (minimum 1 AP)</li>
+                <li><strong>House Spells:</strong> 3 signature spells from chosen school that are particularly powerful
+                </li>
+            </ul>
+
+            <h2>Meditation</h2>
+            <p>Generally reserved for Magicians of either sex, meditation focuses a character's energy on magic power so
+                dramatically it drains them physically. They convert life points (LP) to astral points (AP). Other magic
+                users who carry at least one dose of thonnys may meditate as well.</p>
+
+            <h2>Wand Spells</h2>
+            <p>Available only to Magicians or Magiciennes. Allows transfer of astral points to a magical wand. The
+                transfer consumes many astral points but is permanent once charged. Character unable to perform any
+                magic for remainder of camp after attempting wand spell, regardless of success or failure.</p>
+
+            <h2>Spell Origins</h2>
+            <p>Every spell has an origin - a group that long ago sought the knowledge of the gods to produce a divine
+                effect:</p>
+            <ul>
+                <li><strong>M</strong> - Magician/Magician</li>
+                <li><strong>E</strong> - Elf</li>
+                <li><strong>D</strong> - Druid/Druid</li>
+                <li><strong>W</strong> - Warlock/Warlock</li>
+            </ul>
+            <p>Although any character may learn and cast almost any spell, the sheer number of spells available
+                encourages characters to specialize.</p>
+
+            <h2>Magic-Casting Classes</h2>
+            <p>Several classes have the ability to cast spells, each with their own unique approach to magic.
+                Understanding
+                these differences is crucial for building an effective magic user.</p>
+
+            <h3>Primary Spellcasters</h3>
+            <p>These classes are dedicated primarily to magic and have the highest spell increase attempts:</p>
+
+            <div class="info-box">
+                <h4>Magician & Magician</h4>
+                <p><strong>Magic Type:</strong> Formula (Book-based)</p>
+                <p><strong>Spell Increase Attempts:</strong> 40</p>
+                <p><strong>Approach:</strong> Scholarly and methodical. Magicians view magic as a science, meticulously
+                    recording spells in grimoires. They can specialize in Arcane Lore (Clairvoyance, Combat, Demonology,
+                    Dispell, Domination, Healing, Movement, Transformation, or Transmutation) to gain bonuses with
+                    specific
+                    house spells.</p>
+                <p><strong>Special Abilities:</strong> Meditation (convert LP to AP), Wand Spells (permanent
+                    enchantments)</p>
+            </div>
+
+            <div class="info-box">
+                <h4>Cleric</h4>
+                <p><strong>Magic Type:</strong> Divine (Clerical)</p>
+                <p><strong>Spell Increase Attempts:</strong> 35</p>
+                <p><strong>Approach:</strong> Divine intermediaries who channel the power of their deity. Clerics
+                    receive
+                    magic directly from divine sources and can choose a Divine Domain (Life, War, Knowledge, etc.) that
+                    determines their specific powers.</p>
+                <p><strong>Special Abilities:</strong> Channel Divinity, Turn Undead, Domain-specific powers</p>
+            </div>
+
+            <div class="info-box">
+                <h4>Bard</h4>
+                <p><strong>Magic Type:</strong> Arcane (Music-based)</p>
+                <p><strong>Spell Increase Attempts:</strong> 30</p>
+                <p><strong>Approach:</strong> Versatile performers who weave magic through music, poetry, and
+                    storytelling.
+                    Their magic is tied to performance and emotion, making it more intuitive than scholarly magic but
+                    more
+                    structured than instinctive magic.</p>
+                <p><strong>Special Abilities:</strong> Bardic Inspiration, Jack of All Trades versatility</p>
+            </div>
+
+            <h3>Hybrid Spellcasters</h3>
+            <p>These classes balance magic with other abilities:</p>
+
+            <div class="info-box">
+                <h4>Druid & Druid</h4>
+                <p><strong>Magic Type:</strong> Dark Spells (Control)</p>
+                <p><strong>Spell Increase Attempts:</strong> 25</p>
+                <p><strong>Approach:</strong> Guardians of nature who command both creation and destruction. Their "dark
+                    spells" represent the controlling, destructive aspects of nature - not evil, but necessary for
+                    maintaining balance. They can command plants, call predators, and manipulate life force.</p>
+                <p><strong>Restrictions:</strong> Cannot use metal armor or weapons</p>
+            </div>
+
+            <div class="info-box">
+                <h4>Warlock & Warlock</h4>
+                <p><strong>Magic Type:</strong> Non-book (Intuitive)</p>
+                <p><strong>Spell Increase Attempts:</strong> 25</p>
+                <p><strong>Approach:</strong> Intuitive magic users who derive power from innate understanding rather
+                    than
+                    bookish knowledge. Their magic flows from connection to natural forces and primal energies,
+                    manifesting
+                    through rituals, charms, and communion with spirits or otherworldly patrons.</p>
+                <p><strong>Style:</strong> Personal and instinctive - they feel the flow of magical energy rather than
+                    understanding theoretical principles</p>
+            </div>
+
+            <div class="info-box">
+                <h4>Monk</h4>
+                <p><strong>Magic Type:</strong> Ki (Mystical Energy)</p>
+                <p><strong>Spell Increase Attempts:</strong> 25</p>
+                <p><strong>Approach:</strong> Masters of martial arts who harness mystical Ki energy to perform
+                    superhuman
+                    feats. Through meditation and training, they transform their bodies into living weapons.</p>
+                <p><strong>Special Abilities:</strong> Unarmored Defense, Ki Powers (stunning strikes, supernatural
+                    speed,
+                    wall running)</p>
+            </div>
+
+            <h3>Limited Spellcasters</h3>
+            <p>These classes have access to magic but focus primarily on other abilities:</p>
+
+            <div class="info-box">
+                <h4>Paladin</h4>
+                <p><strong>Magic Type:</strong> Divine (Holy)</p>
+                <p><strong>Spell Increase Attempts:</strong> 20</p>
+                <p><strong>Approach:</strong> Holy warriors who combine martial prowess with divine magic. Bound by
+                    Sacred
+                    Oaths, they draw power from unwavering faith and conviction. They can channel divine energy to heal
+                    allies and smite enemies with holy power.</p>
+                <p><strong>Special Abilities:</strong> Divine Smite, Lay on Hands, Oath-specific powers</p>
+            </div>
+
+            <div class="info-box">
+                <h4>Ranger</h4>
+                <p><strong>Magic Type:</strong> Nature (Primal)</p>
+                <p><strong>Spell Increase Attempts:</strong> 15</p>
+                <p><strong>Approach:</strong> Wilderness warriors who blend martial skill with primal magic. Their magic
+                    enhances natural abilities, allowing them to communicate with animals and harness nature's power in
+                    combat.</p>
+                <p><strong>Special Abilities:</strong> Favored Enemy, Natural Explorer, tracking expertise</p>
+            </div>
+
+            <h3>Choosing a Magic-Casting Class</h3>
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Class</th>
+                        <th>Magic Type</th>
+                        <th>Spell Attempts</th>
+                        <th>Best For</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Magician/Magician</td>
+                        <td>Arcane (Book)</td>
+                        <td>40</td>
+                        <td>Maximum spell versatility and power</td>
+                    </tr>
+                    <tr>
+                        <td>Cleric</td>
+                        <td>Divine</td>
+                        <td>35</td>
+                        <td>Healing, support, and divine power</td>
+                    </tr>
+                    <tr>
+                        <td>Bard</td>
+                        <td>Arcane (Music)</td>
+                        <td>30</td>
+                        <td>Versatility and party support</td>
+                    </tr>
+                    <tr>
+                        <td>Druid/Druid</td>
+                        <td>Nature (Control)</td>
+                        <td>25</td>
+                        <td>Nature magic and healing</td>
+                    </tr>
+                    <tr>
+                        <td>Warlock/Warlock</td>
+                        <td>Intuitive</td>
+                        <td>25</td>
+                        <td>Instinctive magic and social skills</td>
+                    </tr>
+                    <tr>
+                        <td>Monk</td>
+                        <td>Ki Energy</td>
+                        <td>25</td>
+                        <td>Martial arts enhanced by mystical power</td>
+                    </tr>
+                    <tr>
+                        <td>Paladin</td>
+                        <td>Divine (Holy)</td>
+                        <td>20</td>
+                        <td>Front-line combat with divine support</td>
+                    </tr>
+                    <tr>
+                        <td>Ranger</td>
+                        <td>Nature (Primal)</td>
+                        <td>15</td>
+                        <td>Wilderness skills with limited magic</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="note">
+                <h4>Note on Elves:</h4>
+                <p>All Elves receive 20 spell increase attempts regardless of their class, reflecting their natural
+                    affinity
+                    for magic. This can make Elven Warriors or Rogues surprisingly capable with spells.</p>
+            </div>
+
+            <h2>Complete Spell List</h2>
+            <p>The spell list has been unified and expanded to include both the original arcane lore spells and the new
+                5th Edition spells.</p>
+
+            <div class="system-card" style="text-align: center; padding: 30px; margin: 20px 0;">
+                <h3><a href="spell_list.html"
+                        style="font-size: 1.5em; text-decoration: none; border: 2px solid #8b4513; padding: 10px 20px; border-radius: 5px; background-color: #d2b48c; color: #2c1810; display: inline-block;">View
+                        Complete Spell List</a></h3>
+                <p style="margin-top: 15px;">Access the searchable database of all 300+ spells, including:</p>
+                <ul style="display: inline-block; text-align: left;">
+                    <li>Original Arcane Lore Spells (Clairvoyance, Combat, etc.)</li>
+                    <li>New 5th Edition Spells (Cleric, Paladin, Wizard, etc.)</li>
+                    <li>Filter by Class, School, and Level</li>
+                </ul>
+            </div>
+
+            <h2>Wand Spells (Magicians Only)</h2>
+            <p>These powerful rituals allow a Magician to permanently "charge" a wand with certain abilities. The
+                transfer consumes many astral points but is permanent once charged. A wand may hold more than one spell
+                at a time.</p>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Ritual</th>
+                        <th>AP Cost</th>
+                        <th>Effect</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#1 Prepare Wand</td>
+                        <td>-</td>
+                        <td>Makes wand unbreakable, prepares for further charges. All Magicians start with this.</td>
+                    </tr>
+                    <tr>
+                        <td>#2 Eternal Torch</td>
+                        <td>23</td>
+                        <td>Wand becomes undousable torch. Used automatically in dungeons/caves.</td>
+                    </tr>
+                    <tr>
+                        <td>#3 Magic Rope</td>
+                        <td>19</td>
+                        <td>Turn wand into 10-pace rope that attaches to ledges. Used automatically when climbing.</td>
+                    </tr>
+                    <tr>
+                        <td>#4 AP Reduction</td>
+                        <td>27</td>
+                        <td>Reduce all spell costs by 2 AP (minimum 1 AP per spell).</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>House Spells for Magicians</h2>
+            <p>Every Magician or Magician must choose an Arcane Lore specialization. Based on this choice, they gain
+                bonuses with certain spell values. These "house spells" can be increased by up to 3 points each when
+                reaching new experience levels. The number indicates starting bonus:</p>
+
+            <div class="info-box">
+                <h3>Clairvoyance Lore</h3>
+                <p>Analyze +2, Attributes Revealed +1, Eagle's Eye +1, Exposami +2, Odem Arcanum +2, Penetrating +1,
+                    Sensibal +2</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Combat Lore</h3>
+                <p>Accurate Eye +2, Fulminictus +2, Ignifaxus +2, Iron Rust +1, Lightning +2, Magic Armor +1,
+                    Plumbumbarum +2</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Demonology Lore</h3>
+                <p>Banish Spirits +2, Blood & Furor +3, Conjure Elemental +2, Heptagon +2, Necropathia +1, Skeletarius
+                    +2</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Dispell Lore</h3>
+                <p>Destructibo +1, Domination +3, Gardianum +2, Illusions +2, Odem Arcanum +1, Transformation +3</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Domination Lore</h3>
+                <p>Bambaladam +3, Horriphobus +4, Respondami +2, Sensibal +1, Somnigravis +2</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Healing Lore</h3>
+                <p>Arcano +2, Balm +3, Increase CR +1, Pure and Clear +3, Rest the Body +3</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Movement Lore</h3>
+                <p>Acceleratus +3, Foramen +3, Motoricus +2, Transversalis +2, Without a Trace +2</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Transformation Lore</h3>
+                <p>Eagle, Wolf +3, Magic Armor +2, Paralyze +2, Salother +3, Visibili +2</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Transmutation Lore</h3>
+                <p>Abvenenum +2, Burn! +1, Claudibus +1, Darkness +2, Fiat Lux +2, Melt the Solid +2, Silentium +2</p>
+            </div>
+
+            <h2>Combat Magic</h2>
+
+            <h3>Casting Spells in Combat</h3>
+
+            <h4>Action Economy</h4>
+            <ul>
+                <li><strong>Standard Spell (1 action):</strong> Uses your entire action for the turn. You cannot attack
+                    or use skills.</li>
+                <li><strong>Bonus Action Spell:</strong> Some quick spells use a bonus action, allowing you to also take
+                    a regular action.</li>
+                <li><strong>Reaction Spell:</strong> Defensive spells triggered by enemy actions (e.g., Shield,
+                    Counterspell).</li>
+                <li><strong>Long Casting Time:</strong> Spells requiring 1 minute or more cannot be cast during combat.
+                </li>
+            </ul>
+
+            <h4>Astral Point Cost</h4>
+            <p>Spells consume AP based on their power level:</p>
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Spell Level</th>
+                        <th>AP Cost</th>
+                        <th>Examples</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Cantrips (Level 0)</td>
+                        <td>0 AP</td>
+                        <td>Fire Bolt, Sacred Flame, Mage Hand</td>
+                    </tr>
+                    <tr>
+                        <td>Level 1</td>
+                        <td>2-4 AP</td>
+                        <td>Cure Wounds, Magic Missile, Shield</td>
+                    </tr>
+                    <tr>
+                        <td>Level 2</td>
+                        <td>5-8 AP</td>
+                        <td>Spiritual Weapon, Misty Step, Hold Person</td>
+                    </tr>
+                    <tr>
+                        <td>Level 3</td>
+                        <td>9-12 AP</td>
+                        <td>Fireball, Haste, Revivify</td>
+                    </tr>
+                    <tr>
+                        <td>Level 4</td>
+                        <td>13-16 AP</td>
+                        <td>Greater Invisibility, Polymorph, Wall of Fire</td>
+                    </tr>
+                    <tr>
+                        <td>Level 5+</td>
+                        <td>17-45 AP</td>
+                        <td>See spell list for specific costs</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Line of Sight</h4>
+            <ul>
+                <li>Must have clear line of sight to target</li>
+                <li>Back row casters have full visibility over front row</li>
+                <li>Some spells can target areas or use indirect targeting</li>
+                <li>Obstacles and walls block line of sight</li>
+            </ul>
+
+            <h3>Spell Duration</h3>
+
+            <h4>In Combat</h4>
+            <p>Spell durations are converted to turns for tactical clarity:</p>
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Duration Type</th>
+                        <th>Combat Effect</th>
+                        <th>Examples</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Instantaneous</td>
+                        <td>Immediate effect</td>
+                        <td>Damage spells, healing spells</td>
+                    </tr>
+                    <tr>
+                        <td>1 Round</td>
+                        <td>Until your next turn</td>
+                        <td>Shield, Hellish Rebuke</td>
+                    </tr>
+                    <tr>
+                        <td>1 Minute</td>
+                        <td>10 turns</td>
+                        <td>Bless, Bane, Hunter's Mark</td>
+                    </tr>
+                    <tr>
+                        <td>10 Minutes+</td>
+                        <td>Lasts entire combat</td>
+                        <td>Aid, Mage Armor (if cast before)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Out of Combat</h4>
+            <p>Spells use their listed time-based durations:</p>
+            <ul>
+                <li><strong>1 Hour:</strong> 60 minutes of exploration</li>
+                <li><strong>8 Hours:</strong> Until next long rest</li>
+                <li><strong>24 Hours:</strong> One full day</li>
+                <li><strong>Until Dispelled:</strong> Permanent until removed</li>
+            </ul>
+
+            <h3>Concentration</h3>
+            <div class="info-box">
+                <h4>Concentration Limit</h4>
+                <p>You can only maintain <strong>ONE</strong> concentration spell at a time. Casting a new concentration
+                    spell ends the previous one.</p>
+            </div>
+
+            <h4>Maintaining Concentration</h4>
+            <ul>
+                <li><strong>When Damaged:</strong> Make WIS saving throw (DC = 10 or half damage taken, whichever is
+                    higher)</li>
+                <li><strong>If Failed:</strong> Spell ends immediately</li>
+                <li><strong>If Incapacitated:</strong> Concentration automatically ends</li>
+                <li><strong>Voluntary End:</strong> Can drop concentration as a free action</li>
+            </ul>
+
+            <h4>Concentration Spells</h4>
+            <p>Marked with <strong>[Concentration]</strong> tag in spell descriptions. Common examples:</p>
+            <ul>
+                <li><strong>Buff Spells:</strong> Bless, Haste, Greater Invisibility</li>
+                <li><strong>Control Spells:</strong> Hold Person, Entangle, Hypnotic Pattern</li>
+                <li><strong>Summoning Spells:</strong> Conjure Animals, Spiritual Weapon</li>
+                <li><strong>Area Effects:</strong> Fog Cloud, Spirit Guardians, Wall of Fire</li>
+            </ul>
+
+            <div class="note">
+                <h4>Strategic Importance:</h4>
+                <p>Concentration prevents unlimited buff stacking and creates meaningful tactical choices. Do you
+                    maintain Haste for extra attacks, or switch to Bless for better accuracy? Breaking enemy
+                    concentration becomes a valuable combat tactic.</p>
+            </div>
+
+            <h3>Pre-Combat Preparation</h3>
+
+            <h4>Long-Duration Buffs</h4>
+            <p>Spells lasting 1 hour or more can be cast before entering combat:</p>
+            <ul>
+                <li>Still consume AP when cast</li>
+                <li>Provide tactical advantage going into battle</li>
+                <li><strong>Examples:</strong> Mage Armor (8 hours), Aid (8 hours), Longstrider (1 hour)</li>
+            </ul>
+
+            <h4>Ritual Casting</h4>
+            <p>Spells with the <strong>[Ritual]</strong> tag can be cast without consuming AP outside of combat:</p>
+            <ul>
+                <li>Cannot be used in combat</li>
+                <li>Useful for exploration and utility</li>
+                <li>No time tracking required - simply declare ritual casting</li>
+                <li><strong>Examples:</strong> Detect Magic, Identify, Alarm, Comprehend Languages</li>
+            </ul>
+
+            <h2>Magic Strategy</h2>
+            <ul>
+                <li><strong>AP Management:</strong> Don't exhaust all astral points - keep reserve for emergencies</li>
+                <li><strong>Spell Selection:</strong> Learn variety of spells for different situations</li>
+                <li><strong>Specialization:</strong> Choose Arcane Lore that matches your party needs</li>
+                <li><strong>Meditation Timing:</strong> Use meditation at camp when LP is high</li>
+                <li><strong>Wand Charging:</strong> Invest in useful utility spells for wands</li>
+                <li><strong>Combat Positioning:</strong> Keep magic users in back row for protection and visibility</li>
+                <li><strong>Concentration Management:</strong> Choose your concentration spell wisely - you can only
+                    have one active</li>
+                <li><strong>Pre-Combat Buffs:</strong> Cast long-duration spells before battle to save actions in combat
+                </li>
+                <li><strong>Ritual Casting:</strong> Use ritual spells freely outside combat (0 AP cost)</li>
+                <li><strong>Cantrip Usage:</strong> Rely on cantrips for minor encounters to conserve AP</li>
+                <li><strong>Breaking Concentration:</strong> Target enemy casters to disrupt their powerful spells</li>
+            </ul>
+
+            <div class="note">
+                <h4>Legend:</h4>
+                <p>* = Equals damage caused | ** = Level of Illusion x 2 | *** = Until end of combat or attacked | V =
+                    Varies | S = Special | AR = AR lowering equal to AP used</p>
+            </div>
+        </main>
+        <footer>
+            <p><a href="../index.html">Back to Index</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spell List - Game Systems Manual</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .filters {
+            background-color: #e8d9c5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #8b4513;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 5px;
+            border: 1px solid #d2b48c;
+            border-radius: 3px;
+            font-family: inherit;
+        }
+
+        .spell-card {
+            background-color: #fff;
+            border: 1px solid #d2b48c;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            transition: box-shadow 0.2s;
+        }
+
+        .spell-card:hover {
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .spell-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .spell-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #8b4513;
+        }
+
+        .spell-meta {
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+        }
+
+        .spell-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 3px;
+        }
+
+        .spell-desc {
+            white-space: pre-wrap;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            padding: 5px 10px;
+            cursor: pointer;
+            background-color: #d2b48c;
+            border: 1px solid #8b4513;
+            color: #2c1810;
+            border-radius: 3px;
+        }
+
+        .pagination button:disabled {
+            background-color: #eee;
+            color: #999;
+            cursor: not-allowed;
+            border-color: #ccc;
+        }
+
+        #loading {
+            text-align: center;
+            font-style: italic;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="magic.html" class="nav-home">← Back to Magic</a>
+        <header>
+            <h1>Spell List</h1>
+        </header>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label for="search">Search Name</label>
+                <input type="text" id="search" placeholder="Fireball...">
+            </div>
+            <div class="filter-group">
+                <label for="class-filter">Class</label>
+                <select id="class-filter">
+                    <option value="">All Classes</option>
+                    <!-- Populated by JS -->
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="level-filter">Level</label>
+                <select id="level-filter">
+                    <option value="">All Levels</option>
+                    <option value="0">Cantrip</option>
+                    <option value="1">1st Level</option>
+                    <option value="2">2nd Level</option>
+                    <option value="3">3rd Level</option>
+                    <option value="4">4th Level</option>
+                    <option value="5">5th Level</option>
+                    <option value="6">6th Level</option>
+                    <option value="7">7th Level</option>
+                    <option value="8">8th Level</option>
+                    <option value="9">9th Level</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="school-filter">School</label>
+                <select id="school-filter">
+                    <option value="">All Schools</option>
+                    <!-- Populated by JS -->
+                </select>
+            </div>
+        </div>
+
+        <div id="spell-count" style="margin-bottom: 10px; font-style: italic;"></div>
+        <div id="spells-container"></div>
+        <div id="loading">Loading spells...</div>
+
+        <div class="pagination">
+            <button id="prev-btn" disabled>Previous</button>
+            <span id="page-info">Page 1</span>
+            <button id="next-btn" disabled>Next</button>
+        </div>
+
+        <footer>
+            <p>Game Systems Manual - 5e Spell List</p>
+        </footer>
+    </div>
+
+    <script>
+        let allSpells = [];
+        let filteredSpells = [];
+        let currentPage = 1;
+        const spellsPerPage = 20;
+
+        async function loadSpells() {
+            try {
+                const response = await fetch('spells.json');
+                if (!response.ok) throw new Error("Failed to load spells");
+                allSpells = await response.json();
+
+                populateFilters();
+                applyFilters();
+
+                document.getElementById('loading').style.display = 'none';
+            } catch (e) {
+                console.error(e);
+                document.getElementById('loading').textContent = "Error loading spell data.";
+            }
+        }
+
+        function populateFilters() {
+            const classes = new Set();
+            const schools = new Set();
+
+            allSpells.forEach(spell => {
+                if (spell.classes) spell.classes.forEach(c => classes.add(c.name));
+                if (spell.school) schools.add(spell.school.name);
+            });
+
+            const classSelect = document.getElementById('class-filter');
+            Array.from(classes).sort().forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c;
+                opt.textContent = c;
+                classSelect.appendChild(opt);
+            });
+
+            const schoolSelect = document.getElementById('school-filter');
+            Array.from(schools).sort().forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s;
+                opt.textContent = s;
+                schoolSelect.appendChild(opt);
+            });
+        }
+
+        function applyFilters() {
+            const search = document.getElementById('search').value.toLowerCase();
+            const classFilter = document.getElementById('class-filter').value;
+            const levelFilter = document.getElementById('level-filter').value;
+            const schoolFilter = document.getElementById('school-filter').value;
+
+            filteredSpells = allSpells.filter(spell => {
+                const matchName = spell.name.toLowerCase().includes(search);
+                const matchClass = !classFilter || (spell.classes && spell.classes.some(c => c.name === classFilter));
+                const matchLevel = levelFilter === "" || spell.level === parseInt(levelFilter);
+                const matchSchool = !schoolFilter || (spell.school && spell.school.name === schoolFilter);
+
+                return matchName && matchClass && matchLevel && matchSchool;
+            });
+
+            currentPage = 1;
+            renderSpells();
+        }
+
+        function renderSpells() {
+            const container = document.getElementById('spells-container');
+            container.innerHTML = '';
+
+            const start = (currentPage - 1) * spellsPerPage;
+            const end = start + spellsPerPage;
+            const pageSpells = filteredSpells.slice(start, end);
+
+            document.getElementById('spell-count').textContent = `Showing ${filteredSpells.length} spells`;
+
+            pageSpells.forEach(spell => {
+                const div = document.createElement('div');
+                div.className = 'spell-card';
+
+                const levelText = spell.level === 0 ? 'Cantrip' : `Level ${spell.level}`;
+                const schoolText = spell.school ? spell.school.name : 'Unknown';
+                const ritual = spell.ritual ? ' (Ritual)' : '';
+                const concentration = spell.concentration ? ' (Concentration)' : '';
+
+                div.innerHTML = `
+                    <div class="spell-header">
+                        <span class="spell-name">${spell.name}</span>
+                        <span class="spell-meta">${levelText} ${schoolText}${ritual}${concentration}</span>
+                    </div>
+                    <div class="spell-details">
+                        <div><strong>Casting Time:</strong> ${spell.casting_time}</div>
+                        <div><strong>Range:</strong> ${spell.range}</div>
+                        <div><strong>Components:</strong> ${spell.components ? spell.components.join(', ') : 'None'}</div>
+                        <div><strong>Duration:</strong> ${spell.duration}</div>
+                    </div>
+                    <div class="spell-desc">${Array.isArray(spell.desc) ? spell.desc.join('\n\n') : spell.desc}</div>
+                    ${spell.higher_level ? `<div class="spell-desc" style="margin-top:10px; font-style:italic;"><strong>At Higher Levels:</strong> ${spell.higher_level.join('\n')}</div>` : ''}
+                `;
+                container.appendChild(div);
+            });
+
+            updatePagination();
+        }
+
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredSpells.length / spellsPerPage);
+            document.getElementById('page-info').textContent = `Page ${currentPage} of ${totalPages || 1}`;
+            document.getElementById('prev-btn').disabled = currentPage <= 1;
+            document.getElementById('next-btn').disabled = currentPage >= totalPages;
+        }
+
+        document.getElementById('prev-btn').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderSpells();
+                window.scrollTo(0, 0);
+            }
+        });
+
+        document.getElementById('next-btn').addEventListener('click', () => {
+            const totalPages = Math.ceil(filteredSpells.length / spellsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderSpells();
+                window.scrollTo(0, 0);
+            }
+        });
+
+        document.getElementById('search').addEventListener('input', applyFilters);
+        document.getElementById('class-filter').addEventListener('change', applyFilters);
+        document.getElementById('level-filter').addEventListener('change', applyFilters);
+        document.getElementById('school-filter').addEventListener('change', applyFilters);
+
+        document.addEventListener('DOMContentLoaded', loadSpells);
+    </script>
+</body>
+
+</html>

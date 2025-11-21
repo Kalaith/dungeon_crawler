@@ -1,0 +1,212 @@
+/* Game Manual Stylesheet */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background-color: #f4e9d8;
+    color: #2c1810;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: #fff8f0;
+    padding: 30px;
+    border: 3px solid #8b4513;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+header {
+    border-bottom: 2px solid #8b4513;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+}
+
+h1 {
+    font-size: 2.5em;
+    color: #8b4513;
+    text-align: center;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+h2 {
+    font-size: 1.8em;
+    color: #a0522d;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #d2b48c;
+    padding-bottom: 5px;
+}
+
+h3 {
+    font-size: 1.3em;
+    color: #654321;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+h4 {
+    font-size: 1.1em;
+    color: #8b6f47;
+    margin-top: 15px;
+    margin-bottom: 8px;
+}
+
+p {
+    margin-bottom: 15px;
+    text-align: justify;
+}
+
+ul, ol {
+    margin-left: 30px;
+    margin-bottom: 15px;
+}
+
+li {
+    margin-bottom: 8px;
+}
+
+a {
+    color: #8b4513;
+    text-decoration: none;
+    border-bottom: 1px dotted #8b4513;
+}
+
+a:hover {
+    color: #a0522d;
+    border-bottom: 1px solid #a0522d;
+}
+
+.nav-home {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 8px 15px;
+    background-color: #d2b48c;
+    border: 2px solid #8b4513;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.nav-home:hover {
+    background-color: #c9a879;
+    border-bottom: 2px solid #8b4513;
+}
+
+.system-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.system-card {
+    background-color: #fef5e7;
+    border: 2px solid #d2b48c;
+    padding: 15px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.system-card:hover {
+    background-color: #f9e9d0;
+    border-color: #8b4513;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.system-card h3 {
+    margin-top: 0;
+    font-size: 1.2em;
+}
+
+.system-card p {
+    font-size: 0.9em;
+    margin-bottom: 0;
+    text-align: left;
+}
+
+.info-box {
+    background-color: #e8d9c5;
+    border-left: 4px solid #8b4513;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+.stat-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.stat-table th,
+.stat-table td {
+    border: 1px solid #d2b48c;
+    padding: 10px;
+    text-align: left;
+}
+
+.stat-table th {
+    background-color: #d2b48c;
+    color: #2c1810;
+    font-weight: bold;
+}
+
+.stat-table tr:nth-child(even) {
+    background-color: #fef5e7;
+}
+
+.formula {
+    background-color: #e8d9c5;
+    padding: 10px;
+    font-family: 'Courier New', monospace;
+    border-radius: 3px;
+    margin: 10px 0;
+}
+
+code {
+    background-color: #e8d9c5;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+}
+
+.note {
+    background-color: #fff9e6;
+    border: 1px solid #d2b48c;
+    padding: 10px;
+    margin: 15px 0;
+    border-radius: 4px;
+    font-style: italic;
+}
+
+footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 2px solid #8b4513;
+    text-align: center;
+    color: #8b6f47;
+    font-size: 0.9em;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    .system-grid {
+        grid-template-columns: 1fr;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+}

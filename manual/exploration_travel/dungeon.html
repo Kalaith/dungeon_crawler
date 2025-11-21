@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dungeon Exploration - Game Systems Manual</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+    <div class="container">
+        <a href="../index.html" class="nav-home">← Back to Index</a>
+
+        <header>
+            <h1>Dungeon Exploration</h1>
+        </header>
+
+        <main>
+            <h2>Overview</h2>
+            <p>Dungeons are grid-based labyrinths filled with monsters, treasures, environmental hazards, and powerful
+                FOE enemies. Each dungeon consists of multiple floors (strata) organized thematically, with difficulty
+                increasing as you descend deeper. Exploration requires careful mapping, resource management, and
+                tactical awareness.</p>
+
+            <h2>Dungeon Structure</h2>
+
+            <h3>Strata System</h3>
+            <p>Dungeons are divided into thematic sections called Strata, each containing 3-5 floors:</p>
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Stratum</th>
+                        <th>Floors</th>
+                        <th>Theme</th>
+                        <th>New Mechanics</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>First</td>
+                        <td>1-5</td>
+                        <td>Introduction</td>
+                        <td>Basic enemies, simple layouts</td>
+                    </tr>
+                    <tr>
+                        <td>Second</td>
+                        <td>6-10</td>
+                        <td>Escalation</td>
+                        <td>Environmental hazards, FOE puzzles</td>
+                    </tr>
+                    <tr>
+                        <td>Third</td>
+                        <td>11-15</td>
+                        <td>Challenge</td>
+                        <td>Complex FOE patterns, gathering emphasis</td>
+                    </tr>
+                    <tr>
+                        <td>Fourth</td>
+                        <td>16-20</td>
+                        <td>Mastery</td>
+                        <td>Multi-floor puzzles, boss encounters</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p><strong>Boss Gates:</strong> Each stratum ends with a boss encounter that must be defeated to progress to
+                the next stratum. Bosses are significantly more powerful than regular enemies and require strategic
+                party composition and preparation.</p>
+
+            <h3>Floor Layouts</h3>
+            <ul>
+                <li><strong>Grid Size:</strong> 35x30 tiles per floor</li>
+                <li><strong>Complexity:</strong> Increases with depth - early floors are linear, later floors have
+                    branching paths and loops</li>
+                <li><strong>Shortcuts:</strong> One-way passages that unlock after activation, allowing quick return to
+                    town</li>
+                <li><strong>Save Points:</strong> Safe tiles where you can save progress without returning to town</li>
+            </ul>
+
+            <h2>FOE System (Formido Oppugnatura Exsequens)</h2>
+
+            <h3>What Are FOEs?</h3>
+            <p>FOEs are visible mini-boss enemies that roam dungeon floors according to specific movement patterns. They
+                appear as colored orbs on your map and represent significantly higher threat levels than random
+                encounters.</p>
+
+            <div class="info-box">
+                <p><strong>Warning:</strong> FOEs can often one-shot unprepared parties. Avoid combat until you're
+                    confident in your party's strength, or use them as skill gates to test your progression.</p>
+            </div>
+
+            <h3>FOE Characteristics</h3>
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Trait</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Visible</td>
+                        <td>Always shown on map, unlike random encounters</td>
+                    </tr>
+                    <tr>
+                        <td>Mobile</td>
+                        <td>Move according to specific AI patterns</td>
+                    </tr>
+                    <tr>
+                        <td>Avoidable</td>
+                        <td>Combat only triggers on collision</td>
+                    </tr>
+                    <tr>
+                        <td>Powerful</td>
+                        <td>Much higher stats than regular enemies</td>
+                    </tr>
+                    <tr>
+                        <td>Respawning</td>
+                        <td>Respawn after leaving floor or resting</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>FOE Movement Patterns</h3>
+            <p>Understanding FOE movement is crucial for safe navigation:</p>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Pattern</th>
+                        <th>Behavior</th>
+                        <th>Strategy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Static</td>
+                        <td>Never moves</td>
+                        <td>Easy to avoid, guards specific areas</td>
+                    </tr>
+                    <tr>
+                        <td>Patrol</td>
+                        <td>Fixed route, repeating</td>
+                        <td>Time your movements between patrols</td>
+                    </tr>
+                    <tr>
+                        <td>Mirror</td>
+                        <td>Moves same direction as player</td>
+                        <td>Move perpendicular to create distance</td>
+                    </tr>
+                    <tr>
+                        <td>Inverse</td>
+                        <td>Moves opposite of player</td>
+                        <td>Use to manipulate position</td>
+                    </tr>
+                    <tr>
+                        <td>Chase</td>
+                        <td>Pursues when detected (3-5 tile range)</td>
+                        <td>Stay out of detection radius</td>
+                    </tr>
+                    <tr>
+                        <td>Random</td>
+                        <td>Moves unpredictably</td>
+                        <td>Difficult to plan around, high risk</td>
+                    </tr>
+                    <tr>
+                        <td>Phasing</td>
+                        <td>Can move through walls</td>
+                        <td>Cannot be blocked, requires speed</td>
+                    </tr>
+                    <tr>
+                        <td>Fast</td>
+                        <td>Moves 2 tiles per player turn</td>
+                        <td>Requires careful planning, very dangerous</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>FOE Detection</h3>
+            <p>The UI provides FOE proximity warnings:</p>
+            <ul>
+                <li><strong>Yellow Icon:</strong> FOE is patrolling normally</li>
+                <li><strong>Red Icon (Pulsing):</strong> FOE has detected you and is pursuing</li>
+                <li><strong>Audio Cue:</strong> Distinct sound when FOE enters detection range</li>
+                <li><strong>Line of Sight:</strong> FOEs cannot detect through walls</li>
+            </ul>
+
+            <h3>FOE Combat</h3>
+            <p>If you collide with a FOE, combat initiates immediately:</p>
+            <ul>
+                <li>FOEs have 3-5x the HP of regular enemies</li>
+                <li>FOEs deal significantly more damage</li>
+                <li>Escaping is harder due to FOE's high AGI stats</li>
+                <li>Defeating FOEs yields superior materials and experience</li>
+                <li>Some FOEs drop unique equipment or unlock shortcuts</li>
+            </ul>
+
+            <h2>Random Encounters</h2>
+
+            <h3>Encounter Rate</h3>
+            <p>Random encounters occur as you move through the dungeon:</p>
+            <ul>
+                <li><strong>Frequency:</strong> Approximately every 5-10 steps</li>
+                <li><strong>Variability:</strong> Affected by party's Luck stat and certain skills</li>
+                <li><strong>Avoidance:</strong> Some skills can reduce encounter rate</li>
+                <li><strong>Danger Level:</strong> Every battle is meaningful - regular enemies can kill unprepared
+                    parties</li>
+            </ul>
+
+            <h3>Enemy Difficulty</h3>
+            <p>Unlike typical RPGs, regular encounters demand respect:</p>
+            <ul>
+                <li>Enemies can deal 20-40% of a character's HP per hit</li>
+                <li>Status effects (poison, paralysis, sleep) are genuinely dangerous</li>
+                <li>Enemy groups can focus-fire vulnerable party members</li>
+                <li>Buffs and debuffs significantly affect combat outcomes</li>
+            </ul>
+
+            <h2>Resource Gathering</h2>
+
+            <h3>Gathering Points</h3>
+            <p>Specific tiles contain resource nodes that yield crafting materials:</p>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Icon</th>
+                        <th>Materials</th>
+                        <th>Required Skill</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Mine</td>
+                        <td>Pickaxe</td>
+                        <td>Ores, gems, minerals</td>
+                        <td>Mining</td>
+                    </tr>
+                    <tr>
+                        <td>Chop</td>
+                        <td>Axe</td>
+                        <td>Wood, bark, sap</td>
+                        <td>Lumberjacking</td>
+                    </tr>
+                    <tr>
+                        <td>Take</td>
+                        <td>Hand</td>
+                        <td>Herbs, flowers, insects</td>
+                        <td>Herbalism</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Gathering Mechanics</h3>
+            <ul>
+                <li><strong>Sparkle Effect:</strong> Gathering points sparkle when resources are available</li>
+                <li><strong>Refresh Timer:</strong> Points refresh after time passes (varies by node)</li>
+                <li><strong>Skill Dependency:</strong> Higher gathering skills yield better/more materials</li>
+                <li><strong>Randomized Loot:</strong> Each gathering attempt draws from a loot table</li>
+                <li><strong>Rare Materials:</strong> Low chance for exceptional materials at any node</li>
+            </ul>
+
+            <h2>Dungeon Options</h2>
+
+            <h3>Map</h3>
+            <p>Access your cartography screen to view and edit your floor map. See the <a
+                    href="cartography.html">Cartography System</a> for full details on mapping mechanics.</p>
+
+            <h3>Open Door</h3>
+            <p>Interact with doors to proceed through the dungeon. Doors may be:</p>
+            <ul>
+                <li><strong>Unlocked:</strong> Opens freely</li>
+                <li><strong>Locked:</strong> Requires key, lockpicking, or magic</li>
+                <li><strong>One-Way:</strong> Can only be opened from one side</li>
+                <li><strong>Shortcut:</strong> Unlocks permanently after first activation</li>
+            </ul>
+
+            <h4>Locked Door Options</h4>
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Requirements</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Pick Lock</td>
+                        <td>Locks skill, lockpicks</td>
+                        <td>Quiet, preserves door</td>
+                    </tr>
+                    <tr>
+                        <td>Break Down</td>
+                        <td>High Strength</td>
+                        <td>Loud, destroys door permanently</td>
+                    </tr>
+                    <tr>
+                        <td>Foramen Spell</td>
+                        <td>Magic user, spell known</td>
+                        <td>Unlocks permanently, silent</td>
+                    </tr>
+                    <tr>
+                        <td>Use Key</td>
+                        <td>Correct key in inventory</td>
+                        <td>Instant, quiet</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Close Door</h3>
+            <p>Close doors behind you to prevent enemies from following. Broken doors cannot be closed.</p>
+
+            <h3>Open Chest</h3>
+            <p>Treasure chests contain equipment, consumables, and gold. Front character opens the chest and triggers
+                any traps:</p>
+            <ul>
+                <li><strong>Trap Types:</strong> Poison gas, explosion, curse, mimic (chest is actually a monster)</li>
+                <li><strong>Detection:</strong> High Perception may detect traps before opening</li>
+                <li><strong>Disarming:</strong> Rogues with Traps skill can attempt to disarm</li>
+                <li><strong>Risk/Reward:</strong> Better chests often have deadlier traps</li>
+            </ul>
+
+            <h3>Gather Resources</h3>
+            <p>Interact with sparkling gathering points to collect materials. Success rate and yield depend on relevant
+                gathering skill level.</p>
+
+            <h3>Save Progress</h3>
+            <p>At designated save points, you can save your game without returning to town. Save points are marked on
+                your map.</p>
+
+            <h2>Environmental Hazards</h2>
+
+            <h3>Hazard Types</h3>
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Hazard</th>
+                        <th>Effect</th>
+                        <th>Mitigation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Poison Gas</td>
+                        <td>Inflicts poison status</td>
+                        <td>Antidotes, poison resistance</td>
+                    </tr>
+                    <tr>
+                        <td>Spike Traps</td>
+                        <td>Deals physical damage</td>
+                        <td>High Perception to detect</td>
+                    </tr>
+                    <tr>
+                        <td>Lava Tiles</td>
+                        <td>Fire damage per step</td>
+                        <td>Fire resistance equipment</td>
+                    </tr>
+                    <tr>
+                        <td>Ice Floors</td>
+                        <td>Sliding, loss of control</td>
+                        <td>Careful movement, ice cleats</td>
+                    </tr>
+                    <tr>
+                        <td>Darkness</td>
+                        <td>Reduced vision, ambushes</td>
+                        <td>Light sources, Fiat Lux spell</td>
+                    </tr>
+                    <tr>
+                        <td>Cursed Zones</td>
+                        <td>Stat debuffs, HP drain</td>
+                        <td>Clerical magic, holy items</td>
+                    </tr>
+                </tbody>
+                </ul>
+
+                <h2>Dungeon Strategy</h2>
+
+                <h3>Party Formation</h3>
+                <p>Your party is arranged in two rows, which determines their role in combat and exploration.</p>
+                <table class="stat-table">
+                    <thead>
+                        <tr>
+                            <th>Row</th>
+                            <th>Best Character Type</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Front</td>
+                            <td>Warriors, Paladins, Battle-Mages</td>
+                            <td>Engage enemies in melee, protect the back row. High AC/HP recommended.</td>
+                        </tr>
+                        <tr>
+                            <td>Back</td>
+                            <td>Archers, Healers, Squishy Casters</td>
+                            <td>Attack from safety, cast support spells. Protected from most melee attacks.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p><strong>Note:</strong> There are no class restrictions on rows. A Wizard with high AC and touch
+                    spells can effectively fight in the Front Row.</p>
+
+                <h3>Resource Management</h3>
+                <ul>
+                    <li><strong>HP/TP Conservation:</strong> Don't waste resources on trivial encounters</li>
+                    <li><strong>Healing Items:</strong> Keep readily accessible in left hand slots</li>
+                    <li><strong>Inventory Space:</strong> Leave room for gathered materials and loot</li>
+                    <li><strong>Return Timing:</strong> Head back to town before resources are depleted</li>
+                </ul>
+
+                <h3>FOE Navigation</h3>
+                <ul>
+                    <li>Map FOE starting positions immediately upon entering a floor</li>
+                    <li>Observe movement patterns for at least 3-4 turns before proceeding</li>
+                    <li>Use annotations to mark safe routes and danger zones</li>
+                    <li>Plan escape routes in case FOE detection occurs</li>
+                    <li>Some FOE puzzles require manipulating FOE positions with careful movement</li>
+                </ul>
+
+                <h3>Exploration Tips</h3>
+                <ul>
+                    <li>Map systematically - complete one section before moving to the next</li>
+                    <li>Mark all gathering points and note refresh timers</li>
+                    <li>Save frequently at save points</li>
+                    <li>Keep healing items ready for trap triggers</li>
+                    <li>Listen at doors before opening (may hear enemies)</li>
+                    <li>Check party HP/TP regularly</li>
+                    <li>Don't overextend - return to town before party is weakened</li>
+                    <li>Complete mapping quests for guild rewards</li>
+                </ul>
+
+                <h3>Lighting</h3>
+                <table class="stat-table">
+                    <thead>
+                        <tr>
+                            <th>Light Source</th>
+                            <th>Duration</th>
+                            <th>Advantages</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Torch</td>
+                            <td>Limited (30 min)</td>
+                            <td>Cheap, readily available</td>
+                        </tr>
+                        <tr>
+                            <td>Lantern</td>
+                            <td>Longer (2 hours)</td>
+                            <td>More reliable, brighter</td>
+                        </tr>
+                        <tr>
+                            <td>Fiat Lux Spell</td>
+                            <td>Spell duration (1 hour)</td>
+                            <td>No equipment needed, hands-free</td>
+                        </tr>
+                        <tr>
+                            <td>Charged Wand</td>
+                            <td>Permanent</td>
+                            <td>Never runs out, automatic</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+        </main>
+
+        <footer>
+            <p><a href="../index.html">Back to Index</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>

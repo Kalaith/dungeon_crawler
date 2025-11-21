@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Derived Statistics - Game Systems Manual</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+    <div class="container">
+        <a href="../index.html" class="nav-home">← Back to Index</a>
+
+        <header>
+            <h1>Derived Statistics</h1>
+        </header>
+
+        <main>
+            <h2>Overview</h2>
+            <p>Derived statistics are calculated from your character's primary attributes and Class. These
+                statistics play crucial roles in gameplay, affecting everything from survival to combat effectiveness to
+                magical ability.</p>
+
+            <h2>Primary Derived Statistics</h2>
+
+            <h3>Health Points (HP)</h3>
+            <p>Represent the amount of damage a character can take before death. A character's Health Points are based
+                upon their statistics and increase with experience.</p>
+
+            <div class="info-box">
+                <h4>Health Points Mechanics:</h4>
+                <ul>
+                    <li>Based on character's Constitution (CO) and Strength (ST)</li>
+                    <li>Increase with experience</li>
+                    <li><strong>At 5 or fewer HP:</strong> Character will lose consciousness</li>
+                    <li><strong>At 0 HP:</strong> Character dies</li>
+                    <li><strong>Recovery:</strong> Health Points can be regained through sleep, potions, or magical
+                        intervention</li>
+                </ul>
+            </div>
+
+            <h3>Astral Points (AP)</h3>
+            <p>All kinds of magic are powered by astral energy which is measured in astral points. These points
+                represent the amount of magical power your character has and the amount of points available to cast
+                spells.</p>
+
+            <div class="info-box">
+                <h4>Astral Points Mechanics:</h4>
+                <ul>
+                    <li>Based upon character's Class</li>
+                    <li>Increase with experience</li>
+                    <li><strong>Recovery:</strong> Replenished through sleep, potions, or meditation</li>
+                    <li>Each spell cast consumes a specific amount of AP</li>
+                </ul>
+            </div>
+
+            <h3>Endurance</h3>
+            <p>Reflects your character's ability to withstand strain and is a key factor in how much burden can be
+                tolerated before suffering exhaustion or penalties.</p>
+
+            <div class="formula">
+                <p><strong>Endurance Calculation:</strong><br>
+                    Based on Health Points (HP) + Constitution (CO)</p>
+            </div>
+
+            <h3>Magic Resistance (MR)</h3>
+            <p>Represents a character's ability to ward off the effects of magical spells.</p>
+
+            <div class="formula">
+                <p><strong>Magic Resistance Calculation:</strong><br>
+                    Based on Courage (CR) + Wisdom (WD) + Superstition (SN)</p>
+            </div>
+
+            <h2>Secondary Derived Statistics</h2>
+            <p>Once characters are generated and have joined your party, they acquire three new secondary statistics,
+                each of which are seen in the character review.</p>
+
+            <h3>Encumbrance (ENC)</h3>
+            <p>A character can only carry so much before their knees start to buckle and back gives out. Encumbrance
+                tracks this load, and tells you how many ounces of armor, weapons, and supplies a character carries.</p>
+
+            <div class="info-box">
+                <h4>Encumbrance Rules:</h4>
+                <ul>
+                    <li><strong>Maximum Capacity:</strong> 100 × Strength (ST) ounces</li>
+                    <li>Characters who push the limit or exceed it suffer penalties to Initiative and physical checks
+                    </li>
+                    <li>Affects how quickly a character can react in combat</li>
+                    <li>Tracks total weight of armor, weapons, and supplies</li>
+                </ul>
+            </div>
+
+            <div class="formula">
+                <p><strong>Maximum Encumbrance:</strong><br>
+                    100 × ST (in ounces)</p>
+            </div>
+
+            <h3>Initiative (Speed)</h3>
+            <p>Initiative determines the order in which characters and enemies act during combat. A higher initiative
+                means acting earlier in the round, allowing you to strike first, heal allies before they fall, or
+                control the battlefield.</p>
+
+            <div class="info-box">
+                <h4>Initiative Mechanics:</h4>
+                <ul>
+                    <li><strong>Calculation:</strong> d20 + AG Modifier + IN Modifier (if IN ≥ 12)</li>
+                    <li><strong>Agility (AG):</strong> Primary initiative attribute (reaction speed)</li>
+                    <li><strong>Intuition (IN):</strong> Adds to initiative if 12+ (danger sense)</li>
+                    <li><strong>Turn Order:</strong> Highest to Lowest</li>
+                    <li><strong>Ties:</strong> Resolved by higher AG, then higher IN, then simultaneous</li>
+                    <li><strong>Surprise:</strong> Surprised creatures cannot act on the first round</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h4>Initiative Examples:</h4>
+                <p><strong>Character 1:</strong> AG 10 (+0), IN 8 (+0) → Initiative = d20 + 0</p>
+                <p><strong>Character 2:</strong> AG 12 (+1), IN 13 (+1) → Initiative = d20 + 2</p>
+                <p><strong>Character 3:</strong> AG 13 (+1), IN 10 (+0) → Initiative = d20 + 1 (IN below 12)</p>
+            </div>
+
+            <h3>Movement Points (Overworld)</h3>
+            <p>While combat movement is abstract (Front/Back rows), traveling the overworld requires Movement Points.
+            </p>
+            <div class="info-box">
+                <h4>Movement Mechanics:</h4>
+                <ul>
+                    <li><strong>Daily Pool:</strong> Characters/Parties have a set number of Movement Points per day
+                        based on their mode of travel (Foot, Ship, etc.).</li>
+                    <li><strong>Terrain Cost:</strong> Difficult terrain (swamps, mountains) costs more points to
+                        traverse.</li>
+                    <li><strong>Exhaustion:</strong> Pushing beyond your daily limit causes exhaustion.</li>
+                </ul>
+            </div>
+
+            <h3>Armor Class (AC)</h3>
+            <p>A character's Armor Class represents how hard it is for enemies to land a solid, damaging blow. It is a
+                combination of physical armor, agility, and magical protection.</p>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>AC Value</th>
+                        <th>Protection Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>10</td>
+                        <td>Unarmored (Base)</td>
+                    </tr>
+                    <tr>
+                        <td>11-13</td>
+                        <td>Light Armor (Leather, Studded Leather)</td>
+                    </tr>
+                    <tr>
+                        <td>14-16</td>
+                        <td>Medium Armor (Scale Mail, Breastplate)</td>
+                    </tr>
+                    <tr>
+                        <td>18-20+</td>
+                        <td>Heavy Armor (Plate) & Shields</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box">
+                <h4>Armor Class Mechanics:</h4>
+                <ul>
+                    <li><strong>Base:</strong> 10 + Dexterity Modifier (unless wearing heavy armor)</li>
+                    <li><strong>Higher is Better:</strong> Enemies must roll equal to or higher than your AC to hit.
+                    </li>
+                    <li><strong>Shields:</strong> Typically add +2 to AC.</li>
+                    <li><strong>Magic:</strong> Spells like <em>Mage Armor</em> or <em>Shield</em> can temporarily boost
+                        AC.</li>
+                </ul>
+            </div>
+
+            <h2>Currency System</h2>
+            <p>Money is an important commodity in the game world. This statistic shows the amount of money your
+                character currently has.</p>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Currency</th>
+                        <th>Symbol</th>
+                        <th>Conversion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Gold Ducats</td>
+                        <td>D</td>
+                        <td>Highest form of currency</td>
+                    </tr>
+                    <tr>
+                        <td>Silver Crowns</td>
+                        <td>S</td>
+                        <td>10 Silver Crowns = 1 Gold Ducat</td>
+                    </tr>
+                    <tr>
+                        <td>Copper Bits</td>
+                        <td>B</td>
+                        <td>10 Copper Bits = 1 Silver Crown</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box">
+                <h4>Currency Example:</h4>
+                <p>You may see, for instance, "10D 2S 5B" on your character's screen, meaning they have:</p>
+                <ul>
+                    <li>10 Gold Ducats</li>
+                    <li>2 Silver Crowns</li>
+                    <li>5 Copper Bits</li>
+                </ul>
+                <p>Your character's make up and a bit of luck determine how much money they receive at creation.</p>
+            </div>
+
+            <h2>Physical Characteristics</h2>
+
+            <h3>Height and Weight</h3>
+            <p>Help to define the physical aspects of your character and are based on the Class you selected for
+                your character.</p>
+
+            <h3>Deity</h3>
+            <p>A character's deity is very important. Based upon the month the character is born, the deity determines
+                the character's general way of life and may offer bonuses to attribute or skill values.</p>
+
+            <div class="info-box">
+                <h4>Deity Benefits:</h4>
+                <ul>
+                    <li>Determines character's general way of life</li>
+                    <li>May offer bonuses to attribute or skill values</li>
+                    <li>Temples throughout the world offer respite for travelers</li>
+                    <li>Characters in need may enjoy divine help</li>
+                    <li>Steady worship and sacrifice will make a favorable impression</li>
+                </ul>
+            </div>
+
+            <h2>Statistic Interactions</h2>
+
+            <h3>How Statistics Work Together</h3>
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Derived Stat</th>
+                        <th>Affects</th>
+                        <th>Affected By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Endurance</td>
+                        <td>Burden Tolerance, Exhaustion Resistance</td>
+                        <td>Health Points, Constitution</td>
+                    </tr>
+                    <tr>
+                        <td>Initiative</td>
+                        <td>Turn Order</td>
+                        <td>Agility, Encumbrance</td>
+                    </tr>
+                    <tr>
+                        <td>Encumbrance</td>
+                        <td>Initiative, Physical Checks</td>
+                        <td>Strength, Equipped Items</td>
+                    </tr>
+                    <tr>
+                        <td>Magic Resistance</td>
+                        <td>Spell Defense</td>
+                        <td>Courage, Wisdom, Superstition</td>
+                    </tr>
+                    <tr>
+                        <td>Armor Class</td>
+                        <td>Physical Defense</td>
+                        <td>Equipped Armor</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </main>
+
+        <footer>
+            <p><a href="../index.html">Back to Index</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>

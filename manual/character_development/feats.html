@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feats - Game Systems Manual</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .feat-filters {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .feat-filters input,
+        .feat-filters select {
+            padding: 8px;
+            margin: 5px;
+            border-radius: 4px;
+            border: 1px solid #666;
+            background: #2a2a2a;
+            color: #e0e0e0;
+        }
+
+        .feat-card {
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid #4a9eff;
+            border-radius: 4px;
+        }
+
+        .feat-card h3 {
+            margin-top: 0;
+            color: #4a9eff;
+        }
+
+        .feat-prerequisites {
+            color: #ff9944;
+            font-style: italic;
+            margin: 5px 0;
+        }
+
+        .feat-category {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #4a9eff;
+            color: #000;
+            border-radius: 3px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .feat-desc {
+            margin-top: 10px;
+        }
+
+        .feat-desc li {
+            margin: 5px 0;
+        }
+
+        .level-table {
+            margin: 20px 0;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .level-table th {
+            background: #4a9eff;
+            color: #000;
+        }
+
+        .level-table td,
+        .level-table th {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .level-table tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .highlight-row {
+            background: rgba(74, 158, 255, 0.2) !important;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="../index.html" class="nav-home">← Back to Index</a>
+        <header>
+            <h1>Feats</h1>
+        </header>
+        <main>
+            <h2>Overview</h2>
+            <p>Feats represent special abilities, training, or talents that set your character apart from others. Every
+                <strong>3rd level</strong> (levels 3, 6, 9, 12, etc.), your character gains a feat of your choice. Feats
+                can enhance your combat prowess, expand your magical abilities, or provide unique utility options.
+            </p>
+
+            <h2>Feat Progression</h2>
+            <table class="level-table">
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>Feats Gained</th>
+                        <th>Total Feats</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1-2</td>
+                        <td>-</td>
+                        <td>0</td>
+                    </tr>
+                    <tr class="highlight-row">
+                        <td>3</td>
+                        <td>1st Feat</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>4-5</td>
+                        <td>-</td>
+                        <td>1</td>
+                    </tr>
+                    <tr class="highlight-row">
+                        <td>6</td>
+                        <td>2nd Feat</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>7-8</td>
+                        <td>-</td>
+                        <td>2</td>
+                    </tr>
+                    <tr class="highlight-row">
+                        <td>9</td>
+                        <td>3rd Feat</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>10-11</td>
+                        <td>-</td>
+                        <td>3</td>
+                    </tr>
+                    <tr class="highlight-row">
+                        <td>12</td>
+                        <td>4th Feat</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Feat Categories</h2>
+            <div class="info-box">
+                <p><strong>Origin Feats:</strong> Available from level 1, representing innate talents or early training.
+                </p>
+                <p><strong>General Feats:</strong> Available from level 4+, representing advanced training and mastery.
+                </p>
+                <p><strong>Racial Feats:</strong> Specific to certain races, enhancing racial abilities.</p>
+            </div>
+
+            <h2>Browse Feats</h2>
+            <div class="feat-filters">
+                <input type="text" id="searchFeats" placeholder="Search feats by name or description...">
+                <select id="categoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="Origin">Origin</option>
+                    <option value="General">General</option>
+                </select>
+                <select id="prerequisiteFilter">
+                    <option value="all">All Prerequisites</option>
+                    <option value="none">No Prerequisites</option>
+                    <option value="level">Level Requirement</option>
+                    <option value="ability">Ability Score</option>
+                    <option value="race">Race Specific</option>
+                </select>
+            </div>
+
+            <div id="featList">
+                <!-- Feats will be dynamically loaded here -->
+            </div>
+        </main>
+        <footer>
+            <p><a href="../index.html">Back to Index</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // Combined feat data from both JSON files
+        const FEATS = [
+            {
+                "name": "Alert",
+                "category": "Origin",
+                "prerequisites": [],
+                "desc": [
+                    "Add your proficiency bonus to Initiative rolls.",
+                    "After rolling Initiative, you may swap your Initiative with a willing ally."
+                ]
+            },
+            {
+                "name": "Crafter",
+                "category": "Origin",
+                "prerequisites": [],
+                "desc": [
+                    "You gain proficiency with 3 Artisan's Tools.",
+                    "You receive a 20% discount when you buy a nonmagical item.",
+                    "During a Long Rest you may craft a piece of gear given you are proficient in and have the appropriate tool."
+                ]
+            },
+            {
+                "name": "Healer",
+                "category": "Origin",
+                "prerequisites": [],
+                "desc": [
+                    "With a Utilize action, you can expend 1 use of a Healer's Kit on a creature within 5 ft. That creature can expend a hit die to heal by the roll of the hit die plus your proficiency bonus.",
+                    "You can reroll 1's you roll from healing someone with this feat or from a spell."
+                ]
+            },
+            {
+                "name": "Lucky",
+                "category": "Origin",
+                "prerequisites": [],
+                "desc": [
+                    "You have a number of Luck Points equal to your proficiency bonus.",
+                    "You can expend 1 to give yourself advantage on a d20 test or give someone else disadvantage on an attack roll against you.",
+                    "You regain your Luck Points with a Long Rest."
+                ]
+            },
+            {
+                "name": "Magic Initiate",
+                "category": "Origin",
+                "prerequisites": [],
+                "desc": [
+                    "You learn two cantrips and a Level 1 Spell of your choice from either the Cleric, Druid, or Wizard spell lists.",
+                    "You can cast the spell once per Long Rest without expending a spell slot.",
+                    "This feat is repeatable but you must learn from different spell lists."
+                ]
+            },
+            {
+                "name": "Musician",
+                "category": "Origin",
+                "prerequisites": [],
+                "desc": [
+                    "You gain proficiency with 3 Musical Instruments.",
+                    "When finishing a Short or Long Rest, you can give a number of allies equal to your proficiency bonus Heroic Inspiration."
+                ]
+            },
+            {
+                "name": "Savage Attacker",
+                "category": "Origin",
+                "prerequisites": [],
+                "desc": [
+                    "Once per turn when you deal damage with a weapon, you can roll damage twice and take the higher result."
+                ]
+            },
+            {
+                "name": "Skilled",
+                "category": "Origin",
+                "prerequisites": [],
+                "desc": [
+                    "You gain proficiency with 3 skills or tools.",
+                    "You can take this feat more than once."
+                ]
+            },
+            {
+                "name": "Tavern Brawler",
+                "category": "Origin",
+                "prerequisites": [],
+                "desc": [
+                    "Your Unarmed Strikes deal 1d4+STR damage and you can reroll 1's from damage rolls.",
+                    "You can also push a target 5 ft once per turn with an Unarmed Strike.",
+                    "You also gain proficiency with improvised weapons."
+                ]
+            },
+            {
+                "name": "Tough",
+                "category": "Origin",
+                "prerequisites": [],
+                "desc": [
+                    "Your HP max increases by 2 times your character level when you gain this feat.",
+                    "Every time you level up you gain an extra 2 max HP."
+                ]
+            },
+            {
+                "name": "Ability Score Improvement",
+                "category": "General",
+                "prerequisites": [{ "type": "level", "value": 4 }],
+                "desc": [
+                    "You increase one ability score by 2 or two ability scores by 1."
+                ]
+            },
+            {
+                "name": "Actor",
+                "category": "General",
+                "prerequisites": [{ "type": "level", "value": 4 }, { "type": "ability", "value": "CHA 13" }],
+                "desc": [
+                    "+1 CHA.",
+                    "You have advantage on Deception and Performance checks to maintain your disguise.",
+                    "You can mimic creature sounds and speech."
+                ]
+            },
+            {
+                "name": "Athlete",
+                "category": "General",
+                "prerequisites": [{ "type": "level", "value": 4 }, { "type": "ability", "value": "STR 13" }],
+                "desc": [
+                    "+1 STR or DEX.",
+                    "You gain a Climb speed and can stand up from Prone with 5 ft of movement.",
+                    "You can make a running jump with only 5 ft of prior movement."
+                ]
+            },
+            {
+                "name": "Charger",
+                "category": "General",
+                "prerequisites": [{ "type": "level", "value": 4 }, { "type": "ability", "value": "STR 13" }],
+                "desc": [
+                    "+1 STR or DEX.",
+                    "You gain +10 ft when Dashing.",
+                    "If you move at least 10 ft towards a target before hitting them, you can deal 1d8 extra damage or push them 10 ft."
+                ]
+            },
+            {
+                "name": "Crossbow Expert",
+                "category": "General",
+                "prerequisites": [{ "type": "level", "value": 4 }, { "type": "ability", "value": "DEX 13" }],
+                "desc": [
+                    "+1 DEX.",
+                    "You ignore the Loading property of Crossbows.",
+                    "Being in melee does not impose disadvantage on ranged attacks."
+                ]
+            },
+            {
+                "name": "Defensive Duelist",
+                "category": "General",
+                "prerequisites": [{ "type": "level", "value": 4 }, { "type": "ability", "value": "DEX 13" }],
+                "desc": [
+                    "+1 DEX.",
+                    "While holding a finesse weapon, you can use your Reaction to add your proficiency bonus to your AC when hit by a melee attack."
+                ]
+            },
+            {
+                "name": "Dual Wielder",
+                "category": "General",
+                "prerequisites": [{ "type": "level", "value": 4 }, { "type": "ability", "value": "STR 13" }],
+                "desc": [
+                    "+1 STR or DEX.",
+                    "When you attack with a Light weapon, you can make an offhand attack with your Bonus Action with a melee weapon."
+                ]
+            },
+            {
+                "name": "Durable",
+                "category": "General",
+                "prerequisites": [{ "type": "level", "value": 4 }],
+                "desc": [
+                    "+1 CON.",
+                    "You have advantage on Death Saves.",
+                    "You can use your Bonus Action to expend and heal with a Hit Die."
+                ]
+            },
+            {
+                "name": "Great Weapon Master",
+                "category": "General",
+                "prerequisites": [{ "type": "level", "value": 4 }, { "type": "ability", "value": "STR 13" }],
+                "desc": [
+                    "+1 STR.",
+                    "When you hit with a Heavy weapon, you deal extra damage equal to your proficiency bonus.",
+                    "When you crit or reduce a target to 0 HP, you can make another attack with your Bonus Action."
+                ]
+            },
+            {
+                "name": "Heavily Armored",
+                "category": "General",
+                "prerequisites": [{ "type": "level", "value": 4 }, { "type": "proficiency", "value": "Medium Armor" }],
+                "desc": [
+                    "+1 STR.",
+                    "You gain proficiency in Heavy Armor."
+                ]
+            },
+            {
+                "name": "Polearm Master",
+                "category": "General",
+                "prerequisites": [{ "type": "level", "value": 4 }, { "type": "ability", "value": "STR 13" }],
+                "desc": [
+                    "+1 STR or DEX.",
+                    "You can use your Bonus Action to make another attack after attacking with a Quarterstaff, Spear, or Heavy + Reach weapon.",
+                    "You can use your Reaction to attack when an enemy moves into your range."
+                ]
+            },
+            {
+                "name": "Sentinel",
+                "category": "General",
+                "prerequisites": [{ "type": "level", "value": 4 }, { "type": "ability", "value": "STR 13" }],
+                "desc": [
+                    "+1 STR or DEX.",
+                    "You can make an opportunity attack against a target that tries to Disengage or hits someone other than you.",
+                    "These attacks reduce the target's speed to 0 for the rest of that turn."
+                ]
+            },
+            {
+                "name": "Sharpshooter",
+                "category": "General",
+                "prerequisites": [{ "type": "level", "value": 4 }, { "type": "ability", "value": "DEX 13" }],
+                "desc": [
+                    "+1 DEX.",
+                    "Your ranged weapon attacks ignore half and 3/4 cover.",
+                    "Being in melee doesn't impose disadvantage and your long range isn't at disadvantage."
+                ]
+            },
+            {
+                "name": "War Caster",
+                "category": "General",
+                "prerequisites": [{ "type": "level", "value": 4 }, { "type": "feature", "value": "Spellcasting" }],
+                "desc": [
+                    "+1 INT, WIS, or CHA.",
+                    "You have advantage on Constitution saves to maintain concentration.",
+                    "You can perform somatic components even with weapons or shields in hand.",
+                    "You can use a spell as an opportunity attack."
+                ]
+            },
+            {
+                "name": "Elven Accuracy",
+                "category": "General",
+                "prerequisites": [{ "type": "race", "value": "Elf or Half-Elf" }],
+                "desc": [
+                    "+1 DEX, INT, WIS, or CHA.",
+                    "Whenever you have advantage on an attack roll using DEX, INT, WIS, or CHA, you can reroll one of the dice once."
+                ]
+            },
+            {
+                "name": "Dwarven Fortitude",
+                "category": "General",
+                "prerequisites": [{ "type": "race", "value": "Dwarf" }],
+                "desc": [
+                    "+1 CON.",
+                    "Whenever you take the Dodge action in combat, you can spend one Hit Die to heal yourself."
+                ]
+            },
+            {
+                "name": "Dragon Fear",
+                "category": "General",
+                "prerequisites": [{ "type": "race", "value": "Dragonborn" }],
+                "desc": [
+                    "+1 STR, CON, or CHA.",
+                    "Instead of exhaling destructive energy, you can roar to frighten creatures within 30 feet."
+                ]
+            },
+            {
+                "name": "Dragon Hide",
+                "category": "General",
+                "prerequisites": [{ "type": "race", "value": "Dragonborn" }],
+                "desc": [
+                    "+1 STR, CON, or CHA.",
+                    "Your scales harden. While not wearing armor, AC = 13 + DEX.",
+                    "You grow retractable claws that deal 1d4 + STR slashing damage."
+                ]
+            },
+            {
+                "name": "Squat Nimbleness",
+                "category": "General",
+                "prerequisites": [{ "type": "race", "value": "Dwarf or Small race" }],
+                "desc": [
+                    "+1 STR or DEX.",
+                    "Increase your walking speed by 5 feet.",
+                    "You gain proficiency in Acrobatics or Athletics.",
+                    "You have advantage on checks to escape from being grappled."
+                ]
+            },
+            {
+                "name": "Fade Away",
+                "category": "General",
+                "prerequisites": [{ "type": "race", "value": "Gnome" }],
+                "desc": [
+                    "+1 DEX or INT.",
+                    "Immediately after you take damage, you can use a reaction to magically become invisible until the end of your next turn."
+                ]
+            },
+            {
+                "name": "Flames of Phlegethos",
+                "category": "General",
+                "prerequisites": [{ "type": "race", "value": "Tiefling" }],
+                "desc": [
+                    "+1 INT or CHA.",
+                    "When you roll fire damage for a spell, you can reroll any 1s.",
+                    "When you cast a fire spell, flames wreathe you and deal 1d4 fire damage to nearby attackers."
+                ]
+            },
+            {
+                "name": "Infernal Constitution",
+                "category": "General",
+                "prerequisites": [{ "type": "race", "value": "Tiefling" }],
+                "desc": [
+                    "+1 CON.",
+                    "You have resistance to cold and poison damage.",
+                    "You have advantage on saving throws against being poisoned."
+                ]
+            },
+            {
+                "name": "Bountiful Luck",
+                "category": "General",
+                "prerequisites": [{ "type": "race", "value": "Halfling" }],
+                "desc": [
+                    "When an ally within 30 feet rolls a 1 on a d20, you can use your reaction to let them reroll."
+                ]
+            },
+            {
+                "name": "Second Chance",
+                "category": "General",
+                "prerequisites": [{ "type": "race", "value": "Halfling" }],
+                "desc": [
+                    "+1 DEX, CON, or CHA.",
+                    "When a creature hits you with an attack roll, you can use your reaction to force that creature to reroll."
+                ]
+            }
+        ];
+
+        function renderFeats(feats) {
+            const featList = document.getElementById('featList');
+            featList.innerHTML = '';
+
+            if (feats.length === 0) {
+                featList.innerHTML = '<p>No feats match your search criteria.</p>';
+                return;
+            }
+
+            feats.forEach(feat => {
+                const featCard = document.createElement('div');
+                featCard.className = 'feat-card';
+
+                let prereqText = '';
+                if (feat.prerequisites && feat.prerequisites.length > 0) {
+                    const prereqs = feat.prerequisites.map(p => {
+                        if (p.type === 'level') return `Level ${p.value}+`;
+                        if (p.type === 'ability') return p.value;
+                        if (p.type === 'race') return p.value;
+                        if (p.type === 'proficiency') return p.value;
+                        if (p.type === 'feature') return p.value;
+                        return '';
+                    }).filter(p => p).join(', ');
+                    prereqText = `<p class="feat-prerequisites">Prerequisites: ${prereqs}</p>`;
+                } else {
+                    prereqText = '<p class="feat-prerequisites">No prerequisites</p>';
+                }
+
+                const descList = feat.desc.map(d => `<li>${d}</li>`).join('');
+
+                featCard.innerHTML = `
+                    <h3><span class="feat-category">${feat.category}</span>${feat.name}</h3>
+                    ${prereqText}
+                    <div class="feat-desc">
+                        <ul>
+                            ${descList}
+                        </ul>
+                    </div>
+                `;
+
+                featList.appendChild(featCard);
+            });
+        }
+
+        function filterFeats() {
+            const searchTerm = document.getElementById('searchFeats').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const prerequisiteFilter = document.getElementById('prerequisiteFilter').value;
+
+            let filtered = FEATS.filter(feat => {
+                // Search filter
+                const matchesSearch = feat.name.toLowerCase().includes(searchTerm) ||
+                    feat.desc.some(d => d.toLowerCase().includes(searchTerm));
+
+                // Category filter
+                const matchesCategory = categoryFilter === 'all' || feat.category === categoryFilter;
+
+                // Prerequisite filter
+                let matchesPrerequisite = true;
+                if (prerequisiteFilter === 'none') {
+                    matchesPrerequisite = !feat.prerequisites || feat.prerequisites.length === 0;
+                } else if (prerequisiteFilter === 'level') {
+                    matchesPrerequisite = feat.prerequisites && feat.prerequisites.some(p => p.type === 'level');
+                } else if (prerequisiteFilter === 'ability') {
+                    matchesPrerequisite = feat.prerequisites && feat.prerequisites.some(p => p.type === 'ability');
+                } else if (prerequisiteFilter === 'race') {
+                    matchesPrerequisite = feat.prerequisites && feat.prerequisites.some(p => p.type === 'race');
+                }
+
+                return matchesSearch && matchesCategory && matchesPrerequisite;
+            });
+
+            renderFeats(filtered);
+        }
+
+        // Event listeners
+        document.getElementById('searchFeats').addEventListener('input', filterFeats);
+        document.getElementById('categoryFilter').addEventListener('change', filterFeats);
+        document.getElementById('prerequisiteFilter').addEventListener('change', filterFeats);
+
+        // Initial render
+        renderFeats(FEATS);
+    </script>
+</body>
+
+</html>

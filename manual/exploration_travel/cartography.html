@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartography System - Game Systems Manual</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+    <div class="container">
+        <a href="../index.html" class="nav-home">← Back to Index</a>
+        <header>
+            <h1>Cartography System</h1>
+        </header>
+        <main>
+            <h2>Overview</h2>
+            <p>The Cartography System is the heart of dungeon exploration. As you venture into labyrinths, ruins, and
+                caverns, you must manually document your discoveries by drawing maps. This transforms exploration from
+                passive wandering into active documentation, creating investment in every floor you explore.</p>
+
+            <div class="info-box">
+                <p><strong>Core Philosophy:</strong> Your map is your lifeline. Accurate cartography enables safe
+                    navigation around dangers, efficient resource gathering, puzzle solving, and strategic planning. Map
+                    completion is rewarded by guild quests and provides crucial tactical advantages.</p>
+            </div>
+
+            <h2>Grid-Based Movement</h2>
+            <p>All dungeons and the overworld use a grid-based movement system:</p>
+            <ul>
+                <li><strong>Dungeon Floors:</strong> 35x30 tile grids</li>
+                <li><strong>Overworld:</strong> 50x50 tile grid (scalable)</li>
+                <li><strong>Movement:</strong> 1 tile = 1 movement step in cardinal directions (N, S, E, W)</li>
+                <li><strong>Turn-Based:</strong> Each movement step advances time and may trigger encounters</li>
+            </ul>
+
+            <h2>Drawing Tools</h2>
+
+            <h3>Wall Pencil</h3>
+            <p>Draw or erase walls as you explore. Walls can be single-thick or double-thick depending on dungeon
+                architecture. Mark walls carefully to avoid getting lost or walking into dead ends.</p>
+
+            <h3>Floor Paint</h3>
+            <p>Color tiles by type to indicate terrain:</p>
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Floor Type</th>
+                        <th>Color</th>
+                        <th>Effect</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Standard</td>
+                        <td>Gray</td>
+                        <td>Normal walkable floor</td>
+                    </tr>
+                    <tr>
+                        <td>Water</td>
+                        <td>Blue</td>
+                        <td>May require swimming or slow movement</td>
+                    </tr>
+                    <tr>
+                        <td>Pit/Chasm</td>
+                        <td>Black</td>
+                        <td>Impassable or causes falling damage</td>
+                    </tr>
+                    <tr>
+                        <td>Lava/Fire</td>
+                        <td>Red</td>
+                        <td>Deals fire damage when crossed</td>
+                    </tr>
+                    <tr>
+                        <td>Ice</td>
+                        <td>Cyan</td>
+                        <td>Slippery, may cause sliding</td>
+                    </tr>
+                    <tr>
+                        <td>Poison</td>
+                        <td>Green</td>
+                        <td>Inflicts poison status</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Icon Palette</h3>
+            <p>Place icons to mark important locations. Icons are categorized by function:</p>
+
+            <h4>Navigation Icons</h4>
+            <ul>
+                <li><strong>Stairs Up:</strong> Ascend to previous floor</li>
+                <li><strong>Stairs Down:</strong> Descend to next floor</li>
+                <li><strong>Shortcut (Locked):</strong> One-way passage, locked until activated</li>
+                <li><strong>Shortcut (Unlocked):</strong> Active shortcut for quick travel</li>
+                <li><strong>Teleporter:</strong> Instant transport to another location</li>
+            </ul>
+
+            <h4>Interactive Icons</h4>
+            <ul>
+                <li><strong>Door (Closed):</strong> Unopened door</li>
+                <li><strong>Door (Open):</strong> Opened door</li>
+                <li><strong>Locked Door:</strong> Requires key, lockpicking, or magic</li>
+                <li><strong>Chest (Unopened):</strong> Treasure chest awaiting looting</li>
+                <li><strong>Chest (Opened):</strong> Already looted chest</li>
+                <li><strong>Lever/Switch:</strong> Activates mechanisms</li>
+            </ul>
+
+            <h4>Gathering Point Icons</h4>
+            <ul>
+                <li><strong>Mine (Sparkle):</strong> Ore gathering point with resources available</li>
+                <li><strong>Mine (Depleted):</strong> No resources currently available</li>
+                <li><strong>Chop (Sparkle):</strong> Wood gathering point with resources</li>
+                <li><strong>Chop (Depleted):</strong> No wood currently available</li>
+                <li><strong>Take (Sparkle):</strong> Herb/item gathering point with resources</li>
+                <li><strong>Take (Depleted):</strong> No items currently available</li>
+            </ul>
+
+            <h4>Danger Icons</h4>
+            <ul>
+                <li><strong>FOE (Red):</strong> Visible mini-boss enemy, currently pursuing</li>
+                <li><strong>FOE (Yellow):</strong> Visible mini-boss enemy, patrolling</li>
+                <li><strong>Trap:</strong> Detected trap location</li>
+                <li><strong>Hazard:</strong> Environmental danger (poison gas, spikes, etc.)</li>
+            </ul>
+
+            <h4>Miscellaneous Icons</h4>
+            <ul>
+                <li><strong>NPC:</strong> Non-player character location</li>
+                <li><strong>Quest Objective:</strong> Location for quest completion</li>
+                <li><strong>Save Point:</strong> Safe location to save progress</li>
+                <li><strong>Healing Spring:</strong> Restores HP/TP</li>
+            </ul>
+
+            <h3>Text Annotations</h3>
+            <p>Attach custom notes to any tile. Use annotations to record:</p>
+            <ul>
+                <li>Puzzle solutions or hints</li>
+                <li>NPC dialogue or requests</li>
+                <li>Environmental hazard warnings</li>
+                <li>FOE movement patterns</li>
+                <li>Resource respawn timers</li>
+                <li>Secret passage locations</li>
+            </ul>
+
+            <h3>Auto-Fill (Optional)</h3>
+            <p>Modern convenience feature that automatically fills explored corridors. Can be toggled on/off.
+                Recommended settings:</p>
+            <ul>
+                <li><strong>Dungeons:</strong> Manual mapping for full engagement</li>
+                <li><strong>Overworld:</strong> Auto-fill after initial exploration to reduce tedium</li>
+            </ul>
+
+            <h2>Dynamic Icon Updates</h2>
+            <p>Many icons change appearance based on status:</p>
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Icon</th>
+                        <th>Status Change</th>
+                        <th>Visual Indicator</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Chest</td>
+                        <td>Unopened → Opened</td>
+                        <td>Lid opens, sparkle disappears</td>
+                    </tr>
+                    <tr>
+                        <td>Gathering Point</td>
+                        <td>Available → Depleted</td>
+                        <td>Sparkle disappears</td>
+                    </tr>
+                    <tr>
+                        <td>Gathering Point</td>
+                        <td>Depleted → Refreshed</td>
+                        <td>Sparkle reappears</td>
+                    </tr>
+                    <tr>
+                        <td>Shortcut</td>
+                        <td>Locked → Unlocked</td>
+                        <td>Color changes to yellow/gold</td>
+                    </tr>
+                    <tr>
+                        <td>Door</td>
+                        <td>Closed → Open</td>
+                        <td>Door graphic opens</td>
+                    </tr>
+                    <tr>
+                        <td>FOE</td>
+                        <td>Patrolling → Chasing</td>
+                        <td>Yellow → Red, pulsing</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Strategic Cartography</h2>
+
+            <h3>Planning Safe Routes</h3>
+            <p>Use your map to plot paths that avoid FOE patrol routes. Mark FOE positions and movement patterns with
+                annotations to predict safe windows for passage.</p>
+
+            <h3>Resource Tracking</h3>
+            <p>Mark all gathering points and note their refresh timers. Efficient resource farming requires knowing
+                which nodes are available and planning optimal collection routes.</p>
+
+            <h3>Puzzle Documentation</h3>
+            <p>Many dungeons contain spatial puzzles requiring lever sequences, teleporter navigation, or timed
+                movements. Use annotations to record solutions for future reference.</p>
+
+            <h3>Minimizing Backtracking</h3>
+            <p>Complete maps reveal unexplored branches, preventing wasted time retracing steps. Mark dead ends clearly
+                to avoid repeated exploration.</p>
+
+            <h2>Guild Mapping Quests</h2>
+            <p>The Adventurer's Guild frequently requests complete floor maps. Rewards scale with map accuracy:</p>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Completion %</th>
+                        <th>Reward Tier</th>
+                        <th>Typical Rewards</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>50-69%</td>
+                        <td>Bronze</td>
+                        <td>Small gold bonus, basic items</td>
+                    </tr>
+                    <tr>
+                        <td>70-89%</td>
+                        <td>Silver</td>
+                        <td>Moderate gold, equipment unlock</td>
+                    </tr>
+                    <tr>
+                        <td>90-99%</td>
+                        <td>Gold</td>
+                        <td>Large gold, rare materials</td>
+                    </tr>
+                    <tr>
+                        <td>100%</td>
+                        <td>Platinum</td>
+                        <td>Skill points, unique equipment, fast travel unlock</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Map Persistence</h2>
+            <div class="info-box">
+                <p><strong>Critical Rule:</strong> If your party dies, <strong>map progress is retained</strong>. Your
+                    cartography work is never lost, even in defeat. This allows you to rush back to your previous
+                    position on subsequent attempts without re-exploring.</p>
+            </div>
+
+            <h2>Overworld Cartography</h2>
+            <p>The overworld uses identical mapping tools but with different scale and purpose:</p>
+            <ul>
+                <li><strong>Terrain Mapping:</strong> Mark forests, mountains, rivers, deserts</li>
+                <li><strong>Dungeon Entrances:</strong> Icon all labyrinth locations</li>
+                <li><strong>Town Locations:</strong> Mark settlements and their services</li>
+                <li><strong>Overworld FOEs:</strong> Document patrol routes of dragons, giants, etc.</li>
+                <li><strong>Landmarks:</strong> Note healing springs, campsites, quest locations</li>
+                <li><strong>Fast Travel Points:</strong> Mark unlocked waypoints</li>
+            </ul>
+
+            <h2>Cartography Tips</h2>
+            <ul>
+                <li>Map systematically - complete one section before moving to the next</li>
+                <li>Mark FOE starting positions immediately upon entering a floor</li>
+                <li>Use different annotation colors for different information types</li>
+                <li>Update gathering point icons as soon as they refresh</li>
+                <li>Draw walls as you explore, not from memory later</li>
+                <li>Mark one-way passages clearly to avoid confusion</li>
+                <li>Note environmental hazards before they damage your party</li>
+                <li>Keep quest objective markers updated as you progress</li>
+            </ul>
+
+        </main>
+        <footer>
+            <p><a href="../index.html">Back to Index</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>

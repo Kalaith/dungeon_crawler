@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attack & Parry - Game Systems Manual</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="nav-home">← Back to Index</a>
+
+        <header>
+            <h1>Attack & Parry Values</h1>
+        </header>
+
+        <main>
+            <h2>Overview</h2>
+            <p>A character's attack and parry values reflect their statistics and combat skills and determine how they perform in combat. In general, there are two different parts to the attack and parry values.</p>
+
+            <h2>Understanding The Values</h2>
+
+            <h3>1. Basic Values</h3>
+            <p>Overall reflections of the character's ability to fight offensively (Attack) and to protect defensively (Parry).</p>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Value Type</th>
+                        <th>Code</th>
+                        <th>Based On</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Attack</td>
+                        <td>AT</td>
+                        <td>Courage (CR) + Agility (AG) + Strength (ST)</td>
+                        <td>Basic offensive capability</td>
+                    </tr>
+                    <tr>
+                        <td>Parry</td>
+                        <td>PA</td>
+                        <td>Intuition (IN) + Agility (AG) + Strength (ST)</td>
+                        <td>Basic defensive capability</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="formula">
+                <p><strong>Basic AT =</strong> (CR + AG + ST) / calculation factor</p>
+                <p><strong>Basic PA =</strong> (IN + AG + ST) / calculation factor</p>
+            </div>
+
+            <h3>2. Mode Values</h3>
+            <p>Mode Values are based upon the combination of your character's actual combat skill (SV, from the skill list) and the Basic Values. Like the Basic Values, Mode Values are split into two categories: attack (AT) and parry (PA).</p>
+
+            <div class="formula">
+                <p><strong>Total Points Available =</strong> Basic AT + Basic PA + Combat Skill Value (SV)</p>
+            </div>
+
+            <h2>Modifying The Values</h2>
+
+            <p>While the system initially determines your character's Mode Values, you may change the individual AT (attack) and PA (parry) values to suit your own taste:</p>
+
+            <ul>
+                <li><strong>Offensive character:</strong> Increase their AT values for a hack-and-slash type</li>
+                <li><strong>Defensive character:</strong> Increase their PA values for better self-protection</li>
+            </ul>
+
+            <h3>Distribution Rules</h3>
+
+            <div class="info-box">
+                <h4>How to Distribute Points:</h4>
+                <ol>
+                    <li>Calculate your total: Basic AT + Basic PA + SV (skill value)</li>
+                    <li>Split this number between the Mode's AT and PA values any way you like</li>
+                    <li><strong>Restriction:</strong> Values may not fall below the AT or PA Basic Values</li>
+                </ol>
+            </div>
+
+            <h3>Distribution Example</h3>
+            <div class="info-box">
+                <p><strong>Example:</strong> If your total is 14 and your Basic Values are both 6:</p>
+                <ul>
+                    <li>You could have AT value of 8 and PA value of 6</li>
+                    <li>Or AT of 7 and PA of 7</li>
+                    <li>Or AT of 6 and PA of 8</li>
+                    <li>Any combination where AT + PA = 14 and neither falls below 6</li>
+                </ul>
+                <p>Consider where you want the character's proficiency to lie: defensive moves or offensive moves.</p>
+            </div>
+
+            <h3>Important Restrictions</h3>
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Weapon Type</th>
+                        <th>Can Modify?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Melee Weapons</td>
+                        <td>Yes - can adjust AT and PA distribution</td>
+                    </tr>
+                    <tr>
+                        <td>Missile Weapons</td>
+                        <td>No - values are calculated and may not be changed</td>
+                    </tr>
+                    <tr>
+                        <td>Thrown Weapons</td>
+                        <td>No - values are calculated and may not be changed</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Negative Combat Skill Values</h2>
+
+            <p>What happens if a character has a negative combat skill value?</p>
+
+            <div class="info-box">
+                <h4>Effects of Negative Skill Values:</h4>
+                <ul>
+                    <li><strong>No adjustments allowed:</strong> You won't be able to do any adjustments for starters</li>
+                    <li>The negative value is subtracted, more or less evenly, from the character's Basic Skill values to produce the AT and PA values</li>
+                    <li>If the character's skill level is so low that it exceeds the total of the Basic Values, they would have <strong>zero AT and zero PA</strong></li>
+                    <li>They will not be able to protect themselves from such a weapon's attack</li>
+                    <li>They can't attack very well with it either</li>
+                </ul>
+            </div>
+
+            <div class="note">
+                <p><strong>Warning:</strong> Characters with zero AT and zero PA for a weapon type are essentially defenseless and ineffective with that weapon. Avoid using weapons for which your character has very low or negative skill values.</p>
+            </div>
+
+            <h2>Strategic Considerations</h2>
+
+            <h3>Combat Style Planning</h3>
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Combat Style</th>
+                        <th>AT/PA Distribution</th>
+                        <th>Best For</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Aggressive Attacker</td>
+                        <td>Maximize AT, minimum PA</td>
+                        <td>Characters who want to end fights quickly, front-line warriors</td>
+                    </tr>
+                    <tr>
+                        <td>Defensive Fighter</td>
+                        <td>Maximize PA, minimum AT</td>
+                        <td>Characters who need to survive, tanks, those with low HP</td>
+                    </tr>
+                    <tr>
+                        <td>Balanced Fighter</td>
+                        <td>Equal AT and PA</td>
+                        <td>Versatile combatants, adaptive strategy</td>
+                    </tr>
+                    <tr>
+                        <td>Controlled Aggression</td>
+                        <td>Higher AT, moderate PA</td>
+                        <td>Most common effective build</td>
+                    </tr>
+                    <tr>
+                        <td>Cautious Defender</td>
+                        <td>Higher PA, moderate AT</td>
+                        <td>Support characters, rear guard</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Character Role Recommendations</h3>
+
+            <div class="info-box">
+                <h4>Warriors and Fighters:</h4>
+                <p>Generally benefit from higher AT values to maximize damage output. However, ensure PA doesn't fall too low or they won't survive long enough to use their attacks.</p>
+            </div>
+
+            <div class="info-box">
+                <h4>Magic Users:</h4>
+                <p>Often benefit from higher PA values since they typically have lower HP and need to survive long enough to cast spells. Their damage comes from magic, not melee attacks.</p>
+            </div>
+
+            <div class="info-box">
+                <h4>Hybrid Characters:</h4>
+                <p>A balanced approach works well, allowing flexibility in combat situations. Can switch between aggressive and defensive tactics as needed.</p>
+            </div>
+
+            <h3>Weapon-Specific Considerations</h3>
+
+            <ul>
+                <li><strong>Two-Handed Weapons:</strong> Often benefit from higher AT due to their damage potential</li>
+                <li><strong>Dual Wielding:</strong> May benefit from balanced AT/PA for versatility</li>
+                <li><strong>Shield Users:</strong> Can afford higher AT since shields provide additional defense</li>
+                <li><strong>Ranged Weapons:</strong> Cannot be adjusted, so focus on improving the combat skill itself</li>
+            </ul>
+
+            <h2>Improving Attack and Parry Values</h2>
+
+            <h3>During Character Creation</h3>
+            <p>In Advanced mode, you can adjust AT and PA values after assigning skill points to combat skills.</p>
+
+            <h3>When Leveling Up</h3>
+            <p>When increasing combat skills upon gaining a level, you will have the opportunity to adjust AT and PA values again, allowing you to refine your combat style as your character develops.</p>
+
+            <h3>Through Attributes</h3>
+            <p>Since Basic Values are calculated from attributes, improving the following attributes will increase your combat effectiveness:</p>
+            <ul>
+                <li><strong>For Higher AT:</strong> Increase Courage (CR), Agility (AG), or Strength (ST)</li>
+                <li><strong>For Higher PA:</strong> Increase Intuition (IN), Agility (AG), or Strength (ST)</li>
+                <li><strong>Agility and Strength</strong> benefit both AT and PA</li>
+            </ul>
+
+        </main>
+
+        <footer>
+            <p><a href="../index.html">Back to Index</a></p>
+        </footer>
+    </div>
+</body>
+</html>

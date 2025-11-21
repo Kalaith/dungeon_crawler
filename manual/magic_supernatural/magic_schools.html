@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic Schools - Game Systems Manual</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .school-card {
+            background-color: #fef5e7;
+            border: 2px solid #d2b48c;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .school-card h3 {
+            margin-top: 0;
+            color: #8b4513;
+            border-bottom: 1px solid #d2b48c;
+            padding-bottom: 10px;
+        }
+
+        .school-card p {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="magic.html" class="nav-home">← Back to Magic</a>
+        <header>
+            <h1>Schools of Magic</h1>
+        </header>
+        <main>
+            <p>Magic is often categorized into schools, each representing a different way of manipulating the Weave.
+                Below are the standard schools of magic recognized by scholars and practitioners.</p>
+
+            <div id="schools-container">
+                <p>Loading magic schools...</p>
+            </div>
+        </main>
+        <footer>
+            <p>Game Systems Manual - Magic Schools</p>
+        </footer>
+    </div>
+
+    <script>
+        async function loadSchools() {
+            try {
+                const response = await fetch('magic_schools.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const schools = await response.json();
+                const container = document.getElementById('schools-container');
+                container.innerHTML = '';
+
+                schools.forEach(school => {
+                    const card = document.createElement('div');
+                    card.className = 'school-card';
+                    card.innerHTML = `
+                        <h3>${school.name}</h3>
+                        <p>${school.desc}</p>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (e) {
+                console.error("Failed to load schools:", e);
+                document.getElementById('schools-container').innerHTML = '<p>Error loading magic schools data.</p>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadSchools);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combat System - Game Systems Manual</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+    <div class="container">
+        <a href="../index.html" class="nav-home">← Back to Index</a>
+        <header>
+            <h1>Combat System</h1>
+        </header>
+        <main>
+            <h2>Overview</h2>
+            <p>Combat is turn-based and tactical, where every battle matters. Random encounters trigger fully realized
+                turn-based battles, not quick auto-resolve events. Even regular enemies can severely damage or kill
+                party members. Strategic skill
+                usage, proper formation, and careful resource management are essential for survival.</p>
+
+            <div class="info-box">
+                <p><strong>Core Philosophy:</strong> Every battle is meaningful. Regular enemies are deadly, FOEs can
+                    instantly kill unprepared parties, and boss fights require dozens of turns of careful planning.
+                    Status effects, buffs, and debuffs are genuinely important.</p>
+            </div>
+
+            <h2>Combat Structure</h2>
+
+            <h3>The Combat Round</h3>
+            <p>Combat is organized into **Rounds**. A round represents about 6 seconds in the game world. During a
+                round, every participant takes a **Turn**.</p>
+            <ol>
+                <li><strong>Initiative:</strong> At the start of combat, everyone rolls Initiative (d20 + AG Modifier)
+                    to determine the Turn Order. Speed determines who acts first.</li>
+                <li><strong>Turns:</strong> Participants act in order from highest Initiative to lowest.</li>
+                <li><strong>New Round:</strong> Once everyone has acted, the round ends and a new one begins (keeping
+                    the same Initiative order).</li>
+            </ol>
+
+            <h3>Action Economy: Your Turn</h3>
+            <p>On your turn, you can move and take actions. You generally have the following resources available:</p>
+
+            <div class="info-box">
+                <h4>1. Action (Main)</h4>
+                <p>The main thing you do on your turn.</p>
+                <ul>
+                    <li><strong>Attack:</strong> Make a melee or ranged attack. (Some classes/monsters get
+                        <strong>Multiattack</strong>, allowing multiple hits).
+                    </li>
+                    <li><strong>Cast Spell:</strong> Cast a spell with a casting time of "1 Action".</li>
+                    <li><strong>Defend (Dodge):</strong> Focus on defense (Disadvantage to be hit).</li>
+                    <li><strong>Use Item:</strong> Drink a potion or use a tool.</li>
+                    <li><strong>Skill:</strong> Use a special class ability.</li>
+                    <li><strong>Dash:</strong> Double your movement speed (irrelevant in static rows, but useful for
+                        escaping).</li>
+                    <li><strong>Disengage:</strong> Prevent opportunity attacks when moving.</li>
+                </ul>
+
+                <h4>2. Bonus Action (Quick)</h4>
+                <p>A quick action available only if a specific ability, spell, or weapon grants it.</p>
+                <ul>
+                    <li><strong>Off-hand Attack:</strong> If dual-wielding light weapons.</li>
+                    <li><strong>Quick Spells:</strong> Spells like <em>Healing Word</em> or <em>Misty Step</em>.</li>
+                    <li><strong>Class Features:</strong> Rogue's Cunning Action, Bardic Inspiration, etc.</li>
+                </ul>
+
+                <h4>3. Movement</h4>
+                <p>Combat movement is restricted to switching rows. There are no terrain modifiers or grid movement in
+                    combat.</p>
+                <ul>
+                    <li><strong>Switch Row:</strong> Moving between Front and Back rows costs movement.</li>
+                    <li><strong>Interact:</strong> You can interact with one object for free (draw weapon, open door).
+                    </li>
+                </ul>
+
+                <h4>4. Reaction (Instant)</h4>
+                <p>A special action taken <em>outside</em> your turn in response to a trigger.</p>
+                <ul>
+                    <li><strong>Opportunity Attack:</strong> Attack an enemy leaving your reach.</li>
+                    <li><strong>Spells:</strong> <em>Counterspell</em>, <em>Shield</em>, <em>Hellish Rebuke</em>.</li>
+                    <li><strong>Readied Action:</strong> An action you prepared to take when a specific condition is
+                        met.</li>
+                </ul>
+            </div>
+
+            <h3>Initiative & Speed</h3>
+            <p>Turn order is decided by the <strong>Initiative Roll</strong>, which is based on your Agility (AG) and
+                Intuition (IN).</p>
+
+            <div class="formula">
+                <p><strong>Initiative = d20 + AG Modifier + IN Modifier (if IN ≥ 12)</strong></p>
+            </div>
+
+            <ul>
+                <li><strong>Agility (AG):</strong> Primary initiative attribute (reaction speed)</li>
+                <li><strong>Intuition (IN):</strong> Adds to initiative if 12+ (danger sense, allows you to act faster)
+                </li>
+                <li><strong>Ties:</strong> If tied, the character with higher AG goes first. If still tied, higher IN.
+                    If still tied, simultaneous actions.</li>
+                <li><strong>Surprise:</strong> If a side is surprised, they cannot move or act on their first turn and
+                    can't take reactions until that turn ends.</li>
+            </ul>
+
+            <div class="info-box">
+                <h4>Initiative Examples</h4>
+                <p><strong>Character 1:</strong> AG 10 (+0), IN 8 (+0) → Initiative = d20 + 0</p>
+                <p><strong>Character 2:</strong> AG 12 (+1), IN 13 (+1) → Initiative = d20 + 2</p>
+                <p><strong>Character 3:</strong> AG 13 (+1), IN 10 (+0) → Initiative = d20 + 1 (IN below 12, no bonus)
+                </p>
+            </div>
+
+            <h3>Party & Monster Size Limits</h3>
+            <p>The combat system supports up to <strong>6 characters</strong> in the player's party and up to <strong>6
+                    monsters</strong> in an encounter. Formation tables reflect these limits.</p>
+
+            <h3>Row Positioning</h3>
+            <p>Party members are arranged in two rows with significant tactical implications:</p>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Row</th>
+                        <th>Damage Taken</th>
+                        <th>Melee Damage Dealt</th>
+                        <th>Ranged/Magic</th>
+                        <th>Best For</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Front</td>
+                        <td>100% (Normal)</td>
+                        <td>100% (Normal)</td>
+                        <td>100% (Normal)</td>
+                        <td><strong>Melee Fighters & Battle Mages:</strong> Anyone with good AC or melee attacks. Mages
+                            using touch spells (e.g., <em>Shocking Grasp</em>) or cone spells (e.g., <em>Burning
+                                Hands</em>) often benefit from being here.</td>
+                    </tr>
+                    <tr>
+                        <td>Back</td>
+                        <td>Melee attacks vs you have Disadvantage</td>
+                        <td>Disadvantage on Attack Rolls</td>
+                        <td>100% (Normal)</td>
+                        <td><strong>Ranged & Support:</strong> Archers, Healers, and fragile Casters. Protected from
+                            direct melee threats.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Formation Strategy</h3>
+            <div class="info-box">
+                <h4>Recommended Formation</h4>
+                <p><strong>Front Row:</strong> 2-3 characters with high HP, armor, and melee capability (Warriors,
+                    Paladins, Barbarians)</p>
+                <p><strong>Back Row:</strong> 2-3 characters with ranged attacks, magic, or healing (Magicians, Clerics,
+                    Rangers, Bards)</p>
+            </div>
+
+            <h3>Row Switching</h3>
+            <p>Characters can switch rows during combat:</p>
+            <ul>
+                <li><strong>Action Cost:</strong> Free action (no turn cost)</li>
+                <li><strong>Tactical Use:</strong> Move wounded characters to back row for protection</li>
+                <li><strong>Emergency Response:</strong> Bring melee fighters forward if back row is threatened</li>
+                <li><strong>Skill Synergy:</strong> Some skills require specific row positioning</li>
+            </ul>
+
+            <h2>Combat Actions</h2>
+
+            <h3>Attack</h3>
+            <p>Make a weapon attack against an enemy. Attacks use a two-step process: Attack Roll, then Damage Roll.</p>
+
+            <h4>Attack Roll</h4>
+            <div class="formula">
+                <p><strong>Attack Roll = d20 + Attribute Modifier + Proficiency Bonus + Weapon Skill</strong></p>
+            </div>
+
+            <p>If your attack roll meets or exceeds the target's Armor Class (AC), the attack hits and you roll damage.
+            </p>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Weapon Type</th>
+                        <th>Attribute Used</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Melee Weapons</td>
+                        <td>Strength (ST)</td>
+                        <td>Longsword, Greatsword, Mace</td>
+                    </tr>
+                    <tr>
+                        <td>Finesse Weapons</td>
+                        <td>ST or Dexterity (DX) - your choice</td>
+                        <td>Rapier, Shortsword, Dagger</td>
+                    </tr>
+                    <tr>
+                        <td>Ranged Weapons (Bows)</td>
+                        <td>Agility (AG)</td>
+                        <td>Longbow, Shortbow</td>
+                    </tr>
+                    <tr>
+                        <td>Ranged Weapons (Thrown)</td>
+                        <td>Dexterity (DX)</td>
+                        <td>Throwing Dagger, Javelin</td>
+                    </tr>
+                    <tr>
+                        <td>Crossbows</td>
+                        <td>Dexterity (DX)</td>
+                        <td>Light Crossbow, Heavy Crossbow</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Damage Calculation</h4>
+            <div class="formula">
+                <p><strong>Damage = Weapon Dice + Attribute Modifier</strong></p>
+            </div>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Weapon</th>
+                        <th>Damage Dice</th>
+                        <th>Modifier</th>
+                        <th>Example Damage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Dagger</td>
+                        <td>1d4</td>
+                        <td>+ ST or DX</td>
+                        <td>1d4 + 1 (if ST/DX +1)</td>
+                    </tr>
+                    <tr>
+                        <td>Shortsword</td>
+                        <td>1d6</td>
+                        <td>+ ST or DX</td>
+                        <td>1d6 + 2 (if ST/DX +2)</td>
+                    </tr>
+                    <tr>
+                        <td>Longsword</td>
+                        <td>1d8</td>
+                        <td>+ ST</td>
+                        <td>1d8 + 3 (if ST +3)</td>
+                    </tr>
+                    <tr>
+                        <td>Greatsword</td>
+                        <td>2d6</td>
+                        <td>+ ST</td>
+                        <td>2d6 + 3 (if ST +3)</td>
+                    </tr>
+                    <tr>
+                        <td>Longbow</td>
+                        <td>1d8</td>
+                        <td>+ AG</td>
+                        <td>1d8 + 2 (if AG +2)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Critical Hits</h4>
+            <ul>
+                <li><strong>Trigger:</strong> Natural 20 on attack roll (automatic hit)</li>
+                <li><strong>Damage:</strong> Roll weapon damage dice twice, then add modifiers once</li>
+                <li><strong>Example:</strong> Longsword (1d8) crit with ST +2 = 2d8 + 2</li>
+                <li><strong>Critical Miss:</strong> Natural 1 on attack roll (automatic miss)</li>
+            </ul>
+
+            <h4>Special Weapon Properties</h4>
+            <ul>
+                <li><strong>Two-Handed:</strong> Add +2 to damage (Greatsword, Greataxe, Maul)</li>
+                <li><strong>Versatile:</strong> Can be used one-handed or two-handed (Longsword: 1d8 one-handed, 1d10
+                    two-handed)</li>
+                <li><strong>Light:</strong> Can dual-wield (Dagger, Shortsword)</li>
+                <li><strong>Finesse:</strong> Use ST or DX for attack and damage (your choice)</li>
+            </ul>
+
+            <h4>Row Penalties</h4>
+            <ul>
+                <li><strong>Melee from Back Row:</strong> Attacks have Disadvantage (roll 2d20, take lower)</li>
+                <li><strong>Ranged/Magic:</strong> No penalty from back row</li>
+            </ul>
+
+            <h3>Defend</h3>
+            <p>Focus entirely on avoiding attacks during the turn.</p>
+            <ul>
+                <li><strong>Effect:</strong> Attackers have Disadvantage on attack rolls against you. You have Advantage
+                    on Agility saving throws.</li>
+                <li><strong>Duration:</strong> Until the start of your next turn.</li>
+                <li><strong>Use Case:</strong> Survive powerful enemy attacks, protect low HP characters.</li>
+            </ul>
+
+            <h3>Skill</h3>
+            <p>Apply learned abilities - offensive, defensive, or support.</p>
+
+            <h4>Offensive Skills</h4>
+            <ul>
+                <li>Single-target high damage attacks</li>
+                <li>Multi-target AOE attacks</li>
+                <li>Elemental attacks exploiting weaknesses</li>
+                <li>Status-inflicting attacks (poison, paralysis, sleep)</li>
+            </ul>
+
+            <h4>Defensive Skills</h4>
+            <ul>
+                <li>Taunt abilities forcing enemies to target tank</li>
+                <li>AC boosts (Shield, Parry)</li>
+                <li>Counter-attack stances</li>
+                <li>Evasion boosts (Dodge)</li>
+            </ul>
+
+            <h4>Support Skills</h4>
+            <ul>
+                <li>Attack/AC buffs (Bless, Shield of Faith)</li>
+                <li>Elemental resistance buffs</li>
+                <li>Speed manipulation</li>
+                <li>Debuffs reducing enemy AC or Attack Rolls</li>
+            </ul>
+
+            <h3>Item</h3>
+            <p>Use consumable items from inventory on selected targets.</p>
+            <ul>
+                <li><strong>Healing Potions:</strong> Restore HP</li>
+                <li><strong>Mana Potions:</strong> Restore TP/AP</li>
+                <li><strong>Antidotes:</strong> Cure poison</li>
+                <li><strong>Panaceas:</strong> Cure all status effects</li>
+                <li><strong>Buff Items:</strong> Temporary stat boosts</li>
+            </ul>
+
+            <h3>Switch Row</h3>
+            <p>Move character between front and back rows (free action, no turn cost).</p>
+
+            <h3>Escape</h3>
+            <p>Attempt to flee combat.</p>
+            <ul>
+                <li><strong>Success Rate:</strong> Based on party AG vs enemy AG</li>
+                <li><strong>FOE Escape:</strong> Much harder due to FOE's high stats</li>
+                <li><strong>Consequence:</strong> No experience or loot if successful</li>
+                <li><strong>Failure:</strong> Enemies get free attacks</li>
+            </ul>
+
+            <h3>Magic (Spell Casting)</h3>
+            <p>Cast a spell from your learned spell list.</p>
+
+            <h4>Requirements</h4>
+            <ul>
+                <li>Sufficient Astral Points (AP)</li>
+                <li>Appropriate action type (action, bonus action, or reaction)</li>
+                <li>Valid target within range</li>
+                <li>Line of sight (for most spells)</li>
+            </ul>
+
+            <h4>Spell Types</h4>
+
+            <div class="info-box">
+                <h5>Offensive Spells</h5>
+                <ul>
+                    <li>Direct damage (Magic Missile, Fireball, Lightning Bolt)</li>
+                    <li>Damage over time (Acid Arrow, Heat Metal)</li>
+                    <li>Area of effect attacks</li>
+                    <li>Status-inflicting spells (Hold Person, Sleep)</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h5>Defensive Spells</h5>
+                <ul>
+                    <li>Protective barriers (Shield, Mage Armor)</li>
+                    <li>Damage resistance (Protection from Energy)</li>
+                    <li>Counterspells (Counterspell, Dispel Magic)</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h5>Support Spells</h5>
+                <ul>
+                    <li>Healing (Cure Wounds, Healing Word, Mass Cure Wounds)</li>
+                    <li>Buffs (Bless, Haste, Heroism)</li>
+                    <li>Debuffs (Bane, Slow, Bestow Curse)</li>
+                    <li>Utility (Invisibility, Fly, Misty Step)</li>
+                </ul>
+            </div>
+
+            <h4>Concentration Management</h4>
+            <p>Only one concentration spell can be active at a time. Key considerations:</p>
+            <ul>
+                <li>Taking damage risks breaking concentration (CON save required)</li>
+                <li>Strategic choice: maintain powerful buff or cast new spell?</li>
+                <li>Breaking enemy concentration is a valuable tactic</li>
+                <li>Position concentration casters in back row for protection</li>
+            </ul>
+
+            <h4>AP Management</h4>
+            <ul>
+                <li>Higher level spells cost more AP (see <a href="../magic_supernatural/magic.html">Magic & Spells</a>)
+                </li>
+                <li>Cantrips are free (0 AP) but less powerful</li>
+                <li>Balance powerful spells vs. resource conservation</li>
+                <li>Consider meditation to restore AP between combats</li>
+            </ul>
+
+            <h2>Status Effects</h2>
+
+            <h3>Ailments (Negative)</h3>
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Ailment</th>
+                        <th>Effect</th>
+                        <th>Duration</th>
+                        <th>Cure</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Poison</td>
+                        <td>Disadvantage on Attack Rolls and Ability Checks</td>
+                        <td>Until cured or battle ends</td>
+                        <td>Antidote, Cure Poison spell</td>
+                    </tr>
+                    <tr>
+                        <td>Paralysis</td>
+                        <td>Incapacitated, Auto-fail ST/AG saves, Attacks vs you have Advantage and Auto-Crit if
+                            within 5ft</td>
+                        <td>Save ends</td>
+                        <td>Panacea, Cleanse spell</td>
+                    </tr>
+                    <tr>
+                        <td>Sleep</td>
+                        <td>Unconscious, wake if damaged or shaken</td>
+                        <td>Until damaged</td>
+                        <td>Physical interaction, Wake spell</td>
+                    </tr>
+                    <tr>
+                        <td>Blind</td>
+                        <td>Disadvantage on Attacks, Attacks vs you have Advantage</td>
+                        <td>Save ends</td>
+                        <td>Eye Drops, Clarity spell</td>
+                    </tr>
+                    <tr>
+                        <td>Confusion</td>
+                        <td>Random behavior/movement</td>
+                        <td>Save ends</td>
+                        <td>Panacea, Clarity spell</td>
+                    </tr>
+                    <tr>
+                        <td>Curse</td>
+                        <td>Disadvantage on Attacks/Saves vs specific target</td>
+                        <td>Until cured</td>
+                        <td>Remove Curse spell</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Buffs (Positive)</h3>
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Buff</th>
+                        <th>Effect</th>
+                        <th>Duration</th>
+                        <th>Stacking</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Bless</td>
+                        <td>+1d4 to Attack Rolls and Saving Throws</td>
+                        <td>1 minute (Conc)</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>Shield of Faith</td>
+                        <td>+2 AC</td>
+                        <td>10 minutes (Conc)</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>Haste</td>
+                        <td>Double Speed, +2 AC, Advantage on AG saves, Extra Action</td>
+                        <td>1 minute (Conc)</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>Protection from Energy</td>
+                        <td>Resistance (Half Damage) vs Element</td>
+                        <td>1 hour (Conc)</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>Regen</td>
+                        <td>Restore HP at start of turn</td>
+                        <td>1 minute</td>
+                        <td>No</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Debuffs (Enemy Weakening)</h3>
+            <p>Debuffs are crucial for difficult encounters:</p>
+            <ul>
+                <li><strong>Bane:</strong> -1d4 to Enemy Attack Rolls and Saves</li>
+                <li><strong>Slow:</strong> Half speed, -2 AC, no reactions, limited actions</li>
+                <li><strong>Faerie Fire:</strong> Attacks vs Enemy have Advantage, no invisibility</li>
+                <li><strong>Blindness:</strong> Enemy has Disadvantage on attacks</li>
+            </ul>
+
+            <div class="info-box">
+                <p><strong>Critical Insight:</strong> Unlike most RPGs, buffs and debuffs are ESSENTIAL, not optional. A
+                    properly buffed/debuffed party can survive encounters that would otherwise be impossible.</p>
+            </div>
+
+            <h2>Attack & Damage Mechanics</h2>
+
+            <h3>The Attack Roll</h3>
+            <p>To determine if an attack hits, the attacker rolls a d20 and adds their attack bonus.</p>
+            <div class="formula">
+                <p><strong>Attack Roll:</strong> d20 + Ability Modifier + Proficiency Bonus + Other Modifiers</p>
+            </div>
+            <p>If the total equals or exceeds the target's <strong>Armor Class (AC)</strong>, the attack hits.</p>
+            <ul>
+                <li><strong>Natural 1:</strong> Automatic Miss.</li>
+                <li><strong>Natural 20:</strong> Critical Hit (Automatic Hit + Double Damage Dice).</li>
+            </ul>
+
+            <h3>Damage Calculation</h3>
+            <p>If an attack hits, damage is rolled based on the weapon or spell used.</p>
+            <div class="formula">
+                <p><strong>Physical Damage:</strong> Weapon Dice + ST/DX Modifier</p>
+                <p><strong>Spell Damage:</strong> Spell Dice + (sometimes) Spellcasting Modifier</p>
+            </div>
+
+            <h4>Modifiers Include:</h4>
+            <ul>
+                <li><strong>Critical Hit:</strong> Roll damage dice twice, then add modifiers.</li>
+                <li><strong>Resistance:</strong> Target takes half damage.</li>
+                <li><strong>Vulnerability:</strong> Target takes double damage.</li>
+                <li><strong>Row Penalty:</strong> Melee attacks from back row have Disadvantage on the attack roll (roll
+                    2d20, take lowest).</li>
+            </ul>
+
+            <h2>Combat Difficulty</h2>
+
+            <h3>Regular Encounters</h3>
+            <p>Standard enemies are dangerous:</p>
+            <ul>
+                <li>Can deal 20-40% of character's HP per hit</li>
+                <li>Often appear in groups of 3-5</li>
+                <li>May have elemental attacks or status effects</li>
+                <li>Require strategic skill usage, not just basic attacks</li>
+            </ul>
+
+            <h3>FOE Encounters</h3>
+            <p>Mini-boss enemies with extreme stats:</p>
+            <ul>
+                <li>3-5x HP of regular enemies</li>
+                <li>Can one-shot unprepared characters</li>
+                <li>Often have multiple actions per turn</li>
+                <li>Require full party coordination and buff stacking</li>
+                <li>Yield superior materials and experience</li>
+            </ul>
+
+            <h3>Boss Encounters</h3>
+            <p>Major battles requiring extensive preparation:</p>
+            <ul>
+                <li>Battles last 20-40+ turns</li>
+                <li>Multiple phases with changing attack patterns</li>
+                <li>Require specific strategies and party compositions</li>
+                <li>Full resource management (HP/TP/items)</li>
+                <li>Often have adds (additional enemies) that spawn mid-fight</li>
+            </ul>
+
+            <h2>Combat Strategy</h2>
+
+            <h3>Pre-Combat Preparation</h3>
+            <ul>
+                <li>Ensure party is at full HP/TP before major encounters</li>
+                <li>Equip appropriate elemental resistance gear</li>
+                <li>Stock healing items and status cure items</li>
+                <li>Position fragile characters in back row</li>
+                <li>Identify enemy weaknesses (if known)</li>
+            </ul>
+
+            <h3>Opening Turns</h3>
+            <ul>
+                <li><strong>Turn 1-2:</strong> Apply buffs (ATK/DEF up) and debuffs (enemy ATK/DEF down)</li>
+                <li><strong>Turn 2-3:</strong> Apply elemental resistances if enemy uses elemental attacks</li>
+                <li><strong>Turn 3+:</strong> Begin damage phase with buffed party</li>
+            </ul>
+
+            <h3>Mid-Combat Tactics</h3>
+            <ul>
+                <li>Maintain buff/debuff stacks - reapply before they expire</li>
+                <li>Focus fire priority targets (healers, casters)</li>
+                <li>Switch wounded characters to back row</li>
+                <li>Cure dangerous status effects immediately (paralysis, sleep)</li>
+                <li>Manage TP/AP carefully - don't waste on overkill</li>
+                <li><strong>Track spell durations:</strong> Know when buffs/debuffs expire (typically 10 turns for
+                    1-minute spells)</li>
+                <li><strong>Protect concentration casters:</strong> Keep them in back row and use defensive positioning
+                </li>
+                <li><strong>Target enemy concentration:</strong> Break powerful enemy buffs by damaging their casters
+                </li>
+                <li><strong>Concentration decisions:</strong> Decide if maintaining current spell is better than casting
+                    a new one</li>
+            </ul>
+
+            <h3>Emergency Responses</h3>
+            <ul>
+                <li>If character drops below 30% HP, heal immediately</li>
+                <li>If multiple characters are low, use AOE healing</li>
+                <li>If party is overwhelmed, consider fleeing</li>
+                <li>Use defensive skills (Guard, DEF buffs) to survive burst damage</li>
+                <li>Revive fallen allies only if safe to do so</li>
+            </ul>
+
+            <h2>After Combat</h2>
+
+            <h3>Victory Rewards</h3>
+            <ul>
+                <li><strong>Experience Points:</strong> Distributed to all surviving party members</li>
+                <li><strong>Materials:</strong> Monster drops for crafting</li>
+                <li><strong>Gold:</strong> Currency for purchases</li>
+                <li><strong>Equipment:</strong> Rare drops from powerful enemies</li>
+                <li><strong>First Encounter Bonus:</strong> Extra XP for first time facing enemy type</li>
+            </ul>
+
+            <h3>Post-Combat Actions</h3>
+            <ul>
+                <li>Treat wounds and poison immediately</li>
+                <li>Restore HP/TP if resources allow</li>
+                <li>Check inventory space before continuing</li>
+                <li>Assess party condition - return to town if weakened</li>
+                <li>Save at next save point</li>
+            </ul>
+
+            <h2>Combat Tips</h2>
+            <ul>
+                <li>Never underestimate regular enemies - they can kill you</li>
+                <li>Buffs and debuffs are not optional - use them</li>
+                <li>Status effects are genuinely dangerous - cure them immediately</li>
+                <li>Formation matters - protect your back row</li>
+                <li>Speed tuning allows healers to save dying allies</li>
+                <li>Elemental weaknesses can double your damage - exploit them</li>
+                <li>Don't waste TP/AP on trivial encounters - conserve for bosses</li>
+                <li>Fleeing is valid - survival is more important than pride</li>
+                <li>Learn enemy patterns - predictable attacks can be countered</li>
+                <li>Party synergy is crucial - build complementary teams</li>
+                <li><strong>Concentration is limited:</strong> Choose your one concentration spell wisely</li>
+                <li><strong>Cantrips are free:</strong> Use them liberally to save AP for critical moments</li>
+                <li><strong>Pre-buff before bosses:</strong> Cast long-duration spells before entering combat</li>
+                <li><strong>Ritual spells are free:</strong> Use them outside combat for utility (0 AP cost)</li>
+                <li><strong>Break enemy concentration:</strong> Damaging enemy casters can end powerful buffs</li>
+                <li><strong>Spell components simplified:</strong> Don't worry about components unless expensive
+                    materials are required</li>
+            </ul>
+
+        </main>
+        <footer>
+            <p><a href="../index.html">Back to Index</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>

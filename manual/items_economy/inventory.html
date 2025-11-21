@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory & Equipment - Game Systems Manual</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+    <div class="container">
+        <a href="../index.html" class="nav-home">← Back to Index</a>
+        <header>
+            <h1>Inventory & Equipment</h1>
+        </header>
+        <main>
+            <h2>Overview</h2>
+            <p>Every character has a backpack where they can store up to 16 items, plus seven equipment slots on their
+                body for items that are "equipped" and at the ready.</p>
+
+            <h2>Backpack (16 Item Slots)</h2>
+            <p>The backpack is the primary storage area for items not currently equipped.</p>
+
+            <h3>Managing Backpack Items</h3>
+            <ul>
+                <li><strong>Select:</strong> Left click an item to select it (highlights red)</li>
+                <li><strong>Examine:</strong> Click item, then click eye icon to see what it is and its condition</li>
+                <li><strong>Use:</strong> Select Use Object option for items like tinder boxes or scrolls</li>
+                <li><strong>Drop:</strong> Select Drop Object to permanently remove item</li>
+                <li><strong>Give:</strong> Transfer items between party members</li>
+            </ul>
+
+            <div class="note">
+                <p><strong>Warning:</strong> Items that are dropped are gone forever. The system will ask for
+                    confirmation before item disappears.</p>
+            </div>
+
+            <h2>Equipment Slots (7 Body Slots)</h2>
+            <p>In addition to backpacks, characters may carry seven items on their body. These items are considered
+                "equipped" and at the ready.</p>
+
+            <h3>The Seven Slots</h3>
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Slot</th>
+                        <th>Purpose</th>
+                        <th>Items</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Head</td>
+                        <td>Head Protection</td>
+                        <td>Helmets, hats, caps</td>
+                    </tr>
+                    <tr>
+                        <td>Torso</td>
+                        <td>Body Protection</td>
+                        <td>Armor, shirts, robes</td>
+                    </tr>
+                    <tr>
+                        <td>Foot</td>
+                        <td>Foot Protection</td>
+                        <td>Boots, shoes</td>
+                    </tr>
+                    <tr>
+                        <td>Right Hand</td>
+                        <td>Primary Weapon</td>
+                        <td>Weapon for combat</td>
+                    </tr>
+                    <tr>
+                        <td>Left Hand</td>
+                        <td>Quick Use/Shield</td>
+                        <td>Potions, herbs, shields, missiles</td>
+                    </tr>
+                    <tr>
+                        <td>Other Slots</td>
+                        <td>Additional Protection</td>
+                        <td>Various armor pieces</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Equipping Items</h3>
+            <p>To equip your character, select an item from inventory and drag it to the appropriate body icon. If you
+                try to equip something your character can't wear, the system will let you know.</p>
+
+            <h2>Special Equipment Slots</h2>
+
+            <h3>Right Hand - Weapon Slot</h3>
+            <p>The right hand is the weapon hand. This weapon will be at the ready should a monster approach. If
+                characters don't have a weapon here and are attacked, they will have to arm themselves in the first
+                round, losing precious time, or fight unarmed.</p>
+
+            <h3>Left Hand - Quick Use Slot</h3>
+            <p>The left hand is the potion, herb, shield, or missile hand. Items in the left hand are held ready for use
+                at a moment's notice during combat.</p>
+            <ul>
+                <li>Potions and herbs for quick healing</li>
+                <li>Shields for defense</li>
+                <li>Missiles/ammunition for ranged weapons</li>
+            </ul>
+
+            <h2>Armor and Protection</h2>
+            <p>Items that cover parts of the body work to improve Armor Class (AR). Each of the seven carrying slots
+                represents a part of the body.</p>
+
+            <h3>Armor Class (AC)</h3>
+            <p>Shows how difficult it is to land a damaging hit on the character. Higher is better.</p>
+            <ul>
+                <li><strong>10:</strong> Unarmored (Base AC)</li>
+                <li><strong>11-14:</strong> Light Armor (Leather, Padded)</li>
+                <li><strong>14-16:</strong> Medium Armor (Chain Shirt, Scale Mail)</li>
+                <li><strong>16-20+:</strong> Heavy Armor & Shields (Plate, Shields)</li>
+            </ul>
+
+            <h2>Encumbrance (ENC)</h2>
+            <p>A character can only carry so much before their knees start to buckle and back gives out. Encumbrance
+                tracks this load and tells you how many ounces of armor, weapons, and supplies a character carries.</p>
+
+            <div class="formula">
+                <p><strong>Maximum Capacity:</strong> 100 × Strength (ST) ounces</p>
+            </div>
+
+            <div class="info-box">
+                <h4>Effects of High Encumbrance:</h4>
+                <ul>
+                    <li>Characters who push limit or exceed it lose movement points</li>
+                    <li>Not able to move as quickly or as much</li>
+                    <li>Reduced combat effectiveness</li>
+                    <li>Slower travel speed</li>
+                </ul>
+            </div>
+
+            <h2>Eating & Drinking</h2>
+            <p>To feed your characters or give them drink:</p>
+            <ol>
+                <li>Review character</li>
+                <li>Select item (waterskin or ration) from inventory</li>
+                <li>Click on the mouth icon</li>
+                <li>Character's hunger or thirst lines will reflect satisfaction</li>
+            </ol>
+
+            <div class="note">
+                <p><strong>Note:</strong> The mouth icon is also used to consume herbs or potions.</p>
+            </div>
+
+            <h2>Inventory Management Strategy</h2>
+
+            <h3>Essential Items to Carry</h3>
+            <ul>
+                <li>Adequate rations and waterskins</li>
+                <li>Healing potions in left hand</li>
+                <li>Backup weapon</li>
+                <li>Lockpicks (for characters with Locks skill)</li>
+                <li>Tinder box and torches/lanterns</li>
+                <li>Emergency herbs and antidotes</li>
+            </ul>
+
+            <h3>Weight Management</h3>
+            <ul>
+                <li>Regularly check encumbrance levels</li>
+                <li>Drop or sell unnecessary items</li>
+                <li>Balance protection (armor) with mobility</li>
+                <li>Distribute heavy items among stronger characters</li>
+                <li>Consider using pack animals or carts for extended journeys</li>
+            </ul>
+
+            <h3>Equipment Optimization</h3>
+            <ul>
+                <li><strong>Right Hand:</strong> Best weapon for character's skills</li>
+                <li><strong>Left Hand:</strong> Healing potion during dangerous situations, shield during normal combat
+                </li>
+                <li><strong>Armor Slots:</strong> Best protection you can afford within encumbrance limits</li>
+                <li><strong>Backpack:</strong> Essentials first, valuables second, excess last</li>
+            </ul>
+
+            <h3>Combat Preparation</h3>
+            <ul>
+                <li>Ensure right hand has weapon before entering dungeons or wilderness</li>
+                <li>Keep healing item in left hand during dangerous areas</li>
+                <li>Have backup weapon in backpack</li>
+                <li>Check equipment condition regularly</li>
+                <li>Repair damaged items before they break</li>
+            </ul>
+        </main>
+        <footer>
+            <p><a href="../index.html">Back to Index</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>

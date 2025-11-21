@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills System - Game Systems Manual</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+    <div class="container">
+        <a href="../index.html" class="nav-home">← Back to Index</a>
+
+        <header>
+            <h1>Skills System</h1>
+        </header>
+
+        <main>
+            <h2>Overview</h2>
+            <p>Characters need certain skills to survive in their sometimes friendly, often times hostile environment.
+                Skills are broken down into seven groups which all Archetypes have the ability to develop: Combat, Body,
+                Social, Nature, Lore, Craftsmanship, and Intuition.</p>
+
+            <div class="info-box">
+                <h3>Skill Range</h3>
+                <p>Skills range from <strong>-20 to +18</strong>. Those on the lower end would have trouble with even
+                    simple tasks, while those on the high side could perform complex actions with ease.</p>
+            </div>
+
+            <h2>How Skills Work</h2>
+
+            <h3>Skill Check Mechanic</h3>
+            <p>When your character attempts an action that requires a skill, you make a skill check using the following
+                formula:</p>
+
+            <div class="formula">
+                <p><strong>Skill Check = d20 + Attribute Modifier + Proficiency Bonus (if trained)</strong></p>
+            </div>
+
+            <h4>Proficiency Bonus</h4>
+            <p>Characters add their proficiency bonus to skills they are trained in based on their class:</p>
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Character Level</th>
+                        <th>Proficiency Bonus</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1-4</td>
+                        <td>+2</td>
+                    </tr>
+                    <tr>
+                        <td>5-8</td>
+                        <td>+3</td>
+                    </tr>
+                    <tr>
+                        <td>9-12</td>
+                        <td>+4</td>
+                    </tr>
+                    <tr>
+                        <td>13-16</td>
+                        <td>+5</td>
+                    </tr>
+                    <tr>
+                        <td>17-20</td>
+                        <td>+6</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Difficulty Classes (DC)</h4>
+            <p>The Game Master (or game system) sets a Difficulty Class for each task. Your skill check must meet or
+                exceed the DC to succeed.</p>
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Difficulty</th>
+                        <th>DC</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Very Easy</td>
+                        <td>5</td>
+                        <td>Climb a rope with knots</td>
+                    </tr>
+                    <tr>
+                        <td>Easy</td>
+                        <td>10</td>
+                        <td>Climb a rough stone wall</td>
+                    </tr>
+                    <tr>
+                        <td>Medium</td>
+                        <td>15</td>
+                        <td>Pick a simple lock</td>
+                    </tr>
+                    <tr>
+                        <td>Hard</td>
+                        <td>20</td>
+                        <td>Pick a complex lock</td>
+                    </tr>
+                    <tr>
+                        <td>Very Hard</td>
+                        <td>25</td>
+                        <td>Disarm a magical trap</td>
+                    </tr>
+                    <tr>
+                        <td>Nearly Impossible</td>
+                        <td>30</td>
+                        <td>Convince a dragon to leave peacefully</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Advantage from Secondary Attributes</h4>
+            <p>Each skill lists a primary attribute and one or more secondary attributes. If your secondary attribute
+                modifier is <strong>+2 or higher</strong>, you roll with <strong>Advantage</strong> (roll 2d20, take the
+                higher result).</p>
+
+            <div class="info-box">
+                <h4>Example: Acrobatics Check</h4>
+                <p><strong>Skill:</strong> Acrobatics (AG primary, CR/ST secondary)</p>
+                <p><strong>Character:</strong> AG 12 (+1), CR 13 (+1), ST 10 (+0), Level 3 (Proficiency +2), trained in
+                    Acrobatics</p>
+                <p><strong>Check:</strong> d20 + 1 (AG) + 2 (proficiency) = d20 + 3</p>
+                <p><strong>Advantage:</strong> No (CR and ST modifiers are below +2)</p>
+                <p><strong>To succeed at DC 15:</strong> Must roll 12 or higher on d20</p>
+            </div>
+
+            <div class="info-box">
+                <h4>Example 2: Same Character at Level 5</h4>
+                <p><strong>Character:</strong> AG 14 (+2), CR 15 (+2), ST 12 (+1), Level 5 (Proficiency +3)</p>
+                <p><strong>Check:</strong> d20 + 2 (AG) + 3 (proficiency) = d20 + 5</p>
+                <p><strong>Advantage:</strong> Yes! (CR +2 grants advantage - roll 2d20, take higher)</p>
+                <p><strong>To succeed at DC 15:</strong> Must roll 10 or higher (much easier with advantage)</p>
+            </div>
+
+            <h2>Increasing Skill Values</h2>
+            <p>In Advanced mode, characters are given a set of statistic values that reflect standard training for their
+                Class. You receive remaining attempts (typically 20, varies by Class) to increase skills you
+                consider important.</p>
+
+            <h3>To Attempt a Skill Increase:</h3>
+            <ol>
+                <li>Move to the skill screen that contains the skill you want to increase</li>
+                <li>Open the Skill Increase Menu</li>
+                <li>Select a skill group</li>
+                <li>Choose a skill to increase - the system rolls a die to determine success or failure</li>
+                <li>Repeat until all skill attempts are used</li>
+            </ol>
+
+            <h3>Skill Increase Limits</h3>
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Skill Type</th>
+                        <th>Max Increase per Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Combat Skills</td>
+                        <td>+1 point</td>
+                    </tr>
+                    <tr>
+                        <td>Intuitive Skills</td>
+                        <td>+1 point</td>
+                    </tr>
+                    <tr>
+                        <td>Knowledge (Lore) Skills</td>
+                        <td>+3 points</td>
+                    </tr>
+                    <tr>
+                        <td>All Other Skills</td>
+                        <td>+2 points</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box">
+                <h4>Additional Rules:</h4>
+                <ul>
+                    <li>Combat skills provide bonuses to attack rolls with specific weapon types</li>
+                    <li>You have 3 attempts available to increase any one skill</li>
+                    <li>Highest skill value possible: +18</li>
+                    <li>Lowest skill value possible: -20</li>
+                </ul>
+            </div>
+
+            <h2>Combat Skills</h2>
+            <p>Combat skills determine how well a character wields different weapon types in battle.
+                These skills provide bonuses to attack rolls. Defense is handled by your Armor Class (AC), not parry
+                values.
+                On reaching a new level, Combat skills can be raised by 1 point.</p>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Skill</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Unarmed</td>
+                        <td>Encompasses boxing, wrestling, and kicking. A skill to fall back on in case the character's
+                            weapon breaks.</td>
+                    </tr>
+                    <tr>
+                        <td>Cutting Weapons</td>
+                        <td>Governs use of all weapons used in a striking fashion, including edged weapons (sabre,
+                            cutlass) and some blunt weapons (mace, morning star).</td>
+                    </tr>
+                    <tr>
+                        <td>Pointed Weapons</td>
+                        <td>Includes epee, rapier, foil, as well as all knives and daggers.</td>
+                    </tr>
+                    <tr>
+                        <td>Swords</td>
+                        <td>Swords are used as striking weapons but can be used to pierce as well. Handled easily and
+                            readily available.</td>
+                    </tr>
+                    <tr>
+                        <td>Axes</td>
+                        <td>Axes and hatchets are favored weapons of northern warriors and are easy to find. Do a lot of
+                            damage but require a lot of skill to handle.</td>
+                    </tr>
+                    <tr>
+                        <td>Pole Arms</td>
+                        <td>Used for spears and pole arms, but also for quarterstaves and double fleurs.</td>
+                    </tr>
+                    <tr>
+                        <td>Two-Handed Swords</td>
+                        <td>Governs all two-handed swords. Normally, only warriors learn to handle these awkward
+                            weapons.</td>
+                    </tr>
+                    <tr>
+                        <td>Missile Weapons</td>
+                        <td>Most common types are the various types of bows and the crossbow.</td>
+                    </tr>
+                    <tr>
+                        <td>Throwing Weapons</td>
+                        <td>Includes all javelins, throwing knives, throwing stars, and throwing hatchets.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Body Skills</h2>
+            <p>Body skills regulate all athletic actions such as climbing, hiding, or riding. For a character to succeed
+                in an action that requires a Body skill, good values for strength and agility are a must. When
+                characters gain an experience level, Body skills may be increased by up to 2 points.</p>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Skill</th>
+                        <th>Attributes</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Acrobatics</td>
+                        <td>CR/AG/ST</td>
+                        <td>Covers attempts to stay on your feet in tricky situations, such as running across ice,
+                            balancing on a tightrope, or staying upright on a rocking ship's deck. Also includes
+                            performing acrobatic stunts like dives, rolls, somersaults, cartwheels, and flips for an
+                            audience. Acrobatic reactions to unexpected situations rely more on Physical Control skill.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Climb</td>
+                        <td>CR/AG/ST</td>
+                        <td>Climbing is always risky, especially at great heights. Success depends on skill level and
+                            whether specialized equipment is used.</td>
+                    </tr>
+                    <tr>
+                        <td>Physical Control</td>
+                        <td>CR/IN/AG</td>
+                        <td>Allows reducing consequences of a fall, escaping an opponent's grip, or squeezing through a
+                            narrow crack.</td>
+                    </tr>
+                    <tr>
+                        <td>Ride</td>
+                        <td>CH/AG/ST</td>
+                        <td>Ability to ride horseback during daring maneuvers without falling.</td>
+                    </tr>
+                    <tr>
+                        <td>Stealth</td>
+                        <td>CR/IN/AG</td>
+                        <td>Ability to move without a sound and conceal yourself from enemies. Used when attempting to
+                            slink past guards, slip away without being noticed, or sneak up on someone without being
+                            seen or heard. Success depends on ground type and armor worn - noise can alert potential
+                            targets.</td>
+                    </tr>
+                    <tr>
+                        <td>Swim</td>
+                        <td>CR/AG/ST</td>
+                        <td>Determines how long a character can keep their head above water. Any kind of armor is a
+                            large hindrance.</td>
+                    </tr>
+                    <tr>
+                        <td>Self Control</td>
+                        <td>CR/ST/ST</td>
+                        <td>Ability to take damage without letting pain get the better of you. Allows continuing actions
+                            with accuracy and skill.</td>
+                    </tr>
+                    <tr>
+                        <td>Dance</td>
+                        <td>CH/AG/AG</td>
+                        <td>Like Acrobatics, offers opportunities for earning money performing for an appreciative
+                            audience.</td>
+                    </tr>
+                    <tr>
+                        <td>Hide</td>
+                        <td>CR/IN/AG</td>
+                        <td>Ability to find a hiding place quickly and quietly.</td>
+                    </tr>
+                    <tr>
+                        <td>Carouse</td>
+                        <td>WD/IN/ST</td>
+                        <td>Ability to hold oneself in check while visiting taverns. Affects amount of alcohol a
+                            character can drink before becoming intoxicated.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Social Skills</h2>
+            <p>Social skills help (or hinder) characters in the social situations they encounter in towns and cities.
+                Social skills aren't much use in the wild. When characters gain a level, Social skills may be increased
+                by up to 2 points.</p>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Skill</th>
+                        <th>Attributes</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Convert</td>
+                        <td>WD/IN/CH</td>
+                        <td>Ability to influence others with tact, social graces, and good nature to convince them your
+                            point of view is correct, especially regarding religious matters. Used when acting in good
+                            faith to foster friendships, make cordial requests, or exhibit proper etiquette. Examples
+                            include convincing a chamberlain to let your party see the king or inspiring a crowd of
+                            townsfolk.</td>
+                    </tr>
+                    <tr>
+                        <td>Seduce</td>
+                        <td>IN/CH/CH</td>
+                        <td>Ability to attract and charm others through personal magnetism and social grace. Used to
+                            gain favor, secure assistance, or obtain information through romantic or social appeal.
+                            Success depends on reading social cues and presenting yourself in an appealing manner.</td>
+                    </tr>
+                    <tr>
+                        <td>Haggle</td>
+                        <td>CR/WD/CH</td>
+                        <td>Good hagglers can get discounts of up to 50% from merchants in markets.</td>
+                    </tr>
+                    <tr>
+                        <td>Streetwise</td>
+                        <td>WD/IN/CH</td>
+                        <td>Helps find your way in a strange town, find unguarded shortcuts, avoid city guards, and
+                            locate good begging spots.</td>
+                    </tr>
+                    <tr>
+                        <td>Lie</td>
+                        <td>CR/IN/CH</td>
+                        <td>Determines whether you can convincingly hide the truth, either verbally or through your
+                            actions. This deception can encompass everything from misleading others through ambiguity to
+                            telling outright lies. Typical situations include trying to fast-talk a guard, con a
+                            merchant, pass yourself off in a disguise, dull someone's suspicions with false assurances,
+                            or maintain a straight face while telling a blatant lie.</td>
+                    </tr>
+                    <tr>
+                        <td>Human Nature</td>
+                        <td>WD/IN/CH</td>
+                        <td>Allows determining the true intentions of a creature, such as when searching out a lie or
+                            predicting someone's next move. Involves gleaning clues from body language, speech habits,
+                            and changes in mannerisms. Also helps judge the probable reaction of non-player characters
+                            in your party.</td>
+                    </tr>
+                    <tr>
+                        <td>Evaluate</td>
+                        <td>WD/IN/IN</td>
+                        <td>Helps characters estimate the value of artifacts and other useful items.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Nature Skills</h2>
+            <p>Nature skills are a must for survival in the wilderness. They help characters feel at home with the land
+                and are generally used whenever a party ventures outside of town. When characters gain levels, these
+                skills may be increased by up to 2 points.</p>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Skill</th>
+                        <th>Attributes</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Track</td>
+                        <td>WD/IN/AG</td>
+                        <td>Used to follow tracks, identify the species that left them, and determine how recently they
+                            passed. Essential for hunting wild game and tracking enemies or prey through various terrain
+                            types.</td>
+                    </tr>
+                    <tr>
+                        <td>Bind</td>
+                        <td>DX/AG/ST</td>
+                        <td>Knowledge of ropes and knots. Helps when tying game and freeing oneself if bound and gagged.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Orientation</td>
+                        <td>WD/IN/IN</td>
+                        <td>Well-honed sense of direction useful in wilderness and down in dungeons.</td>
+                    </tr>
+                    <tr>
+                        <td>Herb Lore</td>
+                        <td>WD/IN/DX</td>
+                        <td>Measures ability to recall lore about terrain, plants and their medicinal properties, and
+                            natural cycles. Includes knowledge of where to find specific herbs, ability to correctly
+                            identify them in the wild, and skill in preparing them for various uses.</td>
+                    </tr>
+                    <tr>
+                        <td>Animal Lore</td>
+                        <td>CR/WD/IN</td>
+                        <td>Comprehensive knowledge of animals including their behavior, habitats, and anatomy. Helps
+                            calm domesticated animals, keep mounts from getting spooked, intuit an animal's intentions,
+                            and control your mount during risky maneuvers. In combat, knowing vulnerable spots can mean
+                            the difference between life and death.</td>
+                    </tr>
+                    <tr>
+                        <td>Survival</td>
+                        <td>IN/DX/AG</td>
+                        <td>Essential wilderness skill used to guide your group through harsh terrain, identify signs
+                            that dangerous creatures live nearby, predict the weather, and avoid natural hazards like
+                            quicksand. Also needed to find good spots for setting up camp, locate sources of water, and
+                            identify rich hunting grounds.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Lore Skills</h2>
+            <p>Almost all knowledge can be covered by a Lore skill, and in many cases, Lore skills define a character's
+                art. When characters gain new levels, Lore skills may be increased by up to 3 points.</p>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Skill</th>
+                        <th>Attributes</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Alchemy</td>
+                        <td>CR/WD/DX</td>
+                        <td>Governs recognition and preparation of potions and elixirs.</td>
+                    </tr>
+                    <tr>
+                        <td>Ancient Tongues</td>
+                        <td>WD/WD/IN</td>
+                        <td>Allows identifying ancient scrolls.</td>
+                    </tr>
+                    <tr>
+                        <td>Geography</td>
+                        <td>WD/WD/IN</td>
+                        <td>Lore of far-off countries.</td>
+                    </tr>
+                    <tr>
+                        <td>History</td>
+                        <td>WD/WD/IN</td>
+                        <td>Measures ability to recall lore about historical events, legendary people, ancient kingdoms,
+                            past disputes, recent wars, and lost civilizations. Includes knowledge of both oral
+                            traditions and written historical records.</td>
+                    </tr>
+                    <tr>
+                        <td>Ritual</td>
+                        <td>WD/IN/CH</td>
+                        <td>Measures ability to recall lore about deities, rites and prayers, religious hierarchies,
+                            holy symbols, and the practices of secret cults. Essential for understanding and performing
+                            the various rituals connected with different faiths.</td>
+                    </tr>
+                    <tr>
+                        <td>Tactics</td>
+                        <td>CR/WD/CH</td>
+                        <td>Knowledge of successful combat movement.</td>
+                    </tr>
+                    <tr>
+                        <td>Read/Write</td>
+                        <td>WD/WD/DX</td>
+                        <td>Ability to read and write your native tongue. Quite a rare skill.</td>
+                    </tr>
+                    <tr>
+                        <td>Arcane Lore</td>
+                        <td>WD/WD/DX</td>
+                        <td>Measures ability to recall lore about spells, magic items, eldritch symbols, magical
+                            traditions, the planes of existence, and the inhabitants of those planes. Allows recognizing
+                            artifacts, judging a spell's effect, and understanding magical phenomena. An absolute must
+                            for magic users.</td>
+                    </tr>
+                    <tr>
+                        <td>Tongues</td>
+                        <td>WD/IN/CH</td>
+                        <td>Determines how many foreign languages a character speaks and how well they speak them.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Craftsmanship Skills</h2>
+            <p>Craftsmanship skills are based on a character's ability to influence situations or people with their
+                hands and mind. All Craftsmanship skills are honed by constant use and practice. On reaching a new
+                level, these skills may be increased by up to 2 points.</p>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Skill</th>
+                        <th>Attributes</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Train Animals</td>
+                        <td>CR/IN/CH</td>
+                        <td>Used to tame and train animals such as horses, hounds, or falcons.</td>
+                    </tr>
+                    <tr>
+                        <td>Drive</td>
+                        <td>IN/CH/DX</td>
+                        <td>Skill of handling carts, coaches, and sleds.</td>
+                    </tr>
+                    <tr>
+                        <td>Cheat</td>
+                        <td>CR/CH/DX</td>
+                        <td>Skill in manipulating games of chance through sleight of hand and misdirection. Includes
+                            using marked cards, loaded dice, palming coins, and other deceptive techniques. Promises
+                            substantial monetary rewards as long as no one notices your tricks. If caught, expect little
+                            mercy from angry gamblers and tavern keepers.</td>
+                    </tr>
+                    <tr>
+                        <td>Treat Disease</td>
+                        <td>CR/WD/CH</td>
+                        <td>Essential healing skill that allows you to diagnose illnesses and treat diseased companions.
+                            Helps identify symptoms, determine the nature of the affliction, and apply appropriate
+                            remedies. Team members should be proficient with this skill.</td>
+                    </tr>
+                    <tr>
+                        <td>Treat Poison</td>
+                        <td>CR/WD/IN</td>
+                        <td>Essential healing skill for dealing with poisoned characters.</td>
+                    </tr>
+                    <tr>
+                        <td>Treat Wounds</td>
+                        <td>WD/CH/DX</td>
+                        <td>Very commonly used skill for adventurers. Allows you to stabilize dying companions, bind
+                            wounds, and provide emergency medical care. Success can prevent further deterioration and
+                            speed recovery. Untreated wounds often lead to infection and disease, making this skill
+                            essential for survival.</td>
+                    </tr>
+                    <tr>
+                        <td>Instrument</td>
+                        <td>WD/IN/DX</td>
+                        <td>Determines how well you can delight an audience with music. With an appropriate instrument,
+                            you can earn money performing at taverns and festivals - provided you hit the right notes
+                            and the mood is right. Can also be used to boost morale or create distractions.</td>
+                    </tr>
+                    <tr>
+                        <td>Locks</td>
+                        <td>IN/DX/DX</td>
+                        <td>Essential skill for survival in towns and dungeons. Covers picking locks on doors, chests,
+                            and other secured containers. Also includes understanding lock mechanisms, identifying trap
+                            triggers, and knowing which tools work best for different lock types. Success often means
+                            the difference between treasure and empty hands.</td>
+                    </tr>
+                    <tr>
+                        <td>Pickpocket</td>
+                        <td>CR/IN/DX</td>
+                        <td>Covers acts of legerdemain and manual trickery, such as planting something on someone else,
+                            concealing an object on your person, lifting a coin purse, or slipping something out of
+                            another person's pocket. A risky endeavor with promise of silver or gold... or a pummeling
+                            if caught. Requires quick hands and keen awareness of your mark's attention.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Intuitive Skills</h2>
+            <p>Intuitive skills are not trained but improved primarily through practice. They are the character's sixth
+                sense. Because of this, they can only be improved by 1 point when characters gain a level.</p>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Skill</th>
+                        <th>Attributes</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Danger Sense</td>
+                        <td>WD/IN/IN</td>
+                        <td>Provides warning of immediate danger posed by ambush or trap.</td>
+                    </tr>
+                    <tr>
+                        <td>Perception</td>
+                        <td>WD/IN/IN</td>
+                        <td>Lets you spot, hear, or otherwise detect the presence of something. Measures your general
+                            awareness of surroundings and the keenness of your senses. Examples include hearing a
+                            conversation through a closed door, eavesdropping under an open window, hearing monsters
+                            moving stealthily in the forest, spotting orcs lying in ambush on a road, noticing thugs
+                            hiding in shadows, detecting secret doors, or seeing candlelight under a closed door.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </main>
+
+        <footer>
+            <p><a href="../index.html">Back to Index</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>
