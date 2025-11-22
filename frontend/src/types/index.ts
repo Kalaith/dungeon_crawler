@@ -132,13 +132,22 @@ export interface Feat {
 export interface Spell {
   id: string;
   name: string;
-  level: number;
+  level: number; // 0 = Cantrip, 1-9 = Spell levels
   school: string;
   castingTime: string;
   range: string;
-  components: string[];
+  components: {
+    verbal: boolean;
+    somatic: boolean;
+    material: boolean;
+    materialDescription?: string;
+  };
   duration: string;
+  concentration: boolean;
   description: string;
+  damageType?: string;
+  savingThrow?: 'ST' | 'CO' | 'DX' | 'AG' | 'IT' | 'IN' | 'WD' | 'CH';
+  attackRoll?: boolean;
   apCost: number;
 }
 

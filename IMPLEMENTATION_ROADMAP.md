@@ -131,29 +131,29 @@ This document outlines a **3-6 month development roadmap** for implementing the 
   - [x] Spell save DC (8 + proficiency + spellcasting modifier)
   - [x] Spell attack bonus (proficiency + spellcasting modifier)
   - [x] Concentration mechanics
-  - [ ] Spell learning (Prepared vs Known casters)
+  - [x] Spell learning (Prepared vs Known casters)
 
 #### Developer 3: Combat UI
-- [-] **Combat Interface** (`components/combat/CombatInterface.tsx`)
+- [x] **Combat Interface** (`components/combat/CombatInterface.tsx`)
   - [x] Initiative tracker display
   - [x] Turn indicator
   - [x] Party status (HP, AP, row position)
   - [x] Enemy status
   - [x] Combat log with color coding
 
-- [-] **Action Menu** (`components/combat/ActionMenu.tsx`)
+- [x] **Action Menu** (`components/combat/ActionMenu.tsx`)
   - [x] Attack action
-  - [ ] Spell casting (with AP cost display)
+  - [x] Spell casting (with AP cost display)
   - [x] Item use
-  - [ ] Defend action
-  - [ ] Row switch (free action)
+  - [x] Defend action
+  - [x] Row switch (free action)
   - [x] Ability/skill use
 
-- [ ] **Spell Selection UI** (`components/combat/SpellSelector.tsx`)
-  - [ ] Spell list filtered by available AP
-  - [ ] Spell details (cost, damage/effect, target, range)
-  - [ ] Concentration indicator
-  - [ ] Spell level organization
+- [x] **Spell Selection UI** (`components/combat/SpellSelector.tsx`)
+  - [x] Spell list filtered by available AP
+  - [x] Spell details (cost, damage/effect, target, range)
+  - [x] Concentration indicator
+  - [x] Spell level organization
 
 #### Developer 4: Monster Integration
 - [x] **Import Monster Data** (`data/monsters.ts`)
