@@ -57,7 +57,7 @@ This document outlines a **3-6 month development roadmap** for implementing the 
 - [x] **Import Class Data** (`data/classes.ts`)
   - [x] Parse manual class data (12 classes: Warrior, Rogue, Ranger, Paladin, Cleric, Druid, Wizard, Sorcerer, Warlock, Bard, Barbarian, Monk)
   - [x] Base stats and growth rates
-  - [ ] Starting equipment
+  - [x] Starting equipment
   - [x] Class abilities by level
   - [x] Spellcasting progression (for casters)
   - [x] AP pools and bonuses
@@ -81,10 +81,10 @@ This document outlines a **3-6 month development roadmap** for implementing the 
   - [x] Feat display
 
 #### Developer 4: Data Validation & Testing
-- [-] **Create Character Validation**
+- [x] **Create Character Validation**
   - [x] Attribute range checks
   - [x] Class/race compatibility
-  - [ ] Starting equipment validation
+  - [x] Starting equipment validation
   - [ ] Spell list validation for casters
 
 - [ ] **Write Unit Tests**
@@ -113,24 +113,24 @@ This document outlines a **3-6 month development roadmap** for implementing the 
   - [x] Victory/defeat conditions
 
 #### Developer 2: Combat Mechanics
-- [-] **Attack System** (`utils/combatMechanics.ts`)
-  - [ ] Attack rolls (d20 + modifiers + proficiency + weapon skill)
-  - [ ] Damage calculation (weapon dice + attribute modifier)
-  - [ ] Critical hits (natural 20 = double weapon dice)
-  - [ ] Critical misses (natural 1)
-  - [ ] Advantage/Disadvantage system
+- [x] **Attack System** (`utils/combatMechanics.ts`)
+  - [x] Attack rolls (d20 + modifiers + proficiency + weapon skill)
+  - [x] Damage calculation (weapon dice + attribute modifier)
+  - [x] Critical hits (natural 20 = double weapon dice)
+  - [x] Critical misses (natural 1)
+  - [x] Advantage/Disadvantage system
 
-- [-] **Defense System**
+- [x] **Defense System**
   - [x] AC calculation (10 + armor + AG modifier)
-  - [ ] Armor types (Light/Medium/Heavy)
-  - [ ] Shield bonuses
-  - [ ] Row positioning effects (back row: melee attacks have disadvantage)
+  - [x] Armor types (Light/Medium/Heavy)
+  - [x] Shield bonuses
+  - [x] Row positioning effects (back row: melee attacks have disadvantage)
 
-- [-] **Spell System** (`utils/spellSystem.ts`)
+- [x] **Spell System** (`utils/spellSystem.ts`)
   - [x] AP cost system (Cantrip: 0, Level 1: 5, Level 2: 8, etc.)
-  - [ ] Spell save DC (8 + proficiency + spellcasting modifier)
-  - [ ] Spell attack bonus (proficiency + spellcasting modifier)
-  - [ ] Concentration mechanics
+  - [x] Spell save DC (8 + proficiency + spellcasting modifier)
+  - [x] Spell attack bonus (proficiency + spellcasting modifier)
+  - [x] Concentration mechanics
   - [ ] Spell learning (Prepared vs Known casters)
 
 #### Developer 3: Combat UI
@@ -156,11 +156,11 @@ This document outlines a **3-6 month development roadmap** for implementing the 
   - [ ] Spell level organization
 
 #### Developer 4: Monster Integration
-- [-] **Import Monster Data** (`data/monsters.ts`)
-  - [ ] Parse `monsters_ultra.json` from manual
-  - [ ] Convert D&D stats to RoA scale
-  - [ ] Map abilities and actions
-  - [ ] Create encounter tables by CR
+- [x] **Import Monster Data** (`data/monsters.ts`)
+  - [x] Parse `monsters_ultra.json` from manual
+  - [x] Convert D&D stats to RoA scale
+  - [x] Map abilities and actions
+  - [x] Create encounter tables by CR
 
 - [ ] **Combat Balance Testing**
   - [ ] Test combat encounters at levels 1, 3, 5

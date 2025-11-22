@@ -51,6 +51,7 @@ export interface Character {
   alive: boolean;
   statusEffects: ActiveStatusEffect[];
   position: { row: 'front' | 'back'; index: number }; // Combat position
+  concentratingOn?: string; // Spell ID if concentrating
   portrait?: string;
   deity?: string;
   background?: string;
@@ -88,6 +89,7 @@ export interface CharacterClass {
     ability: Attribute;
     type: 'prepared' | 'known';
   };
+  startingEquipment: string[];
 }
 
 export interface ClassAbility {

@@ -1,4 +1,4 @@
-import { CharacterClass } from '../types';
+import type { CharacterClass } from '../types';
 
 export const characterClasses: CharacterClass[] = [
     {
@@ -20,9 +20,10 @@ export const characterClasses: CharacterClass[] = [
                 description: 'Regain hit points equal to 1d10 + level.',
                 level: 1,
                 type: 'active',
-                cost: { AP: 0 } // Uses a separate resource in 5e, but we can adapt later
+                cost: { AP: 0 }
             }
-        ]
+        ],
+        startingEquipment: ['Chain mail', 'Shield', 'Longsword', 'Explorer\'s pack']
     },
     {
         id: 'rogue',
@@ -44,7 +45,8 @@ export const characterClasses: CharacterClass[] = [
                 level: 1,
                 type: 'passive'
             }
-        ]
+        ],
+        startingEquipment: ['Leather armor', 'Shortsword', 'Shortsword', 'Thieves\' tools', 'Burglar\'s pack']
     },
     {
         id: 'wizard',
@@ -70,7 +72,8 @@ export const characterClasses: CharacterClass[] = [
         spellcasting: {
             ability: 'IT',
             type: 'prepared'
-        }
+        },
+        startingEquipment: ['Quarterstaff', 'Component pouch', 'Scholar\'s pack', 'Spellbook']
     },
     {
         id: 'cleric',
@@ -96,7 +99,8 @@ export const characterClasses: CharacterClass[] = [
         spellcasting: {
             ability: 'WD',
             type: 'prepared'
-        }
+        },
+        startingEquipment: ['Scale mail', 'Shield', 'Mace', 'Holy symbol', 'Priest\'s pack']
     },
     {
         id: 'ranger',
@@ -122,7 +126,8 @@ export const characterClasses: CharacterClass[] = [
         spellcasting: {
             ability: 'WD',
             type: 'known'
-        }
+        },
+        startingEquipment: ['Scale mail', 'Longbow', '20 arrows', 'Longsword', 'Explorer\'s pack']
     },
     {
         id: 'paladin',
@@ -148,7 +153,8 @@ export const characterClasses: CharacterClass[] = [
         spellcasting: {
             ability: 'CH',
             type: 'prepared'
-        }
+        },
+        startingEquipment: ['Chain mail', 'Shield', 'Longsword', 'Holy symbol', 'Explorer\'s pack']
     },
     {
         id: 'barbarian',
@@ -170,7 +176,8 @@ export const characterClasses: CharacterClass[] = [
                 level: 1,
                 type: 'active'
             }
-        ]
+        ],
+        startingEquipment: ['Greataxe', 'Handaxe', 'Handaxe', 'Javelin (4)', 'Explorer\'s pack']
     },
     {
         id: 'bard',
@@ -196,7 +203,8 @@ export const characterClasses: CharacterClass[] = [
         spellcasting: {
             ability: 'CH',
             type: 'known'
-        }
+        },
+        startingEquipment: ['Leather armor', 'Rapier', 'Lute', 'Entertainer\'s pack']
     },
     {
         id: 'druid',
@@ -222,7 +230,8 @@ export const characterClasses: CharacterClass[] = [
         spellcasting: {
             ability: 'WD',
             type: 'prepared'
-        }
+        },
+        startingEquipment: ['Leather armor', 'Wooden shield', 'Scimitar', 'Druidic focus', 'Explorer\'s pack']
     },
     {
         id: 'monk',
@@ -244,7 +253,8 @@ export const characterClasses: CharacterClass[] = [
                 level: 1,
                 type: 'passive'
             }
-        ]
+        ],
+        startingEquipment: ['Shortsword', 'Dart (10)', 'Explorer\'s pack']
     },
     {
         id: 'sorcerer',
@@ -270,7 +280,8 @@ export const characterClasses: CharacterClass[] = [
         spellcasting: {
             ability: 'CH',
             type: 'known'
-        }
+        },
+        startingEquipment: ['Light crossbow', '20 bolts', 'Component pouch', 'Dungeoneer\'s pack']
     },
     {
         id: 'warlock',
@@ -296,6 +307,7 @@ export const characterClasses: CharacterClass[] = [
         spellcasting: {
             ability: 'CH',
             type: 'known'
-        }
+        },
+        startingEquipment: ['Leather armor', 'Light crossbow', '20 bolts', 'Arcane focus', 'Scholar\'s pack']
     }
 ];
