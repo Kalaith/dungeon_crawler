@@ -10,17 +10,23 @@ export const CombatHeader: React.FC = () => {
         ⚔️ Combat ⚔️
       </h3>
       <div className="flex justify-center gap-2 flex-wrap">
-        {combatTurnOrder.map((participant, index) => (
-          <div
-            key={index}
-            className={`px-3 py-1.5 rounded-sm text-xs font-bold border-2 ${index === currentTurn
-              ? 'bg-gold-500 border-gold-600 text-stone-700'
-              : 'bg-stone-600 border-stone-500 text-stone-400'
-              }`}
-          >
-            {participant.character.name}
-          </div>
-        ))}
+        {combatTurnOrder.map((participant, index) => {
+          const name = participant.type === 'party'
+            ? participant.character?.name
+            : participant.enemy?.name;
+
+          return (
+            <div
+              key={index}
+              className={`px-3 py-1.5 rounded-sm text-xs font-bold border-2 ${index === currentTurn
+                ? 'bg-gold-500 border-gold-600 text-stone-700'
+                : 'bg-stone-600 border-stone-500 text-stone-400'
+                }`}
+            >
+              {name || 'Unknown'}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

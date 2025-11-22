@@ -255,7 +255,7 @@ export interface Ability {
   description: string;
   mpCost?: number; // Legacy, use AP
   apCost?: number;
-  damage?: string; // Dice notation e.g. "1d6"
+  damage?: string | number; // Dice notation e.g. "1d6" or multiplier e.g. 1.5
   heal?: string;
   target: 'self' | 'ally' | 'enemy' | 'all_enemies' | 'all_allies';
   effect?: StatusEffect;

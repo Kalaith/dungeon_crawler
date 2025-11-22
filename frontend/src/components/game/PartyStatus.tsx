@@ -19,8 +19,8 @@ export const PartyStatus: React.FC = () => {
         {partyMembers.map((character, index) => {
           if (!character) return null;
 
-          const healthPercent = (character.hp / character.maxHp) * 100;
-          const manaPercent = (character.mp / character.maxMp) * 100;
+          const healthPercent = (character.derivedStats.HP.current / character.derivedStats.HP.max) * 100;
+          const manaPercent = (character.derivedStats.AP.current / character.derivedStats.AP.max) * 100;
 
           return (
             <div
@@ -55,8 +55,8 @@ export const PartyStatus: React.FC = () => {
 
               <div className="space-y-1 text-xs text-slate-600 dark:text-gray-400">
                 <div className="flex justify-between">
-                  <span>HP: {character.hp}/{character.maxHp}</span>
-                  <span>MP: {character.mp}/{character.maxMp}</span>
+                  <span>HP: {character.derivedStats.HP.current}/{character.derivedStats.HP.max}</span>
+                  <span>AP: {character.derivedStats.AP.current}/{character.derivedStats.AP.max}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Level: {character.level}</span>
@@ -66,10 +66,10 @@ export const PartyStatus: React.FC = () => {
                   <span>EXP: {character.exp}</span>
                   <span>Next: {character.expToNext}</span>
                 </div>
-                {character.abilities.length > 0 && (
+                {character.class.abilities.length > 0 && (
                   <div className="text-center pt-1 border-t border-gray-400/20">
                     <span className="text-xs text-slate-500 dark:text-gray-300">
-                      {character.abilities.length} abilities
+                      {character.class.abilities.length} abilities
                     </span>
                   </div>
                 )}

@@ -29,8 +29,18 @@ export const useCombatStore = create<CombatStore>((set, get) => ({
     combatLog: [],
 
     startCombat: (enemy, participants) => {
-        // Sort by initiative
-        const sortedParticipants = [...participants].sort((a, b) => b.initiative - a.initiative);
+        // Create enemy participant
+        const enemyParticipant: CombatParticipant = {
+            id: enemy.id,
+            type: 'enemy',
+            enemy: enemy,
+            initiative: enemy.derivedStats.Initiative + Math.floor(Math.random() * 20) + 1, // d20 + Init
+            status: 'active'
+        };
+
+        // Combine and sort by initiative
+        const allParticipants = [...participants, enemyParticipant];
+        const sortedParticipants = allParticipants.sort((a, b) => b.initiative - a.initiative);
 
         set({
             inCombat: true,

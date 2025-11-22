@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useCombatStore } from '../../stores/useCombatStore';
 import { useCombat } from '../../hooks/useCombat';
+import { usePartyStore } from '../../stores/usePartyStore';
 import type { Character } from '../../types';
 import { CombatHeader } from './CombatHeader';
 import { EnemyDisplay } from './EnemyDisplay';
@@ -9,85 +10,79 @@ import { ActionMenu } from './ActionMenu';
 
 export const CombatInterface: React.FC = () => {
   const { inCombat, combatTurnOrder, currentTurn, nextTurn } = useCombatStore();
-  const { processTurn } = useCombat();
+  const { processTurn, handleCombatAction } = useCombat();
+  const { party } = usePartyStore();
   const lastProcessedTurn = useRef<number | null>(null);
+
+  const currentParticipant = combatTurnOrder[currentTurn];
+
+  // Top-level debug log (simplified)
+  // console.log('🔴 COMBAT INTERFACE RENDER:', { ... });
 
   // Process enemy turns automatically and skip unconscious party members
   useEffect(() => {
-    console.log('🎨 COMBAT INTERFACE EFFECT TRIGGERED');
-    console.log('InCombat:', inCombat);
-    console.log('Turn order length:', combatTurnOrder.length);
-    console.log('Current turn index:', currentTurn);
-
     if (inCombat && combatTurnOrder.length > 0) {
       const currentParticipant = combatTurnOrder[currentTurn];
-      console.log('Current participant:', {
-        index: currentTurn,
-        type: currentParticipant?.type,
-        name: currentParticipant?.character.name,
-        alive: currentParticipant?.type === 'party' ? (currentParticipant.character as Character).alive : 'N/A',
-        hp: currentParticipant?.character.hp
-      });
 
       if (currentParticipant) {
         if (currentParticipant.type === 'enemy') {
-          console.log('👹 Processing ENEMY turn');
-
           // Prevent multiple processTurn calls for the same turn
-          if (lastProcessedTurn.current === currentTurn) {
-            console.log('🚫 BLOCKED: Already processed enemy turn', currentTurn);
-            return;
-          }
+          if (lastProcessedTurn.current === currentTurn) return;
 
-          console.log('✅ ALLOWING: Enemy turn', currentTurn, '(last processed:', lastProcessedTurn.current, ')');
           lastProcessedTurn.current = currentTurn;
           processTurn();
         } else {
           // Check if party member is unconscious and skip their turn
           const character = currentParticipant.character as Character;
-          console.log('🧑 Processing PARTY member turn:', {
-            name: character.name,
-            alive: character.alive,
-            hp: character.hp
-          });
 
-          if (!character.alive || character.hp <= 0) {
-            console.log('❌ Party member is unconscious, checking if should skip...');
-
+          if (!character.alive || character.derivedStats.HP.current <= 0) {
             // Check if all party members are unconscious before skipping
             const alivePartyMembers = combatTurnOrder.filter(p => {
               if (p.type === 'party') {
                 const char = p.character as Character;
-                return char.alive && char.hp > 0;
+                return char.alive && char.derivedStats.HP.current > 0;
               }
               return false;
             });
 
-            console.log('Alive party members:', alivePartyMembers.length);
+            if (alivePartyMembers.length === 0) return;
 
-            if (alivePartyMembers.length === 0) {
-              console.log('⚠️ All party members defeated - not skipping');
-              return;
-            }
-
-            console.log('🚀 Skipping unconscious party member in 100ms');
             setTimeout(() => nextTurn(), 100);
           } else {
-            console.log('✅ Party member is conscious - waiting for player action');
             // Reset the last processed turn when it's a conscious player's turn
             if (lastProcessedTurn.current !== null) {
-              console.log('🔄 Resetting lastProcessedTurn (was:', lastProcessedTurn.current, ')');
               lastProcessedTurn.current = null;
             }
           }
         }
-      } else {
-        console.log('❌ No current participant found!');
       }
     }
   }, [inCombat, combatTurnOrder, currentTurn, processTurn, nextTurn]);
 
   if (!inCombat) return null;
+
+  // Calculate ActionMenu props outside JSX
+  let actionMenuProps = null;
+  let errorMsg = null;
+
+  if (currentParticipant?.type === 'party' && currentParticipant?.character) {
+    const charId = currentParticipant.character.id;
+    let charIndex = party.findIndex(p => p?.id === charId);
+
+    if (charIndex === -1) {
+      console.warn(`⚠️ Character ID ${charId} not found in party, trying name match...`);
+      charIndex = party.findIndex(p => p?.name === currentParticipant.character!.name);
+    }
+
+    if (charIndex !== -1) {
+      actionMenuProps = {
+        characterIndex: charIndex,
+        onAction: handleCombatAction
+      };
+    } else {
+      errorMsg = `Character not found: ${currentParticipant.character.name} (${charId})`;
+    }
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90">
@@ -98,7 +93,27 @@ export const CombatInterface: React.FC = () => {
           <EnemyDisplay />
           <div className="flex flex-col p-4 bg-stone-700 border-l-4 border-stone-500">
             <CombatLog />
-            <ActionMenu />
+
+            {/* Render ActionMenu if props exist */}
+            {actionMenuProps && (
+              <div className="mt-4">
+                <ActionMenu {...actionMenuProps} />
+              </div>
+            )}
+
+            {/* Render Error if exists */}
+            {errorMsg && (
+              <div className="p-4 bg-red-900/50 text-red-200 border border-red-500 rounded mt-4">
+                {errorMsg}
+              </div>
+            )}
+
+            {/* Debug info if no menu and no error but it IS a party turn */}
+            {!actionMenuProps && !errorMsg && currentParticipant?.type === 'party' && (
+              <div className="text-yellow-400 text-xs mt-2">
+                Waiting for character data...
+              </div>
+            )}
           </div>
         </div>
       </div>

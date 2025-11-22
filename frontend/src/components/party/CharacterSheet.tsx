@@ -1,5 +1,5 @@
 import React from 'react';
-import { Character, Attribute } from '../../types';
+import type { Character, Attribute } from '../../types';
 
 interface CharacterSheetProps {
     character: Character;

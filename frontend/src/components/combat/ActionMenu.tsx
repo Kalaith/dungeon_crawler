@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useGameStore } from '../../stores/gameStore';
+import { usePartyStore } from '../../stores/usePartyStore';
 import type { Spell } from '../../types';
 import { SpellSelector } from './SpellSelector';
 
@@ -9,7 +9,7 @@ interface ActionMenuProps {
 }
 
 export const ActionMenu: React.FC<ActionMenuProps> = ({ characterIndex, onAction }) => {
-  const { party } = useGameStore();
+  const { party } = usePartyStore();
   const [showSpellSelector, setShowSpellSelector] = useState(false);
   const [showAbilities, setShowAbilities] = useState(false);
 
