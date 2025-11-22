@@ -68,7 +68,7 @@ This document outlines a **3-6 month development roadmap** for implementing the 
   - [x] Step 2: Race Selection
   - [x] Step 3: Class Selection
   - [x] Step 4: Attribute Distribution (Point Buy/Random/Quick)
-  - [ ] Step 5: Deity Selection
+  - [x] Step 5: Deity & Background Selection
   - [x] Step 6: Review & Confirm
   - [x] Visual stat preview with modifiers
   - [x] Derived stats calculation display

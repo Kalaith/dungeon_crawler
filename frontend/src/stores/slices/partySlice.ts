@@ -88,7 +88,8 @@ export const createPartySlice: GameSliceCreator<PartySlice> = (set, get) => ({
         for (const mat of recipe.materials) {
             let removed = 0;
             for (let i = newInventory.length - 1; i >= 0; i--) {
-                if (newInventory[i].id === mat.materialId) {
+                const item = newInventory[i];
+                if (item && item.id === mat.materialId) {
                     newInventory.splice(i, 1);
                     removed++;
                     if (removed >= mat.count) break;
