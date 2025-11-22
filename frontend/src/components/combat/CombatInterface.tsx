@@ -7,6 +7,7 @@ import { CombatHeader } from './CombatHeader';
 import { EnemyDisplay } from './EnemyDisplay';
 import { CombatLog } from './CombatLog';
 import { ActionMenu } from './ActionMenu';
+import { CombatVictoryScreen } from './CombatVictoryScreen';
 
 export const CombatInterface: React.FC = () => {
   const { inCombat, combatTurnOrder, currentTurn, nextTurn } = useCombatStore();
@@ -15,9 +16,6 @@ export const CombatInterface: React.FC = () => {
   const lastProcessedTurn = useRef<number | null>(null);
 
   const currentParticipant = combatTurnOrder[currentTurn];
-
-  // Top-level debug log (simplified)
-  // console.log('🔴 COMBAT INTERFACE RENDER:', { ... });
 
   // Process enemy turns automatically and skip unconscious party members
   useEffect(() => {
@@ -86,6 +84,7 @@ export const CombatInterface: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90">
+      <CombatVictoryScreen />
       <div className="bg-stone-600 rounded-sm shadow-2xl border-4 border-stone-400 w-[95%] max-w-5xl max-h-[95vh] overflow-hidden flex flex-col">
         <CombatHeader />
 

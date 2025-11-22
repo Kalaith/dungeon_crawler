@@ -4,6 +4,7 @@ import { usePartyStore } from '../stores/usePartyStore';
 import { useInventoryStore } from '../stores/useInventoryStore';
 import { useProgressionStore } from '../stores/useProgressionStore';
 import { useUIStore } from '../stores/uiStore';
+import { useGameStateStore } from '../stores/useGameStateStore';
 import type { Character, Enemy } from '../types';
 import { calculateEffectiveStats } from '../utils/characterUtils';
 import { applyStatusEffect, processStatusEffects, updateStatusEffects, hasStatusEffect } from '../utils/statusEffectUtils';
@@ -18,8 +19,11 @@ export const useCombat = () => {
     nextTurn,
     endCombat: endCombatStore,
     updateEnemyHP,
-    updateEnemyStatusEffects
+    updateEnemyStatusEffects,
+    setVictoryData
   } = useCombatStore();
+
+  const { setGameState } = useGameStateStore();
 
   const {
     party,
@@ -33,11 +37,15 @@ export const useCombat = () => {
   const { generateLoot } = useProgressionStore();
   const { showMessage } = useUIStore();
 
+  // ... (keep other hooks)
+
   // Helper to end combat and distribute rewards
   const endCombat = useCallback((victory: boolean, loot?: import('../types').LootDrop) => {
     if (victory) {
+      // ... (keep victory logic)
       // Award experience
       const exp = currentEnemy?.expReward || 0;
+      const levelUps: { characterId: string; name: string; levelsGained: number }[] = [];
 
       // Update party with XP and check for level ups
       party.forEach((character, index) => {
@@ -48,6 +56,11 @@ export const useCombat = () => {
 
           if (leveledUp) {
             addCombatLog(`${character.name} gained ${levelsGained} level(s)!`);
+            levelUps.push({
+              characterId: character.id,
+              name: character.name,
+              levelsGained
+            });
           }
         }
       });
@@ -60,16 +73,23 @@ export const useCombat = () => {
         }
       }
 
-      // Reset combat state
-      endCombatStore();
+      // Set victory data to show the screen
+      setVictoryData({
+        exp,
+        gold: loot?.gold || 0,
+        items: loot?.items || [],
+        levelUps
+      });
+
+      // Note: We do NOT call endCombatStore() here anymore. 
+      // The Victory Screen's "Continue" button will call it.
 
     } else {
       // Game Over
       endCombatStore();
-      // Ideally trigger game over state in a main game store or UI
-      // For now, just reset combat
+      setGameState('game-over');
     }
-  }, [currentEnemy, party, updatePartyMember, addCombatLog, addGoldToParty, addItemsToInventory, endCombatStore]);
+  }, [currentEnemy, party, updatePartyMember, addCombatLog, addGoldToParty, addItemsToInventory, endCombatStore, setVictoryData, setGameState]);
 
   const performAttack = useCallback((attacker: Character | Enemy, target: Character | Enemy) => {
     // Calculate effective stats for attacker
@@ -148,7 +168,10 @@ export const useCombat = () => {
 
     const aliveParty = party.filter((c): c is Character => c !== null && c.alive);
     if (aliveParty.length === 0) {
-      console.log('⚠️ No alive party members for enemy to attack');
+      console.log('⚠️ No alive party members for enemy to attack - Triggering Game Over');
+      addCombatLog('All party members are defeated!');
+      showMessage('Game Over! All party members have fallen.');
+      endCombat(false);
       return;
     }
 

@@ -19,6 +19,17 @@ interface CombatStore {
     updateEnemyHP: (newHp: number) => void;
     updateEnemyStatusEffects: (effects: ActiveStatusEffect[]) => void;
     resetCombat: () => void;
+
+    // Victory State
+    victoryData: VictoryData | null;
+    setVictoryData: (data: VictoryData | null) => void;
+}
+
+export interface VictoryData {
+    exp: number;
+    gold: number;
+    items: import('../types').Item[];
+    levelUps: { characterId: string; name: string; levelsGained: number }[];
 }
 
 export const useCombatStore = create<CombatStore>((set, get) => ({
@@ -27,6 +38,7 @@ export const useCombatStore = create<CombatStore>((set, get) => ({
     combatTurnOrder: [],
     currentTurn: 0,
     combatLog: [],
+    victoryData: null,
 
     startCombat: (enemy, participants) => {
         // Create enemy participant
@@ -47,7 +59,8 @@ export const useCombatStore = create<CombatStore>((set, get) => ({
             currentEnemy: { ...enemy, hp: enemy.maxHp },
             combatTurnOrder: sortedParticipants,
             currentTurn: 0,
-            combatLog: [`Combat started with ${enemy.name}!`]
+            combatLog: [`Combat started with ${enemy.name}!`],
+            victoryData: null
         });
     },
 
@@ -55,7 +68,8 @@ export const useCombatStore = create<CombatStore>((set, get) => ({
         inCombat: false,
         currentEnemy: null,
         combatTurnOrder: [],
-        currentTurn: 0
+        currentTurn: 0,
+        victoryData: null
     }),
 
     addCombatLog: (message) => set((state) => {
@@ -107,6 +121,9 @@ export const useCombatStore = create<CombatStore>((set, get) => ({
         currentEnemy: null,
         combatTurnOrder: [],
         currentTurn: 0,
-        combatLog: []
-    })
+        combatLog: [],
+        victoryData: null
+    }),
+
+    setVictoryData: (data) => set({ victoryData: data })
 }));

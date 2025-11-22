@@ -5,8 +5,13 @@ import { Minimap } from './Minimap';
 import { PartyStatus } from './PartyStatus';
 import { GameControls } from './GameControls';
 
+import { useGameOverCheck } from '../../hooks/useGameOverCheck';
+
 export const GameScreen: React.FC = () => {
   const { addExploredTile, playerPosition } = useDungeonStore();
+
+  // Monitor for game over condition
+  useGameOverCheck();
 
   useEffect(() => {
     // Initialize explored map with starting position
