@@ -111,6 +111,17 @@ export const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = (
     );
 
     const renderStep4 = () => {
+        const negativeAttrKeys: Array<keyof typeof store.negativeAttributes> = ['SN', 'AC', 'CL', 'AV', 'NE', 'CU', 'VT'];
+        const negativeAttrNames = {
+            SN: 'Superstition',
+            AC: 'Acrophobia',
+            CL: 'Claustrophobia',
+            AV: 'Avarice',
+            NE: 'Necrophobia',
+            CU: 'Curiosity',
+            VT: 'Violent Temper'
+        };
+
         return (
             <div className="space-y-4">
                 <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Step 4: Attributes</h2>
@@ -132,19 +143,55 @@ export const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = (
                     </button>
                 </div>
 
-                <AttributeGrid
-                    attributes={store.attributes}
-                    editable={store.generationMethod === 'point-buy'}
-                    onAttributeChange={(attr, value) => store.setAttribute(attr, value)}
-                    racialModifiers={store.selectedRace?.attributeModifiers}
-                    showModifiers={true}
-                    minValue={8}
-                    maxValue={18}
-                />
+                {/* Positive Attributes */}
+                <div>
+                    <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Positive Attributes</h3>
+                    <AttributeGrid
+                        attributes={store.attributes}
+                        editable={store.generationMethod === 'point-buy'}
+                        onAttributeChange={(attr, value) => store.setAttribute(attr, value)}
+                        racialModifiers={store.selectedRace?.attributeModifiers}
+                        showModifiers={true}
+                        minValue={8}
+                        maxValue={18}
+                    />
+                </div>
+
+                {/* Negative Attributes */}
+                <div className="mt-6">
+                    <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Negative Attributes</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                        Higher values represent stronger flaws. Range: 2-8 for new characters.
+                    </p>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        {negativeAttrKeys.map((attr) => (
+                            <div key={attr} className="bg-gray-50 dark:bg-gray-700 p-3 rounded border border-gray-300 dark:border-gray-600">
+                                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                    {negativeAttrNames[attr]} ({attr})
+                                </label>
+                                <input
+                                    type="number"
+                                    min={2}
+                                    max={8}
+                                    value={store.negativeAttributes[attr]}
+                                    onChange={(e) => store.setNegativeAttribute(attr, parseInt(e.target.value) || 2)}
+                                    disabled={store.generationMethod !== 'point-buy'}
+                                    className="w-full px-2 py-1 text-center border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-200 disabled:cursor-not-allowed"
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
 
                 {store.generationMethod === 'point-buy' && (
-                    <div className="text-center mt-4">
-                        Points Remaining: <span className="font-bold">{store.attributePointsRemaining}</span>
+                    <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                        <div className="text-center mb-2">
+                            <span className="text-sm font-medium">Points Remaining: </span>
+                            <span className="font-bold text-lg">{store.attributePointsRemaining}</span>
+                        </div>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 text-center">
+                            Trading: 1 positive point = 2 negative points (or vice versa)
+                        </p>
                     </div>
                 )}
             </div>

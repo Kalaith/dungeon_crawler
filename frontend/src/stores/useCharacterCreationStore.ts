@@ -88,17 +88,28 @@ export const useCharacterCreationStore = create<CharacterCreationState>((set) =>
         };
     }),
 
-    setNegativeAttribute: (attr, value) => set((state) => ({
-        negativeAttributes: { ...state.negativeAttributes, [attr]: value }
-    })),
+    setNegativeAttribute: (attr, value) => set((state) => {
+        // Enforce bounds for negative attributes (2-8 for new characters)
+        const clampedValue = Math.max(2, Math.min(8, value));
+        return {
+            negativeAttributes: { ...state.negativeAttributes, [attr]: clampedValue }
+        };
+    }),
 
     rollAttributes: () => set(() => {
-        // Simple 3d6 roll for each attribute
-        const roll = () => Math.floor(Math.random() * 6) + 1 + Math.floor(Math.random() * 6) + 1 + Math.floor(Math.random() * 6) + 1;
+        // 3d6 roll for positive attributes
+        const roll3d6 = () => Math.floor(Math.random() * 6) + 1 + Math.floor(Math.random() * 6) + 1 + Math.floor(Math.random() * 6) + 1;
+        // 1d6+1 roll for negative attributes (range 2-7, occasionally 8)
+        const roll1d6plus1 = () => Math.floor(Math.random() * 6) + 1 + 1;
+
         return {
             attributes: {
-                ST: roll(), CO: roll(), DX: roll(), AG: roll(),
-                IT: roll(), IN: roll(), WD: roll(), CH: roll()
+                ST: roll3d6(), CO: roll3d6(), DX: roll3d6(), AG: roll3d6(),
+                IT: roll3d6(), IN: roll3d6(), WD: roll3d6(), CH: roll3d6()
+            },
+            negativeAttributes: {
+                SN: roll1d6plus1(), AC: roll1d6plus1(), CL: roll1d6plus1(), AV: roll1d6plus1(),
+                NE: roll1d6plus1(), CU: roll1d6plus1(), VT: roll1d6plus1()
             }
         };
     }),

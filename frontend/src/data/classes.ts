@@ -309,5 +309,78 @@ export const characterClasses: CharacterClass[] = [
             type: 'known'
         },
         startingEquipment: ['Leather armor', 'Light crossbow', '20 bolts', 'Arcane focus', 'Scholar\'s pack']
+    },
+    {
+        id: 'jester',
+        name: 'Jester',
+        description: 'A wanderer and entertainer who uses wit, charm, and agility to survive.',
+        baseStats: { HP: 8, AP: 0 },
+        growthRates: { HP: 8, AP: 0 },
+        primaryAttributes: ['IN', 'CH', 'DX'],
+        proficiencies: {
+            armor: ['light'],
+            weapons: ['simple', 'hand_crossbow', 'rapier', 'shortsword'],
+            savingThrows: ['DX', 'CH']
+        },
+        abilities: [
+            {
+                id: 'quick_wit',
+                name: 'Quick Wit',
+                description: 'Use charm and deception to distract or confuse enemies.',
+                level: 1,
+                type: 'active'
+            }
+        ],
+        startingEquipment: ['Leather armor', 'Rapier', 'Disguise kit', 'Entertainer\'s pack']
+    },
+    {
+        id: 'hunter',
+        name: 'Hunter',
+        description: 'A master of the wilderness, skilled tracker and survivalist.',
+        baseStats: { HP: 10, AP: 0 },
+        growthRates: { HP: 10, AP: 0 },
+        primaryAttributes: ['IN', 'DX', 'AG'],
+        proficiencies: {
+            armor: ['light', 'medium'],
+            weapons: ['simple', 'martial'],
+            savingThrows: ['DX', 'IN']
+        },
+        abilities: [
+            {
+                id: 'danger_sense',
+                name: 'Danger Sense',
+                description: 'Keen senses alert you to danger and traps.',
+                level: 1,
+                type: 'passive'
+            }
+        ],
+        startingEquipment: ['Leather armor', 'Longbow', '20 arrows', 'Hunting knife', 'Explorer\'s pack']
+    },
+    {
+        id: 'magician',
+        name: 'Magician',
+        description: 'A hybrid spellcaster who blends arcane magic with alchemical knowledge.',
+        baseStats: { HP: 6, AP: 10 },
+        growthRates: { HP: 6, AP: 4 },
+        primaryAttributes: ['IN', 'DX', 'IT'],
+        proficiencies: {
+            armor: [],
+            weapons: ['dagger', 'dart', 'sling', 'quarterstaff', 'light_crossbow'],
+            savingThrows: ['IT', 'DX']
+        },
+        abilities: [
+            {
+                id: 'alchemical_crafting',
+                name: 'Alchemical Crafting',
+                description: 'Create potions and alchemical items.',
+                level: 1,
+                type: 'passive'
+            }
+        ],
+        spellcasting: {
+            ability: 'IT',
+            type: 'prepared'
+        },
+        startingEquipment: ['Quarterstaff', 'Alchemist\'s supplies', 'Component pouch', 'Scholar\'s pack']
     }
 ];
