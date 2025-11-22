@@ -1,5 +1,6 @@
 import React from 'react';
 import { useCombatStore } from '../../stores/useCombatStore';
+import { TurnOrderBadge } from './TurnOrderBadge';
 
 export const CombatHeader: React.FC = () => {
   const { combatTurnOrder, currentTurn } = useCombatStore();
@@ -16,15 +17,11 @@ export const CombatHeader: React.FC = () => {
             : participant.enemy?.name;
 
           return (
-            <div
+            <TurnOrderBadge
               key={index}
-              className={`px-3 py-1.5 rounded-sm text-xs font-bold border-2 ${index === currentTurn
-                ? 'bg-gold-500 border-gold-600 text-stone-700'
-                : 'bg-stone-600 border-stone-500 text-stone-400'
-                }`}
-            >
-              {name || 'Unknown'}
-            </div>
+              name={name || 'Unknown'}
+              isActive={index === currentTurn}
+            />
           );
         })}
       </div>

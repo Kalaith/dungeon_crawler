@@ -1,5 +1,6 @@
 import React from 'react';
 import { usePartyStore } from '../../stores/usePartyStore';
+import { CharacterCard } from '../character/CharacterCard';
 
 export const PartyStatus: React.FC = () => {
   const { party } = usePartyStore();
@@ -19,62 +20,15 @@ export const PartyStatus: React.FC = () => {
         {partyMembers.map((character, index) => {
           if (!character) return null;
 
-          const healthPercent = (character.derivedStats.HP.current / character.derivedStats.HP.max) * 100;
-          const manaPercent = (character.derivedStats.AP.current / character.derivedStats.AP.max) * 100;
-
           return (
-            <div
+            <CharacterCard
               key={index}
-              className={`bg-purple-400/8 dark:bg-purple-400/15 border border-gray-400/20 rounded-lg p-3 ${!character.alive ? 'opacity-50' : ''
-                }`}
-            >
-              <div className="flex justify-between items-center mb-2">
-                <div className="font-semibold text-slate-900 dark:text-gray-200 text-sm">
-                  {character.name}
-                </div>
-                <div className="text-xs text-slate-500 dark:text-gray-300">
-                  {character.class.name}
-                </div>
-              </div>
-
-              {/* Health Bar */}
-              <div className="h-2 bg-gray-400/15 dark:bg-gray-400/15 rounded-full overflow-hidden mb-1">
-                <div
-                  className="h-full bg-gradient-to-r from-red-400 to-green-400 transition-all duration-300"
-                  style={{ width: `${healthPercent}%` }}
-                />
-              </div>
-
-              {/* Mana Bar */}
-              <div className="h-2 bg-gray-400/15 dark:bg-gray-400/15 rounded-full overflow-hidden mb-2">
-                <div
-                  className="h-full bg-gradient-to-r from-teal-600 to-teal-300 transition-all duration-300"
-                  style={{ width: `${manaPercent}%` }}
-                />
-              </div>
-
-              <div className="space-y-1 text-xs text-slate-600 dark:text-gray-400">
-                <div className="flex justify-between">
-                  <span>HP: {character.derivedStats.HP.current}/{character.derivedStats.HP.max}</span>
-                  <span>AP: {character.derivedStats.AP.current}/{character.derivedStats.AP.max}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Level: {character.level}</span>
-                  <span>Gold: {character.gold}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>EXP: {character.exp}</span>
-                  <span>Next: {character.expToNext}</span>
-                </div>
-                {character.class.abilities.length > 0 && (
-                  <div className="text-center pt-1 border-t border-gray-400/20">
-                    <span className="text-xs text-slate-500 dark:text-gray-300">
-                      {character.class.abilities.length} abilities
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
+              character={character}
+              variant="detailed"
+              showBars={true}
+              showStats={true}
+              showAbilityCount={true}
+            />
           );
         })}
       </div>

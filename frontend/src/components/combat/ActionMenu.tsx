@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { usePartyStore } from '../../stores/usePartyStore';
 import type { Spell } from '../../types';
 import { SpellSelector } from './SpellSelector';
+import { AbilitySelector } from './AbilitySelector';
 
 interface ActionMenuProps {
   characterIndex: number;
@@ -11,7 +12,7 @@ interface ActionMenuProps {
 export const ActionMenu: React.FC<ActionMenuProps> = ({ characterIndex, onAction }) => {
   const { party } = usePartyStore();
   const [showSpellSelector, setShowSpellSelector] = useState(false);
-  const [showAbilities, setShowAbilities] = useState(false);
+  const [showAbilitySelector, setShowAbilitySelector] = useState(false);
 
   const character = party[characterIndex];
   if (!character) return null;
@@ -25,58 +26,10 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ characterIndex, onAction
     setShowSpellSelector(false);
   };
 
-  const handleAbilityUse = (abilityId: string) => {
-    onAction('spell', { abilityId });
-    setShowAbilities(false);
+  const handleAbilityUse = (ability: any) => {
+    onAction('spell', { abilityId: ability.id });
+    setShowAbilitySelector(false);
   };
-
-  if (showAbilities) {
-    return (
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-lg">
-        <div className="flex items-center justify-between mb-3">
-          <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Choose Ability
-          </h4>
-          <button
-            onClick={() => setShowAbilities(false)}
-            className="text-sm px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600"
-          >
-            Back
-          </button>
-        </div>
-        <div className="space-y-2 max-h-64 overflow-y-auto">
-          {character.class.abilities
-            .filter(ability => ability.level <= character.level)
-            .map((ability) => {
-              const apCost = ability.cost?.AP || 0;
-              const canUse = currentAP >= apCost;
-
-              return (
-                <button
-                  key={ability.id}
-                  onClick={() => canUse && handleAbilityUse(ability.id)}
-                  disabled={!canUse}
-                  className={`w-full text-left p-3 rounded border transition-all ${canUse
-                    ? 'border-indigo-300 bg-white dark:bg-gray-700 hover:bg-indigo-50 dark:hover:bg-gray-600'
-                    : 'border-gray-200 bg-gray-100 dark:bg-gray-800 opacity-50 cursor-not-allowed'
-                    }`}
-                >
-                  <div className="flex justify-between items-start mb-1">
-                    <span className="font-bold text-gray-900 dark:text-white">{ability.name}</span>
-                    {apCost > 0 && (
-                      <span className={`text-sm font-semibold ${canUse ? 'text-indigo-600' : 'text-gray-400'}`}>
-                        {apCost} AP
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{ability.description}</p>
-                </button>
-              );
-            })}
-        </div>
-      </div>
-    );
-  }
 
   return (
     <>
@@ -110,7 +63,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ characterIndex, onAction
 
           {hasAbilities && (
             <button
-              onClick={() => setShowAbilities(true)}
+              onClick={() => setShowAbilitySelector(true)}
               className="p-3 bg-indigo-600 border-2 border-indigo-500 text-white font-bold text-sm uppercase tracking-wider hover:bg-indigo-500 hover:border-indigo-400 transition-all active:translate-y-0.5 shadow-md rounded"
             >
               💫 Ability
@@ -155,6 +108,16 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ characterIndex, onAction
           currentAP={currentAP}
           onSelectSpell={handleSpellCast}
           onCancel={() => setShowSpellSelector(false)}
+        />
+      )}
+
+      {showAbilitySelector && (
+        <AbilitySelector
+          abilities={character.class.abilities}
+          currentLevel={character.level}
+          currentAP={currentAP}
+          onSelectAbility={handleAbilityUse}
+          onCancel={() => setShowAbilitySelector(false)}
         />
       )}
     </>

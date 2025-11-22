@@ -1,13 +1,13 @@
 import React from 'react';
-import type { Character, Attribute } from '../../types';
+import type { Character } from '../../types';
+import { StatDisplay } from '../ui/StatDisplay';
+import { AttributeGrid } from '../character/AttributeGrid';
 
 interface CharacterSheetProps {
     character: Character;
 }
 
 export const CharacterSheet: React.FC<CharacterSheetProps> = ({ character }) => {
-    const attributes: Attribute[] = ['ST', 'CO', 'DX', 'AG', 'IT', 'IN', 'WD', 'CH'];
-
     return (
         <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg max-w-4xl mx-auto">
             <div className="flex flex-col md:flex-row gap-6">
@@ -31,41 +31,39 @@ export const CharacterSheet: React.FC<CharacterSheetProps> = ({ character }) => 
                     {/* Attributes */}
                     <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                         <h3 className="text-lg font-bold mb-3 border-b pb-2 dark:text-white">Attributes</h3>
-                        <div className="grid grid-cols-2 gap-2">
-                            {attributes.map((attr) => (
-                                <div key={attr} className="flex justify-between items-center">
-                                    <span className="font-medium text-gray-700 dark:text-gray-300">{attr}</span>
-                                    <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">
-                                        {character.attributes[attr]}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
+                        <AttributeGrid
+                            attributes={character.attributes}
+                            editable={false}
+                        />
                     </div>
 
                     {/* Derived Stats */}
                     <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                         <h3 className="text-lg font-bold mb-3 border-b pb-2 dark:text-white">Combat Stats</h3>
-                        <div className="space-y-2">
-                            <div className="flex justify-between">
-                                <span>HP</span>
-                                <span className="font-bold">{character.derivedStats.HP.current} / {character.derivedStats.HP.max}</span>
+                        <div className="space-y-3">
+                            <StatDisplay
+                                label="HP"
+                                current={character.derivedStats.HP.current}
+                                max={character.derivedStats.HP.max}
+                                barColor="health"
+                            />
+                            <StatDisplay
+                                label="AP"
+                                current={character.derivedStats.AP.current}
+                                max={character.derivedStats.AP.max}
+                                barColor="mana"
+                            />
+                            <div className="flex justify-between text-sm">
+                                <span className="text-gray-700 dark:text-gray-300">AC</span>
+                                <span className="font-bold text-gray-900 dark:text-white">{character.derivedStats.AC}</span>
                             </div>
-                            <div className="flex justify-between">
-                                <span>AP</span>
-                                <span className="font-bold">{character.derivedStats.AP.current} / {character.derivedStats.AP.max}</span>
+                            <div className="flex justify-between text-sm">
+                                <span className="text-gray-700 dark:text-gray-300">Initiative</span>
+                                <span className="font-bold text-gray-900 dark:text-white">{character.derivedStats.Initiative}</span>
                             </div>
-                            <div className="flex justify-between">
-                                <span>AC</span>
-                                <span className="font-bold">{character.derivedStats.AC}</span>
-                            </div>
-                            <div className="flex justify-between">
-                                <span>Initiative</span>
-                                <span className="font-bold">{character.derivedStats.Initiative}</span>
-                            </div>
-                            <div className="flex justify-between">
-                                <span>Movement</span>
-                                <span className="font-bold">{character.derivedStats.Movement} ft</span>
+                            <div className="flex justify-between text-sm">
+                                <span className="text-gray-700 dark:text-gray-300">Movement</span>
+                                <span className="font-bold text-gray-900 dark:text-white">{character.derivedStats.Movement} ft</span>
                             </div>
                         </div>
                     </div>

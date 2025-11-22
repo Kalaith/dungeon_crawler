@@ -2,8 +2,9 @@ import React from 'react';
 import { useCharacterCreationStore } from '../../stores/useCharacterCreationStore';
 import { races } from '../../data/races';
 import { characterClasses } from '../../data/classes';
-import type { Attribute, Character, DerivedStats } from '../../types';
-import { v4 as uuidv4 } from 'uuid';
+import type { Attribute, Character } from '../../types';
+import { AttributeGrid } from '../character/AttributeGrid';
+import { createCharacterFromWizardData } from '../../utils/characterCreation';
 
 interface CharacterCreationWizardProps {
     onFinish: (character: Character) => void;
@@ -24,57 +25,13 @@ export const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = (
     const handleFinish = () => {
         if (!store.selectedRace || !store.selectedClass) return;
 
-        // Calculate final attributes including racial modifiers
-        const finalAttributes = { ...store.attributes };
-        (Object.keys(store.selectedRace.attributeModifiers) as Attribute[]).forEach(attr => {
-            if (store.selectedRace?.attributeModifiers[attr]) {
-                finalAttributes[attr] += store.selectedRace.attributeModifiers[attr]!;
-            }
-        });
-
-        // Calculate derived stats (simplified for now)
-        const derivedStats: DerivedStats = {
-            HP: {
-                current: store.selectedClass.baseStats.HP + Math.floor((finalAttributes.CO - 10) / 2),
-                max: store.selectedClass.baseStats.HP + Math.floor((finalAttributes.CO - 10) / 2)
-            },
-            AP: {
-                current: store.selectedClass.baseStats.AP + Math.floor((finalAttributes.IT - 10) / 2),
-                max: store.selectedClass.baseStats.AP + Math.floor((finalAttributes.IT - 10) / 2)
-            },
-            Initiative: Math.floor((finalAttributes.AG - 10) / 2) + Math.floor((finalAttributes.IN - 10) / 2),
-            AC: 10 + Math.floor((finalAttributes.AG - 10) / 2), // Base AC calculation
-            Proficiency: 2,
-            Movement: store.selectedRace.movementRate
-        };
-
-        const newCharacter: Character = {
-            id: uuidv4(),
-            name: store.name,
-            race: store.selectedRace,
-            class: store.selectedClass,
-            level: 1,
-            exp: 0,
-            expToNext: 1000,
-            attributes: finalAttributes,
-            negativeAttributes: store.negativeAttributes,
-            derivedStats: derivedStats,
-            skills: store.selectedSkills.map(s => ({ ...s, value: 1 })), // Basic skill implementation
-            feats: store.selectedFeats,
-            equipment: {},
-            inventory: [],
-            spells: [],
-            gold: 10, // Starting gold
-            alive: true,
-            statusEffects: [],
-            position: { row: 'front', index: 0 },
-            portrait: store.portrait,
-            deity: store.selectedDeity || undefined,
-            background: store.selectedBackground || undefined
-        };
-
-        onFinish(newCharacter);
-        store.reset();
+        try {
+            const newCharacter = createCharacterFromWizardData(store);
+            onFinish(newCharacter);
+            store.reset();
+        } catch (error) {
+            console.error('Failed to create character:', error);
+        }
     };
 
     const handleBack = () => {
@@ -154,8 +111,6 @@ export const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = (
     );
 
     const renderStep4 = () => {
-        const attributes: Attribute[] = ['ST', 'CO', 'DX', 'AG', 'IT', 'IN', 'WD', 'CH'];
-
         return (
             <div className="space-y-4">
                 <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Step 4: Attributes</h2>
@@ -177,40 +132,16 @@ export const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = (
                     </button>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                    {attributes.map((attr) => (
-                        <div key={attr} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                            <span className="font-bold w-8">{attr}</span>
-                            <div className="flex items-center space-x-2">
-                                {store.generationMethod === 'point-buy' && (
-                                    <button
-                                        onClick={() => store.setAttribute(attr, store.attributes[attr] - 1)}
-                                        className="w-6 h-6 bg-gray-200 rounded flex items-center justify-center hover:bg-gray-300"
-                                        disabled={store.attributes[attr] <= 8}
-                                    >
-                                        -
-                                    </button>
-                                )}
-                                <span className="w-8 text-center font-mono text-lg">{store.attributes[attr]}</span>
-                                {store.generationMethod === 'point-buy' && (
-                                    <button
-                                        onClick={() => store.setAttribute(attr, store.attributes[attr] + 1)}
-                                        className="w-6 h-6 bg-gray-200 rounded flex items-center justify-center hover:bg-gray-300"
-                                        disabled={store.attributes[attr] >= 18}
-                                    >
-                                        +
-                                    </button>
-                                )}
-                            </div>
-                            {/* Show racial modifier if any */}
-                            <span className="text-xs text-gray-500 w-8 text-right">
-                                {store.selectedRace?.attributeModifiers[attr] ?
-                                    `(${store.selectedRace.attributeModifiers[attr]! > 0 ? '+' : ''}${store.selectedRace.attributeModifiers[attr]})`
-                                    : ''}
-                            </span>
-                        </div>
-                    ))}
-                </div>
+                <AttributeGrid
+                    attributes={store.attributes}
+                    editable={store.generationMethod === 'point-buy'}
+                    onAttributeChange={(attr, value) => store.setAttribute(attr, value)}
+                    racialModifiers={store.selectedRace?.attributeModifiers}
+                    showModifiers={true}
+                    minValue={8}
+                    maxValue={18}
+                />
+
                 {store.generationMethod === 'point-buy' && (
                     <div className="text-center mt-4">
                         Points Remaining: <span className="font-bold">{store.attributePointsRemaining}</span>

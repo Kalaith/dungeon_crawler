@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDungeon } from '../../hooks/useDungeon';
+import { useKeyboardControls } from '../../hooks/useKeyboardControls';
 import { useGameStateStore } from '../../stores/useGameStateStore';
 import { usePartyStore } from '../../stores/usePartyStore';
 import { Button } from '../ui/Button';
@@ -9,41 +10,14 @@ export const GameControls: React.FC = () => {
   const { gameState } = useGameStateStore();
   const { restParty } = usePartyStore();
 
-  useEffect(() => {
-    if (gameState !== 'exploring') return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      switch (e.key) {
-        case 'ArrowUp':
-        case 'w':
-        case 'W':
-          e.preventDefault();
-          moveForward();
-          break;
-        case 'ArrowDown':
-        case 's':
-        case 'S':
-          e.preventDefault();
-          moveBackward();
-          break;
-        case 'ArrowLeft':
-        case 'a':
-        case 'A':
-          e.preventDefault();
-          turnLeft();
-          break;
-        case 'ArrowRight':
-        case 'd':
-        case 'D':
-          e.preventDefault();
-          turnRight();
-          break;
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [gameState, moveForward, moveBackward, turnLeft, turnRight]);
+  // Use custom hook for keyboard controls
+  useKeyboardControls({
+    onMoveForward: moveForward,
+    onMoveBackward: moveBackward,
+    onTurnLeft: turnLeft,
+    onTurnRight: turnRight,
+    enabled: gameState === 'exploring'
+  });
 
   return (
     <div className="flex flex-col gap-4 p-4 bg-cream-100 dark:bg-charcoal-800 rounded-lg border border-gray-400/20">

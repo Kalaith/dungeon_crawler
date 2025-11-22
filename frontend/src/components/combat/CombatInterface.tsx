@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { useCombatStore } from '../../stores/useCombatStore';
 import { useCombat } from '../../hooks/useCombat';
+import { useTurnProcessor } from '../../hooks/useTurnProcessor';
 import { usePartyStore } from '../../stores/usePartyStore';
-import type { Character } from '../../types';
 import { CombatHeader } from './CombatHeader';
 import { EnemyDisplay } from './EnemyDisplay';
 import { CombatLog } from './CombatLog';
@@ -10,52 +10,14 @@ import { ActionMenu } from './ActionMenu';
 import { CombatVictoryScreen } from './CombatVictoryScreen';
 
 export const CombatInterface: React.FC = () => {
-  const { inCombat, combatTurnOrder, currentTurn, nextTurn } = useCombatStore();
+  const { inCombat, combatTurnOrder, currentTurn } = useCombatStore();
   const { processTurn, handleCombatAction } = useCombat();
   const { party } = usePartyStore();
-  const lastProcessedTurn = useRef<number | null>(null);
+
+  // Use custom hook to handle turn processing logic
+  useTurnProcessor(processTurn);
 
   const currentParticipant = combatTurnOrder[currentTurn];
-
-  // Process enemy turns automatically and skip unconscious party members
-  useEffect(() => {
-    if (inCombat && combatTurnOrder.length > 0) {
-      const currentParticipant = combatTurnOrder[currentTurn];
-
-      if (currentParticipant) {
-        if (currentParticipant.type === 'enemy') {
-          // Prevent multiple processTurn calls for the same turn
-          if (lastProcessedTurn.current === currentTurn) return;
-
-          lastProcessedTurn.current = currentTurn;
-          processTurn();
-        } else {
-          // Check if party member is unconscious and skip their turn
-          const character = currentParticipant.character as Character;
-
-          if (!character.alive || character.derivedStats.HP.current <= 0) {
-            // Check if all party members are unconscious before skipping
-            const alivePartyMembers = combatTurnOrder.filter(p => {
-              if (p.type === 'party') {
-                const char = p.character as Character;
-                return char.alive && char.derivedStats.HP.current > 0;
-              }
-              return false;
-            });
-
-            if (alivePartyMembers.length === 0) return;
-
-            setTimeout(() => nextTurn(), 100);
-          } else {
-            // Reset the last processed turn when it's a conscious player's turn
-            if (lastProcessedTurn.current !== null) {
-              lastProcessedTurn.current = null;
-            }
-          }
-        }
-      }
-    }
-  }, [inCombat, combatTurnOrder, currentTurn, processTurn, nextTurn]);
 
   if (!inCombat) return null;
 
