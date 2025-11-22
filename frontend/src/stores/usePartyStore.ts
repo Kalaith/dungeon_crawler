@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Character, ActiveStatusEffect, Item } from '../types';
 import { GAME_CONFIG } from '../data/constants';
+import { migrateParty } from '../utils/characterMigration';
 
 interface PartyStore {
     party: (Character | null)[];
@@ -175,6 +176,12 @@ export const usePartyStore = create<PartyStore>()(
         }),
         {
             name: 'dungeon-crawler-party',
+            onRehydrateStorage: () => (state) => {
+                // Migrate legacy character data when loading from localStorage
+                if (state?.party) {
+                    state.party = migrateParty(state.party);
+                }
+            }
         }
     )
 );

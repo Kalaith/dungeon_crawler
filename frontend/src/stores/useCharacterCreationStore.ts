@@ -47,7 +47,7 @@ const initialAttributes: Attributes = {
 };
 
 const initialNegativeAttributes: NegativeAttributes = {
-    SN: 0, AC: 0, CL: 0, AV: 0, NE: 0, CU: 0, VT: 0
+    SN: 2, AC: 2, CL: 2, AV: 2, NE: 2, CU: 2, VT: 2
 };
 
 export const useCharacterCreationStore = create<CharacterCreationState>((set) => ({
@@ -91,8 +91,28 @@ export const useCharacterCreationStore = create<CharacterCreationState>((set) =>
     setNegativeAttribute: (attr, value) => set((state) => {
         // Enforce bounds for negative attributes (2-8 for new characters)
         const clampedValue = Math.max(2, Math.min(8, value));
+        const oldValue = state.negativeAttributes[attr];
+
+        // Calculate the change in negative attribute points
+        // Base is 2, so anything above 2 is "spending" points on flaws
+        const oldNegativePoints = oldValue - 2;
+        const newNegativePoints = clampedValue - 2;
+        const negativePointChange = newNegativePoints - oldNegativePoints;
+
+        // Trading rate: 2 negative points = 1 positive point
+        // So if you increase a negative attribute by 2, you get 1 positive point
+        const positivePointGain = Math.floor(negativePointChange / 2);
+
+        // Calculate current positive attribute sum
+        const currentSum = Object.values(state.attributes).reduce((a, b) => a + b, 0);
+        const MAX_POINTS = 100;
+
+        // New points remaining = old remaining + points gained from negative attributes
+        const newPointsRemaining = (MAX_POINTS - currentSum) + positivePointGain;
+
         return {
-            negativeAttributes: { ...state.negativeAttributes, [attr]: clampedValue }
+            negativeAttributes: { ...state.negativeAttributes, [attr]: clampedValue },
+            attributePointsRemaining: newPointsRemaining
         };
     }),
 
@@ -145,6 +165,7 @@ export const useCharacterCreationStore = create<CharacterCreationState>((set) =>
         selectedClass: null,
         attributes: initialAttributes,
         negativeAttributes: initialNegativeAttributes,
+        attributePointsRemaining: 20,
         selectedSkills: [],
         selectedFeats: [],
         selectedDeity: null,

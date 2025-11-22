@@ -190,7 +190,7 @@ export const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = (
                             <span className="font-bold text-lg">{store.attributePointsRemaining}</span>
                         </div>
                         <p className="text-xs text-gray-600 dark:text-gray-400 text-center">
-                            Trading: 1 positive point = 2 negative points (or vice versa)
+                            Increase negative attributes to gain bonus positive points (every 2 points in flaws = 1 bonus point)
                         </p>
                     </div>
                 )}

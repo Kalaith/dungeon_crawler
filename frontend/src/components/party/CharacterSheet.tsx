@@ -8,6 +8,17 @@ interface CharacterSheetProps {
 }
 
 export const CharacterSheet: React.FC<CharacterSheetProps> = ({ character }) => {
+    if (!character.derivedStats) {
+        return (
+            <div className="bg-red-100 dark:bg-red-900/20 border-2 border-red-500 rounded-lg p-4">
+                <p className="text-red-800 dark:text-red-200 font-semibold">Invalid Character Data</p>
+                <p className="text-sm text-red-600 dark:text-red-300">
+                    This character is missing required stats. Please recreate this character.
+                </p>
+            </div>
+        );
+    }
+
     return (
         <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg max-w-4xl mx-auto">
             <div className="flex flex-col md:flex-row gap-6">

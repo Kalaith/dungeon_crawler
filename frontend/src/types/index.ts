@@ -130,25 +130,28 @@ export interface Feat {
 }
 
 export interface Spell {
-  id: string;
   name: string;
   level: number; // 0 = Cantrip, 1-9 = Spell levels
-  school: string;
-  castingTime: string;
-  range: string;
-  components: {
-    verbal: boolean;
-    somatic: boolean;
-    material: boolean;
-    materialDescription?: string;
-  };
+  school: string; // Evocation, Conjuration, Transmutation, etc.
+  casting_time: string;
+  range: string; // Self, Touch, Close, Far
   duration: string;
   concentration: boolean;
+  ritual: boolean;
+  ap_cost: number;
+  combat_usable: boolean;
   description: string;
-  damageType?: string;
-  savingThrow?: 'ST' | 'CO' | 'DX' | 'AG' | 'IT' | 'IN' | 'WD' | 'CH';
-  attackRoll?: boolean;
-  apCost: number;
+  classes: string[]; // Which classes can learn this spell
+
+  // Optional fields
+  higher_level?: string; // Description of effects at higher levels
+  damage_type?: string; // Fire, Cold, Lightning, etc.
+  damage_dice?: Record<string, string>; // Level -> dice formula (e.g., "1": "3d6", "2": "4d6")
+  heal_dice?: Record<string, string>; // Level -> heal amount
+  save_type?: string; // DEX, CON, WIS, INT, CHA, STR
+  attack_type?: 'melee' | 'ranged';
+  aoe?: string; // Area of effect (e.g., "20 sphere", "15 cone")
+  material_cost?: string; // Material component cost if any
 }
 
 // --- Existing interfaces adapted or kept ---

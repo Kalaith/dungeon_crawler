@@ -2,12 +2,26 @@ import { create } from 'zustand';
 import type { Enemy, CombatParticipant, ActiveStatusEffect } from '../types';
 import { GAME_CONFIG } from '../data/constants';
 
+interface ActionEconomy {
+    actionUsed: boolean;
+    bonusActionUsed: boolean;
+    movementUsed: boolean;
+    reactionUsed: boolean;
+}
+
 interface CombatStore {
     inCombat: boolean;
     currentEnemy: Enemy | null;
     combatTurnOrder: CombatParticipant[];
     currentTurn: number;
     combatLog: string[];
+
+    // Action Economy
+    currentActionEconomy: ActionEconomy;
+
+    // Concentration Tracking
+    concentratingCharacterId: string | null;
+    concentrationSpellId: string | null;
 
     // Actions
     startCombat: (enemy: Enemy, partyMembers: CombatParticipant[]) => void;
@@ -19,6 +33,18 @@ interface CombatStore {
     updateEnemyHP: (newHp: number) => void;
     updateEnemyStatusEffects: (effects: ActiveStatusEffect[]) => void;
     resetCombat: () => void;
+
+    // Action Economy Methods
+    useAction: () => void;
+    useBonusAction: () => void;
+    useMovement: () => void;
+    useReaction: () => void;
+    resetActionEconomy: () => void;
+
+    // Concentration Methods
+    setConcentration: (characterId: string, spellId: string) => void;
+    breakConcentration: () => void;
+    checkConcentration: (damage: number) => boolean;
 
     // Victory State
     victoryData: VictoryData | null;
@@ -39,6 +65,18 @@ export const useCombatStore = create<CombatStore>((set, get) => ({
     currentTurn: 0,
     combatLog: [],
     victoryData: null,
+
+    // Action Economy State
+    currentActionEconomy: {
+        actionUsed: false,
+        bonusActionUsed: false,
+        movementUsed: false,
+        reactionUsed: false
+    },
+
+    // Concentration State
+    concentratingCharacterId: null,
+    concentrationSpellId: null,
 
     startCombat: (enemy, participants) => {
         // Create enemy participant
@@ -84,7 +122,16 @@ export const useCombatStore = create<CombatStore>((set, get) => ({
 
     nextTurn: () => set((state) => {
         const nextTurnIndex = (state.currentTurn + 1) % state.combatTurnOrder.length;
-        return { currentTurn: nextTurnIndex };
+        return {
+            currentTurn: nextTurnIndex,
+            // Reset action economy for new turn
+            currentActionEconomy: {
+                actionUsed: false,
+                bonusActionUsed: false,
+                movementUsed: false,
+                reactionUsed: false
+            }
+        };
     }),
 
     resetTurnOrder: (participants) => {
@@ -122,8 +169,84 @@ export const useCombatStore = create<CombatStore>((set, get) => ({
         combatTurnOrder: [],
         currentTurn: 0,
         combatLog: [],
-        victoryData: null
+        victoryData: null,
+        currentActionEconomy: {
+            actionUsed: false,
+            bonusActionUsed: false,
+            movementUsed: false,
+            reactionUsed: false
+        },
+        concentratingCharacterId: null,
+        concentrationSpellId: null
     }),
 
-    setVictoryData: (data) => set({ victoryData: data })
+    setVictoryData: (data) => set({ victoryData: data }),
+
+    // Action Economy Methods
+    useAction: () => set((state) => ({
+        currentActionEconomy: { ...state.currentActionEconomy, actionUsed: true }
+    })),
+
+    useBonusAction: () => set((state) => ({
+        currentActionEconomy: { ...state.currentActionEconomy, bonusActionUsed: true }
+    })),
+
+    useMovement: () => set((state) => ({
+        currentActionEconomy: { ...state.currentActionEconomy, movementUsed: true }
+    })),
+
+    useReaction: () => set((state) => ({
+        currentActionEconomy: { ...state.currentActionEconomy, reactionUsed: true }
+    })),
+
+    resetActionEconomy: () => set({
+        currentActionEconomy: {
+            actionUsed: false,
+            bonusActionUsed: false,
+            movementUsed: false,
+            reactionUsed: false
+        }
+    }),
+
+    // Concentration Methods
+    setConcentration: (characterId, spellId) => {
+        const state = get();
+        // Break previous concentration if exists
+        if (state.concentratingCharacterId) {
+            get().addCombatLog(`Concentration broken on previous spell`);
+        }
+        set({
+            concentratingCharacterId: characterId,
+            concentrationSpellId: spellId
+        });
+    },
+
+    breakConcentration: () => {
+        const state = get();
+        if (state.concentratingCharacterId) {
+            get().addCombatLog(`Concentration broken!`);
+            set({
+                concentratingCharacterId: null,
+                concentrationSpellId: null
+            });
+        }
+    },
+
+    checkConcentration: (damage) => {
+        const state = get();
+        if (!state.concentratingCharacterId) return true;
+
+        // DC = 10 or half damage, whichever is higher
+        const dc = Math.max(10, Math.floor(damage / 2));
+        // Simplified: 50% chance to maintain concentration
+        // TODO: Implement proper Constitution saving throw
+        const roll = Math.floor(Math.random() * 20) + 1;
+        const success = roll >= dc;
+
+        if (!success) {
+            get().breakConcentration();
+        }
+
+        return success;
+    }
 }));

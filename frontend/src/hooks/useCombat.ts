@@ -194,7 +194,12 @@ export const useCombat = () => {
 
         if (ability && ability.damage) {
           // Damage ability - target lowest HP party member
-          const target = aliveParty.reduce((lowest, current) =>
+          const validTargets = aliveParty.filter(c => c.derivedStats);
+          if (validTargets.length === 0) {
+            console.warn('No valid targets with derivedStats');
+            return;
+          }
+          const target = validTargets.reduce((lowest, current) =>
             current.derivedStats.HP.current < lowest.derivedStats.HP.current ? current : lowest
           );
 
@@ -236,7 +241,9 @@ export const useCombat = () => {
         // Basic attack on random target
         console.log('👹 Enemy performing basic attack');
         const target = aliveParty[Math.floor(Math.random() * aliveParty.length)];
-        performAttack(currentEnemy, target);
+        if (target) {
+          performAttack(currentEnemy, target);
+        }
       }
     } catch (error) {
       console.error('❌ Error during enemy action:', error);
@@ -317,12 +324,14 @@ export const useCombat = () => {
       case 'attack':
         if (currentEnemy) {
           performAttack(character, currentEnemy);
+          // Use action
+          useCombatStore.getState().useAction();
         }
         break;
       case 'ability':
         if (options?.abilityId && characterIndex !== -1) {
           const ability = character.class.abilities.find(a => a.id === options.abilityId);
-          if (ability && character.derivedStats.AP.current >= (ability.cost?.AP || 0)) {
+          if (ability && character.derivedStats && character.derivedStats.AP.current >= (ability.cost?.AP || 0)) {
             // Deduct AP cost
             const cost = ability.cost?.AP || 0;
             const updatedCharacter = {
@@ -336,21 +345,10 @@ export const useCombat = () => {
               }
             };
             updatePartyMember(characterIndex, updatedCharacter);
-            // Character has abilities: Ability[]? No, Race has abilities: Ability[]. Class has abilities: ClassAbility[].
-            // The previous code used `character.abilities.find`.
-            // Let's check Character interface line 34.
-            // It does NOT have `abilities` property directly!
-            // It has `race.abilities` and `class.abilities`.
-            // So `character.abilities` was definitely wrong.
-            // However, `PartyStatus.tsx` had a fix for `character.abilities` -> `character.class.abilities`.
-            // So I should use `character.class.abilities` (which are ClassAbility) or `character.race.abilities` (Ability).
-            // But ClassAbility doesn't have damage/heal.
-            // This implies the player ability system is not fully implemented or uses a different structure.
-            // For the purpose of this fix (fixing NaN and stuck turn), I should probably just comment out the broken ability logic or try to make it safe.
-            // I'll assume for now we just want to fix the syntax and the Attack action.
 
             addCombatLog(`${character.name} uses ${ability.name}! (Effect not fully implemented)`);
-
+            // Use action
+            useCombatStore.getState().useAction();
           } else {
             addCombatLog(`${character.name} doesn't have enough AP!`);
           }
@@ -358,9 +356,30 @@ export const useCombat = () => {
         break;
       case 'defend':
         addCombatLog(`${character.name} defends!`);
+        // Use action
+        useCombatStore.getState().useAction();
         break;
       case 'item':
         addCombatLog(`${character.name} uses an item! (Not implemented)`);
+        // Use action
+        useCombatStore.getState().useAction();
+        break;
+      case 'row-switch':
+        // Switch row (free movement action)
+        const newRow: 'front' | 'back' = character.position.row === 'front' ? 'back' : 'front';
+        if (characterIndex !== -1) {
+          const updatedCharacter = {
+            ...character,
+            position: {
+              ...character.position,
+              row: newRow
+            }
+          };
+          updatePartyMember(characterIndex, updatedCharacter);
+          addCombatLog(`${character.name} moves to the ${newRow} row!`);
+          // Use movement
+          useCombatStore.getState().useMovement();
+        }
         break;
       case 'escape':
         if (Math.random() < 0.5) {
@@ -369,6 +388,8 @@ export const useCombat = () => {
           return;
         } else {
           addCombatLog('Cannot escape!');
+          // Use action
+          useCombatStore.getState().useAction();
         }
         break;
     }

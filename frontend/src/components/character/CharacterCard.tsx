@@ -30,6 +30,19 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     showAbilityCount = false,
     className = ''
 }) => {
+    // Defensive check for derivedStats (handles legacy character data)
+    if (!character.derivedStats) {
+        console.warn(`Character ${character.name} is missing derivedStats. This may be legacy data.`);
+        return (
+            <div className="bg-red-100 dark:bg-red-900/20 border-2 border-red-500 rounded-lg p-4">
+                <p className="text-red-800 dark:text-red-200 font-semibold">Invalid Character Data</p>
+                <p className="text-sm text-red-600 dark:text-red-300">
+                    {character.name} is missing required stats. Please recreate this character.
+                </p>
+            </div>
+        );
+    }
+
     const isAlive = character.alive && character.derivedStats.HP.current > 0;
 
     const baseClasses = variant === 'compact'

@@ -16,7 +16,7 @@ export const useGameOverCheck = () => {
         // If party is empty, we might be in initialization, so ignore
         if (partyMembers.length === 0) return;
 
-        const allDead = partyMembers.every(c => !c.alive || c.derivedStats.HP.current <= 0);
+        const allDead = partyMembers.every(c => !c.alive || !c.derivedStats || c.derivedStats.HP.current <= 0);
 
         if (allDead) {
             console.log('💀 Global Game Over Check: All party members are dead.');
