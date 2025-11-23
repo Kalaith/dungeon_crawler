@@ -2,6 +2,7 @@ import React from 'react';
 import { useCharacterCreationStore } from '../../stores/useCharacterCreationStore';
 import { races } from '../../data/races';
 import { characterClasses } from '../../data/classes';
+import { feats } from '../../data/feats';
 import type { Attribute, Character } from '../../types';
 import { AttributeGrid } from '../character/AttributeGrid';
 import { createCharacterFromWizardData } from '../../utils/characterCreation';
@@ -15,7 +16,7 @@ export const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = (
     const store = useCharacterCreationStore();
 
     const handleNext = () => {
-        if (store.step === 5) {
+        if (store.step === 6) {
             handleFinish();
         } else {
             store.setStep(store.step + 1);
@@ -200,7 +201,37 @@ export const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = (
 
     const renderStep5 = () => (
         <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Step 5: Review</h2>
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Step 5: Feats</h2>
+            <p className="text-gray-600 dark:text-gray-400">Select a feat for your character.</p>
+            <div className="grid grid-cols-1 gap-4">
+                {feats.map((feat) => {
+                    const isSelected = store.selectedFeats.some(f => f.id === feat.id);
+                    // Basic prerequisite check (level 1 only for now)
+                    const isAvailable = !feat.prerequisites || !feat.prerequisites.level || feat.prerequisites.level <= 1;
+
+                    if (!isAvailable) return null;
+
+                    return (
+                        <div
+                            key={feat.id}
+                            onClick={() => store.toggleFeat(feat)}
+                            className={`cursor-pointer p-4 rounded-lg border ${isSelected ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:bg-gray-50'}`}
+                        >
+                            <div className="flex justify-between items-start">
+                                <h3 className="font-bold">{feat.name}</h3>
+                                {isSelected && <span className="text-indigo-600 text-sm font-bold">Selected</span>}
+                            </div>
+                            <p className="text-sm text-gray-600">{feat.description}</p>
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    );
+
+    const renderStep6 = () => (
+        <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Step 6: Review</h2>
             <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
                 <div className="flex items-center space-x-4 mb-6">
                     <div className="h-16 w-16 bg-gray-200 rounded-full"></div>
@@ -226,7 +257,12 @@ export const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = (
                         <h4 className="font-bold mb-2">Derived Stats</h4>
                         <p>HP: {store.selectedClass?.baseStats.HP}</p>
                         <p>AP: {store.selectedClass?.baseStats.AP}</p>
-                        {/* Add more derived stats here */}
+                        <h4 className="font-bold mt-2 mb-1">Feats</h4>
+                        <ul className="list-disc pl-4">
+                            {store.selectedFeats.map(f => (
+                                <li key={f.id}>{f.name}</li>
+                            ))}
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -240,6 +276,7 @@ export const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = (
             {store.step === 3 && renderStep3()}
             {store.step === 4 && renderStep4()}
             {store.step === 5 && renderStep5()}
+            {store.step === 6 && renderStep6()}
 
             <div className="mt-8 flex justify-between">
                 <button
@@ -257,7 +294,7 @@ export const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = (
                     }
                     className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 disabled:bg-indigo-300"
                 >
-                    {store.step === 5 ? 'Finish' : 'Next'}
+                    {store.step === 6 ? 'Finish' : 'Next'}
                 </button>
             </div>
         </div>

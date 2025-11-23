@@ -269,7 +269,7 @@ export interface Ability {
 }
 
 export interface StatusEffect {
-  type: 'poison' | 'sleep' | 'stun' | 'buff' | 'debuff';
+  type: 'poison' | 'sleep' | 'stun' | 'buff' | 'debuff' | 'buff_str' | 'buff_def' | 'buff_agi' | 'buff_int' | 'buff_wis' | 'buff_cha';
   attribute?: Attribute;
   value?: number;
   duration: number; // Turns

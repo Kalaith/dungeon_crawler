@@ -3,10 +3,51 @@ import type { Character, Enemy, ActiveStatusEffect, StatusEffect } from '../type
 /**
  * Applies a status effect to a character or enemy
  */
+/**
+ * Checks if a target is immune to a specific status effect
+ */
+export const checkImmunity = (
+    target: Character | Enemy,
+    effectType: StatusEffect['type']
+): boolean => {
+    // Check race-based immunities for Characters
+    if ('race' in target) {
+        const raceId = target.race.id;
+
+        // Constructed/Android/Automaton immunities
+        if (['android', 'automaton', 'constructed'].includes(raceId)) {
+            if (['poison', 'disease', 'sleep', 'exhaustion'].includes(effectType)) {
+                return true;
+            }
+        }
+
+        // Undead/Dhampir immunities (partial)
+        if (['dhampir', 'undead'].includes(raceId)) {
+            if (['poison', 'disease'].includes(effectType)) {
+                return true;
+            }
+        }
+
+        // Specific trait checks could go here if we parsed abilities more deeply
+        // For now, ID-based checks cover the reported "Constructed" gap
+    }
+
+    return false;
+};
+
+/**
+ * Applies a status effect to a character or enemy
+ */
 export const applyStatusEffect = (
     target: Character | Enemy,
     effect: StatusEffect
 ): ActiveStatusEffect[] => {
+    // Check for immunity first
+    if (checkImmunity(target, effect.type)) {
+        console.log(`${target.name} is immune to ${effect.type}!`);
+        return target.statusEffects;
+    }
+
     const newEffect: ActiveStatusEffect = {
         ...effect,
         remainingTurns: effect.duration
