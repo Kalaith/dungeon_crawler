@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { usePartyStore } from '../../stores/usePartyStore';
+import { useGoldStore } from '../../stores/useGoldStore';
 import type { Character } from '../../types';
 import { Button } from '../ui/Button';
 
@@ -9,6 +10,7 @@ interface HealerServiceProps {
 
 export const HealerService: React.FC<HealerServiceProps> = ({ onClose }) => {
     const { party, addCharacterToParty } = usePartyStore();
+    const { gold, subtractGold, canAfford } = useGoldStore();
     const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
 
     const partyMembers = party.filter(c => c !== null) as Character[];
@@ -34,6 +36,19 @@ export const HealerService: React.FC<HealerServiceProps> = ({ onClose }) => {
     };
 
     const handleHeal = (character: Character) => {
+        const cost = getHealCost(character);
+
+        if (!canAfford(cost)) {
+            alert(`Insufficient funds! You need ${cost} gold but only have ${gold} gold.`);
+            return;
+        }
+
+        const success = subtractGold(cost);
+        if (!success) {
+            alert('Transaction failed!');
+            return;
+        }
+
         const healedCharacter: Character = {
             ...character,
             derivedStats: {
@@ -56,6 +71,19 @@ export const HealerService: React.FC<HealerServiceProps> = ({ onClose }) => {
     };
 
     const handleCureStatus = (character: Character) => {
+        const cost = getCureStatusCost();
+
+        if (!canAfford(cost)) {
+            alert(`Insufficient funds! You need ${cost} gold but only have ${gold} gold.`);
+            return;
+        }
+
+        const success = subtractGold(cost);
+        if (!success) {
+            alert('Transaction failed!');
+            return;
+        }
+
         const curedCharacter: Character = {
             ...character,
             statusEffects: []
@@ -68,6 +96,21 @@ export const HealerService: React.FC<HealerServiceProps> = ({ onClose }) => {
     };
 
     const handleFullTreatment = (character: Character) => {
+        const healCost = getHealCost(character);
+        const statusCost = hasStatusEffects(character) ? getCureStatusCost() : 0;
+        const totalCost = healCost + statusCost;
+
+        if (!canAfford(totalCost)) {
+            alert(`Insufficient funds! You need ${totalCost} gold but only have ${gold} gold.`);
+            return;
+        }
+
+        const success = subtractGold(totalCost);
+        if (!success) {
+            alert('Transaction failed!');
+            return;
+        }
+
         const treatedCharacter: Character = {
             ...character,
             derivedStats: {
@@ -102,6 +145,11 @@ export const HealerService: React.FC<HealerServiceProps> = ({ onClose }) => {
                     <p className="text-lg text-slate-600 dark:text-gray-400">
                         Professional healing and treatment services
                     </p>
+                    <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg inline-block">
+                        <p className="text-sm font-semibold text-yellow-800 dark:text-yellow-200">
+                            💰 Your Gold: {gold}
+                        </p>
+                    </div>
                 </div>
 
                 {/* Services Info */}
@@ -169,8 +217,8 @@ export const HealerService: React.FC<HealerServiceProps> = ({ onClose }) => {
                                     <div
                                         key={character.id}
                                         className={`bg-white dark:bg-charcoal-700 rounded-lg p-4 border-2 ${needsHeal || hasStatus
-                                                ? 'border-yellow-300 dark:border-yellow-700'
-                                                : 'border-green-300 dark:border-green-700'
+                                            ? 'border-yellow-300 dark:border-yellow-700'
+                                            : 'border-green-300 dark:border-green-700'
                                             }`}
                                     >
                                         <div className="flex items-start justify-between gap-4">
@@ -186,8 +234,8 @@ export const HealerService: React.FC<HealerServiceProps> = ({ onClose }) => {
                                                 {/* Stats */}
                                                 <div className="grid grid-cols-2 gap-2 text-sm mb-3">
                                                     <div className={`p-2 rounded ${character.derivedStats.HP.current < character.derivedStats.HP.max
-                                                            ? 'bg-red-50 dark:bg-red-900/20'
-                                                            : 'bg-green-50 dark:bg-green-900/20'
+                                                        ? 'bg-red-50 dark:bg-red-900/20'
+                                                        : 'bg-green-50 dark:bg-green-900/20'
                                                         }`}>
                                                         <p className={
                                                             character.derivedStats.HP.current < character.derivedStats.HP.max
@@ -198,8 +246,8 @@ export const HealerService: React.FC<HealerServiceProps> = ({ onClose }) => {
                                                         </p>
                                                     </div>
                                                     <div className={`p-2 rounded ${character.derivedStats.AP.current < character.derivedStats.AP.max
-                                                            ? 'bg-blue-50 dark:bg-blue-900/20'
-                                                            : 'bg-green-50 dark:bg-green-900/20'
+                                                        ? 'bg-blue-50 dark:bg-blue-900/20'
+                                                        : 'bg-green-50 dark:bg-green-900/20'
                                                         }`}>
                                                         <p className={
                                                             character.derivedStats.AP.current < character.derivedStats.AP.max

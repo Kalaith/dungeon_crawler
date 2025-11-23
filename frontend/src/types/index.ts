@@ -229,12 +229,14 @@ export interface Item {
   id: string;
   name: string;
   type: 'weapon' | 'armor' | 'accessory' | 'consumable' | 'material' | 'key';
+  category?: 'weapons' | 'armor' | 'potions' | 'items'; // For shop categorization
   rarity: 'common' | 'rare' | 'epic' | 'legendary';
   stats?: Partial<Attributes & { HP: number; AP: number; AC: number }>;
   value: number;
   description: string;
   stackable?: boolean;
   quantity?: number;
+  icon?: string; // For UI display
 }
 
 export interface CraftingMaterial extends Item {

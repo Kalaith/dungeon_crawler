@@ -1,5 +1,6 @@
 import React from 'react';
 import { usePartyStore } from '../../stores/usePartyStore';
+import { useGoldStore } from '../../stores/useGoldStore';
 import type { Character } from '../../types';
 import { Button } from '../ui/Button';
 
@@ -9,6 +10,7 @@ interface TempleServiceProps {
 
 export const TempleService: React.FC<TempleServiceProps> = ({ onClose }) => {
     const { party, addCharacterToParty } = usePartyStore();
+    const { gold, subtractGold, canAfford } = useGoldStore();
 
     const partyMembers = party.filter(c => c !== null) as Character[];
     const deadMembers = partyMembers.filter(c => !c.alive);
@@ -19,6 +21,21 @@ export const TempleService: React.FC<TempleServiceProps> = ({ onClose }) => {
     };
 
     const handleResurrect = (character: Character) => {
+        const cost = getResurrectionCost(character);
+
+        if (cost > 0 && !canAfford(cost)) {
+            alert(`Insufficient funds! You need ${cost} gold but only have ${gold} gold.`);
+            return;
+        }
+
+        if (cost > 0) {
+            const success = subtractGold(cost);
+            if (!success) {
+                alert('Transaction failed!');
+                return;
+            }
+        }
+
         const revivedCharacter: Character = {
             ...character,
             alive: true,
@@ -53,6 +70,11 @@ export const TempleService: React.FC<TempleServiceProps> = ({ onClose }) => {
                     <p className="text-lg text-slate-600 dark:text-gray-400">
                         Divine healing and resurrection services
                     </p>
+                    <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg inline-block">
+                        <p className="text-sm font-semibold text-yellow-800 dark:text-yellow-200">
+                            💰 Your Gold: {gold}
+                        </p>
+                    </div>
                 </div>
 
                 {/* Services Info */}
