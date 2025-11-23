@@ -8,6 +8,8 @@ interface MainLayoutProps {
 }
 
 export const MainLayout: React.FC<MainLayoutProps> = ({ children, statusPanel, messageLog }) => {
+    const showSidebar = statusPanel || messageLog;
+
     return (
         <div className="h-screen w-screen bg-etrian-900 p-2 flex flex-col md:flex-row gap-2 overflow-hidden">
 
@@ -19,24 +21,28 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children, statusPanel, m
             </div>
 
             {/* Status Panel & Message Log (Bottom on mobile, Right on desktop) */}
-            <div className="h-[40%] md:h-full md:w-[35%] min-h-[200px] flex md:flex-col gap-2 shrink-0">
+            {showSidebar && (
+                <div className="h-[40%] md:h-full md:w-[35%] min-h-[200px] flex md:flex-col gap-2 shrink-0">
 
-                {/* Party Status Panel */}
-                <div className="flex-1 md:flex-[3] min-w-0">
-                    <GameFrame className="h-full w-full" title="PARTY STATUS">
-                        {statusPanel}
-                    </GameFrame>
+                    {/* Party Status Panel */}
+                    {statusPanel && (
+                        <div className="flex-1 md:flex-[3] min-w-0">
+                            <GameFrame className="h-full w-full" title="PARTY STATUS">
+                                {statusPanel}
+                            </GameFrame>
+                        </div>
+                    )}
+
+                    {/* Message Log Panel (Hidden on small mobile, visible on tablet/desktop) */}
+                    {messageLog && (
+                        <div className="hidden md:block md:flex-[2] min-w-0">
+                            <GameFrame className="h-full w-full" title="LOG">
+                                {messageLog}
+                            </GameFrame>
+                        </div>
+                    )}
                 </div>
-
-                {/* Message Log Panel (Hidden on small mobile, visible on tablet/desktop) */}
-                {messageLog && (
-                    <div className="hidden md:block md:flex-[2] min-w-0">
-                        <GameFrame className="h-full w-full" title="LOG">
-                            {messageLog}
-                        </GameFrame>
-                    </div>
-                )}
-            </div>
+            )}
         </div>
     );
 };

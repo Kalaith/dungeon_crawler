@@ -14,6 +14,7 @@ export const PartyCreation: React.FC = () => {
     party,
     canStartAdventure,
     addCharacterToParty,
+    removeCharacterFromParty
   } = usePartyStore();
   const { setGameState } = useGameStateStore();
 
@@ -33,6 +34,12 @@ export const PartyCreation: React.FC = () => {
   const handleCreateCharacter = (character: Character) => {
     if (currentSlot >= 0) {
       addCharacterToParty(character, currentSlot);
+    }
+  };
+
+  const handleRemoveCharacter = (slotIndex: number) => {
+    if (confirm('Are you sure you want to remove this character?')) {
+      removeCharacterFromParty(slotIndex);
     }
   };
 
@@ -56,9 +63,11 @@ export const PartyCreation: React.FC = () => {
               slotIndex={index}
               onCreateCharacter={openCharacterModal}
               onViewDetails={setViewingCharacter}
+              onRemoveCharacter={handleRemoveCharacter}
             />
           ))}
         </div>
+
 
         <div className="text-center">
           <Button
@@ -86,6 +95,6 @@ export const PartyCreation: React.FC = () => {
       >
         {viewingCharacter && <CharacterSheet character={viewingCharacter} />}
       </Modal>
-    </div>
+    </div >
   );
 };

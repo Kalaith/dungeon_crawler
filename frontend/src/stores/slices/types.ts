@@ -3,7 +3,9 @@ import type { Character, GameState, Position, Direction, Enemy, CombatParticipan
 
 export interface GeneralSlice {
     gameState: GameState;
+    godMode: boolean;
     setGameState: (state: GameState) => void;
+    toggleGodMode: () => void;
     resetGame: () => void;
 }
 

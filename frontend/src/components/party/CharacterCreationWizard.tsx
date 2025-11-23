@@ -72,7 +72,7 @@ export const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = (
         <div className="space-y-4">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Step 2: Race</h2>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                {races.map((race) => (
+                {races.filter(race => !race.isNpcOnly).map((race) => (
                     <div
                         key={race.id}
                         onClick={() => store.setRace(race)}

@@ -17,8 +17,8 @@ function App() {
   return (
     <div className="min-h-screen bg-etrian-900 text-cyan-100 font-sans selection:bg-cyan-500 selection:text-white">
       <MainLayout
-        statusPanel={<PartyStatus />}
-        messageLog={<CombatLog />}
+        statusPanel={gameState !== 'party-creation' ? <PartyStatus /> : null}
+        messageLog={gameState !== 'party-creation' ? <CombatLog /> : null}
       >
         {gameState === 'party-creation' && <PartyCreation />}
 

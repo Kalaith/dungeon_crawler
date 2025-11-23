@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware';
 import type { Character, ActiveStatusEffect, Item } from '../types';
 import { GAME_CONFIG } from '../data/constants';
 import { migrateParty } from '../utils/characterMigration';
+import { useGameStateStore } from './useGameStateStore';
 
 interface PartyStore {
     party: (Character | null)[];
@@ -16,6 +17,8 @@ interface PartyStore {
     updatePartyMember: (characterIndex: number, updates: Partial<Character>) => void;
     equipItem: (characterIndex: number, item: Item, slot: keyof Character['equipment']) => void;
     addGoldToParty: (amount: number) => void;
+    levelUpCharacter: (characterIndex: number) => void;
+    addXpToParty: (amount: number) => void;
     restParty: () => void;
     resetParty: () => void;
 
@@ -45,7 +48,16 @@ export const usePartyStore = create<PartyStore>()(
             updatePartyMemberHP: (characterIndex, newHp) => set((state) => {
                 const updatedParty = [...state.party];
                 const character = updatedParty[characterIndex];
+
                 if (character) {
+                    // Check God Mode
+                    const { godMode } = useGameStateStore.getState();
+
+                    // If godMode is active and we're taking damage (newHp < current), ignore it
+                    if (godMode && newHp < character.derivedStats.HP.current) {
+                        return { party: updatedParty };
+                    }
+
                     updatedParty[characterIndex] = {
                         ...character,
                         derivedStats: {
@@ -133,6 +145,58 @@ export const usePartyStore = create<PartyStore>()(
                 });
                 return { party: updatedParty };
             }),
+
+            levelUpCharacter: (characterIndex) => set((state) => {
+                const updatedParty = [...state.party];
+                const character = updatedParty[characterIndex];
+                if (!character) return { party: updatedParty };
+
+                const newLevel = character.level + 1;
+                const growth = character.class.growthRates;
+                // Simple exponential curve: 100 * 1.2^(level-1)
+                const nextLevelExp = Math.floor(1000 * Math.pow(1.2, newLevel));
+
+                updatedParty[characterIndex] = {
+                    ...character,
+                    level: newLevel,
+                    expToNext: nextLevelExp,
+                    derivedStats: {
+                        ...character.derivedStats,
+                        HP: {
+                            current: character.derivedStats.HP.max + growth.HP,
+                            max: character.derivedStats.HP.max + growth.HP
+                        },
+                        AP: {
+                            current: character.derivedStats.AP.max + growth.AP,
+                            max: character.derivedStats.AP.max + growth.AP
+                        }
+                    },
+                    attributes: {
+                        ...character.attributes,
+                        ST: character.attributes.ST + (character.class.primaryAttributes.includes('ST') ? 1 : 0),
+                        CO: character.attributes.CO + (character.class.primaryAttributes.includes('CO') ? 1 : 0),
+                        DX: character.attributes.DX + (character.class.primaryAttributes.includes('DX') ? 1 : 0),
+                        AG: character.attributes.AG + (character.class.primaryAttributes.includes('AG') ? 1 : 0),
+                        IT: character.attributes.IT + (character.class.primaryAttributes.includes('IT') ? 1 : 0),
+                        IN: character.attributes.IN + (character.class.primaryAttributes.includes('IN') ? 1 : 0),
+                        WD: character.attributes.WD + (character.class.primaryAttributes.includes('WD') ? 1 : 0),
+                        CH: character.attributes.CH + (character.class.primaryAttributes.includes('CH') ? 1 : 0),
+                    }
+                };
+                return { party: updatedParty };
+            }),
+
+            addXpToParty: (amount) => set((state) => {
+                const updatedParty = state.party.map(character => {
+                    if (character) {
+                        return { ...character, exp: character.exp + amount };
+                    }
+                    return character;
+                });
+                return { party: updatedParty };
+            }),
+
+
 
             restParty: () => set((state) => {
                 const restedParty = state.party.map(character => {

@@ -6,10 +6,26 @@ import { enemies } from '../../data/gameData';
 import { races } from '../../data/races';
 import { characterClasses } from '../../data/classes';
 import { createCharacterFromWizardData } from '../../utils/characterCreation';
-import type { CombatParticipant } from '../../types';
+import type { CombatParticipant, Item } from '../../types';
+
+import { useGameStateStore } from '../../stores/useGameStateStore';
+import { useInventoryStore } from '../../stores/useInventoryStore';
+import { lootTables } from '../../data/loot';
+
+import { GameStateModal } from './modals/GameStateModal';
+import { ItemSpawnerModal } from './modals/ItemSpawnerModal';
+import { EnemyEditorModal } from './modals/EnemyEditorModal';
+import { PartyEditorModal } from './modals/PartyEditorModal';
 
 export const DebugPanel: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
+
+    // Modal states
+    const [showGameState, setShowGameState] = useState(false);
+    const [showItemSpawner, setShowItemSpawner] = useState(false);
+    const [showEnemyEditor, setShowEnemyEditor] = useState(false);
+    const [showPartyEditor, setShowPartyEditor] = useState(false);
+
     const {
         startCombat,
         currentEnemy,
@@ -20,28 +36,51 @@ export const DebugPanel: React.FC = () => {
     const {
         party,
         updatePartyMemberHP,
+        updatePartyMemberAP,
         restParty,
         equipItem,
-        addCharacterToParty
+        addCharacterToParty,
+        levelUpCharacter,
+        updatePartyMember
     } = usePartyStore();
 
     const { setGold } = useGoldStore();
+    const { gameState, setGameState, godMode, toggleGodMode } = useGameStateStore();
+    const { addItem } = useInventoryStore();
 
     const handleTriggerCombat = () => {
         if (inCombat) return;
         const goblin = enemies[0];
+        if (!goblin) return;
+
         const partyParticipants = party
-            .map((c, i) => c ? { type: 'party', character: c, index: i, agi: c.agi } as CombatParticipant : null)
+            .map((c) => c ? {
+                id: c.id,
+                type: 'party' as const,
+                character: c,
+                initiative: c.derivedStats.Initiative + Math.floor(Math.random() * 20) + 1,
+                status: 'active' as const
+            } : null)
             .filter((p): p is CombatParticipant => p !== null);
+
         startCombat(goblin, partyParticipants);
     };
 
     const handleTriggerRandomEncounter = () => {
         if (inCombat) return;
         const randomEnemy = enemies[Math.floor(Math.random() * enemies.length)];
+        if (!randomEnemy) return;
+
         const partyParticipants = party
-            .map((c, i) => c ? { type: 'party', character: c, index: i, agi: c.agi } as CombatParticipant : null)
+            .map((c) => c ? {
+                id: c.id,
+                type: 'party' as const,
+                character: c,
+                initiative: c.derivedStats.Initiative + Math.floor(Math.random() * 20) + 1,
+                status: 'active' as const
+            } : null)
             .filter((p): p is CombatParticipant => p !== null);
+
         startCombat(randomEnemy, partyParticipants);
     };
 
@@ -64,18 +103,18 @@ export const DebugPanel: React.FC = () => {
     };
 
     const handleGiveOPSword = () => {
-        const opSword = {
+        const opSword: Item = {
             id: 'op_sword',
             name: 'God Slayer',
-            type: 'weapon' as const,
-            rarity: 'legendary' as const,
-            stats: { str: 50 },
+            type: 'weapon',
+            rarity: 'legendary',
+            stats: { ST: 50, HP: 0, AP: 0, AC: 0 },
             value: 9999,
             description: 'A legendary sword of immense power.'
         };
 
         if (party[0]) {
-            equipItem(0, opSword);
+            equipItem(0, opSword, 'mainHand');
         }
     };
 
@@ -86,6 +125,7 @@ export const DebugPanel: React.FC = () => {
             localStorage.removeItem('dungeon-crawler-party');
             localStorage.removeItem('gold-storage');
             localStorage.removeItem('dungeon-crawler-game-state');
+            localStorage.removeItem('dungeon-crawler-inventory');
 
             // Reload the page to reinitialize all stores
             window.location.reload();
@@ -130,98 +170,189 @@ export const DebugPanel: React.FC = () => {
         setGold(9999);
     };
 
+    const handleLevelUpParty = () => {
+        party.forEach((member, index) => {
+            if (member) {
+                levelUpCharacter(index);
+            }
+        });
+    };
+
+    const handleMaxStatsParty = () => {
+        party.forEach((member, index) => {
+            if (member) {
+                // Max HP/AP
+                updatePartyMemberHP(index, member.derivedStats.HP.max);
+                updatePartyMemberAP(index, member.derivedStats.AP.max);
+
+                // Max Attributes
+                updatePartyMember(index, {
+                    attributes: {
+                        ST: 18, CO: 18, DX: 18, AG: 18, IT: 18, IN: 18, WD: 18, CH: 18
+                    }
+                });
+            }
+        });
+    };
+
+    const handleTeleport = (target: 'town' | 'dungeon' | 'overworld') => {
+        setGameState(target);
+    };
+
+    const handleAddRandomItems = () => {
+        const commonItems = lootTables['common'] || [];
+        const rareItems = lootTables['rare'] || [];
+        const allItems = [...commonItems, ...rareItems];
+
+        if (allItems.length === 0) return;
+
+        for (let i = 0; i < 5; i++) {
+            const randomItem = allItems[Math.floor(Math.random() * allItems.length)];
+            if (randomItem) {
+                addItem(randomItem);
+            }
+        }
+    };
+
     if (!isOpen) {
         return (
             <button
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-4 right-4 bg-red-600 text-white px-3 py-1 rounded shadow-lg z-[100] text-xs font-mono opacity-50 hover:opacity-100"
+                className="fixed bottom-4 right-4 bg-gray-800 text-white p-2 rounded-full shadow-lg hover:bg-gray-700 z-50"
             >
-                DEBUG
+                🐛
             </button>
         );
     }
 
     return (
-        <div className="fixed bottom-4 right-4 bg-black/90 border border-red-500 p-4 rounded shadow-2xl z-[100] w-48">
-            <div className="flex justify-between items-center mb-4 border-b border-red-500/30 pb-2">
-                <h3 className="text-red-500 font-mono font-bold text-sm">DEBUG TOOLS</h3>
-                <button
-                    onClick={() => setIsOpen(false)}
-                    className="text-gray-400 hover:text-white text-xs"
-                >
-                    ✕
-                </button>
+        <>
+            <div className="fixed top-0 right-0 h-full w-80 bg-gray-900 text-white shadow-xl overflow-y-auto z-50 border-l border-gray-700">
+                <div className="p-4 border-b border-gray-700 flex justify-between items-center">
+                    <h2 className="text-xl font-bold">Debug Panel</h2>
+                    <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white">✕</button>
+                </div>
+
+                <div className="p-4 space-y-6">
+                    {/* Combat Section */}
+                    <section>
+                        <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Combat</h3>
+                        <div className="space-y-2">
+                            <button onClick={handleTriggerCombat} className="w-full bg-red-900/50 hover:bg-red-800 text-red-200 py-1 px-2 rounded text-sm border border-red-800">
+                                Trigger Goblin Fight
+                            </button>
+                            <button onClick={handleTriggerRandomEncounter} className="w-full bg-red-900/50 hover:bg-red-800 text-red-200 py-1 px-2 rounded text-sm border border-red-800">
+                                Trigger Random Encounter
+                            </button>
+                            <button onClick={handleKillEnemy} className="w-full bg-red-900/50 hover:bg-red-800 text-red-200 py-1 px-2 rounded text-sm border border-red-800">
+                                Kill Enemy
+                            </button>
+                        </div>
+                    </section>
+
+                    {/* Party Section */}
+                    <section>
+                        <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Party</h3>
+                        <div className="space-y-2">
+                            <button onClick={handleHealParty} className="w-full bg-green-900/50 hover:bg-green-800 text-green-200 py-1 px-2 rounded text-sm border border-green-800">
+                                Full Heal Party
+                            </button>
+                            <button onClick={handleLevelUpParty} className="w-full bg-green-900/50 hover:bg-green-800 text-green-200 py-1 px-2 rounded text-sm border border-green-800">
+                                Level Up Party (+1)
+                            </button>
+                            <button onClick={handleMaxStatsParty} className="w-full bg-green-900/50 hover:bg-green-800 text-green-200 py-1 px-2 rounded text-sm border border-green-800">
+                                Max Stats (Heal + Attrs)
+                            </button>
+                            <button onClick={handleKillParty} className="w-full bg-red-900/50 hover:bg-red-800 text-red-200 py-1 px-2 rounded text-sm border border-red-800">
+                                Kill Party
+                            </button>
+                            <button onClick={handleCreateFullParty} className="w-full bg-blue-900/50 hover:bg-blue-800 text-blue-200 py-1 px-2 rounded text-sm border border-blue-800">
+                                Create Full Party
+                            </button>
+                        </div>
+                    </section>
+
+                    {/* Items Section */}
+                    <section>
+                        <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Items</h3>
+                        <div className="space-y-2">
+                            <button onClick={handleGiveOPSword} className="w-full bg-yellow-900/50 hover:bg-yellow-800 text-yellow-200 py-1 px-2 rounded text-sm border border-yellow-800">
+                                Give God Slayer Sword
+                            </button>
+                            <button onClick={handleAddRandomItems} className="w-full bg-yellow-900/50 hover:bg-yellow-800 text-yellow-200 py-1 px-2 rounded text-sm border border-yellow-800">
+                                Add Random Items (5)
+                            </button>
+                            <button onClick={handleGrant9999Gold} className="w-full bg-yellow-900/50 hover:bg-yellow-800 text-yellow-200 py-1 px-2 rounded text-sm border border-yellow-800">
+                                Grant 9999 Gold
+                            </button>
+                        </div>
+                    </section>
+
+                    {/* Navigation Section */}
+                    <section>
+                        <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Navigation</h3>
+                        <div className="grid grid-cols-3 gap-2">
+                            <button onClick={() => handleTeleport('town')} className="bg-purple-900/50 hover:bg-purple-800 text-purple-200 py-1 px-2 rounded text-sm border border-purple-800">
+                                Town
+                            </button>
+                            <button onClick={() => handleTeleport('dungeon')} className="bg-purple-900/50 hover:bg-purple-800 text-purple-200 py-1 px-2 rounded text-sm border border-purple-800">
+                                Dungeon
+                            </button>
+                            <button onClick={() => handleTeleport('overworld')} className="bg-purple-900/50 hover:bg-purple-800 text-purple-200 py-1 px-2 rounded text-sm border border-purple-800">
+                                Overworld
+                            </button>
+                        </div>
+                    </section>
+
+                    {/* Editors Section */}
+                    <section>
+                        <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Editors & Tools</h3>
+                        <div className="space-y-2">
+                            <button onClick={() => setShowPartyEditor(true)} className="w-full bg-gray-700 hover:bg-gray-600 text-white py-1 px-2 rounded text-sm border border-gray-600">
+                                ✏️ Edit Party Member
+                            </button>
+                            <button onClick={() => setShowEnemyEditor(true)} className="w-full bg-gray-700 hover:bg-gray-600 text-white py-1 px-2 rounded text-sm border border-gray-600">
+                                👹 Edit Enemy Stats
+                            </button>
+                            <button onClick={() => setShowItemSpawner(true)} className="w-full bg-gray-700 hover:bg-gray-600 text-white py-1 px-2 rounded text-sm border border-gray-600">
+                                📦 Spawn Specific Item
+                            </button>
+                            <button onClick={() => setShowGameState(true)} className="w-full bg-gray-700 hover:bg-gray-600 text-white py-1 px-2 rounded text-sm border border-gray-600">
+                                📊 View Game State
+                            </button>
+                        </div>
+                    </section>
+
+                    {/* Cheats Section */}
+                    <section>
+                        <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Cheats</h3>
+                        <div className="space-y-2">
+                            <button
+                                onClick={toggleGodMode}
+                                className={`w-full py-1 px-2 rounded text-sm border ${godMode ? 'bg-yellow-600 text-white border-yellow-400' : 'bg-gray-700 text-gray-300 border-gray-600 hover:bg-gray-600'}`}
+                            >
+                                {godMode ? 'God Mode: ON' : 'God Mode: OFF'}
+                            </button>
+                        </div>
+                    </section>
+
+                    {/* System Section */}
+                    <section>
+                        <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">System</h3>
+                        <div className="space-y-2">
+                            <button onClick={handleClearAllData} className="w-full bg-red-900 hover:bg-red-700 text-white py-1 px-2 rounded text-sm border border-red-700">
+                                ⚠️ Clear All Data
+                            </button>
+                        </div>
+                    </section>
+                </div>
             </div>
 
-            <div className="space-y-2">
-                <button
-                    onClick={handleTriggerCombat}
-                    disabled={inCombat}
-                    className="w-full bg-stone-700 text-white text-xs py-2 px-3 rounded hover:bg-stone-600 disabled:opacity-50 disabled:cursor-not-allowed text-left"
-                >
-                    ⚔️ Spawn Goblin
-                </button>
-
-                <button
-                    onClick={handleTriggerRandomEncounter}
-                    disabled={inCombat}
-                    className="w-full bg-purple-900/50 text-purple-200 text-xs py-2 px-3 rounded hover:bg-purple-900 disabled:opacity-50 disabled:cursor-not-allowed text-left"
-                >
-                    🎲 Random Encounter
-                </button>
-
-                <button
-                    onClick={handleKillParty}
-                    className="w-full bg-red-900/50 text-red-200 text-xs py-2 px-3 rounded hover:bg-red-900 text-left"
-                >
-                    💀 Kill Party
-                </button>
-
-                <button
-                    onClick={handleHealParty}
-                    className="w-full bg-green-900/50 text-green-200 text-xs py-2 px-3 rounded hover:bg-green-900 text-left"
-                >
-                    ❤️ Heal Party
-                </button>
-
-                <button
-                    onClick={handleKillEnemy}
-                    disabled={!inCombat}
-                    className="w-full bg-orange-900/50 text-orange-200 text-xs py-2 px-3 rounded hover:bg-orange-900 disabled:opacity-50 disabled:cursor-not-allowed text-left"
-                >
-                    🎯 Kill Enemy
-                </button>
-
-                <button
-                    onClick={handleGiveOPSword}
-                    className="w-full bg-blue-900/50 text-blue-200 text-xs py-2 px-3 rounded hover:bg-blue-900 text-left"
-                >
-                    🗡️ Give OP Sword
-                </button>
-
-                <div className="border-t border-red-500/30 my-2"></div>
-
-                <button
-                    onClick={handleCreateFullParty}
-                    className="w-full bg-cyan-900/50 text-cyan-200 text-xs py-2 px-3 rounded hover:bg-cyan-900 text-left"
-                >
-                    👥 Create Full Party
-                </button>
-
-                <button
-                    onClick={handleGrant9999Gold}
-                    className="w-full bg-yellow-900/50 text-yellow-200 text-xs py-2 px-3 rounded hover:bg-yellow-900 text-left"
-                >
-                    💰 Grant 9999 Gold
-                </button>
-
-                <button
-                    onClick={handleClearAllData}
-                    className="w-full bg-red-900/50 text-red-200 text-xs py-2 px-3 rounded hover:bg-red-900 text-left"
-                >
-                    🗑️ Clear All Data
-                </button>
-            </div>
-        </div>
+            {/* Modals */}
+            <GameStateModal isOpen={showGameState} onClose={() => setShowGameState(false)} />
+            <ItemSpawnerModal isOpen={showItemSpawner} onClose={() => setShowItemSpawner(false)} />
+            <EnemyEditorModal isOpen={showEnemyEditor} onClose={() => setShowEnemyEditor(false)} />
+            <PartyEditorModal isOpen={showPartyEditor} onClose={() => setShowPartyEditor(false)} />
+        </>
     );
 };
