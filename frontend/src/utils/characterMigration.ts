@@ -55,6 +55,10 @@ export function migrateCharacter(character: any): Character {
         character.gold = 0;
     }
 
+    if (character.pendingFeatSelections === undefined) {
+        character.pendingFeatSelections = 0;
+    }
+
     return character as Character;
 }
 

@@ -110,7 +110,8 @@ export function createCharacterFromWizardData(store: CharacterCreationStoreData)
         position: { row: 'front', index: 0 },
         portrait: store.portrait,
         deity: store.selectedDeity || undefined,
-        background: store.selectedBackground || undefined
+        background: store.selectedBackground || undefined,
+        pendingFeatSelections: 0
     };
 
     return newCharacter;

@@ -55,6 +55,7 @@ export interface Character {
   portrait?: string;
   deity?: string;
   background?: string;
+  pendingFeatSelections: number;
 }
 
 export interface Race {

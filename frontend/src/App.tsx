@@ -11,8 +11,24 @@ import { MainLayout } from './components/layout/MainLayout';
 import { PartyStatus } from './components/game/PartyStatus';
 import { CombatLog } from './components/combat/CombatLog';
 
+import { useState } from 'react';
+import { usePartyStore } from './stores/usePartyStore';
+import { FeatSelectionModal } from './components/party/FeatSelectionModal';
+
 function App() {
   const { gameState } = useGameStateStore();
+  const { party } = usePartyStore();
+  const [ignoredFeatCharIds, setIgnoredFeatCharIds] = useState<string[]>([]);
+
+  // Check for characters with pending feats
+  const characterWithPendingFeatIndex = party.findIndex(c => c && c.pendingFeatSelections > 0 && !ignoredFeatCharIds.includes(c.id));
+  const characterWithPendingFeat = characterWithPendingFeatIndex !== -1 ? party[characterWithPendingFeatIndex] : null;
+
+  const handleCloseFeatModal = () => {
+    if (characterWithPendingFeat) {
+      setIgnoredFeatCharIds(prev => [...prev, characterWithPendingFeat.id]);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-etrian-900 text-cyan-100 font-sans selection:bg-cyan-500 selection:text-white">
@@ -42,6 +58,14 @@ function App() {
 
       <MessageModal />
       <DebugPanel />
+
+      {characterWithPendingFeat && (
+        <FeatSelectionModal
+          characterIndex={characterWithPendingFeatIndex}
+          character={characterWithPendingFeat}
+          onClose={handleCloseFeatModal}
+        />
+      )}
     </div>
   );
 }

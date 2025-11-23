@@ -49,7 +49,8 @@ describe('statusEffectUtils', () => {
         gold: 0,
         alive: true,
         statusEffects: [],
-        position: { row: 'front', index: 0 }
+        position: { row: 'front', index: 0 },
+        pendingFeatSelections: 0
     };
 
     it('should return true for Android immunity to poison', () => {
