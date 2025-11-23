@@ -27,7 +27,7 @@ export const PartyCreation: React.FC = () => {
   const [viewingCharacter, setViewingCharacter] = useState<Character | null>(null);
 
   const handleStartAdventure = () => {
-    setGameState('exploring');
+    setGameState('overworld');
   };
 
   const handleCreateCharacter = (character: Character) => {

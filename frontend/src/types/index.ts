@@ -201,7 +201,7 @@ export interface StaticGameData {
   craftingRecipes: CraftingRecipe[];
 }
 
-export type GameState = 'party-creation' | 'exploring' | 'combat' | 'game-over' | 'town';
+export type GameState = 'party-creation' | 'overworld' | 'town' | 'dungeon' | 'combat' | 'game-over';
 export type Direction = 0 | 1 | 2 | 3; // North, East, South, West
 
 export interface DungeonMap {
