@@ -6,6 +6,7 @@ import { MessageModal } from './components/ui/MessageModal';
 import { GameOverScreen } from './components/game/GameOverScreen';
 import { DebugPanel } from './components/debug/DebugPanel';
 import { OverworldMap } from './components/overworld/OverworldMap';
+import { TownHub } from './components/town/TownHub';
 
 function App() {
   const { gameState } = useGameStateStore();
@@ -14,7 +15,7 @@ function App() {
     <div className="min-h-screen bg-cream-50 dark:bg-charcoal-700">
       {gameState === 'party-creation' && <PartyCreation />}
       {gameState === 'overworld' && <OverworldMap />}
-      {gameState === 'town' && <div className="p-8 text-center text-2xl">Town Hub (Coming Soon)</div>}
+      {gameState === 'town' && <TownHub />}
       {gameState === 'dungeon' && <GameScreen />}
       {gameState === 'combat' && <GameScreen />}
       {gameState === 'game-over' && <GameOverScreen />}

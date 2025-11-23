@@ -3,12 +3,16 @@ import { useDungeon } from '../../hooks/useDungeon';
 import { useKeyboardControls } from '../../hooks/useKeyboardControls';
 import { useGameStateStore } from '../../stores/useGameStateStore';
 import { usePartyStore } from '../../stores/usePartyStore';
+import { useWorldStore } from '../../stores/useWorldStore';
+import { useDungeonContextStore } from '../../stores/useDungeonContextStore';
 import { Button } from '../ui/Button';
 
 export const GameControls: React.FC = () => {
   const { moveForward, moveBackward, turnLeft, turnRight } = useDungeon();
-  const { gameState } = useGameStateStore();
+  const { gameState, setGameState } = useGameStateStore();
   const { restParty } = usePartyStore();
+  const { setCurrentLocation } = useWorldStore();
+  const { exitDungeon, isInDungeon } = useDungeonContextStore();
 
   // Use custom hook for keyboard controls
   useKeyboardControls({
@@ -16,8 +20,16 @@ export const GameControls: React.FC = () => {
     onMoveBackward: moveBackward,
     onTurnLeft: turnLeft,
     onTurnRight: turnRight,
-    enabled: gameState === 'exploring'
+    enabled: gameState === 'dungeon'
   });
+
+  const handleExitDungeon = () => {
+    const { returnToLocationId } = exitDungeon();
+    if (returnToLocationId) {
+      setCurrentLocation(returnToLocationId);
+    }
+    setGameState('overworld');
+  };
 
   return (
     <div className="flex flex-col gap-4 p-4 bg-cream-100 dark:bg-charcoal-800 rounded-lg border border-gray-400/20">
@@ -69,9 +81,15 @@ export const GameControls: React.FC = () => {
           <Button variant="outline" onClick={restParty}>
             Rest
           </Button>
-          <Button variant="outline" disabled>
-            Party
-          </Button>
+          {isInDungeon() ? (
+            <Button variant="outline" onClick={handleExitDungeon}>
+              Exit
+            </Button>
+          ) : (
+            <Button variant="outline" disabled>
+              Party
+            </Button>
+          )}
         </div>
       </div>
     </div>

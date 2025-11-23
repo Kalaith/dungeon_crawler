@@ -5,7 +5,7 @@
 
 export const GAME_CONFIG = {
     PARTY: {
-        MAX_SIZE: 5,
+        MAX_SIZE: 6,
         MIN_SIZE: 1,
     },
 

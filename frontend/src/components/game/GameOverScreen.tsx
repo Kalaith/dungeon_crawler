@@ -4,6 +4,8 @@ import { usePartyStore } from '../../stores/usePartyStore';
 import { useDungeonStore } from '../../stores/useDungeonStore';
 import { useCombatStore } from '../../stores/useCombatStore';
 import { useInventoryStore } from '../../stores/useInventoryStore';
+import { useWorldStore } from '../../stores/useWorldStore';
+import { useDungeonContextStore } from '../../stores/useDungeonContextStore';
 import { Button } from '../ui/Button';
 
 export const GameOverScreen: React.FC = () => {
@@ -12,12 +14,19 @@ export const GameOverScreen: React.FC = () => {
     const { resetDungeon } = useDungeonStore();
     const { resetCombat } = useCombatStore();
     const { resetInventory } = useInventoryStore();
+    const { resetWorld } = useWorldStore();
+    const { exitDungeon } = useDungeonContextStore();
 
     const handleReset = () => {
+        // Exit any dungeon context
+        exitDungeon();
+
+        // Reset all stores
         resetParty();
         resetDungeon();
         resetCombat();
         resetInventory();
+        resetWorld(); // This returns player to Millhaven
         resetGameState();
     };
 
