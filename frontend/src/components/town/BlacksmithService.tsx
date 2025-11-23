@@ -86,19 +86,19 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({ onClose })
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-orange-400/8 to-red-400/8 dark:from-orange-400/15 dark:to-red-400/15 p-8">
+        <div className="h-full w-full overflow-y-auto bg-etrian-900 p-4">
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-8">
                     <div className="text-6xl mb-4">⚒️</div>
-                    <h1 className="text-4xl font-bold text-slate-900 dark:text-gray-200 mb-2">
+                    <h1 className="text-4xl font-bold text-gold-500 mb-2">
                         Blacksmith's Forge
                     </h1>
-                    <p className="text-lg text-slate-600 dark:text-gray-400">
+                    <p className="text-lg text-cyan-100">
                         Repair, upgrade, and forge equipment
                     </p>
-                    <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg inline-block">
-                        <p className="text-sm font-semibold text-yellow-800 dark:text-yellow-200">
+                    <div className="mt-4 p-3 bg-etrian-800 border border-gold-500/30 rounded-lg inline-block">
+                        <p className="text-sm font-semibold text-gold-500">
                             💰 Your Gold: {gold}
                         </p>
                     </div>
@@ -107,8 +107,8 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({ onClose })
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Service Selection */}
                     <div className="lg:col-span-1">
-                        <div className="bg-cream-100 dark:bg-charcoal-800 rounded-xl p-6 shadow-lg border border-gray-400/20 sticky top-8">
-                            <h2 className="text-xl font-semibold text-slate-900 dark:text-gray-200 mb-4">
+                        <div className="bg-etrian-800 rounded-xl p-6 shadow-lg border border-cyan-900/50 sticky top-8">
+                            <h2 className="text-xl font-semibold text-gold-500 mb-4">
                                 Services
                             </h2>
 
@@ -116,8 +116,8 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({ onClose })
                                 <button
                                     onClick={() => setSelectedService('repair')}
                                     className={`w-full p-4 rounded-lg border-2 transition-all text-left ${selectedService === 'repair'
-                                        ? 'bg-blue-500 text-white border-blue-600 shadow-lg'
-                                        : 'bg-white dark:bg-charcoal-700 text-slate-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-blue-400'
+                                        ? 'bg-cyan-700 text-white border-cyan-400 shadow-lg'
+                                        : 'bg-etrian-900 text-cyan-400 border-cyan-900/30 hover:border-cyan-400'
                                         }`}
                                 >
                                     <div className="text-2xl mb-1">🔧</div>
@@ -128,8 +128,8 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({ onClose })
                                 <button
                                     onClick={() => setSelectedService('upgrade')}
                                     className={`w-full p-4 rounded-lg border-2 transition-all text-left ${selectedService === 'upgrade'
-                                        ? 'bg-blue-500 text-white border-blue-600 shadow-lg'
-                                        : 'bg-white dark:bg-charcoal-700 text-slate-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-blue-400'
+                                        ? 'bg-cyan-700 text-white border-cyan-400 shadow-lg'
+                                        : 'bg-etrian-900 text-cyan-400 border-cyan-900/30 hover:border-cyan-400'
                                         }`}
                                 >
                                     <div className="text-2xl mb-1">⬆️</div>
@@ -140,17 +140,17 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({ onClose })
                                 <button
                                     onClick={() => setSelectedService('forge')}
                                     disabled
-                                    className="w-full p-4 rounded-lg border-2 transition-all text-left bg-gray-100 dark:bg-charcoal-900 text-slate-400 dark:text-gray-600 border-gray-200 dark:border-gray-800 opacity-50 cursor-not-allowed"
+                                    className="w-full p-4 rounded-lg border-2 transition-all text-left bg-etrian-900/50 text-cyan-600 border-cyan-900/10 opacity-50 cursor-not-allowed"
                                 >
                                     <div className="text-2xl mb-1">🔨</div>
                                     <div className="font-bold">Forge</div>
                                     <div className="text-xs opacity-80">Create new equipment</div>
-                                    <div className="text-xs text-blue-500 dark:text-blue-400 mt-1">Coming Soon</div>
+                                    <div className="text-xs text-cyan-600 mt-1">Coming Soon</div>
                                 </button>
                             </div>
 
-                            <div className="mt-6 p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
-                                <p className="text-xs text-orange-800 dark:text-orange-200">
+                            <div className="mt-6 p-3 bg-etrian-900 border border-gold-500/30 rounded-lg">
+                                <p className="text-xs text-gold-500">
                                     💡 <strong>Tip:</strong> Keep your equipment in good condition for maximum effectiveness!
                                 </p>
                             </div>
@@ -159,8 +159,8 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({ onClose })
 
                     {/* Equipment List */}
                     <div className="lg:col-span-2">
-                        <div className="bg-cream-100 dark:bg-charcoal-800 rounded-xl p-6 shadow-lg border border-gray-400/20">
-                            <h2 className="text-xl font-semibold text-slate-900 dark:text-gray-200 mb-4">
+                        <div className="bg-etrian-800 rounded-xl p-6 shadow-lg border border-cyan-900/50">
+                            <h2 className="text-xl font-semibold text-gold-500 mb-4">
                                 {selectedService === 'repair' && 'Equipment Repair'}
                                 {selectedService === 'upgrade' && 'Equipment Upgrade'}
                                 {selectedService === 'forge' && 'Forge New Equipment'}
@@ -169,10 +169,10 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({ onClose })
                             {selectedService === 'forge' ? (
                                 <div className="text-center py-12">
                                     <div className="text-6xl mb-4">🔨</div>
-                                    <p className="text-lg text-slate-600 dark:text-gray-400 mb-2">
+                                    <p className="text-lg text-cyan-100 mb-2">
                                         Forge System Coming Soon
                                     </p>
-                                    <p className="text-sm text-slate-500 dark:text-gray-500">
+                                    <p className="text-sm text-cyan-400">
                                         Craft powerful equipment from raw materials
                                     </p>
                                 </div>
@@ -181,31 +181,31 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({ onClose })
                                     {MOCK_EQUIPMENT.map((item) => (
                                         <div
                                             key={item.id}
-                                            className="bg-white dark:bg-charcoal-700 rounded-lg p-4 border-2 border-gray-300 dark:border-gray-600"
+                                            className="bg-etrian-700 rounded-lg p-4 border border-cyan-900/30"
                                         >
                                             <div className="flex items-start justify-between">
                                                 {/* Item Info */}
                                                 <div className="flex items-start gap-3 flex-1">
                                                     <span className="text-4xl">{item.icon}</span>
                                                     <div className="flex-1">
-                                                        <h3 className="font-bold text-lg text-slate-900 dark:text-gray-200">
+                                                        <h3 className="font-bold text-lg text-gold-500">
                                                             {item.name}
                                                         </h3>
-                                                        <p className="text-sm text-slate-600 dark:text-gray-400">
+                                                        <p className="text-sm text-cyan-400">
                                                             {item.type} • Level {item.level}
                                                         </p>
 
                                                         {selectedService === 'repair' && (
                                                             <div className="mt-2">
                                                                 <div className="flex items-center gap-2 mb-1">
-                                                                    <span className="text-xs text-slate-600 dark:text-gray-400">
+                                                                    <span className="text-xs text-cyan-400">
                                                                         Condition:
                                                                     </span>
                                                                     <span className={`text-sm font-bold ${getConditionColor(item.condition)}`}>
                                                                         {item.condition}% ({getConditionLabel(item.condition)})
                                                                     </span>
                                                                 </div>
-                                                                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                                                <div className="w-full bg-etrian-900 rounded-full h-2">
                                                                     <div
                                                                         className={`h-2 rounded-full transition-all ${item.condition >= 80
                                                                             ? 'bg-green-500'
@@ -225,10 +225,10 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({ onClose })
                                                 <div className="text-right ml-4">
                                                     {selectedService === 'repair' && (
                                                         <>
-                                                            <p className="text-sm text-slate-600 dark:text-gray-400 mb-2">
+                                                            <p className="text-sm text-cyan-400 mb-2">
                                                                 Repair Cost
                                                             </p>
-                                                            <p className="text-xl font-bold text-yellow-600 dark:text-yellow-400 mb-3">
+                                                            <p className="text-xl font-bold text-gold-500 mb-3">
                                                                 {getRepairCost(item)} 💰
                                                             </p>
                                                             <Button
@@ -243,10 +243,10 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({ onClose })
                                                     )}
                                                     {selectedService === 'upgrade' && (
                                                         <>
-                                                            <p className="text-sm text-slate-600 dark:text-gray-400 mb-2">
+                                                            <p className="text-sm text-cyan-400 mb-2">
                                                                 Upgrade Cost
                                                             </p>
-                                                            <p className="text-xl font-bold text-yellow-600 dark:text-yellow-400 mb-3">
+                                                            <p className="text-xl font-bold text-gold-500 mb-3">
                                                                 {getUpgradeCost(item)} 💰
                                                             </p>
                                                             <Button
@@ -266,8 +266,8 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({ onClose })
                             )}
 
                             {selectedService !== 'forge' && (
-                                <div className="mt-6 p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
-                                    <p className="text-xs text-orange-800 dark:text-orange-200">
+                                <div className="mt-6 p-4 bg-etrian-900 border border-gold-500/30 rounded-lg">
+                                    <p className="text-xs text-gold-500">
                                         🛠️ <strong>Note:</strong> Mock equipment shown for demonstration. Real inventory integration coming soon!
                                     </p>
                                 </div>

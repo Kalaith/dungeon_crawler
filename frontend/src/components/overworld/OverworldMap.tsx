@@ -76,7 +76,7 @@ export const OverworldMap: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-green-400/8 to-blue-400/8 dark:from-green-400/15 dark:to-blue-400/15 p-8">
+        <div className="h-full w-full overflow-y-auto bg-etrian-900 p-4">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-8">
@@ -91,8 +91,8 @@ export const OverworldMap: React.FC = () => {
                 </div>
 
                 {/* Map Container */}
-                <div className="bg-cream-100 dark:bg-charcoal-800 rounded-xl p-8 shadow-lg border border-gray-400/20 mb-6">
-                    <div className="relative w-full h-[600px] bg-gradient-to-br from-green-100 to-blue-100 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg border-2 border-gray-400/30 overflow-hidden">
+                <div className="bg-etrian-800 rounded-xl p-4 shadow-lg border border-cyan-900/50 mb-6 relative z-0">
+                    <div className="relative w-full h-[50vh] md:h-[600px] bg-etrian-900 rounded-lg border-2 border-cyan-900 overflow-hidden">
                         {/* Render locations */}
                         {worldMap.locations.map((location) => {
                             const discovered = isLocationDiscovered(location.id);
@@ -121,10 +121,10 @@ export const OverworldMap: React.FC = () => {
 
                                         {/* Location name */}
                                         <div className={`absolute top-full left-1/2 transform -translate-x-1/2 mt-1 whitespace-nowrap text-xs font-semibold px-2 py-1 rounded ${isCurrent
-                                                ? 'bg-blue-500 text-white'
-                                                : isConnected
-                                                    ? 'bg-green-500 text-white'
-                                                    : 'bg-gray-700 text-gray-200'
+                                            ? 'bg-blue-500 text-white'
+                                            : isConnected
+                                                ? 'bg-green-500 text-white'
+                                                : 'bg-gray-700 text-gray-200'
                                             }`}>
                                             {location.name}
                                         </div>
@@ -178,7 +178,7 @@ export const OverworldMap: React.FC = () => {
 
                 {/* Location Details Panel */}
                 {selectedLocation && (
-                    <div className="bg-cream-100 dark:bg-charcoal-800 rounded-xl p-6 shadow-lg border border-gray-400/20 mb-6">
+                    <div className="fixed inset-x-4 bottom-4 md:static md:inset-auto md:bg-etrian-800 md:rounded-xl md:p-6 md:shadow-lg md:border md:border-cyan-500 md:mb-6 z-50 bg-etrian-900 border-2 border-cyan-500 rounded-xl p-4 shadow-2xl">
                         <div className="flex items-start justify-between mb-4">
                             <div>
                                 <h2 className="text-2xl font-bold text-slate-900 dark:text-gray-200 mb-2">
@@ -263,8 +263,8 @@ export const OverworldMap: React.FC = () => {
 
                 {/* Current Location Actions */}
                 {currentLocation && !selectedLocation && (
-                    <div className="bg-cream-100 dark:bg-charcoal-800 rounded-xl p-6 shadow-lg border border-gray-400/20">
-                        <h3 className="text-lg font-semibold text-slate-900 dark:text-gray-200 mb-4">
+                    <div className="bg-etrian-800 rounded-xl p-6 shadow-lg border border-cyan-900/50">
+                        <h3 className="text-lg font-semibold text-gold-500 mb-4">
                             Available Actions
                         </h3>
                         <div className="flex gap-3">

@@ -12,23 +12,22 @@ export const PartyStatus: React.FC = () => {
   }
 
   return (
-    <div className="p-4 bg-cream-100 dark:bg-charcoal-800 rounded-lg border border-gray-400/20">
-      <h4 className="text-base font-medium mb-3 text-slate-900 dark:text-gray-200 text-center">
-        Party Status
-      </h4>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+    <div className="h-full w-full overflow-hidden">
+      <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-2 h-full overflow-x-auto md:overflow-y-auto md:overflow-x-hidden pb-2 md:pb-0 snap-x">
         {partyMembers.map((character, index) => {
           if (!character) return null;
 
           return (
-            <CharacterCard
-              key={index}
-              character={character}
-              variant="detailed"
-              showBars={true}
-              showStats={true}
-              showAbilityCount={true}
-            />
+            <div key={index} className="min-w-[160px] md:min-w-0 h-full snap-center">
+              <CharacterCard
+                character={character}
+                variant="detailed"
+                showBars={true}
+                showStats={true}
+                showAbilityCount={true}
+                className="h-full"
+              />
+            </div>
           );
         })}
       </div>

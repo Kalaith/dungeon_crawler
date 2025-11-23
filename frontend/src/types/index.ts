@@ -64,6 +64,7 @@ export interface Race {
   attributeModifiers: Partial<Attributes>;
   abilities: Ability[];
   movementRate: number;
+  isNpcOnly?: boolean;
 }
 
 export interface CharacterClass {

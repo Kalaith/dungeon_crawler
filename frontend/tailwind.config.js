@@ -27,6 +27,16 @@ export default {
           800: '#1a1a1a',
           900: '#0a0a0a', // Void
         },
+        'etrian': {
+          900: '#080a10', // Deep Void
+          800: '#0f172a', // Midnight
+          700: '#1e293b', // Twilight
+        },
+        'cyan': {
+          100: '#cffafe', // Hologram
+          400: '#22d3ee', // Cyan
+          500: '#06b6d4', // Neon
+        },
         'gold': {
           400: '#facc15',
           500: '#eab308', // Base gold

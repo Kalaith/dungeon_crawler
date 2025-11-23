@@ -14,11 +14,11 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseClasses = 'inline-flex items-center justify-center font-medium transition-all duration-200 ease-out cursor-pointer border-none text-decoration-none relative';
-  
+
   const variantClasses = {
-    primary: 'bg-teal-500 text-cream-50 hover:bg-teal-600 active:bg-teal-700',
-    secondary: 'bg-gray-400/15 text-slate-900 hover:bg-gray-400/25 active:bg-gray-400/30 dark:bg-gray-400/15 dark:text-gray-200 dark:hover:bg-gray-400/25 dark:active:bg-gray-400/30',
-    outline: 'bg-transparent border border-gray-400/30 text-slate-900 hover:bg-gray-400/15 dark:border-gray-400/30 dark:text-gray-200 dark:hover:bg-gray-400/15'
+    primary: 'bg-transparent border border-cyan-500 text-cyan-400 hover:bg-cyan-900/50 hover:text-white hover:border-cyan-400 active:bg-cyan-800 disabled:opacity-50 disabled:cursor-not-allowed',
+    secondary: 'bg-etrian-800 border border-etrian-700 text-cyan-100 hover:bg-etrian-700 active:bg-etrian-600 disabled:opacity-50 disabled:cursor-not-allowed',
+    outline: 'bg-transparent border border-cyan-900 text-cyan-400 hover:border-cyan-500 hover:text-cyan-100 hover:bg-cyan-900/20 disabled:opacity-50 disabled:cursor-not-allowed'
   };
 
   const sizeClasses = {

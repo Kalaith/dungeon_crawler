@@ -133,15 +133,15 @@ export const ShopService: React.FC<ShopServiceProps> = ({ onClose }) => {
     ];
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-yellow-400/8 to-amber-400/8 dark:from-yellow-400/15 dark:to-amber-400/15 p-8">
+        <div className="h-full w-full overflow-y-auto bg-etrian-900 p-4">
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-8">
                     <div className="text-6xl mb-4">🛒</div>
-                    <h1 className="text-4xl font-bold text-slate-900 dark:text-gray-200 mb-2">
+                    <h1 className="text-4xl font-bold text-gold-500 mb-2">
                         General Store
                     </h1>
-                    <p className="text-lg text-slate-600 dark:text-gray-400">
+                    <p className="text-lg text-cyan-100">
                         Buy equipment, potions, and supplies for your adventures
                     </p>
                 </div>
@@ -150,15 +150,15 @@ export const ShopService: React.FC<ShopServiceProps> = ({ onClose }) => {
                     {/* Main Shop Area */}
                     <div className="lg:col-span-2">
                         {/* Category Tabs */}
-                        <div className="bg-cream-100 dark:bg-charcoal-800 rounded-xl p-4 shadow-lg border border-gray-400/20 mb-6">
+                        <div className="bg-etrian-800 rounded-xl p-4 shadow-lg border border-cyan-900/50 mb-6">
                             <div className="flex gap-2 flex-wrap">
                                 {categories.map((category) => (
                                     <button
                                         key={category.id}
                                         onClick={() => setSelectedCategory(category.id)}
                                         className={`px-4 py-2 rounded-lg font-semibold transition-all ${selectedCategory === category.id
-                                            ? 'bg-blue-500 text-white shadow-lg'
-                                            : 'bg-white dark:bg-charcoal-700 text-slate-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-charcoal-600'
+                                            ? 'bg-cyan-700 text-white shadow-lg border border-cyan-400'
+                                            : 'bg-etrian-900 text-cyan-400 hover:bg-etrian-700 border border-cyan-900/30'
                                             }`}
                                     >
                                         {category.icon} {category.name}
@@ -168,31 +168,31 @@ export const ShopService: React.FC<ShopServiceProps> = ({ onClose }) => {
                         </div>
 
                         {/* Items Grid */}
-                        <div className="bg-cream-100 dark:bg-charcoal-800 rounded-xl p-6 shadow-lg border border-gray-400/20">
-                            <h2 className="text-xl font-semibold text-slate-900 dark:text-gray-200 mb-4 capitalize">
+                        <div className="bg-etrian-800 rounded-xl p-6 shadow-lg border border-cyan-900/50">
+                            <h2 className="text-xl font-semibold text-gold-500 mb-4 capitalize">
                                 {selectedCategory}
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {filteredItems.map((item) => (
                                     <div
                                         key={item.id}
-                                        className="bg-white dark:bg-charcoal-700 rounded-lg p-4 border border-gray-300 dark:border-gray-600"
+                                        className="bg-etrian-700 rounded-lg p-4 border border-cyan-900/30 hover:border-cyan-500/50 transition-colors"
                                     >
                                         <div className="flex items-start justify-between mb-2">
                                             <div className="flex items-center gap-3">
                                                 <span className="text-3xl">{item.icon}</span>
                                                 <div>
-                                                    <h3 className="font-bold text-slate-900 dark:text-gray-200">
+                                                    <h3 className="font-bold text-cyan-100">
                                                         {item.name}
                                                     </h3>
-                                                    <p className="text-xs text-slate-600 dark:text-gray-400">
+                                                    <p className="text-xs text-cyan-400">
                                                         {item.description}
                                                     </p>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="flex items-center justify-between mt-3">
-                                            <p className="text-lg font-bold text-yellow-600 dark:text-yellow-400">
+                                            <p className="text-lg font-bold text-gold-500">
                                                 {item.price} 💰
                                             </p>
                                             <Button
@@ -211,20 +211,20 @@ export const ShopService: React.FC<ShopServiceProps> = ({ onClose }) => {
 
                     {/* Shopping Cart */}
                     <div className="lg:col-span-1">
-                        <div className="bg-cream-100 dark:bg-charcoal-800 rounded-xl p-6 shadow-lg border border-gray-400/20 sticky top-8">
-                            <h2 className="text-xl font-semibold text-slate-900 dark:text-gray-200 mb-4">
+                        <div className="bg-etrian-800 rounded-xl p-6 shadow-lg border border-cyan-900/50 sticky top-8">
+                            <h2 className="text-xl font-semibold text-gold-500 mb-4">
                                 🛒 Shopping Cart
                             </h2>
 
                             {/* Gold Display */}
-                            <div className="mb-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-                                <p className="text-sm font-semibold text-yellow-800 dark:text-yellow-200">
+                            <div className="mb-4 p-3 bg-etrian-900 border border-gold-500/30 rounded-lg">
+                                <p className="text-sm font-semibold text-gold-500">
                                     💰 Your Gold: {gold}
                                 </p>
                             </div>
 
                             {cart.size === 0 ? (
-                                <p className="text-center text-slate-600 dark:text-gray-400 py-8">
+                                <p className="text-center text-cyan-400 py-8">
                                     Your cart is empty
                                 </p>
                             ) : (
@@ -237,16 +237,16 @@ export const ShopService: React.FC<ShopServiceProps> = ({ onClose }) => {
                                             return (
                                                 <div
                                                     key={itemId}
-                                                    className="bg-white dark:bg-charcoal-700 rounded-lg p-3 border border-gray-300 dark:border-gray-600"
+                                                    className="bg-etrian-700 rounded-lg p-3 border border-cyan-900/30"
                                                 >
                                                     <div className="flex items-center justify-between mb-2">
                                                         <div className="flex items-center gap-2">
                                                             <span className="text-xl">{item.icon}</span>
                                                             <div>
-                                                                <p className="font-semibold text-sm text-slate-900 dark:text-gray-200">
+                                                                <p className="font-semibold text-sm text-cyan-100">
                                                                     {item.name}
                                                                 </p>
-                                                                <p className="text-xs text-slate-600 dark:text-gray-400">
+                                                                <p className="text-xs text-cyan-400">
                                                                     {item.price} 💰 each
                                                                 </p>
                                                             </div>
@@ -256,21 +256,21 @@ export const ShopService: React.FC<ShopServiceProps> = ({ onClose }) => {
                                                         <div className="flex items-center gap-2">
                                                             <button
                                                                 onClick={() => removeFromCart(itemId)}
-                                                                className="w-6 h-6 rounded bg-red-500 text-white hover:bg-red-600 flex items-center justify-center text-sm font-bold"
+                                                                className="w-6 h-6 rounded bg-red-900/50 border border-red-500/50 text-red-200 hover:bg-red-800 flex items-center justify-center text-sm font-bold"
                                                             >
                                                                 −
                                                             </button>
-                                                            <span className="text-sm font-semibold text-slate-900 dark:text-gray-200 w-8 text-center">
+                                                            <span className="text-sm font-semibold text-cyan-100 w-8 text-center">
                                                                 {quantity}
                                                             </span>
                                                             <button
                                                                 onClick={() => addToCart(itemId)}
-                                                                className="w-6 h-6 rounded bg-green-500 text-white hover:bg-green-600 flex items-center justify-center text-sm font-bold"
+                                                                className="w-6 h-6 rounded bg-green-900/50 border border-green-500/50 text-green-200 hover:bg-green-800 flex items-center justify-center text-sm font-bold"
                                                             >
                                                                 +
                                                             </button>
                                                         </div>
-                                                        <p className="text-sm font-bold text-yellow-600 dark:text-yellow-400">
+                                                        <p className="text-sm font-bold text-gold-500">
                                                             {item.price * quantity} 💰
                                                         </p>
                                                     </div>
@@ -279,12 +279,12 @@ export const ShopService: React.FC<ShopServiceProps> = ({ onClose }) => {
                                         })}
                                     </div>
 
-                                    <div className="border-t border-gray-300 dark:border-gray-600 pt-4 mb-4">
+                                    <div className="border-t border-cyan-900/30 pt-4 mb-4">
                                         <div className="flex items-center justify-between mb-4">
-                                            <p className="text-lg font-bold text-slate-900 dark:text-gray-200">
+                                            <p className="text-lg font-bold text-cyan-100">
                                                 Total:
                                             </p>
-                                            <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
+                                            <p className="text-2xl font-bold text-gold-500">
                                                 {getTotalCost()} 💰
                                             </p>
                                         </div>
@@ -302,8 +302,8 @@ export const ShopService: React.FC<ShopServiceProps> = ({ onClose }) => {
                             )}
 
                             {!canAfford(getTotalCost()) && cart.size > 0 && (
-                                <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                                    <p className="text-xs text-red-800 dark:text-red-200">
+                                <div className="mt-4 p-3 bg-red-900/30 border border-red-500/30 rounded-lg">
+                                    <p className="text-xs text-red-400">
                                         ⚠️ <strong>Insufficient Funds!</strong> You need {getTotalCost() - gold} more gold.
                                     </p>
                                 </div>

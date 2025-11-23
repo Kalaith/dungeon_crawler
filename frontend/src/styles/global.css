@@ -3,17 +3,21 @@
 /* Custom CSS Variables for consistent theming */
 :root {
   /* Color palette - matching tailwind config */
-  --color-parchment-100: #f4e4bc;
-  --color-parchment-300: #d4b483;
-  --color-stone-500: #1f2937;
-  --color-stone-700: #0f1115;
-  --color-dungeon-900: #0a0a0a;
+  --color-etrian-900: #080a10;
+  --color-etrian-800: #0f172a;
+  --color-etrian-700: #1e293b;
+
+  --color-cyan-100: #cffafe;
+  --color-cyan-400: #22d3ee;
+  --color-cyan-500: #06b6d4;
+
   --color-gold-500: #eab308;
   --color-blood-500: #ef4444;
   --color-mana-500: #60a5fa;
 
   /* Font family */
-  --font-family-base: "Press Start 2P", "Inter", sans-serif;
+  --font-family-base: "Inter", sans-serif;
+  --font-family-header: "Press Start 2P", cursive;
   --font-family-mono: "VT323", monospace;
 }
 
@@ -21,18 +25,16 @@
 html {
   font-family: var(--font-family-base);
   line-height: 1.5;
-  -webkit-font-smoothing: none;
-  /* Pixel art looks better without smoothing */
+  -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
-  background-color: var(--color-dungeon-900);
-  color: var(--color-parchment-100);
+  background-color: var(--color-etrian-900);
+  color: var(--color-cyan-100);
 }
 
 body {
   margin: 0;
   padding: 0;
   overflow: auto;
-  /* user-select: none; - REMOVED to allow text selection and copying */
 }
 
 *,
@@ -49,6 +51,7 @@ h4,
 h5,
 h6 {
   margin: 0;
+  font-family: var(--font-family-header);
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: 0.05em;
@@ -72,14 +75,14 @@ p {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-stone-700);
+  background: var(--color-etrian-800);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-stone-500);
-  border: 1px solid var(--color-dungeon-900);
+  background: var(--color-etrian-700);
+  border: 1px solid var(--color-cyan-500);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-parchment-300);
+  background: var(--color-cyan-500);
 }

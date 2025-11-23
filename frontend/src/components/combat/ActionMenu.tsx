@@ -36,12 +36,12 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ characterIndex, onAction
 
   return (
     <>
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-lg">
-        <div className="flex items-center justify-between mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
-          <h4 className="text-lg font-bold text-gray-900 dark:text-white">
+      <div className="bg-etrian-800 rounded-lg p-4 shadow-lg border border-cyan-900/50">
+        <div className="flex items-center justify-between mb-4 border-b border-cyan-900/30 pb-2">
+          <h4 className="text-lg font-bold text-gold-500">
             {character.name}'s Turn
           </h4>
-          <div className="text-sm font-mono text-indigo-600 dark:text-indigo-400">
+          <div className="text-sm font-mono text-cyan-400">
             AP: {character.derivedStats.AP.current}/{character.derivedStats.AP.max}
           </div>
         </div>
@@ -65,7 +65,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ characterIndex, onAction
           <button
             onClick={() => onAction('attack')}
             disabled={currentActionEconomy.actionUsed}
-            className="p-3 bg-red-600 border-2 border-red-500 text-white font-bold text-sm uppercase tracking-wider hover:bg-red-500 hover:border-red-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-3 bg-red-900/50 border-2 border-red-500 text-red-100 font-bold text-sm uppercase tracking-wider hover:bg-red-800 hover:border-red-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
           >
             ⚔️ Attack
           </button>
@@ -74,7 +74,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ characterIndex, onAction
             <button
               onClick={() => setShowSpellSelector(true)}
               disabled={currentAP === 0 || currentActionEconomy.actionUsed}
-              className="p-3 bg-purple-600 border-2 border-purple-500 text-white font-bold text-sm uppercase tracking-wider hover:bg-purple-500 hover:border-purple-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-3 bg-purple-900/50 border-2 border-purple-500 text-purple-100 font-bold text-sm uppercase tracking-wider hover:bg-purple-800 hover:border-purple-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
             >
               ✨ Cast Spell
             </button>
@@ -84,7 +84,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ characterIndex, onAction
             <button
               onClick={() => setShowAbilitySelector(true)}
               disabled={currentActionEconomy.actionUsed}
-              className="p-3 bg-indigo-600 border-2 border-indigo-500 text-white font-bold text-sm uppercase tracking-wider hover:bg-indigo-500 hover:border-indigo-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-3 bg-indigo-900/50 border-2 border-indigo-500 text-indigo-100 font-bold text-sm uppercase tracking-wider hover:bg-indigo-800 hover:border-indigo-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
             >
               💫 Ability
             </button>
@@ -93,7 +93,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ characterIndex, onAction
           <button
             onClick={() => onAction('defend')}
             disabled={currentActionEconomy.actionUsed}
-            className="p-3 bg-blue-600 border-2 border-blue-500 text-white font-bold text-sm uppercase tracking-wider hover:bg-blue-500 hover:border-blue-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-3 bg-blue-900/50 border-2 border-blue-500 text-blue-100 font-bold text-sm uppercase tracking-wider hover:bg-blue-800 hover:border-blue-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
           >
             🛡️ Defend
           </button>
@@ -101,7 +101,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ characterIndex, onAction
           <button
             onClick={() => onAction('item')}
             disabled={currentActionEconomy.actionUsed}
-            className="p-3 bg-green-600 border-2 border-green-500 text-white font-bold text-sm uppercase tracking-wider hover:bg-green-500 hover:border-green-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-3 bg-green-900/50 border-2 border-green-500 text-green-100 font-bold text-sm uppercase tracking-wider hover:bg-green-800 hover:border-green-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
           >
             🎒 Item
           </button>
@@ -109,7 +109,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ characterIndex, onAction
           <button
             onClick={() => onAction('row-switch')}
             disabled={currentActionEconomy.movementUsed}
-            className="p-3 bg-yellow-600 border-2 border-yellow-500 text-white font-bold text-sm uppercase tracking-wider hover:bg-yellow-500 hover:border-yellow-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-3 bg-yellow-900/50 border-2 border-yellow-500 text-yellow-100 font-bold text-sm uppercase tracking-wider hover:bg-yellow-800 hover:border-yellow-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
           >
             ↔️ Row
           </button>

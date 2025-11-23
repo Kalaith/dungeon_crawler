@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { useCombatStore } from '../../stores/useCombatStore';
 import { usePartyStore } from '../../stores/usePartyStore';
+import { useGoldStore } from '../../stores/useGoldStore';
 import { enemies } from '../../data/gameData';
+import { races } from '../../data/races';
+import { characterClasses } from '../../data/classes';
+import { createCharacterFromWizardData } from '../../utils/characterCreation';
 import type { CombatParticipant } from '../../types';
 
 export const DebugPanel: React.FC = () => {
@@ -17,8 +21,11 @@ export const DebugPanel: React.FC = () => {
         party,
         updatePartyMemberHP,
         restParty,
-        equipItem
+        equipItem,
+        addCharacterToParty
     } = usePartyStore();
+
+    const { setGold } = useGoldStore();
 
     const handleTriggerCombat = () => {
         if (inCombat) return;
@@ -70,6 +77,57 @@ export const DebugPanel: React.FC = () => {
         if (party[0]) {
             equipItem(0, opSword);
         }
+    };
+
+    const handleClearAllData = () => {
+        if (confirm('⚠️ This will clear ALL game data and reload the page. Are you sure?')) {
+            // Clear all localStorage
+            localStorage.removeItem('dungeon-crawler-game');
+            localStorage.removeItem('dungeon-crawler-party');
+            localStorage.removeItem('gold-storage');
+            localStorage.removeItem('dungeon-crawler-game-state');
+
+            // Reload the page to reinitialize all stores
+            window.location.reload();
+        }
+    };
+
+    const handleCreateFullParty = () => {
+        // Get player-available races (not NPC-only)
+        const playerRaces = races.filter(r => !r.isNpcOnly);
+
+        // Define 6 character configurations
+        const partyConfigs = [
+            { name: 'Warrior', race: playerRaces.find(r => r.id === 'human'), class: characterClasses.find(c => c.id === 'warrior') },
+            { name: 'Wizard', race: playerRaces.find(r => r.id === 'elf'), class: characterClasses.find(c => c.id === 'wizard') },
+            { name: 'Cleric', race: playerRaces.find(r => r.id === 'dwarf'), class: characterClasses.find(c => c.id === 'cleric') },
+            { name: 'Rogue', race: playerRaces.find(r => r.id === 'halfling'), class: characterClasses.find(c => c.id === 'rogue') },
+            { name: 'Ranger', race: playerRaces.find(r => r.id === 'half_elf'), class: characterClasses.find(c => c.id === 'ranger') },
+            { name: 'Paladin', race: playerRaces.find(r => r.id === 'human'), class: characterClasses.find(c => c.id === 'paladin') }
+        ];
+
+        // Create and add characters to party
+        partyConfigs.forEach((config, index) => {
+            if (config.race && config.class) {
+                const character = createCharacterFromWizardData({
+                    name: config.name,
+                    selectedRace: config.race,
+                    selectedClass: config.class,
+                    attributes: { ST: 12, CO: 12, DX: 12, AG: 12, IT: 12, IN: 12, WD: 12, CH: 12 },
+                    negativeAttributes: { SN: 2, AC: 2, CL: 2, AV: 2, NE: 2, CU: 2, VT: 2 },
+                    selectedSkills: [],
+                    selectedFeats: [],
+                    portrait: '',
+                    selectedDeity: null,
+                    selectedBackground: null
+                });
+                addCharacterToParty(character, index);
+            }
+        });
+    };
+
+    const handleGrant9999Gold = () => {
+        setGold(9999);
     };
 
     if (!isOpen) {
@@ -139,6 +197,29 @@ export const DebugPanel: React.FC = () => {
                     className="w-full bg-blue-900/50 text-blue-200 text-xs py-2 px-3 rounded hover:bg-blue-900 text-left"
                 >
                     🗡️ Give OP Sword
+                </button>
+
+                <div className="border-t border-red-500/30 my-2"></div>
+
+                <button
+                    onClick={handleCreateFullParty}
+                    className="w-full bg-cyan-900/50 text-cyan-200 text-xs py-2 px-3 rounded hover:bg-cyan-900 text-left"
+                >
+                    👥 Create Full Party
+                </button>
+
+                <button
+                    onClick={handleGrant9999Gold}
+                    className="w-full bg-yellow-900/50 text-yellow-200 text-xs py-2 px-3 rounded hover:bg-yellow-900 text-left"
+                >
+                    💰 Grant 9999 Gold
+                </button>
+
+                <button
+                    onClick={handleClearAllData}
+                    className="w-full bg-red-900/50 text-red-200 text-xs py-2 px-3 rounded hover:bg-red-900 text-left"
+                >
+                    🗑️ Clear All Data
                 </button>
             </div>
         </div>

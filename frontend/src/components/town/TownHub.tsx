@@ -62,24 +62,24 @@ export const TownHub: React.FC = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-amber-400/8 to-orange-400/8 dark:from-amber-400/15 dark:to-orange-400/15 p-8">
+        <div className="h-full w-full overflow-y-auto bg-etrian-900 p-4">
             <div className="max-w-5xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-8">
-                    <h1 className="text-4xl font-bold text-slate-900 dark:text-gray-200 mb-2">
+                    <h1 className="text-4xl font-bold text-gold-500 mb-2">
                         Welcome to {currentLocation.name}
                     </h1>
-                    <p className="text-lg text-slate-600 dark:text-gray-400 capitalize">
+                    <p className="text-lg text-cyan-100 capitalize">
                         {townData.size} • Population: {townData.population}
                     </p>
-                    <p className="text-sm text-slate-500 dark:text-gray-500 mt-2">
+                    <p className="text-sm text-cyan-400 mt-2">
                         {currentLocation.description}
                     </p>
                 </div>
 
                 {/* Services Grid */}
-                <div className="bg-cream-100 dark:bg-charcoal-800 rounded-xl p-8 shadow-lg border border-gray-400/20 mb-6">
-                    <h2 className="text-2xl font-semibold text-slate-900 dark:text-gray-200 mb-6 text-center">
+                <div className="bg-etrian-800 rounded-xl p-6 shadow-lg border border-cyan-900/50 mb-6">
+                    <h2 className="text-2xl font-semibold text-gold-500 mb-6 text-center">
                         Town Services
                     </h2>
 
@@ -89,20 +89,20 @@ export const TownHub: React.FC = () => {
                                 key={service.id}
                                 disabled={!service.available}
                                 onClick={() => service.available && handleServiceClick(service.id)}
-                                className={`p-6 rounded-lg border-2 transition-all ${service.available
-                                        ? 'bg-white dark:bg-charcoal-700 border-gray-300 dark:border-gray-600 hover:border-blue-500 hover:shadow-lg cursor-pointer'
-                                        : 'bg-gray-100 dark:bg-charcoal-900 border-gray-200 dark:border-gray-800 opacity-50 cursor-not-allowed'
+                                className={`p-4 rounded-lg border-2 transition-all ${service.available
+                                    ? 'bg-etrian-700 border-cyan-900 hover:border-cyan-400 hover:bg-etrian-600 cursor-pointer'
+                                    : 'bg-etrian-900 border-etrian-800 opacity-50 cursor-not-allowed'
                                     }`}
                             >
                                 <div className="text-5xl mb-3 text-center">{service.icon}</div>
-                                <h3 className="text-xl font-bold text-slate-900 dark:text-gray-200 text-center mb-2">
+                                <h3 className="text-xl font-bold text-gold-500 mb-2">
                                     {service.name}
                                 </h3>
-                                <p className="text-sm text-slate-600 dark:text-gray-400 text-center">
+                                <p className="text-sm text-cyan-100 text-center">
                                     {service.description}
                                 </p>
                                 {!service.available && (
-                                    <p className="text-xs text-red-500 dark:text-red-400 text-center mt-2">
+                                    <p className="text-xs text-red-500 text-center mt-2">
                                         Not available in this town
                                     </p>
                                 )}
@@ -110,8 +110,8 @@ export const TownHub: React.FC = () => {
                         ))}
                     </div>
 
-                    <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                        <p className="text-sm text-blue-800 dark:text-blue-200 text-center">
+                    <div className="mt-6 p-4 bg-etrian-700/50 rounded-lg border border-cyan-900/30">
+                        <p className="text-sm text-cyan-400 text-center">
                             💡 <strong>Tip:</strong> All 6 town services are now available!
                         </p>
                     </div>
@@ -129,32 +129,32 @@ export const TownHub: React.FC = () => {
                 </div>
 
                 {/* Town Info Panel */}
-                <div className="mt-6 bg-cream-100 dark:bg-charcoal-800 rounded-xl p-6 shadow-lg border border-gray-400/20">
-                    <h3 className="text-lg font-semibold text-slate-900 dark:text-gray-200 mb-3">
+                <div className="mt-6 bg-etrian-800 rounded-xl p-6 shadow-lg border border-cyan-900/50">
+                    <h3 className="text-lg font-semibold text-gold-500 mb-3">
                         About {currentLocation.name}
                     </h3>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                         <div>
-                            <p className="text-slate-600 dark:text-gray-400">Type</p>
-                            <p className="font-semibold text-slate-900 dark:text-gray-200 capitalize">
+                            <p className="text-cyan-400">Type</p>
+                            <p className="font-semibold text-cyan-100 capitalize">
                                 {townData.size}
                             </p>
                         </div>
                         <div>
-                            <p className="text-slate-600 dark:text-gray-400">Population</p>
-                            <p className="font-semibold text-slate-900 dark:text-gray-200">
+                            <p className="text-cyan-400">Population</p>
+                            <p className="font-semibold text-cyan-100">
                                 {townData.population}
                             </p>
                         </div>
                         <div>
-                            <p className="text-slate-600 dark:text-gray-400">Services</p>
-                            <p className="font-semibold text-slate-900 dark:text-gray-200">
+                            <p className="text-cyan-400">Services</p>
+                            <p className="font-semibold text-cyan-100">
                                 {townData.services.length}
                             </p>
                         </div>
                         <div>
-                            <p className="text-slate-600 dark:text-gray-400">Safety</p>
-                            <p className="font-semibold text-green-600 dark:text-green-400">
+                            <p className="text-cyan-400">Safety</p>
+                            <p className="font-semibold text-green-500">
                                 Safe Haven
                             </p>
                         </div>

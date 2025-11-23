@@ -46,11 +46,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     const isAlive = character.alive && character.derivedStats.HP.current > 0;
 
     const baseClasses = variant === 'compact'
-        ? 'bg-green-400/8 dark:bg-green-400/15 border-2 border-gray-400/20 rounded-lg p-4 min-h-[200px] flex items-center justify-center text-center'
-        : 'bg-purple-400/8 dark:bg-purple-400/15 border border-gray-400/20 rounded-lg p-3';
+        ? 'bg-etrian-800 border-2 border-cyan-900 rounded-lg p-4 min-h-[200px] flex items-center justify-center text-center'
+        : 'bg-etrian-900 border border-cyan-900/50 rounded-lg p-3';
 
     const interactiveClasses = onClick
-        ? 'transition-all hover:border-teal-500 hover:shadow-sm hover:-translate-y-0.5 cursor-pointer'
+        ? 'transition-all hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-900/20 hover:-translate-y-0.5 cursor-pointer'
         : '';
 
     const aliveClasses = !isAlive ? 'opacity-50' : '';
@@ -63,10 +63,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             <div className={variant === 'compact' ? 'w-full' : ''}>
                 {/* Header: Name and Class */}
                 <div className={variant === 'compact' ? 'mb-3' : 'flex justify-between items-center mb-2'}>
-                    <div className={`font-semibold text-slate-900 dark:text-gray-200 ${variant === 'compact' ? 'text-lg mb-2' : 'text-sm'}`}>
+                    <div className={`font-semibold text-gold-500 ${variant === 'compact' ? 'text-lg mb-2' : 'text-sm'}`}>
                         {character.name}
                     </div>
-                    <div className={`text-xs text-slate-500 dark:text-gray-300 ${variant === 'compact' ? 'mb-3' : ''}`}>
+                    <div className={`text-xs text-cyan-400 ${variant === 'compact' ? 'mb-3' : ''}`}>
                         {variant === 'compact'
                             ? `${character.race.name} ${character.class.name}`
                             : character.class.name
@@ -95,7 +95,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 )}
 
                 {/* Stats Display */}
-                <div className={`space-y-1 text-xs ${variant === 'compact' ? 'leading-relaxed' : ''} text-slate-600 dark:text-gray-400`}>
+                <div className={`space-y-1 text-xs ${variant === 'compact' ? 'leading-relaxed' : ''} text-cyan-100`}>
                     {/* HP/AP Values */}
                     <div className={variant === 'compact' ? '' : 'flex justify-between'}>
                         <span>HP: {character.derivedStats.HP.current}/{character.derivedStats.HP.max}</span>
@@ -130,8 +130,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
                     {/* Ability Count */}
                     {showAbilityCount && character.class.abilities.length > 0 && (
-                        <div className="text-center pt-1 border-t border-gray-400/20">
-                            <span className="text-xs text-slate-500 dark:text-gray-300">
+                        <div className="text-center pt-1 border-t border-cyan-900/30">
+                            <span className="text-xs text-cyan-400">
                                 {character.class.abilities.length} abilities
                             </span>
                         </div>
