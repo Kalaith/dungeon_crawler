@@ -5,6 +5,7 @@ import { Button } from '../ui/Button';
 import { InnService } from './InnService';
 import { TavernService } from './TavernService';
 import { TempleService } from './TempleService';
+import { HealerService } from './HealerService';
 
 type ServiceId = 'inn' | 'tavern' | 'shop' | 'temple' | 'healer' | 'blacksmith' | null;
 
@@ -31,6 +32,9 @@ export const TownHub: React.FC = () => {
     if (activeService === 'temple') {
         return <TempleService onClose={() => setActiveService(null)} />;
     }
+    if (activeService === 'healer') {
+        return <HealerService onClose={() => setActiveService(null)} />;
+    }
 
     const handleLeaveToOverworld = () => {
         setGameState('overworld');
@@ -45,7 +49,7 @@ export const TownHub: React.FC = () => {
         { id: 'tavern' as ServiceId, name: 'Tavern', icon: '🍺', available: true, description: 'Recruit adventurers' },
         { id: 'shop' as ServiceId, name: 'Shop', icon: '🛒', available: townData.hasShop, description: 'Buy and sell items' },
         { id: 'temple' as ServiceId, name: 'Temple', icon: '⛪', available: true, description: 'Blessings and resurrection' },
-        { id: 'healer' as ServiceId, name: 'Healer', icon: '⚕️', available: townData.hasHealer, description: 'Cure wounds and diseases' },
+        { id: 'healer' as ServiceId, name: 'Healer', icon: '⚕️', available: true, description: 'Cure wounds and diseases' },
         { id: 'blacksmith' as ServiceId, name: 'Blacksmith', icon: '⚒️', available: townData.hasBlacksmith, description: 'Repair and upgrade equipment' },
     ];
 
@@ -94,7 +98,7 @@ export const TownHub: React.FC = () => {
                                         Not available in this town
                                     </p>
                                 )}
-                                {service.available && service.id !== 'inn' && service.id !== 'tavern' && service.id !== 'temple' && (
+                                {service.available && service.id !== 'inn' && service.id !== 'tavern' && service.id !== 'temple' && service.id !== 'healer' && (
                                     <p className="text-xs text-blue-500 dark:text-blue-400 text-center mt-2">
                                         Coming Soon
                                     </p>
@@ -105,7 +109,7 @@ export const TownHub: React.FC = () => {
 
                     <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                         <p className="text-sm text-blue-800 dark:text-blue-200 text-center">
-                            💡 <strong>Tip:</strong> Visit the Inn to rest, the Tavern to recruit, or the Temple to resurrect fallen heroes!
+                            💡 <strong>Tip:</strong> Visit the Inn to rest, the Tavern to recruit, the Temple to resurrect, or the Healer to cure!
                         </p>
                     </div>
                 </div>
