@@ -28,7 +28,6 @@ const MOCK_EQUIPMENT: EquipmentItem[] = [
 export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({ onClose }) => {
     const { gold, subtractGold, canAfford } = useGoldStore();
     const [selectedService, setSelectedService] = useState<ServiceType>('repair');
-    const [selectedItem, setSelectedItem] = useState<EquipmentItem | null>(null);
 
     const getRepairCost = (item: EquipmentItem): number => {
         const damagePercent = 100 - item.condition;

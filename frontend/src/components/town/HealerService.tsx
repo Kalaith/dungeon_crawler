@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { usePartyStore } from '../../stores/usePartyStore';
 import { useGoldStore } from '../../stores/useGoldStore';
 import type { Character } from '../../types';
@@ -11,7 +11,6 @@ interface HealerServiceProps {
 export const HealerService: React.FC<HealerServiceProps> = ({ onClose }) => {
     const { party, addCharacterToParty } = usePartyStore();
     const { gold, subtractGold, canAfford } = useGoldStore();
-    const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
 
     const partyMembers = party.filter(c => c !== null) as Character[];
 
@@ -134,7 +133,7 @@ export const HealerService: React.FC<HealerServiceProps> = ({ onClose }) => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-green-400/8 to-emerald-400/8 dark:from-green-400/15 dark:to-emerald-400/15 p-8">
+        <div className="py-8 bg-gradient-to-br from-green-400/8 to-emerald-400/8 dark:from-green-400/15 dark:to-emerald-400/15 p-8">
             <div className="max-w-5xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-8">
@@ -205,7 +204,7 @@ export const HealerService: React.FC<HealerServiceProps> = ({ onClose }) => {
                             No party members to heal
                         </p>
                     ) : (
-                        <div className="space-y-4">
+                        <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
                             {partyMembers.map((character) => {
                                 const healCost = getHealCost(character);
                                 const statusCost = getCureStatusCost();

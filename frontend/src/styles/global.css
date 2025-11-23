@@ -31,7 +31,7 @@ html {
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow: auto;
   /* user-select: none; - REMOVED to allow text selection and copying */
 }
 
