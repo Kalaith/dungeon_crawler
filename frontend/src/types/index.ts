@@ -106,17 +106,22 @@ export interface ClassAbility {
   };
 }
 
+export type SkillCategory = 'Combat' | 'Body' | 'Social' | 'Nature' | 'Lore' | 'Craftsmanship' | 'Intuitive';
+
 export interface Skill {
   id: string;
   name: string;
-  attribute: Attribute; // Primary attribute
-  attribute2?: Attribute; // Secondary attribute (if applicable)
-  category: 'Combat' | 'Physical' | 'Social' | 'Nature' | 'Lore' | 'Craftsmanship';
+  category: SkillCategory;
+  primaryAttribute: Attribute;
+  secondaryAttributes: Attribute[]; // For advantage calculation
   description: string;
+  maxIncreasePerLevel: number;
 }
 
-export interface CharacterSkill extends Skill {
-  value: number; // The skill level/rating
+export interface CharacterSkill {
+  skillId: string; // Reference to skill definition
+  value: number; // The skill level/rating (-20 to +18)
+  proficient: boolean; // Whether character has proficiency in this skill
 }
 
 export interface Feat {

@@ -19,6 +19,9 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ characterIndex, onAction
   const character = party[characterIndex];
   if (!character || !character.derivedStats) return null;
 
+  // Check if character is unconscious (HP <= 0)
+  const isUnconscious = character.derivedStats.HP.current <= 0;
+
   const hasSpells = character.spells && character.spells.length > 0;
   const hasAbilities = character.class.abilities && character.class.abilities.length > 0;
   const currentAP = character.derivedStats.AP.current;
@@ -61,59 +64,71 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ characterIndex, onAction
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <button
-            onClick={() => onAction('attack')}
-            disabled={currentActionEconomy.actionUsed}
-            className="p-3 bg-red-900/50 border-2 border-red-500 text-red-100 font-bold text-sm uppercase tracking-wider hover:bg-red-800 hover:border-red-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            ⚔️ Attack
-          </button>
-
-          {hasSpells && (
+        {/* Unconscious State */}
+        {isUnconscious ? (
+          <div className="p-6 bg-red-900/30 border-2 border-red-500 rounded text-center">
+            <div className="text-red-400 text-lg font-bold mb-2">
+              💀 {character.name} is Unconscious!
+            </div>
+            <div className="text-gray-300 text-sm">
+              This character cannot take actions until revived.
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-3">
             <button
-              onClick={() => setShowSpellSelector(true)}
-              disabled={currentAP === 0 || currentActionEconomy.actionUsed}
-              className="p-3 bg-purple-900/50 border-2 border-purple-500 text-purple-100 font-bold text-sm uppercase tracking-wider hover:bg-purple-800 hover:border-purple-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              ✨ Cast Spell
-            </button>
-          )}
-
-          {hasAbilities && (
-            <button
-              onClick={() => setShowAbilitySelector(true)}
+              onClick={() => onAction('attack')}
               disabled={currentActionEconomy.actionUsed}
-              className="p-3 bg-indigo-900/50 border-2 border-indigo-500 text-indigo-100 font-bold text-sm uppercase tracking-wider hover:bg-indigo-800 hover:border-indigo-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-3 bg-red-900/50 border-2 border-red-500 text-red-100 font-bold text-sm uppercase tracking-wider hover:bg-red-800 hover:border-red-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              💫 Ability
+              ⚔️ Attack
             </button>
-          )}
 
-          <button
-            onClick={() => onAction('defend')}
-            disabled={currentActionEconomy.actionUsed}
-            className="p-3 bg-blue-900/50 border-2 border-blue-500 text-blue-100 font-bold text-sm uppercase tracking-wider hover:bg-blue-800 hover:border-blue-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            🛡️ Defend
-          </button>
+            {hasSpells && (
+              <button
+                onClick={() => setShowSpellSelector(true)}
+                disabled={currentAP === 0 || currentActionEconomy.actionUsed}
+                className="p-3 bg-purple-900/50 border-2 border-purple-500 text-purple-100 font-bold text-sm uppercase tracking-wider hover:bg-purple-800 hover:border-purple-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                ✨ Cast Spell
+              </button>
+            )}
 
-          <button
-            onClick={() => onAction('item')}
-            disabled={currentActionEconomy.actionUsed}
-            className="p-3 bg-green-900/50 border-2 border-green-500 text-green-100 font-bold text-sm uppercase tracking-wider hover:bg-green-800 hover:border-green-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            🎒 Item
-          </button>
+            {hasAbilities && (
+              <button
+                onClick={() => setShowAbilitySelector(true)}
+                disabled={currentActionEconomy.actionUsed}
+                className="p-3 bg-indigo-900/50 border-2 border-indigo-500 text-indigo-100 font-bold text-sm uppercase tracking-wider hover:bg-indigo-800 hover:border-indigo-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                💫 Ability
+              </button>
+            )}
 
-          <button
-            onClick={() => onAction('row-switch')}
-            disabled={currentActionEconomy.movementUsed}
-            className="p-3 bg-yellow-900/50 border-2 border-yellow-500 text-yellow-100 font-bold text-sm uppercase tracking-wider hover:bg-yellow-800 hover:border-yellow-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            ↔️ Row
-          </button>
-        </div>
+            <button
+              onClick={() => onAction('defend')}
+              disabled={currentActionEconomy.actionUsed}
+              className="p-3 bg-blue-900/50 border-2 border-blue-500 text-blue-100 font-bold text-sm uppercase tracking-wider hover:bg-blue-800 hover:border-blue-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              🛡️ Defend
+            </button>
+
+            <button
+              onClick={() => onAction('item')}
+              disabled={currentActionEconomy.actionUsed}
+              className="p-3 bg-green-900/50 border-2 border-green-500 text-green-100 font-bold text-sm uppercase tracking-wider hover:bg-green-800 hover:border-green-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              🎒 Item
+            </button>
+
+            <button
+              onClick={() => onAction('row-switch')}
+              disabled={currentActionEconomy.movementUsed}
+              className="p-3 bg-yellow-900/50 border-2 border-yellow-500 text-yellow-100 font-bold text-sm uppercase tracking-wider hover:bg-yellow-800 hover:border-yellow-400 transition-all active:translate-y-0.5 shadow-md rounded disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              ↔️ Row
+            </button>
+          </div>
+        )}
 
         <div className="mt-3 text-xs text-gray-600 dark:text-gray-400 text-center">
           Position: <span className="font-semibold capitalize">{character.position.row} Row</span>

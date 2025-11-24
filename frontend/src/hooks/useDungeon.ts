@@ -122,7 +122,6 @@ export const useDungeon = () => {
           }))
         ];
 
-        showMessage(`Encountered FOE: ${foeDef.name}!`);
         startCombat(enemy, participants);
         return true;
       }
@@ -207,7 +206,6 @@ export const useDungeon = () => {
       const door = interactiveTiles[doorId];
       if (door && door.state === 'closed') {
         updateInteractiveTile(doorId, { state: 'open' });
-        showMessage('You opened the door.');
         return; // Don't move, just open
       } else if (door && door.state === 'locked') {
         showMessage('The door is locked.');
@@ -301,7 +299,6 @@ export const useDungeon = () => {
                   }))
                 ];
 
-                showMessage(`Encountered ${enemy.name}!`);
                 startCombat(enemy, participants);
                 resetEncounterCounter();
               }
@@ -391,7 +388,6 @@ export const useDungeon = () => {
                   }))
                 ];
 
-                showMessage(`Encountered ${enemy.name}!`);
                 startCombat(enemy, participants);
                 resetEncounterCounter();
               }

@@ -1,5 +1,6 @@
-import type { Character, DerivedStats, Attribute, Skill } from '../types';
+import type { Character, DerivedStats, Attribute, CharacterSkill } from '../types';
 import { v4 as uuidv4 } from 'uuid';
+import { initializeCharacterSkills } from './skillChecks';
 
 // Define the store interface needed for character creation
 interface CharacterCreationStoreData {
@@ -8,7 +9,7 @@ interface CharacterCreationStoreData {
     selectedClass: any;
     attributes: Record<Attribute, number>;
     negativeAttributes: any;
-    selectedSkills: Skill[];
+    selectedSkills: any[]; // Legacy, not used anymore
     selectedFeats: any[];
     portrait: string;
     selectedDeity: string | null;
@@ -68,6 +69,32 @@ export function applyRacialModifiers(
 }
 
 /**
+ * Get class-specific skill proficiencies
+ * Maps character classes to their proficient skills
+ */
+function getClassSkillProficiencies(classId: string): string[] {
+    const proficiencyMap: Record<string, string[]> = {
+        'warrior': ['swords', 'axes', 'cutting_weapons', 'self_control', 'tactics'],
+        'rogue': ['stealth', 'hide', 'locks', 'pickpocket', 'perception', 'pointed_weapons'],
+        'wizard': ['arcane_lore', 'read_write', 'ancient_tongues', 'history'],
+        'cleric': ['ritual', 'treat_wounds', 'treat_disease', 'convert', 'history'],
+        'ranger': ['track', 'survival', 'animal_lore', 'herb_lore', 'missile_weapons'],
+        'paladin': ['swords', 'ritual', 'convert', 'self_control', 'ride'],
+        'barbarian': ['axes', 'two_handed_swords', 'survival', 'track', 'swim'],
+        'bard': ['instrument', 'convert', 'seduce', 'human_nature', 'tongues'],
+        'druid': ['herb_lore', 'animal_lore', 'survival', 'ritual', 'treat_wounds'],
+        'monk': ['unarmed', 'acrobatics', 'physical_control', 'self_control'],
+        'sorcerer': ['arcane_lore', 'convert', 'seduce'],
+        'warlock': ['arcane_lore', 'lie', 'human_nature', 'ritual'],
+        'jester': ['instrument', 'dance', 'lie', 'seduce', 'cheat', 'human_nature'],
+        'hunter': ['track', 'survival', 'animal_lore', 'stealth', 'missile_weapons', 'perception'],
+        'magician': ['arcane_lore', 'alchemy', 'herb_lore', 'read_write']
+    };
+
+    return proficiencyMap[classId] || [];
+}
+
+/**
  * Create a complete character object from wizard store data
  */
 export function createCharacterFromWizardData(store: CharacterCreationStoreData): Character {
@@ -88,6 +115,12 @@ export function createCharacterFromWizardData(store: CharacterCreationStoreData)
         store.selectedRace.movementRate
     );
 
+    // Get class-specific skill proficiencies
+    const proficientSkills = getClassSkillProficiencies(store.selectedClass.id);
+
+    // Initialize all 51 skills with proficiencies
+    const characterSkills: CharacterSkill[] = initializeCharacterSkills(proficientSkills);
+
     const newCharacter: Character = {
         id: uuidv4(),
         name: store.name,
@@ -99,7 +132,7 @@ export function createCharacterFromWizardData(store: CharacterCreationStoreData)
         attributes: finalAttributes,
         negativeAttributes: store.negativeAttributes,
         derivedStats: derivedStats,
-        skills: store.selectedSkills.map((s: Skill) => ({ ...s, value: 1 })),
+        skills: characterSkills, // All 51 skills initialized
         feats: store.selectedFeats,
         equipment: {},
         inventory: [],

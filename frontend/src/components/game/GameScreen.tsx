@@ -1,16 +1,32 @@
 import React, { useEffect } from 'react';
 import { useDungeonStore } from '../../stores/useDungeonStore';
+import { useAutomapStore } from '../../stores/useAutomapStore';
 import { DungeonView } from './DungeonView';
 import { Minimap } from './Minimap';
 import { GameControls } from './GameControls';
+import { Automap } from '../dungeon/Automap';
+import { Button } from '../ui/Button';
 
 import { useGameOverCheck } from '../../hooks/useGameOverCheck';
 
 export const GameScreen: React.FC = () => {
   const { addExploredTile, playerPosition } = useDungeonStore();
+  const { toggleAutomap } = useAutomapStore();
 
   // Monitor for game over condition
   useGameOverCheck();
+
+  // Handle M key to toggle automap
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === 'm' || e.key === 'M') {
+        toggleAutomap();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [toggleAutomap]);
 
   useEffect(() => {
     // Initialize explored map with starting position
@@ -38,6 +54,21 @@ export const GameScreen: React.FC = () => {
       <div className="lg:hidden absolute bottom-4 right-4">
         <GameControls />
       </div>
+
+      {/* Automap Toggle Button */}
+      <div className="absolute top-4 left-4">
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={toggleAutomap}
+          title="Toggle Automap (M)"
+        >
+          🗺️
+        </Button>
+      </div>
+
+      {/* Automap Overlay */}
+      <Automap />
     </div>
   );
 };
