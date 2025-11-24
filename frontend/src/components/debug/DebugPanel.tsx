@@ -29,6 +29,7 @@ export const DebugPanel: React.FC = () => {
 
     const {
         startCombat,
+        endCombat,
         currentEnemy,
         updateEnemyHP,
         inCombat
@@ -51,7 +52,7 @@ export const DebugPanel: React.FC = () => {
 
     const handleTriggerCombat = () => {
         if (inCombat) return;
-        const goblin = enemies[0];
+        const goblin = enemies.find(e => e.id === 'goblin') || enemies[0];
         if (!goblin) return;
 
         const partyParticipants = party
@@ -83,6 +84,10 @@ export const DebugPanel: React.FC = () => {
             .filter((p): p is CombatParticipant => p !== null);
 
         startCombat(randomEnemy, partyParticipants);
+    };
+
+    const handleForceEndCombat = () => {
+        endCombat();
     };
 
     const handleKillParty = () => {
@@ -248,6 +253,9 @@ export const DebugPanel: React.FC = () => {
                             <button onClick={handleKillEnemy} className="w-full bg-red-900/50 hover:bg-red-800 text-red-200 py-1 px-2 rounded text-sm border border-red-800">
                                 Kill Enemy
                             </button>
+                            <button onClick={handleForceEndCombat} className="w-full bg-orange-900/50 hover:bg-orange-800 text-orange-200 py-1 px-2 rounded text-sm border border-orange-800">
+                                ⚠️ Force End Combat
+                            </button>
                         </div>
                     </section>
 
@@ -315,6 +323,9 @@ export const DebugPanel: React.FC = () => {
                             <button onClick={() => useDungeonStore.getState().openAllDoors()} className="w-full bg-indigo-900/50 hover:bg-indigo-800 text-indigo-200 py-1 px-2 rounded text-sm border border-indigo-800">
                                 Open All Doors
                             </button>
+                            <div className="text-xs text-gray-400 mt-2">
+                                Steps until encounter: {useDungeonStore.getState().stepsUntilEncounter}
+                            </div>
                         </div>
                     </section>
 

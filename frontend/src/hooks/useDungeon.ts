@@ -6,6 +6,7 @@ import { useInventoryStore } from '../stores/useInventoryStore';
 import { useProgressionStore } from '../stores/useProgressionStore';
 import { useUIStore } from '../stores/uiStore';
 import { FOE_DATA } from '../data/foes';
+import { enemies } from '../data/enemies';
 import type { Direction, Position, CombatParticipant, Enemy } from '../types';
 
 export const useDungeon = () => {
@@ -16,6 +17,9 @@ export const useDungeon = () => {
     setPlayerFacing,
     addExploredTile,
     incrementStepCount,
+    stepsUntilEncounter,
+    decrementEncounterCounter,
+    resetEncounterCounter,
     currentDungeonMap,
     generateFloor,
     changeFloor,
@@ -254,45 +258,56 @@ export const useDungeon = () => {
         showMessage('You found treasure!');
       }
 
-      // Random encounter check (scaled by floor)
-      const encounterChance = 0.10 + (currentFloor * 0.02);
-      if (Math.random() < encounterChance && tile === '.') {
-        setTimeout(() => {
-          // Scale enemies by floor
-          const floorEnemies = Object.values(FOE_DATA).filter(e => e.level <= currentFloor + 1);
-          if (floorEnemies.length > 0) {
-            // Create a random enemy instance
-            const enemyDef = floorEnemies[Math.floor(Math.random() * floorEnemies.length)];
-            const enemy: Enemy = {
-              ...enemyDef,
-              id: `enemy_${Math.random().toString(36).substr(2, 9)}`,
-              hp: enemyDef.derivedStats.HP.max,
-              maxHp: enemyDef.derivedStats.HP.max,
-              statusEffects: []
-            };
+      // Random encounter check (Step Counter System)
+      if (tile === '.') {
+        decrementEncounterCounter();
 
-            // Prepare combat participants
-            const partyMembers = getAlivePartyMembers();
-            const participants: CombatParticipant[] = [
-              {
-                id: enemy.id,
-                type: 'enemy',
-                enemy: enemy,
-                initiative: enemy.derivedStats.Initiative,
-                status: 'active'
-              },
-              ...partyMembers.map((char) => ({
-                id: char.id,
-                type: 'party' as const,
-                character: char,
-                initiative: char.derivedStats.Initiative,
-                status: 'active' as const
-              }))
-            ];
+        if (stepsUntilEncounter <= 0) {
+          setTimeout(() => {
+            // Scale enemies by floor
+            const floorEnemies = enemies.filter(e => e.level <= currentFloor + 1 && e.level >= Math.max(1, currentFloor - 2));
+            // Fallback if no specific level enemies found
+            const availableEnemies = floorEnemies.length > 0 ? floorEnemies : enemies;
 
-            startCombat(enemy, participants);
-          }
-        }, 500);
+            if (availableEnemies.length > 0) {
+              // Create a random enemy instance
+              const enemyDef = availableEnemies[Math.floor(Math.random() * availableEnemies.length)];
+
+              if (enemyDef) {
+                const enemy: Enemy = {
+                  ...enemyDef,
+                  id: `enemy_${Math.random().toString(36).substr(2, 9)}`,
+                  hp: enemyDef.maxHp,
+                  maxHp: enemyDef.maxHp,
+                  statusEffects: []
+                };
+
+                // Prepare combat participants
+                const partyMembers = getAlivePartyMembers();
+                const participants: CombatParticipant[] = [
+                  {
+                    id: enemy.id,
+                    type: 'enemy',
+                    enemy: enemy,
+                    initiative: enemyDef.derivedStats.Initiative,
+                    status: 'active'
+                  },
+                  ...partyMembers.map((char) => ({
+                    id: char.id,
+                    type: 'party' as const,
+                    character: char,
+                    initiative: char.derivedStats.Initiative,
+                    status: 'active' as const
+                  }))
+                ];
+
+                showMessage(`Encountered ${enemy.name}!`);
+                startCombat(enemy, participants);
+                resetEncounterCounter();
+              }
+            }
+          }, 500);
+        }
       } else if (tile === '$') {
         // Generate treasure loot scaled by floor
         const loot = generateLoot(currentFloor);
@@ -307,7 +322,7 @@ export const useDungeon = () => {
         }
       }
     }
-  }, [inCombat, playerPosition, playerFacing, getDirectionVector, getTile, setPlayerPosition, addExploredTile, incrementStepCount, showMessage, startCombat, generateLoot, addGoldToParty, changeFloor, currentFloor, getAlivePartyMembers, addItemsToInventory, interactiveTiles, updateInteractiveTile, checkForFoeCollision, moveFoes]);
+  }, [inCombat, playerPosition, playerFacing, getDirectionVector, getTile, setPlayerPosition, addExploredTile, incrementStepCount, showMessage, startCombat, generateLoot, addGoldToParty, changeFloor, currentFloor, getAlivePartyMembers, addItemsToInventory, interactiveTiles, updateInteractiveTile, checkForFoeCollision, moveFoes, stepsUntilEncounter, decrementEncounterCounter, resetEncounterCounter]);
 
   const moveBackward = useCallback(() => {
     if (inCombat) return;
@@ -335,9 +350,59 @@ export const useDungeon = () => {
       }
 
       incrementStepCount();
+
+      // Also check for encounters when moving backward
+      if (tile === '.') {
+        decrementEncounterCounter();
+        if (stepsUntilEncounter <= 0) {
+          // Trigger combat logic (reuse from moveForward or extract to helper)
+          // For now, just reset to avoid immediate loop, but ideally trigger combat
+          setTimeout(() => {
+            const floorEnemies = enemies.filter(e => e.level <= currentFloor + 1 && e.level >= Math.max(1, currentFloor - 2));
+            const availableEnemies = floorEnemies.length > 0 ? floorEnemies : enemies;
+
+            if (availableEnemies.length > 0) {
+              const enemyDef = availableEnemies[Math.floor(Math.random() * availableEnemies.length)];
+
+              if (enemyDef) {
+                const enemy: Enemy = {
+                  ...enemyDef,
+                  id: `enemy_${Math.random().toString(36).substr(2, 9)}`,
+                  hp: enemyDef.maxHp,
+                  maxHp: enemyDef.maxHp,
+                  statusEffects: []
+                };
+
+                const partyMembers = getAlivePartyMembers();
+                const participants: CombatParticipant[] = [
+                  {
+                    id: enemy.id,
+                    type: 'enemy',
+                    enemy: enemy,
+                    initiative: enemyDef.derivedStats.Initiative,
+                    status: 'active'
+                  },
+                  ...partyMembers.map((char) => ({
+                    id: char.id,
+                    type: 'party' as const,
+                    character: char,
+                    initiative: char.derivedStats.Initiative,
+                    status: 'active' as const
+                  }))
+                ];
+
+                showMessage(`Encountered ${enemy.name}!`);
+                startCombat(enemy, participants);
+                resetEncounterCounter();
+              }
+            }
+          }, 500);
+        }
+      }
+
       moveFoes();
     }
-  }, [inCombat, playerPosition, playerFacing, getDirectionVector, getTile, setPlayerPosition, addExploredTile, incrementStepCount, checkForFoeCollision, moveFoes]);
+  }, [inCombat, playerPosition, playerFacing, getDirectionVector, getTile, setPlayerPosition, addExploredTile, incrementStepCount, checkForFoeCollision, moveFoes, stepsUntilEncounter, decrementEncounterCounter, resetEncounterCounter, currentFloor, getAlivePartyMembers, showMessage, startCombat]);
 
   const turnLeft = useCallback(() => {
     if (inCombat) return;

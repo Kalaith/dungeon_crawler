@@ -11,6 +11,7 @@ interface DungeonStore {
     playerFacing: Direction;
     exploredMap: Set<string>;
     stepCount: number;
+    stepsUntilEncounter: number;
     currentDungeonMap: DungeonMap | null;
     foes: FOEInstance[];
     interactiveTiles: Record<string, InteractiveTile>;
@@ -20,6 +21,8 @@ interface DungeonStore {
     setPlayerFacing: (direction: Direction) => void;
     addExploredTile: (x: number, y: number) => void;
     incrementStepCount: () => void;
+    decrementEncounterCounter: () => void;
+    resetEncounterCounter: () => void;
     generateFloor: (floorNumber: number) => void;
     changeFloor: (direction: 'up' | 'down') => void;
     resetDungeon: () => void;
@@ -44,6 +47,7 @@ export const useDungeonStore = create<DungeonStore>()(
             playerFacing: 0,
             exploredMap: new Set(),
             stepCount: 0,
+            stepsUntilEncounter: 30, // Initial safe buffer
             currentDungeonMap: null,
             foes: [],
             interactiveTiles: {},
@@ -58,6 +62,15 @@ export const useDungeonStore = create<DungeonStore>()(
             }),
 
             incrementStepCount: () => set((state) => ({ stepCount: state.stepCount + 1 })),
+
+            decrementEncounterCounter: () => set((state) => ({
+                stepsUntilEncounter: Math.max(0, state.stepsUntilEncounter - 1)
+            })),
+
+            resetEncounterCounter: () => set(() => ({
+                // Random steps between 20 and 45
+                stepsUntilEncounter: Math.floor(Math.random() * 26) + 20
+            })),
 
             generateFloor: (floorNumber) => {
                 logger.info('🏗️ generateFloor called with floor:', floorNumber);
@@ -96,8 +109,9 @@ export const useDungeonStore = create<DungeonStore>()(
 
                 if (newFloor < 1) return;
 
-                const { generateFloor } = get();
+                const { generateFloor, resetEncounterCounter } = get();
                 generateFloor(newFloor);
+                resetEncounterCounter();
             },
 
             resetDungeon: () => set({
@@ -106,6 +120,7 @@ export const useDungeonStore = create<DungeonStore>()(
                 playerFacing: 0,
                 exploredMap: new Set(),
                 stepCount: 0,
+                stepsUntilEncounter: 30,
                 currentDungeonMap: null,
                 foes: [],
                 interactiveTiles: {}
@@ -160,6 +175,7 @@ export const useDungeonStore = create<DungeonStore>()(
                 playerFacing: state.playerFacing,
                 exploredMap: Array.from(state.exploredMap),
                 stepCount: state.stepCount,
+                stepsUntilEncounter: state.stepsUntilEncounter,
                 foes: state.foes,
                 interactiveTiles: state.interactiveTiles
             }),

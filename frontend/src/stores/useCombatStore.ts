@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { Enemy, CombatParticipant, ActiveStatusEffect } from '../types';
 import { GAME_CONFIG } from '../data/constants';
+import { useGameStateStore } from './useGameStateStore';
 
 interface ActionEconomy {
     actionUsed: boolean;
@@ -100,15 +101,23 @@ export const useCombatStore = create<CombatStore>((set, get) => ({
             combatLog: [`Combat started with ${enemy.name}!`],
             victoryData: null
         });
+
+        // Set game state to combat to show UI
+        useGameStateStore.getState().setGameState('combat');
     },
 
-    endCombat: () => set({
-        inCombat: false,
-        currentEnemy: null,
-        combatTurnOrder: [],
-        currentTurn: 0,
-        victoryData: null
-    }),
+    endCombat: () => {
+        set({
+            inCombat: false,
+            currentEnemy: null,
+            combatTurnOrder: [],
+            currentTurn: 0,
+            victoryData: null
+        });
+
+        // Return to dungeon view
+        useGameStateStore.getState().setGameState('dungeon');
+    },
 
     addCombatLog: (message) => set((state) => {
         const newLog = [...state.combatLog, message];
