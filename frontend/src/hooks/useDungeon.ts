@@ -5,8 +5,8 @@ import { usePartyStore } from '../stores/usePartyStore';
 import { useInventoryStore } from '../stores/useInventoryStore';
 import { useProgressionStore } from '../stores/useProgressionStore';
 import { useUIStore } from '../stores/uiStore';
-import { enemies } from '../data/enemies';
-import type { Direction } from '../types';
+import { FOE_DATA } from '../data/foes';
+import type { Direction, Position, CombatParticipant, Enemy } from '../types';
 
 export const useDungeon = () => {
   const {
@@ -19,7 +19,11 @@ export const useDungeon = () => {
     currentDungeonMap,
     generateFloor,
     changeFloor,
-    currentFloor
+    currentFloor,
+    foes,
+    interactiveTiles,
+    setFoes,
+    updateInteractiveTile
   } = useDungeonStore();
 
   const { inCombat, startCombat } = useCombatStore();
@@ -65,14 +69,121 @@ export const useDungeon = () => {
 
   const getTileAhead = useCallback(() => getTileInDirection(playerFacing), [getTileInDirection, playerFacing]);
   const getTileFarAhead = useCallback(() => getTileInDirection(playerFacing, 2), [getTileInDirection, playerFacing]);
+
   const getTileLeft = useCallback(() => {
+    // Get the tile to the left of the player (perpendicular to facing)
     const leftDirection = ((playerFacing + 3) % 4) as Direction;
-    return getTileInDirection(leftDirection);
-  }, [getTileInDirection, playerFacing]);
+    const [lx, ly] = getDirectionVector(leftDirection);
+    return getTile(playerPosition.x + lx, playerPosition.y + ly);
+  }, [playerFacing, getDirectionVector, getTile, playerPosition]);
+
   const getTileRight = useCallback(() => {
+    // Get the tile to the right of the player (perpendicular to facing)
     const rightDirection = ((playerFacing + 1) % 4) as Direction;
-    return getTileInDirection(rightDirection);
-  }, [getTileInDirection, playerFacing]);
+    const [rx, ry] = getDirectionVector(rightDirection);
+    return getTile(playerPosition.x + rx, playerPosition.y + ry);
+  }, [playerFacing, getDirectionVector, getTile, playerPosition]);
+
+  const checkForFoeCollision = useCallback((pos: Position) => {
+    const foe = foes.find(f => f.x === pos.x && f.y === pos.y);
+    if (foe) {
+      // Trigger combat with FOE
+      const foeDef = FOE_DATA[foe.defId];
+      if (foeDef) {
+        // Prepare combat participants
+        const partyMembers = getAlivePartyMembers();
+
+        const enemy: Enemy = {
+          ...foeDef,
+          id: foe.id,
+          hp: foe.hp,
+          maxHp: foe.maxHp,
+          statusEffects: []
+        };
+
+        const participants: CombatParticipant[] = [
+          {
+            id: foe.id,
+            type: 'enemy',
+            enemy: enemy,
+            initiative: foeDef.derivedStats.Initiative,
+            status: 'active'
+          },
+          ...partyMembers.map((char) => ({
+            id: char.id,
+            type: 'party' as const,
+            character: char,
+            initiative: char.derivedStats.Initiative,
+            status: 'active' as const
+          }))
+        ];
+
+        showMessage(`Encountered FOE: ${foeDef.name}!`);
+        startCombat(enemy, participants);
+        return true;
+      }
+    }
+    return false;
+  }, [foes, getAlivePartyMembers, showMessage, startCombat]);
+
+  const moveFoes = useCallback(() => {
+    const newFoes = [...foes];
+    let updated = false;
+
+    newFoes.forEach(foe => {
+      // Simple random movement for now, can be improved with patterns
+      // Only move if not in combat (which is handled globally, but good to check)
+
+      // 50% chance to move
+      if (Math.random() > 0.5) return;
+
+      const directions: Direction[] = [0, 1, 2, 3];
+      const randomDir = directions[Math.floor(Math.random() * directions.length)];
+      const [dx, dy] = getDirectionVector(randomDir);
+      const newX = foe.x + dx;
+      const newY = foe.y + dy;
+
+      // Check bounds and walls
+      if (getTile(newX, newY) === '.') {
+        // Check if another FOE is there
+        if (!newFoes.some(f => f.id !== foe.id && f.x === newX && f.y === newY)) {
+          foe.x = newX;
+          foe.y = newY;
+          foe.facing = randomDir;
+          updated = true;
+        }
+      }
+    });
+
+    if (updated) {
+      setFoes(newFoes);
+
+      // Check for collision after FOE move
+      if (checkForFoeCollision(playerPosition)) {
+        return;
+      }
+    }
+  }, [foes, getDirectionVector, getTile, setFoes, checkForFoeCollision, playerPosition]);
+
+  const interactWithTile = useCallback(() => {
+    const tileId = Object.keys(interactiveTiles).find(key => {
+      const tile = interactiveTiles[key];
+      return tile.x === playerPosition.x && tile.y === playerPosition.y;
+    });
+
+    if (tileId) {
+      const tile = interactiveTiles[tileId];
+      if (tile.type === 'gathering_point' && tile.state === 'active') {
+        // Gather logic
+        const loot = generateLoot(currentFloor); // Simplified loot
+        addGoldToParty(loot.gold);
+        if (loot.items.length > 0) addItemsToInventory(loot.items);
+
+        showMessage(`Gathered: ${loot.gold} gold${loot.items.length > 0 ? ' and items' : ''}`);
+        updateInteractiveTile(tileId, { state: 'depleted' });
+      }
+    }
+  }, [interactiveTiles, playerPosition, generateLoot, currentFloor, addGoldToParty, addItemsToInventory, showMessage, updateInteractiveTile]);
 
   const moveForward = useCallback(() => {
     if (inCombat) return;
@@ -82,29 +193,49 @@ export const useDungeon = () => {
     const newY = playerPosition.y + dy;
     const tile = getTile(newX, newY);
 
+    // Check for interactive tiles blocking path (Doors)
+    const doorId = Object.keys(interactiveTiles).find(key => {
+      const t = interactiveTiles[key];
+      return t.x === newX && t.y === newY && t.type === 'door';
+    });
+
+    if (doorId) {
+      const door = interactiveTiles[doorId];
+      if (door && door.state === 'closed') {
+        updateInteractiveTile(doorId, { state: 'open' });
+        showMessage('You opened the door.');
+        return; // Don't move, just open
+      } else if (door && door.state === 'locked') {
+        showMessage('The door is locked.');
+        return;
+      }
+    }
+
     if (tile !== '#') {
+      // Check for FOE collision before moving
+      if (checkForFoeCollision({ x: newX, y: newY })) {
+        return;
+      }
+
       setPlayerPosition({ x: newX, y: newY });
-      addExploredTile(newX, newY);
+
+      // Reveal tiles in a 1-tile radius around the player
+      for (let dx = -1; dx <= 1; dx++) {
+        for (let dy = -1; dy <= 1; dy++) {
+          const exploreX = newX + dx;
+          const exploreY = newY + dy;
+          addExploredTile(exploreX, exploreY);
+        }
+      }
+
       incrementStepCount();
+
+      // Move FOEs after player moves
+      moveFoes();
 
       // Handle special tiles
       if (tile === '<') {
         showMessage('You found stairs going up! Press Enter to ascend.');
-        // Check if player wants to go up - simplified for now, auto-trigger or wait for input?
-        // The original code had a timeout to simulate interaction or just prompt.
-        // Let's keep the prompt. Actual interaction usually requires a key press.
-        // But here we just show message. The key handler in GameControls handles the actual floor change?
-        // No, GameControls calls moveForward.
-        // Wait, the original code had:
-        /*
-          setTimeout(() => {
-            if (currentFloor > 1) {
-              changeFloor('up');
-              showMessage(`Ascending to floor ${currentFloor - 1}...`);
-            } ...
-          }, 100);
-        */
-        // This means walking onto stairs triggers them immediately.
         setTimeout(() => {
           if (currentFloor > 1) {
             changeFloor('up');
@@ -121,8 +252,6 @@ export const useDungeon = () => {
         }, 100);
       } else if (tile === '$') {
         showMessage('You found treasure!');
-      } else if (tile === '+') {
-        showMessage('You opened a door!');
       }
 
       // Random encounter check (scaled by floor)
@@ -130,19 +259,34 @@ export const useDungeon = () => {
       if (Math.random() < encounterChance && tile === '.') {
         setTimeout(() => {
           // Scale enemies by floor
-          const floorEnemies = enemies.filter(e => e.level <= currentFloor + 1);
+          const floorEnemies = Object.values(FOE_DATA).filter(e => e.level <= currentFloor + 1);
           if (floorEnemies.length > 0) {
-            const enemy = { ...floorEnemies[Math.floor(Math.random() * floorEnemies.length)] };
+            // Create a random enemy instance
+            const enemyDef = floorEnemies[Math.floor(Math.random() * floorEnemies.length)];
+            const enemy: Enemy = {
+              ...enemyDef,
+              id: `enemy_${Math.random().toString(36).substr(2, 9)}`,
+              hp: enemyDef.derivedStats.HP.max,
+              maxHp: enemyDef.derivedStats.HP.max,
+              statusEffects: []
+            };
 
             // Prepare combat participants
             const partyMembers = getAlivePartyMembers();
-            const participants = [
-              { type: 'enemy' as const, character: { ...enemy, hp: enemy.maxHp }, agi: enemy.agi },
+            const participants: CombatParticipant[] = [
+              {
+                id: enemy.id,
+                type: 'enemy',
+                enemy: enemy,
+                initiative: enemy.derivedStats.Initiative,
+                status: 'active'
+              },
               ...partyMembers.map((char) => ({
+                id: char.id,
                 type: 'party' as const,
                 character: char,
-                index: party.indexOf(char),
-                agi: char.agi
+                initiative: char.derivedStats.Initiative,
+                status: 'active' as const
               }))
             ];
 
@@ -163,7 +307,7 @@ export const useDungeon = () => {
         }
       }
     }
-  }, [inCombat, playerPosition, playerFacing, getDirectionVector, getTile, setPlayerPosition, addExploredTile, incrementStepCount, showMessage, startCombat, generateLoot, addGoldToParty, changeFloor, currentFloor, getAlivePartyMembers, party, addItemsToInventory]);
+  }, [inCombat, playerPosition, playerFacing, getDirectionVector, getTile, setPlayerPosition, addExploredTile, incrementStepCount, showMessage, startCombat, generateLoot, addGoldToParty, changeFloor, currentFloor, getAlivePartyMembers, addItemsToInventory, interactiveTiles, updateInteractiveTile, checkForFoeCollision, moveFoes]);
 
   const moveBackward = useCallback(() => {
     if (inCombat) return;
@@ -174,21 +318,38 @@ export const useDungeon = () => {
     const tile = getTile(newX, newY);
 
     if (tile !== '#') {
+      // Check for FOE collision
+      if (checkForFoeCollision({ x: newX, y: newY })) {
+        return;
+      }
+
       setPlayerPosition({ x: newX, y: newY });
-      addExploredTile(newX, newY);
+
+      // Reveal tiles in a 1-tile radius around the player
+      for (let dx = -1; dx <= 1; dx++) {
+        for (let dy = -1; dy <= 1; dy++) {
+          const exploreX = newX + dx;
+          const exploreY = newY + dy;
+          addExploredTile(exploreX, exploreY);
+        }
+      }
+
       incrementStepCount();
+      moveFoes();
     }
-  }, [inCombat, playerPosition, playerFacing, getDirectionVector, getTile, setPlayerPosition, addExploredTile, incrementStepCount]);
+  }, [inCombat, playerPosition, playerFacing, getDirectionVector, getTile, setPlayerPosition, addExploredTile, incrementStepCount, checkForFoeCollision, moveFoes]);
 
   const turnLeft = useCallback(() => {
     if (inCombat) return;
     setPlayerFacing(((playerFacing + 3) % 4) as Direction);
-  }, [inCombat, playerFacing, setPlayerFacing]);
+    moveFoes(); // Turning takes a turn? Usually yes in these games.
+  }, [inCombat, playerFacing, setPlayerFacing, moveFoes]);
 
   const turnRight = useCallback(() => {
     if (inCombat) return;
     setPlayerFacing(((playerFacing + 1) % 4) as Direction);
-  }, [inCombat, playerFacing, setPlayerFacing]);
+    moveFoes();
+  }, [inCombat, playerFacing, setPlayerFacing, moveFoes]);
 
   return {
     playerPosition,
@@ -201,6 +362,7 @@ export const useDungeon = () => {
     moveForward,
     moveBackward,
     turnLeft,
-    turnRight
+    turnRight,
+    interactWithTile
   };
 };

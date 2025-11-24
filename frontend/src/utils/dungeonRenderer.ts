@@ -1,4 +1,6 @@
 import { RENDER_CONFIG } from '../data/constants';
+import type { FOEInstance, InteractiveTile } from '../types';
+import { FOE_DATA } from '../data/foes';
 
 export interface DungeonSceneData {
     ahead: string;
@@ -7,6 +9,10 @@ export interface DungeonSceneData {
     right: string;
     leftOfAhead: string;
     rightOfAhead: string;
+    foeAhead?: FOEInstance;
+    foeFarAhead?: FOEInstance;
+    objectAhead?: InteractiveTile;
+    objectFarAhead?: InteractiveTile;
 }
 
 export class DungeonRenderer {
@@ -23,8 +29,26 @@ export class DungeonRenderer {
     public renderScene(sceneData: DungeonSceneData): void {
         this.clearCanvas();
         this.renderBackground();
+
+        // Render Far Layer (Walls -> Objects -> FOEs)
         this.renderFarWalls(sceneData.farAhead);
+        if (sceneData.objectFarAhead) {
+            this.renderObject(RENDER_CONFIG.GEOMETRY.R3, sceneData.objectFarAhead);
+        }
+        if (sceneData.foeFarAhead) {
+            this.renderFOE(RENDER_CONFIG.GEOMETRY.R3, sceneData.foeFarAhead);
+        }
+
+        // Render Middle Layer
         this.renderMiddleSection(sceneData);
+        if (sceneData.objectAhead) {
+            this.renderObject(RENDER_CONFIG.GEOMETRY.R2, sceneData.objectAhead);
+        }
+        if (sceneData.foeAhead) {
+            this.renderFOE(RENDER_CONFIG.GEOMETRY.R2, sceneData.foeAhead);
+        }
+
+        // Render Near Layer
         this.renderNearSides(sceneData);
     }
 
@@ -48,8 +72,6 @@ export class DungeonRenderer {
 
         if (tileType === '#') {
             this.drawRect(R3, RENDER_CONFIG.COLORS.WALL_FACE);
-        } else if (tileType === '+') {
-            this.drawRect(R3, RENDER_CONFIG.COLORS.DOOR);
         } else if (tileType === '<') {
             this.drawRect(R3, RENDER_CONFIG.COLORS.STAIRS_UP);
         } else if (tileType === '>') {
@@ -86,8 +108,6 @@ export class DungeonRenderer {
         // Main wall ahead
         if (data.ahead === '#') {
             this.drawRect(R2, COLORS.WALL_FACE);
-        } else if (data.ahead === '+') {
-            this.drawRect(R2, COLORS.DOOR);
         } else if (data.ahead === '<') {
             this.drawRect(R2, COLORS.STAIRS_UP);
         } else if (data.ahead === '>') {
@@ -101,16 +121,30 @@ export class DungeonRenderer {
         const { R1, R2 } = RENDER_CONFIG.GEOMETRY;
         const { COLORS } = RENDER_CONFIG;
 
-        // Left wall
+        // Left wall - extend to front wall if there's a wall ahead
         if (data.left === '#') {
-            this.drawPoly([
-                [0, 0],
-                [R1.x, R1.y],
-                [R1.x, R1.y + R1.h],
-                [0, this.height]
-            ], COLORS.WALL_SIDE);
-        } else {
-            // Passage to the left - show corner of next tile
+            if (data.ahead === '#') {
+                // Wall ahead - extend left wall all the way to front wall
+                this.drawPoly([
+                    [0, 0],
+                    [R2.x, R2.y],
+                    [R2.x, R2.y + R2.h],
+                    [0, this.height]
+                ], COLORS.WALL_SIDE);
+            } else {
+                // No wall ahead - normal left wall
+                this.drawPoly([
+                    [0, 0],
+                    [R1.x, R1.y],
+                    [R1.x, R1.y + R1.h],
+                    [0, this.height]
+                ], COLORS.WALL_SIDE);
+            }
+        }
+
+        // Show wall to the left of ahead (if exists and no wall directly ahead)
+        // Draw as a perspective polygon from R1 to R2
+        if (data.leftOfAhead === '#' && data.ahead !== '#') {
             this.drawPoly([
                 [R1.x, R1.y],
                 [R2.x, R2.y],
@@ -119,22 +153,96 @@ export class DungeonRenderer {
             ], COLORS.WALL_SIDE);
         }
 
-        // Right wall
+        // Right wall - extend to front wall if there's a wall ahead
         if (data.right === '#') {
-            this.drawPoly([
-                [this.width, 0],
-                [R1.x + R1.w, R1.y],
-                [R1.x + R1.w, R1.y + R1.h],
-                [this.width, this.height]
-            ], COLORS.WALL_SIDE);
-        } else {
-            // Passage to the right
+            if (data.ahead === '#') {
+                // Wall ahead - extend right wall all the way to front wall
+                this.drawPoly([
+                    [this.width, 0],
+                    [R2.x + R2.w, R2.y],
+                    [R2.x + R2.w, R2.y + R2.h],
+                    [this.width, this.height]
+                ], COLORS.WALL_SIDE);
+            } else {
+                // No wall ahead - normal right wall
+                this.drawPoly([
+                    [this.width, 0],
+                    [R1.x + R1.w, R1.y],
+                    [R1.x + R1.w, R1.y + R1.h],
+                    [this.width, this.height]
+                ], COLORS.WALL_SIDE);
+            }
+        }
+
+        // Show wall to the right of ahead (if exists and no wall directly ahead)
+        // Draw as a perspective polygon from R1 to R2
+        if (data.rightOfAhead === '#' && data.ahead !== '#') {
             this.drawPoly([
                 [R1.x + R1.w, R1.y],
                 [R2.x + R2.w, R2.y],
                 [R2.x + R2.w, R2.y + R2.h],
                 [R1.x + R1.w, R1.y + R1.h]
             ], COLORS.WALL_SIDE);
+        }
+    }
+
+    private renderFOE(rect: { x: number, y: number, w: number, h: number }, foe: FOEInstance): void {
+        const foeDef = FOE_DATA[foe.defId];
+        const color = foeDef ? foeDef.color : 'red';
+
+        // Draw FOE as a circle/blob
+        const centerX = rect.x + rect.w / 2;
+        const centerY = rect.y + rect.h / 2;
+        const radius = Math.min(rect.w, rect.h) / 3;
+
+        this.ctx.fillStyle = color;
+        this.ctx.beginPath();
+        this.ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        this.ctx.fill();
+        this.ctx.strokeStyle = 'white';
+        this.ctx.lineWidth = 2;
+        this.ctx.stroke();
+
+        // Draw eyes (simple direction indicator)
+        // Assuming facing player for now
+        this.ctx.fillStyle = 'white';
+        this.ctx.beginPath();
+        this.ctx.arc(centerX - radius / 3, centerY - radius / 4, radius / 4, 0, Math.PI * 2);
+        this.ctx.arc(centerX + radius / 3, centerY - radius / 4, radius / 4, 0, Math.PI * 2);
+        this.ctx.fill();
+    }
+
+    private renderObject(rect: { x: number, y: number, w: number, h: number }, obj: InteractiveTile): void {
+        if (obj.type === 'door') {
+            if (obj.state === 'closed' || obj.state === 'locked') {
+                this.drawRect(rect, RENDER_CONFIG.COLORS.DOOR);
+                // Draw knob/detail
+                this.ctx.fillStyle = 'black';
+                this.ctx.beginPath();
+                this.ctx.arc(rect.x + rect.w * 0.8, rect.y + rect.h / 2, rect.w * 0.05, 0, Math.PI * 2);
+                this.ctx.fill();
+            } else {
+                // Open door - draw frame
+                this.ctx.strokeStyle = RENDER_CONFIG.COLORS.DOOR;
+                this.ctx.lineWidth = 4;
+                this.ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
+            }
+        } else if (obj.type === 'gathering_point') {
+            if (obj.state === 'active') {
+                // Draw sparkle
+                this.ctx.fillStyle = 'gold';
+                const centerX = rect.x + rect.w / 2;
+                const centerY = rect.y + rect.h * 0.8;
+                const size = rect.w / 4;
+
+                this.ctx.beginPath();
+                this.ctx.moveTo(centerX, centerY - size);
+                this.ctx.lineTo(centerX + size, centerY);
+                this.ctx.lineTo(centerX, centerY + size);
+                this.ctx.lineTo(centerX - size, centerY);
+                this.ctx.closePath();
+                this.ctx.fill();
+            }
         }
     }
 

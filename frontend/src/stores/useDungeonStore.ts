@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Position, Direction, DungeonMap } from '../types';
+import type { Position, Direction, DungeonMap, FOEInstance, InteractiveTile } from '../types';
 import { generateDungeon } from '../utils/dungeonGenerator';
 import { GAME_CONFIG } from '../data/constants';
 import { logger } from '../utils/logger';
@@ -12,6 +12,8 @@ interface DungeonStore {
     exploredMap: Set<string>;
     stepCount: number;
     currentDungeonMap: DungeonMap | null;
+    foes: FOEInstance[];
+    interactiveTiles: Record<string, InteractiveTile>;
 
     // Actions
     setPlayerPosition: (position: Position) => void;
@@ -21,6 +23,15 @@ interface DungeonStore {
     generateFloor: (floorNumber: number) => void;
     changeFloor: (direction: 'up' | 'down') => void;
     resetDungeon: () => void;
+
+    // FOE Actions
+    setFoes: (foes: FOEInstance[]) => void;
+    updateFoe: (foeId: string, updates: Partial<FOEInstance>) => void;
+    removeFoe: (foeId: string) => void;
+
+    // Interactive Tile Actions
+    setInteractiveTiles: (tiles: Record<string, InteractiveTile>) => void;
+    updateInteractiveTile: (tileId: string, updates: Partial<InteractiveTile>) => void;
 }
 
 export const useDungeonStore = create<DungeonStore>()(
@@ -32,6 +43,8 @@ export const useDungeonStore = create<DungeonStore>()(
             exploredMap: new Set(),
             stepCount: 0,
             currentDungeonMap: null,
+            foes: [],
+            interactiveTiles: {},
 
             setPlayerPosition: (position) => set({ playerPosition: position }),
             setPlayerFacing: (direction) => set({ playerFacing: direction }),
@@ -59,12 +72,15 @@ export const useDungeonStore = create<DungeonStore>()(
                             playerStart: dungeonData.playerStart,
                             stairsUp: dungeonData.stairsUp,
                             stairsDown: dungeonData.stairsDown,
-                            treasureLocations: dungeonData.treasureLocations
+                            treasureLocations: dungeonData.treasureLocations,
+                            explored: [] // Placeholder, not used in store state directly but in map object
                         },
                         currentFloor: floorNumber,
                         playerPosition: dungeonData.playerStart,
                         playerFacing: 0,
-                        exploredMap: new Set([`${dungeonData.playerStart.x},${dungeonData.playerStart.y}`])
+                        exploredMap: new Set([`${dungeonData.playerStart.x},${dungeonData.playerStart.y}`]),
+                        foes: dungeonData.foes || [],
+                        interactiveTiles: dungeonData.interactiveTiles || {}
                     });
                     logger.info('✅ State updated with new dungeon');
                 } catch (error) {
@@ -88,8 +104,29 @@ export const useDungeonStore = create<DungeonStore>()(
                 playerFacing: 0,
                 exploredMap: new Set(),
                 stepCount: 0,
-                currentDungeonMap: null
-            })
+                currentDungeonMap: null,
+                foes: [],
+                interactiveTiles: {}
+            }),
+
+            setFoes: (foes) => set({ foes }),
+
+            updateFoe: (foeId, updates) => set((state) => ({
+                foes: state.foes.map(f => f.id === foeId ? { ...f, ...updates } : f)
+            })),
+
+            removeFoe: (foeId) => set((state) => ({
+                foes: state.foes.filter(f => f.id !== foeId)
+            })),
+
+            setInteractiveTiles: (tiles) => set({ interactiveTiles: tiles }),
+
+            updateInteractiveTile: (tileId, updates) => set((state) => ({
+                interactiveTiles: {
+                    ...state.interactiveTiles,
+                    [tileId]: { ...state.interactiveTiles[tileId], ...updates }
+                }
+            }))
         }),
         {
             name: 'dungeon-crawler-dungeon',
@@ -98,7 +135,9 @@ export const useDungeonStore = create<DungeonStore>()(
                 playerPosition: state.playerPosition,
                 playerFacing: state.playerFacing,
                 exploredMap: Array.from(state.exploredMap),
-                stepCount: state.stepCount
+                stepCount: state.stepCount,
+                foes: state.foes,
+                interactiveTiles: state.interactiveTiles
             }),
             merge: (persistedState: unknown, currentState) => {
                 const state = persistedState as Partial<DungeonStore> | null;

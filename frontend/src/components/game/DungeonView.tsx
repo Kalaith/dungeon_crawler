@@ -7,12 +7,12 @@ import { RENDER_CONFIG } from '../../data/constants';
 export const DungeonView: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { getTileAhead, getTileFarAhead, getTileLeft, getTileRight, getTile } = useDungeon();
-  const { playerPosition, playerFacing, currentDungeonMap } = useDungeonStore();
+  const { playerPosition, playerFacing, currentDungeonMap, foes, interactiveTiles } = useDungeonStore();
 
   // Helper function to get direction vectors
   const getDirectionVector = (direction: number): [number, number] => {
     const directions: [number, number][] = [[0, -1], [1, 0], [0, 1], [-1, 0]]; // N, E, S, W
-    return directions[direction];
+    return directions[direction] || [0, -1];
   };
 
   useEffect(() => {
@@ -28,12 +28,25 @@ export const DungeonView: React.FC = () => {
     const [dx, dy] = getDirectionVector(playerFacing);
     const aheadX = playerPosition.x + dx;
     const aheadY = playerPosition.y + dy;
+    const farAheadX = playerPosition.x + dx * 2;
+    const farAheadY = playerPosition.y + dy * 2;
 
-    const [lx, ly] = getDirectionVector((playerFacing + 3) % 4); // Left vector
+    // Get left and right direction vectors (perpendicular to facing)
+    const [lx, ly] = getDirectionVector((playerFacing + 3) % 4);
+    const [rx, ry] = getDirectionVector((playerFacing + 1) % 4);
+
+    // leftOfAhead is the tile to the left of the ahead tile (not diagonal)
     const leftOfAhead = getTile(aheadX + lx, aheadY + ly);
-
-    const [rx, ry] = getDirectionVector((playerFacing + 1) % 4); // Right vector
+    // rightOfAhead is the tile to the right of the ahead tile (not diagonal)
     const rightOfAhead = getTile(aheadX + rx, aheadY + ry);
+
+    // Find visible FOEs
+    const foeAhead = foes.find(f => f.x === aheadX && f.y === aheadY);
+    const foeFarAhead = foes.find(f => f.x === farAheadX && f.y === farAheadY);
+
+    // Find visible Objects
+    const objectAhead = Object.values(interactiveTiles).find(t => t.x === aheadX && t.y === aheadY);
+    const objectFarAhead = Object.values(interactiveTiles).find(t => t.x === farAheadX && t.y === farAheadY);
 
     renderer.renderScene({
       ahead: getTileAhead(),
@@ -41,7 +54,11 @@ export const DungeonView: React.FC = () => {
       left: getTileLeft(),
       right: getTileRight(),
       leftOfAhead,
-      rightOfAhead
+      rightOfAhead,
+      foeAhead,
+      foeFarAhead,
+      objectAhead,
+      objectFarAhead
     });
 
   }, [
@@ -52,7 +69,9 @@ export const DungeonView: React.FC = () => {
     getTileFarAhead,
     getTileLeft,
     getTileRight,
-    getTile
+    getTile,
+    foes,
+    interactiveTiles
   ]);
 
   if (!currentDungeonMap) {

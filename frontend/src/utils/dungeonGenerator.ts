@@ -1,4 +1,5 @@
-import type { Position } from '../types';
+import type { Position, FOEInstance, InteractiveTile } from '../types';
+import { getFoeDefinition, FOE_DATA } from '../data/foes';
 
 interface Room {
     x: number;
@@ -23,12 +24,13 @@ export class DungeonGenerator {
     private floor: number;
     private grid: string[][];
     private rooms: Room[] = [];
+    private foes: FOEInstance[] = [];
+    private interactiveTiles: Record<string, InteractiveTile> = {};
 
     constructor(width: number, height: number, floor: number) {
         this.width = width;
         this.height = height;
         this.floor = floor;
-        // Initialize grid properly - create each row individually
         this.grid = [];
         for (let y = 0; y < height; y++) {
             this.grid[y] = [];
@@ -44,8 +46,9 @@ export class DungeonGenerator {
         stairsUp?: Position;
         stairsDown?: Position;
         treasureLocations: Position[];
+        foes: FOEInstance[];
+        interactiveTiles: Record<string, InteractiveTile>;
     } {
-        // Create root partition
         const root: Partition = {
             x: 0,
             y: 0,
@@ -53,26 +56,19 @@ export class DungeonGenerator {
             height: this.height
         };
 
-        // Split into rooms using BSP
         this.splitPartition(root, 0);
-
-        // Create rooms in leaf partitions
         this.createRooms(root);
-
-        // Connect rooms with corridors
         this.connectRooms(root);
 
-        // Place stairs
         const stairsUp = this.floor > 1 ? this.placeStairsUp() : undefined;
         const stairsDown = this.placeStairsDown();
-
-        // Place treasure
         const treasureLocations = this.placeTreasure();
 
-        // Determine player start
-        const playerStart = stairsUp || this.getRandomFloorPosition();
+        this.placeDoors();
+        this.placeGatheringPoints();
+        this.placeFOEs();
 
-        // Convert grid to string array
+        const playerStart = stairsUp || this.getRandomFloorPosition();
         const layout = this.grid.map(row => row.join(''));
 
         return {
@@ -80,26 +76,24 @@ export class DungeonGenerator {
             playerStart,
             stairsUp,
             stairsDown,
-            treasureLocations
+            treasureLocations,
+            foes: this.foes,
+            interactiveTiles: this.interactiveTiles
         };
     }
 
     private splitPartition(partition: Partition, depth: number): void {
-        // Stop splitting if too small or max depth reached
         if (depth > 4 || partition.width < 10 || partition.height < 10) {
             return;
         }
 
-        // Decide split direction based on aspect ratio
         const splitHorizontally = partition.height > partition.width;
 
         if (splitHorizontally) {
-            // Split horizontally
-            const splitY = partition.y + Math.floor(partition.height / 2) +
-                (Math.random() * 4 - 2);
+            const splitY = partition.y + Math.floor(partition.height / 2) + (Math.random() * 4 - 2);
 
             if (splitY - partition.y < 6 || partition.y + partition.height - splitY < 6) {
-                return; // Split would create too small partition
+                return;
             }
 
             partition.leftChild = {
@@ -116,12 +110,10 @@ export class DungeonGenerator {
                 height: partition.y + partition.height - splitY
             };
         } else {
-            // Split vertically
-            const splitX = partition.x + Math.floor(partition.width / 2) +
-                (Math.random() * 4 - 2);
+            const splitX = partition.x + Math.floor(partition.width / 2) + (Math.random() * 4 - 2);
 
             if (splitX - partition.x < 6 || partition.x + partition.width - splitX < 6) {
-                return; // Split would create too small partition
+                return;
             }
 
             partition.leftChild = {
@@ -139,18 +131,15 @@ export class DungeonGenerator {
             };
         }
 
-        // Recursively split children
         if (partition.leftChild) this.splitPartition(partition.leftChild, depth + 1);
         if (partition.rightChild) this.splitPartition(partition.rightChild, depth + 1);
     }
 
     private createRooms(partition: Partition): void {
         if (partition.leftChild || partition.rightChild) {
-            // Not a leaf, recurse
             if (partition.leftChild) this.createRooms(partition.leftChild);
             if (partition.rightChild) this.createRooms(partition.rightChild);
         } else {
-            // Leaf partition - create a room
             const roomWidth = Math.floor(partition.width * 0.6) + Math.floor(Math.random() * (partition.width * 0.3));
             const roomHeight = Math.floor(partition.height * 0.6) + Math.floor(Math.random() * (partition.height * 0.3));
 
@@ -167,10 +156,9 @@ export class DungeonGenerator {
             partition.room = room;
             this.rooms.push(room);
 
-            // Carve out the room - with strict bounds checking
             for (let y = room.y; y < room.y + room.height; y++) {
                 for (let x = room.x; x < room.x + room.width; x++) {
-                    if (y >= 0 && y < this.height && x >= 0 && x < this.width && this.grid[y] !== undefined) {
+                    if (this.isValid(x, y)) {
                         this.grid[y][x] = '.';
                     }
                 }
@@ -181,7 +169,6 @@ export class DungeonGenerator {
     private connectRooms(partition: Partition): void {
         if (!partition.leftChild || !partition.rightChild) return;
 
-        // Get rooms from each child
         const leftRoom = this.getRandomRoom(partition.leftChild);
         const rightRoom = this.getRandomRoom(partition.rightChild);
 
@@ -189,7 +176,6 @@ export class DungeonGenerator {
             this.createCorridor(leftRoom, rightRoom);
         }
 
-        // Recursively connect children
         this.connectRooms(partition.leftChild);
         this.connectRooms(partition.rightChild);
     }
@@ -217,7 +203,6 @@ export class DungeonGenerator {
         const x2 = room2.x + Math.floor(room2.width / 2);
         const y2 = room2.y + Math.floor(room2.height / 2);
 
-        // L-shaped corridor
         if (Math.random() < 0.5) {
             this.carveHorizontalCorridor(x1, x2, y1);
             this.carveVerticalCorridor(y1, y2, x2);
@@ -232,7 +217,7 @@ export class DungeonGenerator {
         const end = Math.max(x1, x2);
 
         for (let x = start; x <= end; x++) {
-            if (x >= 0 && x < this.width && y >= 0 && y < this.height && this.grid[y] !== undefined) {
+            if (this.isValid(x, y)) {
                 this.grid[y][x] = '.';
             }
         }
@@ -243,27 +228,29 @@ export class DungeonGenerator {
         const end = Math.max(y1, y2);
 
         for (let y = start; y <= end; y++) {
-            if (x >= 0 && x < this.width && y >= 0 && y < this.height && this.grid[y] !== undefined) {
+            if (this.isValid(x, y)) {
                 this.grid[y][x] = '.';
             }
         }
     }
 
     private placeStairsUp(): Position {
-        const room = this.rooms[0]; // Place in first room
+        if (this.rooms.length === 0) return { x: 1, y: 1 };
+        const room = this.rooms[0];
         const x = room.x + Math.floor(room.width / 2);
         const y = room.y + Math.floor(room.height / 2);
-        if (y >= 0 && y < this.height && x >= 0 && x < this.width && this.grid[y] !== undefined) {
+        if (this.isValid(x, y)) {
             this.grid[y][x] = '<';
         }
         return { x, y };
     }
 
     private placeStairsDown(): Position {
-        const room = this.rooms[this.rooms.length - 1]; // Place in last room
+        if (this.rooms.length === 0) return { x: 1, y: 1 };
+        const room = this.rooms[this.rooms.length - 1];
         const x = room.x + Math.floor(room.width / 2);
         const y = room.y + Math.floor(room.height / 2);
-        if (y >= 0 && y < this.height && x >= 0 && x < this.width && this.grid[y] !== undefined) {
+        if (this.isValid(x, y)) {
             this.grid[y][x] = '>';
         }
         return { x, y };
@@ -271,14 +258,16 @@ export class DungeonGenerator {
 
     private placeTreasure(): Position[] {
         const treasureLocations: Position[] = [];
-        const treasureCount = Math.min(this.floor, 3); // More treasure on deeper floors
+        const treasureCount = Math.min(this.floor, 3);
 
         for (let i = 0; i < treasureCount && i < this.rooms.length - 2; i++) {
-            const room = this.rooms[i + 1]; // Skip first room (has stairs up)
+            const room = this.rooms[i + 1];
+            if (!room) continue;
+
             const x = room.x + 1 + Math.floor(Math.random() * (room.width - 2));
             const y = room.y + 1 + Math.floor(Math.random() * (room.height - 2));
 
-            if (y >= 0 && y < this.height && x >= 0 && x < this.width && this.grid[y] !== undefined && this.grid[y][x] === '.') {
+            if (this.isValid(x, y) && this.grid[y][x] === '.') {
                 this.grid[y][x] = '$';
                 treasureLocations.push({ x, y });
             }
@@ -287,12 +276,116 @@ export class DungeonGenerator {
         return treasureLocations;
     }
 
+    private placeDoors(): void {
+        this.rooms.forEach(room => {
+            if (this.isCorridor(room.x + Math.floor(room.width / 2), room.y - 1)) {
+                this.addDoor(room.x + Math.floor(room.width / 2), room.y);
+            }
+            if (this.isCorridor(room.x + Math.floor(room.width / 2), room.y + room.height)) {
+                this.addDoor(room.x + Math.floor(room.width / 2), room.y + room.height - 1);
+            }
+            if (this.isCorridor(room.x - 1, room.y + Math.floor(room.height / 2))) {
+                this.addDoor(room.x, room.y + Math.floor(room.height / 2));
+            }
+            if (this.isCorridor(room.x + room.width, room.y + Math.floor(room.height / 2))) {
+                this.addDoor(room.x + room.width - 1, room.y + Math.floor(room.height / 2));
+            }
+        });
+    }
+
+    private isCorridor(x: number, y: number): boolean {
+        if (!this.isValid(x, y)) return false;
+        return this.grid[y][x] === '.';
+    }
+
+    private addDoor(x: number, y: number): void {
+        if (!this.isValid(x, y) || this.grid[y][x] !== '.') return;
+
+        if (Math.random() > 0.3) return;
+
+        const id = `door_${x}_${y}`;
+        this.interactiveTiles[id] = {
+            id,
+            type: 'door',
+            x,
+            y,
+            state: Math.random() < 0.2 ? 'locked' : 'closed',
+            metadata: {
+                keyId: 'iron_key'
+            }
+        };
+        this.grid[y][x] = '+';
+    }
+
+    private placeGatheringPoints(): void {
+        const count = 2 + Math.floor(Math.random() * 3);
+
+        for (let i = 0; i < count; i++) {
+            if (this.rooms.length === 0) continue;
+            const room = this.rooms[Math.floor(Math.random() * this.rooms.length)];
+            const x = room.x + Math.floor(Math.random() * room.width);
+            const y = room.y + Math.floor(Math.random() * room.height);
+
+            if (this.isValid(x, y) && this.grid[y][x] === '.') {
+                const id = `gather_${x}_${y}`;
+                this.interactiveTiles[id] = {
+                    id,
+                    type: 'gathering_point',
+                    x,
+                    y,
+                    state: 'active',
+                    metadata: {
+                        skillReq: 'Herbalism'
+                    }
+                };
+            }
+        }
+    }
+
+    private placeFOEs(): void {
+        if (this.floor < 2) return;
+
+        const count = 1 + Math.floor(Math.random() * 2);
+        const foeKeys = Object.keys(FOE_DATA);
+
+        for (let i = 0; i < count; i++) {
+            if (this.rooms.length === 0) continue;
+            const room = this.rooms[Math.floor(Math.random() * this.rooms.length)];
+            const x = room.x + Math.floor(room.width / 2);
+            const y = room.y + Math.floor(room.height / 2);
+
+            if (this.isValid(x, y) && this.grid[y][x] === '.') {
+                const key = foeKeys[Math.floor(Math.random() * foeKeys.length)];
+                const foeDef = getFoeDefinition(key);
+
+                const foeInstance: FOEInstance = {
+                    id: `foe_${key}_${x}_${y}_${Math.random().toString(36).substr(2, 5)}`,
+                    defId: key,
+                    x,
+                    y,
+                    hp: foeDef.derivedStats.HP.max,
+                    maxHp: foeDef.derivedStats.HP.max,
+                    facing: 0,
+                    alertState: 'idle',
+                    origin: { x, y },
+                    currentPathIndex: 0
+                };
+                this.foes.push(foeInstance);
+            }
+        }
+    }
+
     private getRandomFloorPosition(): Position {
+        if (this.rooms.length === 0) return { x: 1, y: 1 };
         const room = this.rooms[0];
         return {
             x: room.x + Math.floor(room.width / 2),
             y: room.y + Math.floor(room.height / 2)
         };
+    }
+
+    private isValid(x: number, y: number): boolean {
+        return x >= 0 && x < this.width && y >= 0 && y < this.height && this.grid[y] !== undefined;
     }
 }
 

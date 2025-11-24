@@ -165,10 +165,7 @@ export interface Enemy {
   hp: number;
   maxHp: number;
   attributes: Attributes;
-  derivedStats: {
-    AC: number;
-    Initiative: number;
-  };
+  derivedStats: DerivedStats;
   abilities?: Ability[];
   statusEffects: ActiveStatusEffect[];
   expReward: number;
@@ -284,4 +281,34 @@ export interface LootDrop {
   gold: number;
   items: Item[];
   chance: number; // 0-1
+}
+
+export type InteractiveTileType = 'door' | 'gathering_point' | 'hazard';
+
+export interface InteractiveTile {
+  id: string;
+  type: InteractiveTileType;
+  x: number;
+  y: number;
+  state: 'open' | 'closed' | 'locked' | 'active' | 'depleted';
+  metadata?: {
+    keyId?: string; // For locked doors
+    skillReq?: string; // For gathering
+    lootTableId?: string; // For gathering
+    hazardType?: string; // For hazards
+    damage?: number;
+  };
+}
+
+export interface FOEInstance {
+  id: string;
+  defId: string; // Reference to FOE_DATA key
+  x: number;
+  y: number;
+  hp: number;
+  maxHp: number;
+  facing: Direction;
+  alertState: 'idle' | 'chasing' | 'returning';
+  origin: Position; // For returning to patrol
+  currentPathIndex: number; // For patrol routes
 }
