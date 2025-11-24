@@ -85,35 +85,58 @@ export class DungeonRenderer {
         const { R2, R3 } = RENDER_CONFIG.GEOMETRY;
         const { COLORS } = RENDER_CONFIG;
 
-        // Left wall of far section (if wall to left of ahead)
-        if (data.leftOfAhead === '#') {
-            this.drawPoly([
-                [R2.x, R2.y],
-                [R3.x, R3.y],
-                [R3.x, R3.y + R3.h],
-                [R2.x, R2.y + R2.h]
-            ], COLORS.WALL_SIDE);
-        }
-
-        // Right wall of far section (if wall to right of ahead)
-        if (data.rightOfAhead === '#') {
-            this.drawPoly([
-                [R2.x + R2.w, R2.y],
-                [R3.x + R3.w, R3.y],
-                [R3.x + R3.w, R3.y + R3.h],
-                [R2.x + R2.w, R2.y + R2.h]
-            ], COLORS.WALL_SIDE);
-        }
-
-        // Main wall ahead
         if (data.ahead === '#') {
+            // Main wall ahead
             this.drawRect(R2, COLORS.WALL_FACE);
-        } else if (data.ahead === '<') {
-            this.drawRect(R2, COLORS.STAIRS_UP);
-        } else if (data.ahead === '>') {
-            this.drawRect(R2, COLORS.STAIRS_DOWN);
-        } else if (data.ahead === '$') {
-            this.drawRect(R2, COLORS.TREASURE);
+
+            // Left extension (if left is open and leftOfAhead is wall)
+            if (data.left !== '#' && data.leftOfAhead === '#') {
+                this.drawRect({
+                    x: 0,
+                    y: R2.y,
+                    w: R2.x,
+                    h: R2.h
+                }, COLORS.WALL_FACE);
+            }
+
+            // Right extension (if right is open and rightOfAhead is wall)
+            if (data.right !== '#' && data.rightOfAhead === '#') {
+                this.drawRect({
+                    x: R2.x + R2.w,
+                    y: R2.y,
+                    w: this.width - (R2.x + R2.w),
+                    h: R2.h
+                }, COLORS.WALL_FACE);
+            }
+        } else {
+            // Left wall of far section (if wall to left of ahead)
+            if (data.leftOfAhead === '#') {
+                this.drawPoly([
+                    [R2.x, R2.y],
+                    [R3.x, R3.y],
+                    [R3.x, R3.y + R3.h],
+                    [R2.x, R2.y + R2.h]
+                ], COLORS.WALL_SIDE);
+            }
+
+            // Right wall of far section (if wall to right of ahead)
+            if (data.rightOfAhead === '#') {
+                this.drawPoly([
+                    [R2.x + R2.w, R2.y],
+                    [R3.x + R3.w, R3.y],
+                    [R3.x + R3.w, R3.y + R3.h],
+                    [R2.x + R2.w, R2.y + R2.h]
+                ], COLORS.WALL_SIDE);
+            }
+
+            // Draw other tile types
+            if (data.ahead === '<') {
+                this.drawRect(R2, COLORS.STAIRS_UP);
+            } else if (data.ahead === '>') {
+                this.drawRect(R2, COLORS.STAIRS_DOWN);
+            } else if (data.ahead === '$') {
+                this.drawRect(R2, COLORS.TREASURE);
+            }
         }
     }
 
