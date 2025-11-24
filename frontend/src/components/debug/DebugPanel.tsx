@@ -10,6 +10,7 @@ import type { CombatParticipant, Item } from '../../types';
 
 import { useGameStateStore } from '../../stores/useGameStateStore';
 import { useInventoryStore } from '../../stores/useInventoryStore';
+import { useDungeonStore } from '../../stores/useDungeonStore';
 import { lootTables } from '../../data/loot';
 
 import { GameStateModal } from './modals/GameStateModal';
@@ -54,7 +55,7 @@ export const DebugPanel: React.FC = () => {
         if (!goblin) return;
 
         const partyParticipants = party
-            .map((c) => c ? {
+            .map((c): CombatParticipant | null => c ? {
                 id: c.id,
                 type: 'party' as const,
                 character: c,
@@ -72,7 +73,7 @@ export const DebugPanel: React.FC = () => {
         if (!randomEnemy) return;
 
         const partyParticipants = party
-            .map((c) => c ? {
+            .map((c): CombatParticipant | null => c ? {
                 id: c.id,
                 type: 'party' as const,
                 character: c,
@@ -300,6 +301,19 @@ export const DebugPanel: React.FC = () => {
                             </button>
                             <button onClick={() => handleTeleport('overworld')} className="bg-purple-900/50 hover:bg-purple-800 text-purple-200 py-1 px-2 rounded text-sm border border-purple-800">
                                 Overworld
+                            </button>
+                        </div>
+                    </section>
+
+                    {/* Dungeon Section */}
+                    <section>
+                        <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Dungeon</h3>
+                        <div className="space-y-2">
+                            <button onClick={() => useDungeonStore.getState().revealMap()} className="w-full bg-indigo-900/50 hover:bg-indigo-800 text-indigo-200 py-1 px-2 rounded text-sm border border-indigo-800">
+                                Reveal Map
+                            </button>
+                            <button onClick={() => useDungeonStore.getState().openAllDoors()} className="w-full bg-indigo-900/50 hover:bg-indigo-800 text-indigo-200 py-1 px-2 rounded text-sm border border-indigo-800">
+                                Open All Doors
                             </button>
                         </div>
                     </section>

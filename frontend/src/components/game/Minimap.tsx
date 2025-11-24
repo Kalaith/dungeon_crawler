@@ -12,7 +12,10 @@ export const Minimap: React.FC = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const tileSize = 8;
+    const mapWidth = currentDungeonMap.width;
+    const mapHeight = currentDungeonMap.height;
+    const tileSize = Math.floor(canvas.width / Math.max(mapWidth, mapHeight));
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Draw explored tiles

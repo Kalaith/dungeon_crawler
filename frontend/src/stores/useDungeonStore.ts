@@ -23,6 +23,8 @@ interface DungeonStore {
     generateFloor: (floorNumber: number) => void;
     changeFloor: (direction: 'up' | 'down') => void;
     resetDungeon: () => void;
+    revealMap: () => void;
+    openAllDoors: () => void;
 
     // FOE Actions
     setFoes: (foes: FOEInstance[]) => void;
@@ -107,6 +109,28 @@ export const useDungeonStore = create<DungeonStore>()(
                 currentDungeonMap: null,
                 foes: [],
                 interactiveTiles: {}
+            }),
+
+            revealMap: () => set((state) => {
+                if (!state.currentDungeonMap) return {};
+                const newExplored = new Set<string>();
+                for (let y = 0; y < state.currentDungeonMap.height; y++) {
+                    for (let x = 0; x < state.currentDungeonMap.width; x++) {
+                        newExplored.add(`${x},${y}`);
+                    }
+                }
+                return { exploredMap: newExplored };
+            }),
+
+            openAllDoors: () => set((state) => {
+                const newTiles: Record<string, InteractiveTile> = { ...state.interactiveTiles };
+                Object.keys(newTiles).forEach(key => {
+                    const tile = newTiles[key];
+                    if (tile && tile.type === 'door') {
+                        newTiles[key] = { ...tile, state: 'open' } as any;
+                    }
+                });
+                return { interactiveTiles: newTiles as any };
             }),
 
             setFoes: (foes) => set({ foes }),

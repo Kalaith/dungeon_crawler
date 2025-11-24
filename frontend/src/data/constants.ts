@@ -18,11 +18,12 @@ export const GAME_CONFIG = {
     DUNGEON: {
         MIN_ROOM_SIZE: 4,
         MAX_ROOM_SIZE: 12,
-        MIN_ROOMS: 5,
-        MAX_ROOMS: 10,
+        MIN_ROOMS: 8,
+        MAX_ROOMS: 20,
         CORRIDOR_WIDTH: 1,
-        DEFAULT_WIDTH: 20,
-        DEFAULT_HEIGHT: 20,
+        DEFAULT_WIDTH: 60,
+        DEFAULT_HEIGHT: 60,
+        MAX_FLOORS: 20,
     },
 
     COMBAT: {
