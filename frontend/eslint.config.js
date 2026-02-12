@@ -13,7 +13,7 @@ export default tseslint.config(
       ecmaVersion: 2020,
       globals: globals.browser,
       parserOptions: {
-        project: './tsconfig.app.json',
+        project: './tsconfig.json',
         tsconfigRootDir: import.meta.dirname,
       },
     },
@@ -35,6 +35,12 @@ export default tseslint.config(
           selector: 'variableLike',
           format: ['camelCase', 'PascalCase'], // Allow PascalCase for React components
         },
+        // Parameters: allow underscore prefix for unused params
+        {
+          selector: 'parameter',
+          format: ['camelCase', 'PascalCase'],
+          leadingUnderscore: 'allow',
+        },
         {
           selector: 'function',
           format: ['camelCase', 'PascalCase'], // Allow PascalCase for React components
@@ -54,8 +60,9 @@ export default tseslint.config(
           format: ['PascalCase'],
         },
       ],
-      // Strict TypeScript rules
+      // Allow explicit any in some cases but warn
       '@typescript-eslint/no-explicit-any': 'error',
+      // No unused variables
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },
   },
