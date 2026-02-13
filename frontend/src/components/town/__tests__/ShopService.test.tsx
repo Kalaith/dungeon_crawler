@@ -1,5 +1,5 @@
+
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import type { Mock } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ShopService } from '../ShopService';
 import { useGoldStore } from '../../../stores/useGoldStore';
@@ -10,20 +10,8 @@ import type { Item } from '../../../types';
 vi.mock('../../../stores/useGoldStore');
 vi.mock('../../../stores/useInventoryStore');
 
-type UseGoldStoreMock = Mock<
-  [],
-  {
-    gold: number;
-    subtractGold: (amount: number) => boolean;
-    canAfford: (amount: number) => boolean;
-  }
->;
-
-type UseInventoryStoreMock = Mock<[], { addItem: (item: Item) => void }>;
-
-const useGoldStoreMock = useGoldStore as unknown as UseGoldStoreMock;
-const useInventoryStoreMock =
-  useInventoryStore as unknown as UseInventoryStoreMock;
+const useGoldStoreMock = useGoldStore as any;
+const useInventoryStoreMock = useInventoryStore as any;
 
 describe('ShopService', () => {
   const mockOnClose = vi.fn();

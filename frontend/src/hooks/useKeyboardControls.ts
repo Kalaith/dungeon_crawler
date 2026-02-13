@@ -22,7 +22,7 @@ export const useKeyboardControls = ({
   enabled = true,
 }: KeyboardControlsConfig) => {
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) return undefined;
 
     const handleKeyDown = (e: KeyboardEvent) => {
       switch (e.key) {

@@ -1,3 +1,4 @@
+
 import type { Enemy } from '../types';
 
 export type FOEMovementPattern = 'static' | 'patrol' | 'chase' | 'random';
@@ -77,3 +78,4 @@ export const getFoeDefinition = (key: string): FOE => {
     statusEffects: [],
   };
 };
+

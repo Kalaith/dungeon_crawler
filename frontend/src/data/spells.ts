@@ -2,7 +2,24 @@ import spellsData from './spells.json';
 import type { Spell } from '../types';
 
 // Import the comprehensive spell database (900+ spells)
-export const allSpells: Spell[] = spellsData as Spell[];
+const slugifySpellName = (name: string): string =>
+  name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+
+export const allSpells: Spell[] = (spellsData as Omit<Spell, 'id'>[]).map(
+  spell => ({
+    ...spell,
+    id: slugifySpellName(spell.name),
+    apCost: spell.ap_cost,
+    castingTime: spell.casting_time,
+    damageType: spell.damage_type,
+    savingThrow: spell.save_type,
+    attackRoll: spell.attack_type === 'melee' || spell.attack_type === 'ranged',
+  })
+);
+export const spells = allSpells;
 
 // AP Cost by spell level (for reference)
 export const apCosts: Record<number, number> = {

@@ -1,3 +1,4 @@
+
 import type {
   Character,
   Enemy,
@@ -138,12 +139,20 @@ export const getStatModifier = (
 export const getStatusEffectName = (
   type: ActiveStatusEffect['type']
 ): string => {
-  const names: Record<ActiveStatusEffect['type'], string> = {
+  const names: Partial<Record<ActiveStatusEffect['type'], string>> = {
     poison: 'Poisoned',
+    disease: 'Diseased',
+    exhaustion: 'Exhausted',
     sleep: 'Asleep',
+    stun: 'Stunned',
+    buff: 'Buffed',
+    debuff: 'Debuffed',
     buff_str: 'STR+',
     buff_def: 'DEF+',
     buff_agi: 'AGI+',
+    buff_int: 'INT+',
+    buff_wis: 'WIS+',
+    buff_cha: 'CHA+',
   };
 
   return names[type] || type;

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { usePartyStore } from '../../stores/usePartyStore';
 import type { Character } from '../../types';
@@ -331,3 +332,4 @@ export const TavernService: React.FC<TavernServiceProps> = ({ onClose }) => {
     </div>
   );
 };
+

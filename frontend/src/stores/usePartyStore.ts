@@ -1,3 +1,4 @@
+
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type {
@@ -279,7 +280,6 @@ export const usePartyStore = create<PartyStore>()(
                 typeof feat.effects.value === 'number' ? feat.effects.value : 0;
               newAttributes[choice] += inc;
             } else if (
-              feat.effects.stat !== 'HP' &&
               feat.effects.stat !== 'ST_or_DX' &&
               feat.effects.stat !== 'INT_WIS_CHA'
             ) {

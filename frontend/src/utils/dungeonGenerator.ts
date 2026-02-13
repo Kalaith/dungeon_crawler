@@ -1,3 +1,4 @@
+
 import type { Position, FOEInstance, InteractiveTile } from '../types';
 import { getFoeDefinition, foeData } from '../data/foes';
 import { gameConfig } from '../data/constants';
@@ -433,3 +434,4 @@ export const generateDungeon = (
 
   return data;
 };
+

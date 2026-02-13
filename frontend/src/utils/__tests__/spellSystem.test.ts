@@ -1,3 +1,4 @@
+
 import { describe, it, expect } from 'vitest';
 import {
   getMaxSpellLevel,
@@ -375,3 +376,4 @@ describe('Concentration Mechanics', () => {
     });
   });
 });
+

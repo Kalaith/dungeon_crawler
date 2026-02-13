@@ -1,3 +1,4 @@
+
 import type { Character, CharacterClass } from '../types';
 import { gameConfig } from '../data/constants';
 
@@ -20,20 +21,25 @@ export const calculateExpRequirement = (level: number): number => {
 const applyLevelUpBonuses = (
   character: Character,
   newLevel: number,
-  growth: CharacterClass['stat_growth']
+  growth: NonNullable<CharacterClass['stat_growth']>
 ): Character => {
+  const currentMaxHp = character.maxHp ?? character.derivedStats.HP?.max ?? 0;
+  const currentMaxMp = character.maxMp ?? character.derivedStats.AP?.max ?? 0;
+
   return {
     ...character,
     level: newLevel,
-    maxHp: character.maxHp + growth.hp,
-    hp: character.maxHp + growth.hp, // Full heal on level up
-    maxMp: character.maxMp + growth.mp,
-    mp: character.maxMp + growth.mp, // Full MP restore on level up
-    str: character.str + growth.str,
-    def: character.def + growth.def,
-    agi: character.agi + growth.agi,
-    luc: character.luc + growth.luc,
-    abilities: character.class.abilities.filter(a => a.unlockLevel <= newLevel),
+    maxHp: currentMaxHp + growth.hp,
+    hp: currentMaxHp + growth.hp, // Full heal on level up
+    maxMp: currentMaxMp + growth.mp,
+    mp: currentMaxMp + growth.mp, // Full MP restore on level up
+    str: (character.str ?? 0) + growth.str,
+    def: (character.def ?? 0) + growth.def,
+    agi: (character.agi ?? 0) + growth.agi,
+    luc: (character.luc ?? 0) + growth.luc,
+    abilities: character.class.abilities.filter(
+      a => (a.unlockLevel ?? a.level) <= newLevel
+    ),
   };
 };
 
@@ -70,6 +76,9 @@ export const calculateLevelUp = (
     }
 
     const growth = updatedCharacter.class.stat_growth;
+    if (!growth) {
+      break;
+    }
     const nextLevelExp = calculateExpRequirement(newLevel);
 
     // Apply level-up bonuses

@@ -1,3 +1,4 @@
+
 import type { Enemy } from '../types';
 
 /**
@@ -297,3 +298,4 @@ export function getRandomMonster(partyLevel: number): Enemy {
   // Return a copy with full HP
   return { ...monster, hp: monster.maxHp };
 }
+

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import type { Character, Item } from '../../types';
 import { StatBar } from '../ui/StatBar';
@@ -372,3 +373,4 @@ export const CharacterSheetModal: React.FC<CharacterSheetModalProps> = ({
     </div>
   );
 };
+

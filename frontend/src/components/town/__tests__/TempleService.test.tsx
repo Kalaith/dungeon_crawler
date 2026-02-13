@@ -1,5 +1,5 @@
+
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import type { Mock } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { TempleService } from '../TempleService';
 import { useGoldStore } from '../../../stores/useGoldStore';
@@ -10,25 +10,8 @@ import type { Character } from '../../../types';
 vi.mock('../../../stores/useGoldStore');
 vi.mock('../../../stores/usePartyStore');
 
-type UseGoldStoreMock = Mock<
-  [],
-  {
-    gold: number;
-    subtractGold: (amount: number) => boolean;
-    canAfford: (amount: number) => boolean;
-  }
->;
-
-type UsePartyStoreMock = Mock<
-  [],
-  {
-    party: Character[];
-    addCharacterToParty: (character: Character, slot: number) => void;
-  }
->;
-
-const useGoldStoreMock = useGoldStore as unknown as UseGoldStoreMock;
-const usePartyStoreMock = usePartyStore as unknown as UsePartyStoreMock;
+const useGoldStoreMock = useGoldStore as any;
+const usePartyStoreMock = usePartyStore as any;
 
 describe('TempleService', () => {
   const mockOnClose = vi.fn();

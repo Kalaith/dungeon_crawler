@@ -1,3 +1,4 @@
+
 import type { Character, Spell } from '../types';
 import { spells } from '../data/spells';
 
@@ -241,3 +242,4 @@ export function initializeCharacterSpells(character: Character): Character {
     };
   }
 }
+

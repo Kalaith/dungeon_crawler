@@ -1,3 +1,4 @@
+
 import type { CombatParticipant } from '../../types';
 import type { GameSliceCreator, CombatSlice } from './types';
 
@@ -270,3 +271,4 @@ export const createCombatSlice: GameSliceCreator<CombatSlice> = (set, get) => ({
       return state;
     }),
 });
+

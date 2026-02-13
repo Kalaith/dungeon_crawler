@@ -23,12 +23,12 @@ export interface NegativeAttributes {
 }
 
 export interface DerivedStats {
-  HP: { current: number; max: number }; // Health Points
-  AP: { current: number; max: number }; // Astral Points (Magic)
+  HP?: { current: number; max: number }; // Health Points
+  AP?: { current: number; max: number }; // Astral Points (Magic)
   Initiative: number;
   AC: number; // Armor Class
-  Proficiency: number;
-  Movement: number;
+  Proficiency?: number;
+  Movement?: number;
 }
 
 export interface Character {
@@ -55,7 +55,17 @@ export interface Character {
   portrait?: string;
   deity?: string;
   background?: string;
-  pendingFeatSelections: number;
+  pendingFeatSelections?: number;
+  // Legacy flat stat aliases used by older progression logic.
+  hp?: number;
+  maxHp?: number;
+  mp?: number;
+  maxMp?: number;
+  str?: number;
+  def?: number;
+  agi?: number;
+  luc?: number;
+  abilities?: ClassAbility[];
 }
 
 export interface Race {
@@ -87,6 +97,14 @@ export interface CharacterClass {
     savingThrows: Attribute[];
   };
   abilities: ClassAbility[];
+  stat_growth?: {
+    hp: number;
+    mp: number;
+    str: number;
+    def: number;
+    agi: number;
+    luc: number;
+  };
   spellcasting?: {
     ability: Attribute;
     type: 'prepared' | 'known';
@@ -99,6 +117,7 @@ export interface ClassAbility {
   name: string;
   description: string;
   level: number;
+  unlockLevel?: number;
   type: 'passive' | 'active';
   cost?: {
     AP?: number;
@@ -127,6 +146,8 @@ export interface Skill {
 
 export interface CharacterSkill {
   skillId: string; // Reference to skill definition
+  id?: string; // Legacy alias
+  name?: string; // Denormalized display value for UI/tests
   value: number; // The skill level/rating (-20 to +18)
   proficient: boolean; // Whether character has proficiency in this skill
 }
@@ -161,6 +182,7 @@ export interface Feat {
 }
 
 export interface Spell {
+  id: string;
   name: string;
   level: number; // 0 = Cantrip, 1-9 = Spell levels
   school: string; // Evocation, Conjuration, Transmutation, etc.
@@ -183,6 +205,12 @@ export interface Spell {
   attack_type?: 'melee' | 'ranged';
   aoe?: string; // Area of effect (e.g., "20 sphere", "15 cone")
   material_cost?: string; // Material component cost if any
+  // Legacy camelCase aliases used in UI/tests.
+  apCost?: number;
+  castingTime?: string;
+  damageType?: string;
+  savingThrow?: string;
+  attackRoll?: boolean;
 }
 
 // --- Existing interfaces adapted or kept ---
@@ -194,11 +222,14 @@ export interface Enemy {
   hp: number;
   maxHp: number;
   attributes: Attributes;
+  negativeAttributes?: NegativeAttributes;
   derivedStats: DerivedStats;
   abilities?: Ability[];
   statusEffects: ActiveStatusEffect[];
-  expReward: number;
-  lootTable: LootDrop[];
+  expReward?: number;
+  xpReward?: number; // Legacy alias
+  goldReward?: number;
+  lootTable?: LootDrop[];
 }
 
 export interface Position {
@@ -211,14 +242,20 @@ export interface CombatParticipant {
   type: 'party' | 'enemy';
   character?: Character;
   enemy?: Enemy;
+  index?: number;
   initiative: number;
   status: 'active' | 'defeated' | 'fled';
 }
 
 export interface GameData {
-  party: Character[];
-  dungeon: DungeonMap;
-  gameState: GameState;
+  party?: Character[];
+  dungeon?: DungeonMap;
+  gameState?: GameState;
+  party_system?: {
+    max_party_size: number;
+    character_classes: CharacterClass[];
+  };
+  craftingRecipes?: CraftingRecipe[];
 }
 
 export interface StaticGameData {
@@ -233,6 +270,7 @@ export type GameState =
   | 'party-creation'
   | 'overworld'
   | 'town'
+  | 'exploring'
   | 'dungeon'
   | 'combat'
   | 'game-over';
@@ -262,7 +300,14 @@ export interface Equipment {
 export interface Item {
   id: string;
   name: string;
-  type: 'weapon' | 'armor' | 'accessory' | 'consumable' | 'material' | 'key';
+  type:
+    | 'weapon'
+    | 'armor'
+    | 'shield'
+    | 'accessory'
+    | 'consumable'
+    | 'material'
+    | 'key';
   category?: 'weapons' | 'armor' | 'potions' | 'items'; // For shop categorization
   rarity: 'common' | 'rare' | 'epic' | 'legendary';
   stats?: Partial<Attributes & { HP: number; AP: number; AC: number }>;
@@ -295,15 +340,23 @@ export interface Ability {
   mpCost?: number; // Legacy, use AP
   apCost?: number;
   damage?: string | number; // Dice notation e.g. "1d6" or multiplier e.g. 1.5
-  heal?: string;
-  target: 'self' | 'ally' | 'enemy' | 'all_enemies' | 'all_allies';
+  heal?: string | number;
+  target?: 'self' | 'ally' | 'enemy' | 'all_enemies' | 'all_allies';
   effect?: StatusEffect;
-  unlockLevel: number;
+  unlockLevel?: number;
+  level?: number;
+  type?: 'passive' | 'active';
+  cost?: {
+    AP?: number;
+    HP?: number;
+  };
 }
 
 export interface StatusEffect {
   type:
     | 'poison'
+    | 'disease'
+    | 'exhaustion'
     | 'sleep'
     | 'stun'
     | 'buff'
@@ -326,7 +379,7 @@ export interface ActiveStatusEffect extends StatusEffect {
 export interface LootDrop {
   gold: number;
   items: Item[];
-  chance: number; // 0-1
+  chance?: number; // 0-1
 }
 
 export type InteractiveTileType = 'door' | 'gathering_point' | 'hazard';

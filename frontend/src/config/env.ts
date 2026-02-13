@@ -1,3 +1,4 @@
+
 interface EnvironmentConfig {
   apiBaseUrl: string;
   environment: 'development' | 'production' | 'preview';
@@ -34,3 +35,4 @@ export const getEnvVar = (key: string, defaultValue?: string): string => {
   }
   return value || defaultValue!;
 };
+

@@ -1,3 +1,4 @@
+
 import { create } from 'zustand';
 import { gameData } from '../data/gameData';
 import { lootTables } from '../data/loot';
@@ -40,7 +41,7 @@ export const useProgressionStore = create<ProgressionStore>(() => ({
       }
     }
 
-    return { gold, items };
+    return { gold, items, chance: 1 };
   },
 
   getRecipe: recipeId => {

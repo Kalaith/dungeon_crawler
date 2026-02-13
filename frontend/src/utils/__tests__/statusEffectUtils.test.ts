@@ -1,3 +1,4 @@
+
 import { checkImmunity, applyStatusEffect } from '../statusEffectUtils';
 import type {
   Character,
@@ -91,3 +92,4 @@ describe('statusEffectUtils', () => {
     expect(effects[0].type).toBe('buff_str');
   });
 });
+

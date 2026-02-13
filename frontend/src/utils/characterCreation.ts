@@ -7,6 +7,7 @@ import type {
   Feat,
   NegativeAttributes,
   Race,
+  Skill,
 } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 import { initializeCharacterSkills } from './skillChecks';
@@ -18,7 +19,7 @@ interface CharacterCreationStoreData {
   selectedClass: CharacterClass | null;
   attributes: Record<Attribute, number>;
   negativeAttributes: NegativeAttributes;
-  selectedSkills: string[]; // Legacy, not used anymore
+  selectedSkills: string[] | Skill[]; // Legacy, not used anymore
   selectedFeats: Feat[];
   portrait: string;
   selectedDeity: string | null;
