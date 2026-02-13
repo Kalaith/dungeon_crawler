@@ -23,12 +23,12 @@ export interface NegativeAttributes {
 }
 
 export interface DerivedStats {
-  HP?: { current: number; max: number }; // Health Points
-  AP?: { current: number; max: number }; // Astral Points (Magic)
+  HP: { current: number; max: number }; // Health Points
+  AP: { current: number; max: number }; // Astral Points (Magic)
   Initiative: number;
   AC: number; // Armor Class
-  Proficiency?: number;
-  Movement?: number;
+  Proficiency: number;
+  Movement: number;
 }
 
 export interface Character {
@@ -55,7 +55,7 @@ export interface Character {
   portrait?: string;
   deity?: string;
   background?: string;
-  pendingFeatSelections?: number;
+  pendingFeatSelections: number;
   // Legacy flat stat aliases used by older progression logic.
   hp?: number;
   maxHp?: number;

@@ -8,8 +8,15 @@ import { AbilitySelector } from './AbilitySelector';
 interface ActionMenuProps {
   characterIndex: number;
   onAction: (
-    action: 'attack' | 'spell' | 'defend' | 'item' | 'row-switch' | 'ability',
-    data?: unknown
+    action:
+      | 'attack'
+      | 'spell'
+      | 'defend'
+      | 'item'
+      | 'row-switch'
+      | 'ability'
+      | 'escape',
+    options?: { spell?: Spell; abilityId?: string }
   ) => void;
 }
 

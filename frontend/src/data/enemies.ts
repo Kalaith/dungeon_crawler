@@ -69,8 +69,12 @@ export const enemies: Enemy[] = [
       CH: 6,
     },
     derivedStats: {
+      HP: { current: 25, max: 25 },
+      AP: { current: 0, max: 0 },
       AC: 12, // Base 10 + 2 (AG)
       Initiative: 1,
+      Proficiency: 2,
+      Movement: 30,
     },
     abilities: [enemyAbilities['goblin_stab']!],
     statusEffects: [],
@@ -94,8 +98,12 @@ export const enemies: Enemy[] = [
       CH: 4,
     },
     derivedStats: {
+      HP: { current: 35, max: 35 },
+      AP: { current: 0, max: 0 },
       AC: 13, // Base 10 + armor
       Initiative: 0,
+      Proficiency: 2,
+      Movement: 30,
     },
     abilities: [enemyAbilities['skeleton_bone_throw']!],
     statusEffects: [],
@@ -119,8 +127,12 @@ export const enemies: Enemy[] = [
       CH: 7,
     },
     derivedStats: {
+      HP: { current: 50, max: 50 },
+      AP: { current: 0, max: 0 },
       AC: 14,
       Initiative: 0,
+      Proficiency: 2,
+      Movement: 30,
     },
     abilities: [enemyAbilities['orc_smash']!],
     statusEffects: [],
@@ -144,8 +156,12 @@ export const enemies: Enemy[] = [
       CH: 6,
     },
     derivedStats: {
+      HP: { current: 80, max: 80 },
+      AP: { current: 0, max: 0 },
       AC: 15,
       Initiative: -1,
+      Proficiency: 2,
+      Movement: 30,
     },
     abilities: [enemyAbilities['troll_regenerate']!],
     statusEffects: [],
@@ -169,12 +185,15 @@ export const enemies: Enemy[] = [
       CH: 10,
     },
     derivedStats: {
+      HP: { current: 65, max: 65 },
+      AP: { current: 0, max: 0 },
       AC: 12,
       Initiative: 2,
+      Proficiency: 3,
+      Movement: 30,
     },
     abilities: [enemyAbilities['dark_mage_shadow_bolt']!],
     statusEffects: [],
     lootTable: [],
   },
 ];
-

@@ -82,7 +82,7 @@ describe('Spell Learning System', () => {
         },
       },
       spells: [],
-    } as Character;
+    } as unknown as Character;
 
     it('should calculate max prepared spells correctly', () => {
       const max = getMaxPreparedSpells(mockWizard);
@@ -103,7 +103,7 @@ describe('Spell Learning System', () => {
             type: 'known',
           },
         },
-      } as Character;
+      } as unknown as Character;
 
       const max = getMaxKnownSpells(mockSorcerer);
       expect(max).toBe(6); // 3 (level) + 3 (CH mod)
@@ -117,7 +117,7 @@ describe('Spell Learning System', () => {
           ...mockWizard.attributes,
           IT: 8, // -1 modifier
         },
-      } as Character;
+      } as unknown as Character;
 
       const max = getMaxPreparedSpells(lowLevelCharacter);
       expect(max).toBeGreaterThanOrEqual(1);
@@ -145,7 +145,7 @@ describe('Spell Learning System', () => {
         },
       },
       spells: [],
-    } as Character;
+    } as unknown as Character;
 
     it('should allow learning valid spell', () => {
       const fireBolt = spells.find(s => s.id === 'fire_bolt');
@@ -161,7 +161,7 @@ describe('Spell Learning System', () => {
       const lowLevelChar: Character = {
         ...mockCharacter,
         level: 1,
-      } as Character;
+      } as unknown as Character;
 
       expect(canLearnSpell(lowLevelChar, fireball)).toBe(false);
     });
@@ -173,7 +173,7 @@ describe('Spell Learning System', () => {
       const charWithSpell: Character = {
         ...mockCharacter,
         spells: [fireBolt],
-      } as Character;
+      } as unknown as Character;
 
       expect(canLearnSpell(charWithSpell, fireBolt)).toBe(false);
     });
@@ -194,7 +194,7 @@ describe('Spell Learning System', () => {
         class: {
           name: 'Wizard',
         },
-      } as Character;
+      } as unknown as Character;
 
       const cantrips = getCantrips(mockWizard);
       expect(cantrips.every(s => s.level === 0)).toBe(true);
@@ -223,7 +223,7 @@ describe('Spell Learning System', () => {
           },
         },
         spells: [],
-      } as Character;
+      } as unknown as Character;
 
       const initialized = initializeCharacterSpells(mockSorcerer);
       expect(initialized.spells.length).toBeGreaterThan(0);
@@ -251,7 +251,7 @@ describe('Spell Learning System', () => {
           },
         },
         spells: [],
-      } as Character;
+      } as unknown as Character;
 
       const initialized = initializeCharacterSpells(mockWizard);
       expect(initialized.spells.every(s => s.level === 0)).toBe(true);
@@ -302,7 +302,7 @@ describe('Spell Data', () => {
       const allSpells = spells.slice(0, 10);
       const castable = getCastableSpells(allSpells, 5);
 
-      expect(castable.every(s => s.apCost <= 5)).toBe(true);
+      expect(castable.every(s => (s.apCost ?? 0) <= 5)).toBe(true);
     });
 
     it('should return empty array when insufficient AP', () => {
@@ -335,7 +335,7 @@ describe('Concentration Mechanics', () => {
         savingThrows: ['CO', 'IT'],
       },
     },
-  } as Character;
+  } as unknown as Character;
 
   describe('Concentration Checks', () => {
     it('should maintain concentration on low damage', () => {
@@ -376,4 +376,3 @@ describe('Concentration Mechanics', () => {
     });
   });
 });
-

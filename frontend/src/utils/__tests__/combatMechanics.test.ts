@@ -1,5 +1,5 @@
 
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import {
   rollD20,
   rollDice,
@@ -331,4 +331,3 @@ describe('Combat Mechanics', () => {
     });
   });
 });
-

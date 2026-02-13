@@ -67,6 +67,7 @@ describe('TempleService', () => {
     alive,
     statusEffects: [],
     position: { row: 'front', index: 0 },
+    pendingFeatSelections: 0,
     exp: 0,
     expToNext: 1000,
   });
