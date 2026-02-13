@@ -1,143 +1,178 @@
 import type { Ability, Enemy } from '../types';
 
 export const enemyAbilities: Record<string, Ability> = {
-    goblin_stab: {
-        id: 'goblin_stab',
-        name: 'Vicious Stab',
-        description: 'A quick stabbing attack',
-        mpCost: 0,
-        damage: 1.3,
-        target: 'enemy',
-        unlockLevel: 1
-    },
-    skeleton_bone_throw: {
-        id: 'skeleton_bone_throw',
-        name: 'Bone Throw',
-        description: 'Throws a bone at the enemy, inflicting poison',
-        mpCost: 0,
-        damage: 1.2,
-        target: 'enemy',
-        effect: { type: 'poison', duration: 3, value: 3 },
-        unlockLevel: 1
-    },
-    orc_smash: {
-        id: 'orc_smash',
-        name: 'Brutal Smash',
-        description: 'A devastating overhead smash',
-        mpCost: 0,
-        damage: 1.6,
-        target: 'enemy',
-        unlockLevel: 1
-    },
-    troll_regenerate: {
-        id: 'troll_regenerate',
-        name: 'Regenerate',
-        description: 'Heals some HP',
-        mpCost: 0,
-        heal: 15,
-        target: 'self',
-        unlockLevel: 1
-    },
-    dark_mage_shadow_bolt: {
-        id: 'dark_mage_shadow_bolt',
-        name: 'Shadow Bolt',
-        description: 'Fires a bolt of dark energy',
-        mpCost: 0,
-        damage: 2.0,
-        target: 'enemy',
-        unlockLevel: 1
-    }
+  goblin_stab: {
+    id: 'goblin_stab',
+    name: 'Vicious Stab',
+    description: 'A quick stabbing attack',
+    mpCost: 0,
+    damage: 1.3,
+    target: 'enemy',
+    unlockLevel: 1,
+  },
+  skeleton_bone_throw: {
+    id: 'skeleton_bone_throw',
+    name: 'Bone Throw',
+    description: 'Throws a bone at the enemy, inflicting poison',
+    mpCost: 0,
+    damage: 1.2,
+    target: 'enemy',
+    effect: { type: 'poison', duration: 3, value: 3 },
+    unlockLevel: 1,
+  },
+  orc_smash: {
+    id: 'orc_smash',
+    name: 'Brutal Smash',
+    description: 'A devastating overhead smash',
+    mpCost: 0,
+    damage: 1.6,
+    target: 'enemy',
+    unlockLevel: 1,
+  },
+  troll_regenerate: {
+    id: 'troll_regenerate',
+    name: 'Regenerate',
+    description: 'Heals some HP',
+    mpCost: 0,
+    heal: 15,
+    target: 'self',
+    unlockLevel: 1,
+  },
+  dark_mage_shadow_bolt: {
+    id: 'dark_mage_shadow_bolt',
+    name: 'Shadow Bolt',
+    description: 'Fires a bolt of dark energy',
+    mpCost: 0,
+    damage: 2.0,
+    target: 'enemy',
+    unlockLevel: 1,
+  },
 };
 
 export const enemies: Enemy[] = [
-    {
-        id: 'goblin',
-        name: "Goblin",
-        level: 1,
-        hp: 25,
-        maxHp: 25,
-        expReward: 15,
-        attributes: {
-            ST: 8, CO: 10, DX: 12, AG: 12, IT: 8, IN: 8, WD: 8, CH: 6
-        },
-        derivedStats: {
-            AC: 12, // Base 10 + 2 (AG)
-            Initiative: 1
-        },
-        abilities: [enemyAbilities['goblin_stab']!],
-        statusEffects: [],
-        lootTable: []
+  {
+    id: 'goblin',
+    name: 'Goblin',
+    level: 1,
+    hp: 25,
+    maxHp: 25,
+    expReward: 15,
+    attributes: {
+      ST: 8,
+      CO: 10,
+      DX: 12,
+      AG: 12,
+      IT: 8,
+      IN: 8,
+      WD: 8,
+      CH: 6,
     },
-    {
-        id: 'skeleton',
-        name: "Skeleton",
-        level: 2,
-        hp: 35,
-        maxHp: 35,
-        expReward: 25,
-        attributes: {
-            ST: 10, CO: 12, DX: 10, AG: 10, IT: 6, IN: 8, WD: 8, CH: 4
-        },
-        derivedStats: {
-            AC: 13, // Base 10 + armor
-            Initiative: 0
-        },
-        abilities: [enemyAbilities['skeleton_bone_throw']!],
-        statusEffects: [],
-        lootTable: []
+    derivedStats: {
+      AC: 12, // Base 10 + 2 (AG)
+      Initiative: 1,
     },
-    {
-        id: 'orc',
-        name: "Orc",
-        level: 3,
-        hp: 50,
-        maxHp: 50,
-        expReward: 40,
-        attributes: {
-            ST: 16, CO: 14, DX: 10, AG: 10, IT: 7, IN: 9, WD: 8, CH: 7
-        },
-        derivedStats: {
-            AC: 14,
-            Initiative: 0
-        },
-        abilities: [enemyAbilities['orc_smash']!],
-        statusEffects: [],
-        lootTable: []
+    abilities: [enemyAbilities['goblin_stab']!],
+    statusEffects: [],
+    lootTable: [],
+  },
+  {
+    id: 'skeleton',
+    name: 'Skeleton',
+    level: 2,
+    hp: 35,
+    maxHp: 35,
+    expReward: 25,
+    attributes: {
+      ST: 10,
+      CO: 12,
+      DX: 10,
+      AG: 10,
+      IT: 6,
+      IN: 8,
+      WD: 8,
+      CH: 4,
     },
-    {
-        id: 'troll',
-        name: "Troll",
-        level: 4,
-        hp: 80,
-        maxHp: 80,
-        expReward: 60,
-        attributes: {
-            ST: 20, CO: 18, DX: 8, AG: 8, IT: 6, IN: 8, WD: 8, CH: 6
-        },
-        derivedStats: {
-            AC: 15,
-            Initiative: -1
-        },
-        abilities: [enemyAbilities['troll_regenerate']!],
-        statusEffects: [],
-        lootTable: []
+    derivedStats: {
+      AC: 13, // Base 10 + armor
+      Initiative: 0,
     },
-    {
-        id: 'dark_mage',
-        name: "Dark Mage",
-        level: 5,
-        hp: 65,
-        maxHp: 65,
-        expReward: 75,
-        attributes: {
-            ST: 8, CO: 10, DX: 12, AG: 14, IT: 18, IN: 14, WD: 12, CH: 10
-        },
-        derivedStats: {
-            AC: 12,
-            Initiative: 2
-        },
-        abilities: [enemyAbilities['dark_mage_shadow_bolt']!],
-        statusEffects: [],
-        lootTable: []
-    }
+    abilities: [enemyAbilities['skeleton_bone_throw']!],
+    statusEffects: [],
+    lootTable: [],
+  },
+  {
+    id: 'orc',
+    name: 'Orc',
+    level: 3,
+    hp: 50,
+    maxHp: 50,
+    expReward: 40,
+    attributes: {
+      ST: 16,
+      CO: 14,
+      DX: 10,
+      AG: 10,
+      IT: 7,
+      IN: 9,
+      WD: 8,
+      CH: 7,
+    },
+    derivedStats: {
+      AC: 14,
+      Initiative: 0,
+    },
+    abilities: [enemyAbilities['orc_smash']!],
+    statusEffects: [],
+    lootTable: [],
+  },
+  {
+    id: 'troll',
+    name: 'Troll',
+    level: 4,
+    hp: 80,
+    maxHp: 80,
+    expReward: 60,
+    attributes: {
+      ST: 20,
+      CO: 18,
+      DX: 8,
+      AG: 8,
+      IT: 6,
+      IN: 8,
+      WD: 8,
+      CH: 6,
+    },
+    derivedStats: {
+      AC: 15,
+      Initiative: -1,
+    },
+    abilities: [enemyAbilities['troll_regenerate']!],
+    statusEffects: [],
+    lootTable: [],
+  },
+  {
+    id: 'dark_mage',
+    name: 'Dark Mage',
+    level: 5,
+    hp: 65,
+    maxHp: 65,
+    expReward: 75,
+    attributes: {
+      ST: 8,
+      CO: 10,
+      DX: 12,
+      AG: 14,
+      IT: 18,
+      IN: 14,
+      WD: 12,
+      CH: 10,
+    },
+    derivedStats: {
+      AC: 12,
+      Initiative: 2,
+    },
+    abilities: [enemyAbilities['dark_mage_shadow_bolt']!],
+    statusEffects: [],
+    lootTable: [],
+  },
 ];

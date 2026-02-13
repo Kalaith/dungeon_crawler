@@ -16,7 +16,7 @@ export const CharacterSlot: React.FC<CharacterSlotProps> = ({
   slotIndex,
   onCreateCharacter,
   onViewDetails,
-  onRemoveCharacter
+  onRemoveCharacter,
 }) => {
   if (!character) {
     return (
@@ -44,7 +44,7 @@ export const CharacterSlot: React.FC<CharacterSlotProps> = ({
       />
       {onRemoveCharacter && (
         <button
-          onClick={(e) => {
+          onClick={e => {
             e.stopPropagation();
             onRemoveCharacter(slotIndex);
           }}

@@ -14,9 +14,9 @@ export * from './constants';
 export const gameData: StaticGameData = {
   party_system: {
     max_party_size: gameConfig.PARTY.MAX_SIZE,
-    character_classes: characterClasses
+    character_classes: characterClasses,
   },
-  craftingRecipes
+  craftingRecipes,
 };
 
 // Deprecated: Use generated dungeon maps instead
@@ -27,5 +27,5 @@ export const dungeonMap: DungeonMap = {
   floor: 1,
   playerStart: { x: 1, y: 1 },
   treasureLocations: [],
-  explored: [] // Add missing property
+  explored: [], // Add missing property
 };

@@ -1,4 +1,9 @@
-import type { Character, Enemy, ActiveStatusEffect, StatusEffect } from '../types';
+import type {
+  Character,
+  Enemy,
+  ActiveStatusEffect,
+  StatusEffect,
+} from '../types';
 
 /**
  * Applies a status effect to a character or enemy
@@ -7,53 +12,53 @@ import type { Character, Enemy, ActiveStatusEffect, StatusEffect } from '../type
  * Checks if a target is immune to a specific status effect
  */
 export const checkImmunity = (
-    target: Character | Enemy,
-    effectType: StatusEffect['type']
+  target: Character | Enemy,
+  effectType: StatusEffect['type']
 ): boolean => {
-    // Check race-based immunities for Characters
-    if ('race' in target) {
-        const raceId = target.race.id;
+  // Check race-based immunities for Characters
+  if ('race' in target) {
+    const raceId = target.race.id;
 
-        // Constructed/Android/Automaton immunities
-        if (['android', 'automaton', 'constructed'].includes(raceId)) {
-            if (['poison', 'disease', 'sleep', 'exhaustion'].includes(effectType)) {
-                return true;
-            }
-        }
-
-        // Undead/Dhampir immunities (partial)
-        if (['dhampir', 'undead'].includes(raceId)) {
-            if (['poison', 'disease'].includes(effectType)) {
-                return true;
-            }
-        }
-
-        // Specific trait checks could go here if we parsed abilities more deeply
-        // For now, ID-based checks cover the reported "Constructed" gap
+    // Constructed/Android/Automaton immunities
+    if (['android', 'automaton', 'constructed'].includes(raceId)) {
+      if (['poison', 'disease', 'sleep', 'exhaustion'].includes(effectType)) {
+        return true;
+      }
     }
 
-    return false;
+    // Undead/Dhampir immunities (partial)
+    if (['dhampir', 'undead'].includes(raceId)) {
+      if (['poison', 'disease'].includes(effectType)) {
+        return true;
+      }
+    }
+
+    // Specific trait checks could go here if we parsed abilities more deeply
+    // For now, ID-based checks cover the reported "Constructed" gap
+  }
+
+  return false;
 };
 
 /**
  * Applies a status effect to a character or enemy
  */
 export const applyStatusEffect = (
-    target: Character | Enemy,
-    effect: StatusEffect
+  target: Character | Enemy,
+  effect: StatusEffect
 ): ActiveStatusEffect[] => {
-    // Check for immunity first
-    if (checkImmunity(target, effect.type)) {
-        console.log(`${target.name} is immune to ${effect.type}!`);
-        return target.statusEffects;
-    }
+  // Check for immunity first
+  if (checkImmunity(target, effect.type)) {
+    console.log(`${target.name} is immune to ${effect.type}!`);
+    return target.statusEffects;
+  }
 
-    const newEffect: ActiveStatusEffect = {
-        ...effect,
-        remainingTurns: effect.duration
-    };
+  const newEffect: ActiveStatusEffect = {
+    ...effect,
+    remainingTurns: effect.duration,
+  };
 
-    return [...target.statusEffects, newEffect];
+  return [...target.statusEffects, newEffect];
 };
 
 /**
@@ -61,83 +66,85 @@ export const applyStatusEffect = (
  * Returns damage dealt (for poison) or healing done
  */
 export const processStatusEffects = (
-    target: Character | Enemy
+  target: Character | Enemy
 ): { damage: number; healing: number; message: string } => {
-    let damage = 0;
-    const healing = 0;
-    const messages: string[] = [];
+  let damage = 0;
+  const healing = 0;
+  const messages: string[] = [];
 
-    target.statusEffects.forEach(effect => {
-        switch (effect.type) {
-            case 'poison': {
-                const poisonDamage = effect.value || 5;
-                damage += poisonDamage;
-                messages.push(`${target.name} takes ${poisonDamage} poison damage!`);
-                break;
-            }
-        }
-    });
+  target.statusEffects.forEach(effect => {
+    switch (effect.type) {
+      case 'poison': {
+        const poisonDamage = effect.value || 5;
+        damage += poisonDamage;
+        messages.push(`${target.name} takes ${poisonDamage} poison damage!`);
+        break;
+      }
+    }
+  });
 
-    return {
-        damage,
-        healing,
-        message: messages.join(' ')
-    };
+  return {
+    damage,
+    healing,
+    message: messages.join(' '),
+  };
 };
 
 /**
  * Decrements status effect durations and removes expired effects
  */
 export const updateStatusEffects = (
-    target: Character | Enemy
+  target: Character | Enemy
 ): ActiveStatusEffect[] => {
-    return target.statusEffects
-        .map(effect => ({
-            ...effect,
-            remainingTurns: effect.remainingTurns - 1
-        }))
-        .filter(effect => effect.remainingTurns > 0);
+  return target.statusEffects
+    .map(effect => ({
+      ...effect,
+      remainingTurns: effect.remainingTurns - 1,
+    }))
+    .filter(effect => effect.remainingTurns > 0);
 };
 
 /**
  * Checks if a target has a specific status effect
  */
 export const hasStatusEffect = (
-    target: Character | Enemy,
-    effectType: ActiveStatusEffect['type']
+  target: Character | Enemy,
+  effectType: ActiveStatusEffect['type']
 ): boolean => {
-    return target.statusEffects.some(effect => effect.type === effectType);
+  return target.statusEffects.some(effect => effect.type === effectType);
 };
 
 /**
  * Gets the total stat modification from buffs
  */
 export const getStatModifier = (
-    target: Character | Enemy,
-    stat: 'str' | 'def' | 'agi'
+  target: Character | Enemy,
+  stat: 'str' | 'def' | 'agi'
 ): number => {
-    let modifier = 0;
+  let modifier = 0;
 
-    target.statusEffects.forEach(effect => {
-        if (effect.type === `buff_${stat}` && effect.value) {
-            modifier += effect.value;
-        }
-    });
+  target.statusEffects.forEach(effect => {
+    if (effect.type === `buff_${stat}` && effect.value) {
+      modifier += effect.value;
+    }
+  });
 
-    return modifier;
+  return modifier;
 };
 
 /**
  * Gets a display-friendly name for a status effect
  */
-export const getStatusEffectName = (type: ActiveStatusEffect['type']): string => {
-    const names: Record<ActiveStatusEffect['type'], string> = {
-        poison: 'Poisoned',
-        sleep: 'Asleep',
-        buff_str: 'STR+',
-        buff_def: 'DEF+',
-        buff_agi: 'AGI+'
-    };
+export const getStatusEffectName = (
+  type: ActiveStatusEffect['type']
+): string => {
+  const names: Record<ActiveStatusEffect['type'], string> = {
+    poison: 'Poisoned',
+    sleep: 'Asleep',
+    buff_str: 'STR+',
+    buff_def: 'DEF+',
+    buff_agi: 'AGI+',
+  };
 
-    return names[type] || type;
+  return names[type] || type;
 };

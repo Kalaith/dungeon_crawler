@@ -12,7 +12,7 @@ interface CharacterCreationModalProps {
 export const CharacterCreationModal: React.FC<CharacterCreationModalProps> = ({
   isOpen,
   onClose,
-  onCreateCharacter
+  onCreateCharacter,
 }) => {
   return (
     <Modal
@@ -22,7 +22,7 @@ export const CharacterCreationModal: React.FC<CharacterCreationModalProps> = ({
       className="max-w-4xl"
     >
       <CharacterCreationWizard
-        onFinish={(character) => {
+        onFinish={character => {
           onCreateCharacter(character);
           onClose();
         }}

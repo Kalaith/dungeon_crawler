@@ -20,7 +20,7 @@ export const useCombat = () => {
     endCombat: endCombatStore,
     updateEnemyHP,
     updateEnemyStatusEffects,
-    setVictoryData
+    setVictoryData,
   } = useCombatStore();
 
   const { setGameState } = useGameStateStore();
@@ -30,7 +30,7 @@ export const useCombat = () => {
     updatePartyMemberHP,
     updatePartyMemberStatusEffects,
     updatePartyMember,
-    addGoldToParty
+    addGoldToParty,
   } = usePartyStore();
 
   const { addItemsToInventory } = useInventoryStore();
@@ -40,125 +40,165 @@ export const useCombat = () => {
   // ... (keep other hooks)
 
   // Helper to end combat and distribute rewards
-  const endCombat = useCallback((victory: boolean, loot?: import('../types').LootDrop) => {
-    if (victory) {
-      // ... (keep victory logic)
-      // Award experience
-      const exp = currentEnemy?.expReward || 0;
-      const levelUps: { characterId: string; name: string; levelsGained: number }[] = [];
+  const endCombat = useCallback(
+    (victory: boolean, loot?: import('../types').LootDrop) => {
+      if (victory) {
+        // ... (keep victory logic)
+        // Award experience
+        const exp = currentEnemy?.expReward || 0;
+        const levelUps: {
+          characterId: string;
+          name: string;
+          levelsGained: number;
+        }[] = [];
 
-      // Update party with XP and check for level ups
-      party.forEach((character, index) => {
-        if (character && character.alive) {
-          const { character: updatedCharacter, leveledUp, levelsGained } = calculateLevelUp(character, exp);
+        // Update party with XP and check for level ups
+        party.forEach((character, index) => {
+          if (character && character.alive) {
+            const {
+              character: updatedCharacter,
+              leveledUp,
+              levelsGained,
+            } = calculateLevelUp(character, exp);
 
-          updatePartyMember(index, updatedCharacter);
+            updatePartyMember(index, updatedCharacter);
 
-          if (leveledUp) {
-            addCombatLog(`${character.name} gained ${levelsGained} level(s)!`);
-            levelUps.push({
-              characterId: character.id,
-              name: character.name,
-              levelsGained
-            });
+            if (leveledUp) {
+              addCombatLog(
+                `${character.name} gained ${levelsGained} level(s)!`
+              );
+              levelUps.push({
+                characterId: character.id,
+                name: character.name,
+                levelsGained,
+              });
+            }
+          }
+        });
+
+        // Add loot rewards
+        if (loot) {
+          addGoldToParty(loot.gold);
+          if (loot.items && loot.items.length > 0) {
+            addItemsToInventory(loot.items);
           }
         }
-      });
 
-      // Add loot rewards
-      if (loot) {
-        addGoldToParty(loot.gold);
-        if (loot.items && loot.items.length > 0) {
-          addItemsToInventory(loot.items);
-        }
+        // Set victory data to show the screen
+        setVictoryData({
+          exp,
+          gold: loot?.gold || 0,
+          items: loot?.items || [],
+          levelUps,
+        });
+
+        // Note: We do NOT call endCombatStore() here anymore.
+        // The Victory Screen's "Continue" button will call it.
+      } else {
+        // Game Over
+        endCombatStore();
+        setGameState('game-over');
+      }
+    },
+    [
+      currentEnemy,
+      party,
+      updatePartyMember,
+      addCombatLog,
+      addGoldToParty,
+      addItemsToInventory,
+      endCombatStore,
+      setVictoryData,
+      setGameState,
+    ]
+  );
+
+  const performAttack = useCallback(
+    (attacker: Character | Enemy, target: Character | Enemy) => {
+      // Calculate effective stats for attacker
+      let attackerStr = 0;
+      if ('attributes' in attacker) {
+        attackerStr = attacker.attributes.ST;
       }
 
-      // Set victory data to show the screen
-      setVictoryData({
-        exp,
-        gold: loot?.gold || 0,
-        items: loot?.items || [],
-        levelUps
-      });
-
-      // Note: We do NOT call endCombatStore() here anymore. 
-      // The Victory Screen's "Continue" button will call it.
-
-    } else {
-      // Game Over
-      endCombatStore();
-      setGameState('game-over');
-    }
-  }, [currentEnemy, party, updatePartyMember, addCombatLog, addGoldToParty, addItemsToInventory, endCombatStore, setVictoryData, setGameState]);
-
-  const performAttack = useCallback((attacker: Character | Enemy, target: Character | Enemy) => {
-    // Calculate effective stats for attacker
-    let attackerStr = 0;
-    if ('attributes' in attacker) {
-      attackerStr = attacker.attributes.ST;
-    }
-
-    if ('equipment' in attacker) {
-      const stats = calculateEffectiveStats(attacker as Character);
-      attackerStr = stats.attributes.ST;
-    }
-
-    // Calculate effective stats for target
-    let targetDef = 0;
-    if ('derivedStats' in target) {
-      targetDef = target.derivedStats.AC;
-    }
-
-    if ('equipment' in target) {
-      const stats = calculateEffectiveStats(target as Character);
-      targetDef = stats.derivedStats.AC;
-    }
-
-    const damage = Math.max(1, attackerStr - targetDef + Math.floor(Math.random() * 5));
-
-    // Handle HP update based on target type
-    let currentHp = 0;
-    if ('derivedStats' in target && 'HP' in target.derivedStats) {
-      // It's a Character
-      currentHp = (target as Character).derivedStats.HP.current;
-    } else if ('hp' in target) {
-      // It's an Enemy
-      currentHp = (target as Enemy).hp;
-    }
-
-    const newHp = currentHp - damage;
-
-    const attackerName = attacker.name || 'Enemy';
-    const targetName = target.name || 'Party member';
-
-    addCombatLog(`${attackerName} attacks ${targetName} for ${damage} damage!`);
-
-    if (target === currentEnemy) {
-      // Update enemy HP
-      updateEnemyHP(newHp);
-
-      if (newHp <= 0) {
-        addCombatLog(`${target.name} is defeated!`);
-        const loot = generateLoot(currentEnemy.level);
-        setTimeout(() => {
-          addCombatLog(`Victory! Gained ${loot.gold} gold!`);
-          if (loot.items.length > 0) {
-            addCombatLog(`Found: ${loot.items.map(i => i.name).join(', ')}`);
-          }
-          endCombat(true, loot);
-        }, 1000);
+      if ('equipment' in attacker) {
+        const stats = calculateEffectiveStats(attacker as Character);
+        attackerStr = stats.attributes.ST;
       }
-    } else {
-      // Update party member HP
-      const characterIndex = party.findIndex(c => c && c.name === target.name);
-      if (characterIndex >= 0) {
-        updatePartyMemberHP(characterIndex, newHp);
+
+      // Calculate effective stats for target
+      let targetDef = 0;
+      if ('derivedStats' in target) {
+        targetDef = target.derivedStats.AC;
+      }
+
+      if ('equipment' in target) {
+        const stats = calculateEffectiveStats(target as Character);
+        targetDef = stats.derivedStats.AC;
+      }
+
+      const damage = Math.max(
+        1,
+        attackerStr - targetDef + Math.floor(Math.random() * 5)
+      );
+
+      // Handle HP update based on target type
+      let currentHp = 0;
+      if ('derivedStats' in target && 'HP' in target.derivedStats) {
+        // It's a Character
+        currentHp = (target as Character).derivedStats.HP.current;
+      } else if ('hp' in target) {
+        // It's an Enemy
+        currentHp = (target as Enemy).hp;
+      }
+
+      const newHp = currentHp - damage;
+
+      const attackerName = attacker.name || 'Enemy';
+      const targetName = target.name || 'Party member';
+
+      addCombatLog(
+        `${attackerName} attacks ${targetName} for ${damage} damage!`
+      );
+
+      if (target === currentEnemy) {
+        // Update enemy HP
+        updateEnemyHP(newHp);
+
         if (newHp <= 0) {
-          addCombatLog(`${target.name} is knocked unconscious!`);
+          addCombatLog(`${target.name} is defeated!`);
+          const loot = generateLoot(currentEnemy.level);
+          setTimeout(() => {
+            addCombatLog(`Victory! Gained ${loot.gold} gold!`);
+            if (loot.items.length > 0) {
+              addCombatLog(`Found: ${loot.items.map(i => i.name).join(', ')}`);
+            }
+            endCombat(true, loot);
+          }, 1000);
+        }
+      } else {
+        // Update party member HP
+        const characterIndex = party.findIndex(
+          c => c && c.name === target.name
+        );
+        if (characterIndex >= 0) {
+          updatePartyMemberHP(characterIndex, newHp);
+          if (newHp <= 0) {
+            addCombatLog(`${target.name} is knocked unconscious!`);
+          }
         }
       }
-    }
-  }, [currentEnemy, addCombatLog, endCombat, generateLoot, updateEnemyHP, updatePartyMemberHP, party]);
+    },
+    [
+      currentEnemy,
+      addCombatLog,
+      endCombat,
+      generateLoot,
+      updateEnemyHP,
+      updatePartyMemberHP,
+      party,
+    ]
+  );
 
   const enemyAction = useCallback(() => {
     if (!currentEnemy) {
@@ -166,9 +206,13 @@ export const useCombat = () => {
       return;
     }
 
-    const aliveParty = party.filter((c): c is Character => c !== null && c.alive);
+    const aliveParty = party.filter(
+      (c): c is Character => c !== null && c.alive
+    );
     if (aliveParty.length === 0) {
-      console.log('⚠️ No alive party members for enemy to attack - Triggering Game Over');
+      console.log(
+        '⚠️ No alive party members for enemy to attack - Triggering Game Over'
+      );
       addCombatLog('All party members are defeated!');
       showMessage('Game Over! All party members have fallen.');
       endCombat(false);
@@ -178,18 +222,22 @@ export const useCombat = () => {
     console.log('👹 Enemy Action Starting:', {
       enemy: currentEnemy.name,
       attributes: currentEnemy.attributes,
-      abilities: currentEnemy.abilities
+      abilities: currentEnemy.abilities,
     });
 
     try {
       // Enemy AI: 40% chance to use ability if available
-      const useAbility = currentEnemy.abilities &&
+      const useAbility =
+        currentEnemy.abilities &&
         currentEnemy.abilities.length > 0 &&
         Math.random() < 0.4;
 
       if (useAbility && currentEnemy.abilities) {
         // Pick a random ability
-        const ability = currentEnemy.abilities[Math.floor(Math.random() * currentEnemy.abilities.length)];
+        const ability =
+          currentEnemy.abilities[
+            Math.floor(Math.random() * currentEnemy.abilities.length)
+          ];
         console.log('👹 Enemy using ability:', ability.name);
 
         if (ability && ability.damage) {
@@ -200,7 +248,9 @@ export const useCombat = () => {
             return;
           }
           const target = validTargets.reduce((lowest, current) =>
-            current.derivedStats.HP.current < lowest.derivedStats.HP.current ? current : lowest
+            current.derivedStats.HP.current < lowest.derivedStats.HP.current
+              ? current
+              : lowest
           );
 
           // Calculate effective stats for target to get AC
@@ -208,14 +258,22 @@ export const useCombat = () => {
           const targetAC = targetStats.derivedStats.AC;
           const enemyST = currentEnemy.attributes?.ST || 10; // Fallback if attributes missing
 
-          const baseDamage = Math.max(1, enemyST - targetAC + Math.floor(Math.random() * 5));
-          const multiplier = typeof ability.damage === 'number' ? ability.damage : 1;
+          const baseDamage = Math.max(
+            1,
+            enemyST - targetAC + Math.floor(Math.random() * 5)
+          );
+          const multiplier =
+            typeof ability.damage === 'number' ? ability.damage : 1;
           const abilityDamage = Math.floor(baseDamage * multiplier);
           const newHp = target.derivedStats.HP.current - abilityDamage;
 
-          addCombatLog(`${currentEnemy.name} uses ${ability.name} on ${target.name} for ${abilityDamage} damage!`);
+          addCombatLog(
+            `${currentEnemy.name} uses ${ability.name} on ${target.name} for ${abilityDamage} damage!`
+          );
 
-          const characterIndex = party.findIndex(c => c && c.name === target.name);
+          const characterIndex = party.findIndex(
+            c => c && c.name === target.name
+          );
           if (characterIndex >= 0) {
             updatePartyMemberHP(characterIndex, newHp);
 
@@ -233,14 +291,20 @@ export const useCombat = () => {
         } else if (ability && ability.heal) {
           // Heal ability - heal self
           const healAmount = parseInt(ability.heal as string) || 10;
-          const newHp = Math.min(currentEnemy.maxHp, currentEnemy.hp + healAmount);
+          const newHp = Math.min(
+            currentEnemy.maxHp,
+            currentEnemy.hp + healAmount
+          );
           updateEnemyHP(newHp);
-          addCombatLog(`${currentEnemy.name} uses ${ability.name} and heals ${healAmount} HP!`);
+          addCombatLog(
+            `${currentEnemy.name} uses ${ability.name} and heals ${healAmount} HP!`
+          );
         }
       } else {
         // Basic attack on random target
         console.log('👹 Enemy performing basic attack');
-        const target = aliveParty[Math.floor(Math.random() * aliveParty.length)];
+        const target =
+          aliveParty[Math.floor(Math.random() * aliveParty.length)];
         if (target) {
           performAttack(currentEnemy, target);
         }
@@ -253,7 +317,9 @@ export const useCombat = () => {
     // Always schedule next turn
     setTimeout(() => {
       console.log('👹 Enemy action complete, checking party status...');
-      const stillAlive = party.filter((c): c is Character => c !== null && c.alive);
+      const stillAlive = party.filter(
+        (c): c is Character => c !== null && c.alive
+      );
 
       if (stillAlive.length === 0) {
         console.log('💀 All party members defeated - GAME OVER');
@@ -266,7 +332,18 @@ export const useCombat = () => {
       console.log('🔄 Enemy calling nextTurn() after attack');
       nextTurn();
     }, 1000);
-  }, [currentEnemy, party, performAttack, addCombatLog, showMessage, nextTurn, endCombat, updatePartyMemberHP, updateEnemyHP, updatePartyMemberStatusEffects]);
+  }, [
+    currentEnemy,
+    party,
+    performAttack,
+    addCombatLog,
+    showMessage,
+    nextTurn,
+    endCombat,
+    updatePartyMemberHP,
+    updateEnemyHP,
+    updatePartyMemberStatusEffects,
+  ]);
 
   const processTurn = useCallback(() => {
     console.log('🎲 PROCESS TURN CALLED');
@@ -274,7 +351,8 @@ export const useCombat = () => {
     console.log('Processing turn for participant:', {
       index: currentTurn,
       type: currentParticipant?.type,
-      name: currentParticipant?.character?.name || currentParticipant?.enemy?.name
+      name:
+        currentParticipant?.character?.name || currentParticipant?.enemy?.name,
     });
 
     if (!currentParticipant) {
@@ -293,7 +371,7 @@ export const useCombat = () => {
     if (!activeEntity) return;
 
     // Process status effects logic (simplified for now)
-    // const statusResult = processStatusEffects(activeEntity); 
+    // const statusResult = processStatusEffects(activeEntity);
     // if (statusResult.message) addCombatLog(statusResult.message);
     // ... logic for damage application ...
 
@@ -305,212 +383,279 @@ export const useCombat = () => {
       }, 500);
     }
     // Player turns are handled by ActionMenu component
-  }, [combatTurnOrder, currentTurn, enemyAction, addCombatLog, updatePartyMemberHP, updateEnemyHP, updatePartyMemberStatusEffects, updateEnemyStatusEffects, currentEnemy, nextTurn]);
+  }, [
+    combatTurnOrder,
+    currentTurn,
+    enemyAction,
+    addCombatLog,
+    updatePartyMemberHP,
+    updateEnemyHP,
+    updatePartyMemberStatusEffects,
+    updateEnemyStatusEffects,
+    currentEnemy,
+    nextTurn,
+  ]);
 
-  const castSpell = useCallback((caster: Character, spell: import('../types').Spell, target: Character | Enemy) => {
-    // 1. Check AP Cost
-    if (caster.derivedStats.AP.current < spell.ap_cost) {
-      addCombatLog(`${caster.name} doesn't have enough AP to cast ${spell.name}!`);
-      return false;
-    }
+  const castSpell = useCallback(
+    (
+      caster: Character,
+      spell: import('../types').Spell,
+      target: Character | Enemy
+    ) => {
+      // 1. Check AP Cost
+      if (caster.derivedStats.AP.current < spell.ap_cost) {
+        addCombatLog(
+          `${caster.name} doesn't have enough AP to cast ${spell.name}!`
+        );
+        return false;
+      }
 
-    // 2. Deduct AP
-    const characterIndex = party.findIndex(p => p && p.id === caster.id);
-    if (characterIndex === -1) return false;
+      // 2. Deduct AP
+      const characterIndex = party.findIndex(p => p && p.id === caster.id);
+      if (characterIndex === -1) return false;
 
-    const updatedCaster = {
-      ...caster,
-      derivedStats: {
-        ...caster.derivedStats,
-        AP: {
-          ...caster.derivedStats.AP,
-          current: caster.derivedStats.AP.current - spell.ap_cost
+      const updatedCaster = {
+        ...caster,
+        derivedStats: {
+          ...caster.derivedStats,
+          AP: {
+            ...caster.derivedStats.AP,
+            current: caster.derivedStats.AP.current - spell.ap_cost,
+          },
+        },
+      };
+      updatePartyMember(characterIndex, updatedCaster);
+
+      addCombatLog(`${caster.name} casts ${spell.name}!`);
+
+      // 3. Resolve Effects
+      // Damage
+      if (spell.damage_dice) {
+        // Get dice for current level (simplified: use lowest level or scaled)
+        // For now, just grab the first available dice formula
+        const levelKey = Object.keys(spell.damage_dice)[0];
+        const diceFormula = spell.damage_dice[levelKey]; // e.g. "4d4"
+
+        const [count, sides] = diceFormula.split('d').map(Number);
+        let totalDamage = 0;
+        for (let i = 0; i < count; i++) {
+          totalDamage += Math.floor(Math.random() * sides) + 1;
         }
-      }
-    };
-    updatePartyMember(characterIndex, updatedCaster);
 
-    addCombatLog(`${caster.name} casts ${spell.name}!`);
-
-    // 3. Resolve Effects
-    // Damage
-    if (spell.damage_dice) {
-      // Get dice for current level (simplified: use lowest level or scaled)
-      // For now, just grab the first available dice formula
-      const levelKey = Object.keys(spell.damage_dice)[0];
-      const diceFormula = spell.damage_dice[levelKey]; // e.g. "4d4"
-
-      const [count, sides] = diceFormula.split('d').map(Number);
-      let totalDamage = 0;
-      for (let i = 0; i < count; i++) {
-        totalDamage += Math.floor(Math.random() * sides) + 1;
-      }
-
-      // Saving Throw (Simplified)
-      if (spell.save_type) {
-        // TODO: Real save calculation based on target stats
-        // For now, 50% chance to save for half damage
-        if (Math.random() > 0.5) {
-          totalDamage = Math.floor(totalDamage / 2);
-          addCombatLog(`${target.name} succeeds on save!`);
-        }
-      }
-
-      // Apply Damage
-      let currentHp = 0;
-      if ('derivedStats' in target) {
-        currentHp = (target as Character).derivedStats.HP.current;
-      } else {
-        currentHp = (target as Enemy).hp;
-      }
-      const newHp = currentHp - totalDamage;
-
-      addCombatLog(`${target.name} takes ${totalDamage} ${spell.damage_type || 'magical'} damage!`);
-
-      if (target === currentEnemy) {
-        updateEnemyHP(newHp);
-        if (newHp <= 0) {
-          addCombatLog(`${target.name} is defeated!`);
-          const loot = generateLoot(currentEnemy.level);
-          setTimeout(() => {
-            addCombatLog(`Victory! Gained ${loot.gold} gold!`);
-            endCombat(true, loot);
-          }, 1000);
-        }
-      } else {
-        // Friendly fire or self-target logic would go here
-      }
-    }
-
-    // Healing
-    if (spell.heal_dice) {
-      const levelKey = Object.keys(spell.heal_dice)[0];
-      const healAmount = parseInt(spell.heal_dice[levelKey]); // Simplified
-
-      let currentHp = 0;
-      let maxHp = 0;
-      if ('derivedStats' in target) {
-        currentHp = (target as Character).derivedStats.HP.current;
-        maxHp = (target as Character).derivedStats.HP.max;
-        const newHp = Math.min(maxHp, currentHp + healAmount);
-
-        // Find target index
-        const targetIndex = party.findIndex(p => p && p.id === target.id);
-        if (targetIndex !== -1) {
-          updatePartyMemberHP(targetIndex, newHp);
-          addCombatLog(`${target.name} heals for ${healAmount} HP!`);
-        }
-      }
-    }
-
-    return true;
-  }, [party, updatePartyMember, updatePartyMemberHP, updateEnemyHP, addCombatLog, endCombat, currentEnemy, generateLoot]);
-
-  const handleCombatAction = useCallback((action: 'attack' | 'spell' | 'defend' | 'item' | 'row-switch' | 'ability' | 'escape', options?: { spell?: import('../types').Spell; abilityId?: string }) => {
-    console.log('⚔️ COMBAT ACTION TRIGGERED:', action);
-    const currentParticipant = combatTurnOrder[currentTurn];
-
-    if (!currentParticipant || currentParticipant.type === 'enemy') {
-      console.log('❌ Action blocked: no participant or enemy turn');
-      return;
-    }
-
-    const character = currentParticipant.character as Character;
-    const characterIndex = party.findIndex(p => p && p.id === character.id);
-
-    switch (action) {
-      case 'attack':
-        if (currentEnemy) {
-          performAttack(character, currentEnemy);
-          useCombatStore.getState().useAction();
-        }
-        break;
-      case 'spell':
-        if (options?.spell && currentEnemy) {
-          // For now, default to single target enemy for damage spells
-          // In future, options.targetId should be passed
-          const success = castSpell(character, options.spell, currentEnemy);
-          if (success) {
-            useCombatStore.getState().useAction();
+        // Saving Throw (Simplified)
+        if (spell.save_type) {
+          // TODO: Real save calculation based on target stats
+          // For now, 50% chance to save for half damage
+          if (Math.random() > 0.5) {
+            totalDamage = Math.floor(totalDamage / 2);
+            addCombatLog(`${target.name} succeeds on save!`);
           }
         }
-        break;
-      case 'ability':
-        if (options?.abilityId && characterIndex !== -1) {
-          const ability = character.class.abilities.find(a => a.id === options.abilityId);
-          if (ability && character.derivedStats && character.derivedStats.AP.current >= (ability.cost?.AP || 0)) {
-            // Deduct AP cost
-            const cost = ability.cost?.AP || 0;
-            const updatedCharacter = {
-              ...character,
-              derivedStats: {
-                ...character.derivedStats,
-                AP: {
-                  ...character.derivedStats.AP,
-                  current: character.derivedStats.AP.current - cost
-                }
-              }
-            };
-            updatePartyMember(characterIndex, updatedCharacter);
 
-            addCombatLog(`${character.name} uses ${ability.name}! (Effect not fully implemented)`);
-            // Use action
-            useCombatStore.getState().useAction();
-          } else {
-            addCombatLog(`${character.name} doesn't have enough AP!`);
-          }
-        }
-        break;
-      case 'defend':
-        addCombatLog(`${character.name} defends!`);
-        // Use action
-        useCombatStore.getState().useAction();
-        break;
-      case 'item':
-        addCombatLog(`${character.name} uses an item! (Not implemented)`);
-        // Use action
-        useCombatStore.getState().useAction();
-        break;
-      case 'row-switch': {
-        // Switch row (free movement action)
-        const newRow: 'front' | 'back' = character.position.row === 'front' ? 'back' : 'front';
-        if (characterIndex !== -1) {
-          const updatedCharacter = {
-            ...character,
-            position: {
-              ...character.position,
-              row: newRow
-            }
-          };
-          updatePartyMember(characterIndex, updatedCharacter);
-          addCombatLog(`${character.name} moves to the ${newRow} row!`);
-          // Use movement
-          useCombatStore.getState().useMovement();
-        }
-        break;
-      }
-      case 'escape':
-        if (Math.random() < 0.5) {
-          addCombatLog('Successfully escaped!');
-          endCombat(false);
-          return;
+        // Apply Damage
+        let currentHp = 0;
+        if ('derivedStats' in target) {
+          currentHp = (target as Character).derivedStats.HP.current;
         } else {
-          addCombatLog('Cannot escape!');
+          currentHp = (target as Enemy).hp;
+        }
+        const newHp = currentHp - totalDamage;
+
+        addCombatLog(
+          `${target.name} takes ${totalDamage} ${spell.damage_type || 'magical'} damage!`
+        );
+
+        if (target === currentEnemy) {
+          updateEnemyHP(newHp);
+          if (newHp <= 0) {
+            addCombatLog(`${target.name} is defeated!`);
+            const loot = generateLoot(currentEnemy.level);
+            setTimeout(() => {
+              addCombatLog(`Victory! Gained ${loot.gold} gold!`);
+              endCombat(true, loot);
+            }, 1000);
+          }
+        } else {
+          // Friendly fire or self-target logic would go here
+        }
+      }
+
+      // Healing
+      if (spell.heal_dice) {
+        const levelKey = Object.keys(spell.heal_dice)[0];
+        const healAmount = parseInt(spell.heal_dice[levelKey]); // Simplified
+
+        let currentHp = 0;
+        let maxHp = 0;
+        if ('derivedStats' in target) {
+          currentHp = (target as Character).derivedStats.HP.current;
+          maxHp = (target as Character).derivedStats.HP.max;
+          const newHp = Math.min(maxHp, currentHp + healAmount);
+
+          // Find target index
+          const targetIndex = party.findIndex(p => p && p.id === target.id);
+          if (targetIndex !== -1) {
+            updatePartyMemberHP(targetIndex, newHp);
+            addCombatLog(`${target.name} heals for ${healAmount} HP!`);
+          }
+        }
+      }
+
+      return true;
+    },
+    [
+      party,
+      updatePartyMember,
+      updatePartyMemberHP,
+      updateEnemyHP,
+      addCombatLog,
+      endCombat,
+      currentEnemy,
+      generateLoot,
+    ]
+  );
+
+  const handleCombatAction = useCallback(
+    (
+      action:
+        | 'attack'
+        | 'spell'
+        | 'defend'
+        | 'item'
+        | 'row-switch'
+        | 'ability'
+        | 'escape',
+      options?: { spell?: import('../types').Spell; abilityId?: string }
+    ) => {
+      console.log('⚔️ COMBAT ACTION TRIGGERED:', action);
+      const currentParticipant = combatTurnOrder[currentTurn];
+
+      if (!currentParticipant || currentParticipant.type === 'enemy') {
+        console.log('❌ Action blocked: no participant or enemy turn');
+        return;
+      }
+
+      const character = currentParticipant.character as Character;
+      const characterIndex = party.findIndex(p => p && p.id === character.id);
+
+      switch (action) {
+        case 'attack':
+          if (currentEnemy) {
+            performAttack(character, currentEnemy);
+            useCombatStore.getState().useAction();
+          }
+          break;
+        case 'spell':
+          if (options?.spell && currentEnemy) {
+            // For now, default to single target enemy for damage spells
+            // In future, options.targetId should be passed
+            const success = castSpell(character, options.spell, currentEnemy);
+            if (success) {
+              useCombatStore.getState().useAction();
+            }
+          }
+          break;
+        case 'ability':
+          if (options?.abilityId && characterIndex !== -1) {
+            const ability = character.class.abilities.find(
+              a => a.id === options.abilityId
+            );
+            if (
+              ability &&
+              character.derivedStats &&
+              character.derivedStats.AP.current >= (ability.cost?.AP || 0)
+            ) {
+              // Deduct AP cost
+              const cost = ability.cost?.AP || 0;
+              const updatedCharacter = {
+                ...character,
+                derivedStats: {
+                  ...character.derivedStats,
+                  AP: {
+                    ...character.derivedStats.AP,
+                    current: character.derivedStats.AP.current - cost,
+                  },
+                },
+              };
+              updatePartyMember(characterIndex, updatedCharacter);
+
+              addCombatLog(
+                `${character.name} uses ${ability.name}! (Effect not fully implemented)`
+              );
+              // Use action
+              useCombatStore.getState().useAction();
+            } else {
+              addCombatLog(`${character.name} doesn't have enough AP!`);
+            }
+          }
+          break;
+        case 'defend':
+          addCombatLog(`${character.name} defends!`);
           // Use action
           useCombatStore.getState().useAction();
+          break;
+        case 'item':
+          addCombatLog(`${character.name} uses an item! (Not implemented)`);
+          // Use action
+          useCombatStore.getState().useAction();
+          break;
+        case 'row-switch': {
+          // Switch row (free movement action)
+          const newRow: 'front' | 'back' =
+            character.position.row === 'front' ? 'back' : 'front';
+          if (characterIndex !== -1) {
+            const updatedCharacter = {
+              ...character,
+              position: {
+                ...character.position,
+                row: newRow,
+              },
+            };
+            updatePartyMember(characterIndex, updatedCharacter);
+            addCombatLog(`${character.name} moves to the ${newRow} row!`);
+            // Use movement
+            useCombatStore.getState().useMovement();
+          }
+          break;
         }
-        break;
-    }
+        case 'escape':
+          if (Math.random() < 0.5) {
+            addCombatLog('Successfully escaped!');
+            endCombat(false);
+            return;
+          } else {
+            addCombatLog('Cannot escape!');
+            // Use action
+            useCombatStore.getState().useAction();
+          }
+          break;
+      }
 
-    console.log('🕒 Scheduling next turn in 500ms after', action);
-    setTimeout(() => {
-      console.log('🔄 Calling nextTurn() after player action:', action);
-      nextTurn();
-    }, 500);
-  }, [combatTurnOrder, currentTurn, currentEnemy, performAttack, addCombatLog, endCombat, nextTurn, generateLoot, party, updatePartyMember, updateEnemyHP, updatePartyMemberHP, castSpell]);
+      console.log('🕒 Scheduling next turn in 500ms after', action);
+      setTimeout(() => {
+        console.log('🔄 Calling nextTurn() after player action:', action);
+        nextTurn();
+      }, 500);
+    },
+    [
+      combatTurnOrder,
+      currentTurn,
+      currentEnemy,
+      performAttack,
+      addCombatLog,
+      endCombat,
+      nextTurn,
+      generateLoot,
+      party,
+      updatePartyMember,
+      updateEnemyHP,
+      updatePartyMemberHP,
+      castSpell,
+    ]
+  );
 
   return {
     handleCombatAction,
-    processTurn
+    processTurn,
   };
 };

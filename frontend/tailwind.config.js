@@ -1,20 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
-        'parchment': {
+        parchment: {
           100: '#f4e4bc', // Lightest
           200: '#e6d2a0',
           300: '#d4b483', // Base parchment
           400: '#c19a6b',
           500: '#a37f55',
         },
-        'stone': {
+        stone: {
           100: '#9ca3af',
           200: '#6b7280',
           300: '#4b5563',
@@ -23,38 +20,38 @@ export default {
           600: '#111827',
           700: '#0f1115', // Deep stone
         },
-        'dungeon': {
+        dungeon: {
           800: '#1a1a1a',
           900: '#0a0a0a', // Void
         },
-        'etrian': {
+        etrian: {
           900: '#080a10', // Deep Void
           800: '#0f172a', // Midnight
           700: '#1e293b', // Twilight
         },
-        'cyan': {
+        cyan: {
           100: '#cffafe', // Hologram
           400: '#22d3ee', // Cyan
           500: '#06b6d4', // Neon
         },
-        'gold': {
+        gold: {
           400: '#facc15',
           500: '#eab308', // Base gold
           600: '#ca8a04',
         },
-        'blood': {
+        blood: {
           500: '#ef4444', // Brighter red for text
           600: '#dc2626',
         },
-        'mana': {
+        mana: {
           500: '#60a5fa', // Brighter blue for text
           600: '#3b82f6',
-        }
+        },
       },
       fontFamily: {
-        'sans': ['"Press Start 2P"', 'Inter', 'sans-serif'], // Fallback to Inter
-        'mono': ['"VT323"', 'monospace'],
-      }
+        sans: ['"Press Start 2P"', 'Inter', 'sans-serif'], // Fallback to Inter
+        mono: ['"VT323"', 'monospace'],
+      },
     },
   },
   plugins: [],

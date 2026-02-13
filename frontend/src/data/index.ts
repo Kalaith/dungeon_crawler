@@ -11,9 +11,9 @@ export * from './loot';
 export * from './constants';
 
 export const gameData: GameData = {
-    party_system: {
-        max_party_size: gameConfig.PARTY.MAX_SIZE,
-        character_classes: characterClasses
-    },
-    craftingRecipes
+  party_system: {
+    max_party_size: gameConfig.PARTY.MAX_SIZE,
+    character_classes: characterClasses,
+  },
+  craftingRecipes,
 };

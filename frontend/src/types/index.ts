@@ -106,7 +106,14 @@ export interface ClassAbility {
   };
 }
 
-export type SkillCategory = 'Combat' | 'Body' | 'Social' | 'Nature' | 'Lore' | 'Craftsmanship' | 'Intuitive';
+export type SkillCategory =
+  | 'Combat'
+  | 'Body'
+  | 'Social'
+  | 'Nature'
+  | 'Lore'
+  | 'Craftsmanship'
+  | 'Intuitive';
 
 export interface Skill {
   id: string;
@@ -134,7 +141,12 @@ export type FeatEffects =
   | { type: 'asi' }
   | { type: 'passive'; [key: string]: unknown }
   | { type: 'active'; action: string; [key: string]: unknown }
-  | { type: 'resource'; resourceName: string; amount: number | 'proficiency'; [key: string]: unknown };
+  | {
+      type: 'resource';
+      resourceName: string;
+      amount: number | 'proficiency';
+      [key: string]: unknown;
+    };
 
 export interface Feat {
   id: string;
@@ -217,7 +229,13 @@ export interface StaticGameData {
   craftingRecipes: CraftingRecipe[];
 }
 
-export type GameState = 'party-creation' | 'overworld' | 'town' | 'dungeon' | 'combat' | 'game-over';
+export type GameState =
+  | 'party-creation'
+  | 'overworld'
+  | 'town'
+  | 'dungeon'
+  | 'combat'
+  | 'game-over';
 export type Direction = 0 | 1 | 2 | 3; // North, East, South, West
 
 export interface DungeonMap {
@@ -284,7 +302,18 @@ export interface Ability {
 }
 
 export interface StatusEffect {
-  type: 'poison' | 'sleep' | 'stun' | 'buff' | 'debuff' | 'buff_str' | 'buff_def' | 'buff_agi' | 'buff_int' | 'buff_wis' | 'buff_cha';
+  type:
+    | 'poison'
+    | 'sleep'
+    | 'stun'
+    | 'buff'
+    | 'debuff'
+    | 'buff_str'
+    | 'buff_def'
+    | 'buff_agi'
+    | 'buff_int'
+    | 'buff_wis'
+    | 'buff_cha';
   attribute?: Attribute;
   value?: number;
   duration: number; // Turns

@@ -6,12 +6,24 @@ import { renderConfig } from '../../data/constants';
 
 export const DungeonView: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { getTileAhead, getTileFarAhead, getTileLeft, getTileRight, getTile } = useDungeon();
-  const { playerPosition, playerFacing, currentDungeonMap, foes, interactiveTiles } = useDungeonStore();
+  const { getTileAhead, getTileFarAhead, getTileLeft, getTileRight, getTile } =
+    useDungeon();
+  const {
+    playerPosition,
+    playerFacing,
+    currentDungeonMap,
+    foes,
+    interactiveTiles,
+  } = useDungeonStore();
 
   // Helper function to get direction vectors
   const getDirectionVector = (direction: number): [number, number] => {
-    const directions: [number, number][] = [[0, -1], [1, 0], [0, 1], [-1, 0]]; // N, E, S, W
+    const directions: [number, number][] = [
+      [0, -1],
+      [1, 0],
+      [0, 1],
+      [-1, 0],
+    ]; // N, E, S, W
     return directions[direction] || [0, -1];
   };
 
@@ -45,8 +57,12 @@ export const DungeonView: React.FC = () => {
     const foeFarAhead = foes.find(f => f.x === farAheadX && f.y === farAheadY);
 
     // Find visible Objects
-    const objectAhead = Object.values(interactiveTiles).find(t => t.x === aheadX && t.y === aheadY);
-    const objectFarAhead = Object.values(interactiveTiles).find(t => t.x === farAheadX && t.y === farAheadY);
+    const objectAhead = Object.values(interactiveTiles).find(
+      t => t.x === aheadX && t.y === aheadY
+    );
+    const objectFarAhead = Object.values(interactiveTiles).find(
+      t => t.x === farAheadX && t.y === farAheadY
+    );
 
     renderer.renderScene({
       ahead: getTileAhead(),
@@ -58,9 +74,8 @@ export const DungeonView: React.FC = () => {
       foeAhead,
       foeFarAhead,
       objectAhead,
-      objectFarAhead
+      objectFarAhead,
     });
-
   }, [
     currentDungeonMap,
     playerPosition,
@@ -71,7 +86,7 @@ export const DungeonView: React.FC = () => {
     getTileRight,
     getTile,
     foes,
-    interactiveTiles
+    interactiveTiles,
   ]);
 
   if (!currentDungeonMap) {

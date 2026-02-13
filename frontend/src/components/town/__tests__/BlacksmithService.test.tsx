@@ -8,123 +8,123 @@ import { useGoldStore } from '../../../stores/useGoldStore';
 vi.mock('../../../stores/useGoldStore');
 
 type UseGoldStoreMock = Mock<
-    [],
-    {
-        gold: number;
-        subtractGold: (amount: number) => boolean;
-        canAfford: (amount: number) => boolean;
-    }
+  [],
+  {
+    gold: number;
+    subtractGold: (amount: number) => boolean;
+    canAfford: (amount: number) => boolean;
+  }
 >;
 
 const useGoldStoreMock = useGoldStore as unknown as UseGoldStoreMock;
 
 describe('BlacksmithService', () => {
-    const mockOnClose = vi.fn();
+  const mockOnClose = vi.fn();
 
-    beforeEach(() => {
-        vi.clearAllMocks();
+  beforeEach(() => {
+    vi.clearAllMocks();
 
-        useGoldStoreMock.mockReturnValue({
-            gold: 100,
-            subtractGold: vi.fn(() => true),
-            canAfford: vi.fn(() => true),
-        });
+    useGoldStoreMock.mockReturnValue({
+      gold: 100,
+      subtractGold: vi.fn(() => true),
+      canAfford: vi.fn(() => true),
+    });
+  });
+
+  it('should calculate repair cost based on condition', () => {
+    render(<BlacksmithService onClose={mockOnClose} />);
+
+    // Iron Sword has 65% condition, level 1
+    // Damage: 35%, Cost: ceil((35/10) * 1 * 10) = 40 gold
+    expect(screen.getByText('40 💰')).toBeInTheDocument();
+  });
+
+  it('should calculate upgrade cost correctly', () => {
+    render(<BlacksmithService onClose={mockOnClose} />);
+
+    // Switch to upgrade tab
+    const upgradeButton = screen.getByText(/Upgrade/i);
+    fireEvent.click(upgradeButton);
+
+    // Level 1 item: 1 * 100 = 100 gold
+    expect(screen.getByText('100 💰')).toBeInTheDocument();
+  });
+
+  it('should deduct gold on successful repair', () => {
+    const mockSubtractGold = vi.fn(() => true);
+
+    useGoldStoreMock.mockReturnValue({
+      gold: 100,
+      subtractGold: mockSubtractGold,
+      canAfford: vi.fn(() => true),
     });
 
-    it('should calculate repair cost based on condition', () => {
-        render(<BlacksmithService onClose={mockOnClose} />);
+    render(<BlacksmithService onClose={mockOnClose} />);
 
-        // Iron Sword has 65% condition, level 1
-        // Damage: 35%, Cost: ceil((35/10) * 1 * 10) = 40 gold
-        expect(screen.getByText('40 💰')).toBeInTheDocument();
+    const repairButton = screen.getAllByText('Repair')[0];
+    fireEvent.click(repairButton);
+
+    expect(mockSubtractGold).toHaveBeenCalled();
+  });
+
+  it('should deduct gold on successful upgrade', () => {
+    const mockSubtractGold = vi.fn(() => true);
+
+    useGoldStoreMock.mockReturnValue({
+      gold: 150,
+      subtractGold: mockSubtractGold,
+      canAfford: vi.fn(() => true),
     });
 
-    it('should calculate upgrade cost correctly', () => {
-        render(<BlacksmithService onClose={mockOnClose} />);
+    render(<BlacksmithService onClose={mockOnClose} />);
 
-        // Switch to upgrade tab
-        const upgradeButton = screen.getByText(/Upgrade/i);
-        fireEvent.click(upgradeButton);
+    // Switch to upgrade tab
+    const upgradeTab = screen.getByText(/Upgrade/i);
+    fireEvent.click(upgradeTab);
 
-        // Level 1 item: 1 * 100 = 100 gold
-        expect(screen.getByText('100 💰')).toBeInTheDocument();
+    const upgradeButton = screen.getAllByText(/Upgrade to Lv/)[0];
+    fireEvent.click(upgradeButton);
+
+    expect(mockSubtractGold).toHaveBeenCalled();
+  });
+
+  it('should prevent repair when insufficient funds', () => {
+    const mockSubtractGold = vi.fn();
+
+    useGoldStoreMock.mockReturnValue({
+      gold: 10,
+      subtractGold: mockSubtractGold,
+      canAfford: vi.fn(() => false),
     });
 
-    it('should deduct gold on successful repair', () => {
-        const mockSubtractGold = vi.fn(() => true);
+    render(<BlacksmithService onClose={mockOnClose} />);
 
-        useGoldStoreMock.mockReturnValue({
-            gold: 100,
-            subtractGold: mockSubtractGold,
-            canAfford: vi.fn(() => true),
-        });
+    const repairButton = screen.getAllByText('Repair')[0];
+    fireEvent.click(repairButton);
 
-        render(<BlacksmithService onClose={mockOnClose} />);
+    // Should not deduct gold
+    expect(mockSubtractGold).not.toHaveBeenCalled();
+  });
 
-        const repairButton = screen.getAllByText('Repair')[0];
-        fireEvent.click(repairButton);
+  it('should prevent upgrade when insufficient funds', () => {
+    const mockSubtractGold = vi.fn();
 
-        expect(mockSubtractGold).toHaveBeenCalled();
+    useGoldStoreMock.mockReturnValue({
+      gold: 50,
+      subtractGold: mockSubtractGold,
+      canAfford: vi.fn(() => false),
     });
 
-    it('should deduct gold on successful upgrade', () => {
-        const mockSubtractGold = vi.fn(() => true);
+    render(<BlacksmithService onClose={mockOnClose} />);
 
-        useGoldStoreMock.mockReturnValue({
-            gold: 150,
-            subtractGold: mockSubtractGold,
-            canAfford: vi.fn(() => true),
-        });
+    // Switch to upgrade tab
+    const upgradeTab = screen.getByText(/Upgrade/i);
+    fireEvent.click(upgradeTab);
 
-        render(<BlacksmithService onClose={mockOnClose} />);
+    const upgradeButton = screen.getAllByText(/Upgrade to Lv/)[0];
+    fireEvent.click(upgradeButton);
 
-        // Switch to upgrade tab
-        const upgradeTab = screen.getByText(/Upgrade/i);
-        fireEvent.click(upgradeTab);
-
-        const upgradeButton = screen.getAllByText(/Upgrade to Lv/)[0];
-        fireEvent.click(upgradeButton);
-
-        expect(mockSubtractGold).toHaveBeenCalled();
-    });
-
-    it('should prevent repair when insufficient funds', () => {
-        const mockSubtractGold = vi.fn();
-
-        useGoldStoreMock.mockReturnValue({
-            gold: 10,
-            subtractGold: mockSubtractGold,
-            canAfford: vi.fn(() => false),
-        });
-
-        render(<BlacksmithService onClose={mockOnClose} />);
-
-        const repairButton = screen.getAllByText('Repair')[0];
-        fireEvent.click(repairButton);
-
-        // Should not deduct gold
-        expect(mockSubtractGold).not.toHaveBeenCalled();
-    });
-
-    it('should prevent upgrade when insufficient funds', () => {
-        const mockSubtractGold = vi.fn();
-
-        useGoldStoreMock.mockReturnValue({
-            gold: 50,
-            subtractGold: mockSubtractGold,
-            canAfford: vi.fn(() => false),
-        });
-
-        render(<BlacksmithService onClose={mockOnClose} />);
-
-        // Switch to upgrade tab
-        const upgradeTab = screen.getByText(/Upgrade/i);
-        fireEvent.click(upgradeTab);
-
-        const upgradeButton = screen.getAllByText(/Upgrade to Lv/)[0];
-        fireEvent.click(upgradeButton);
-
-        // Should not deduct gold
-        expect(mockSubtractGold).not.toHaveBeenCalled();
-    });
+    // Should not deduct gold
+    expect(mockSubtractGold).not.toHaveBeenCalled();
+  });
 });

@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* Custom CSS Variables for consistent theming */
 :root {
@@ -16,9 +16,9 @@
   --color-mana-500: #60a5fa;
 
   /* Font family */
-  --font-family-base: "Inter", sans-serif;
-  --font-family-header: "Press Start 2P", cursive;
-  --font-family-mono: "VT323", monospace;
+  --font-family-base: 'Inter', sans-serif;
+  --font-family-header: 'Press Start 2P', cursive;
+  --font-family-mono: 'VT323', monospace;
 }
 
 /* Base styles */

@@ -14,7 +14,7 @@ export const PartyCreation: React.FC = () => {
     party,
     canStartAdventure,
     addCharacterToParty,
-    removeCharacterFromParty
+    removeCharacterFromParty,
   } = usePartyStore();
   const { setGameState } = useGameStateStore();
 
@@ -22,10 +22,12 @@ export const PartyCreation: React.FC = () => {
     isCharacterModalOpen,
     currentSlot,
     openCharacterModal,
-    closeCharacterModal
+    closeCharacterModal,
   } = useUIStore();
 
-  const [viewingCharacter, setViewingCharacter] = useState<Character | null>(null);
+  const [viewingCharacter, setViewingCharacter] = useState<Character | null>(
+    null
+  );
 
   const handleStartAdventure = () => {
     setGameState('overworld');
@@ -68,7 +70,6 @@ export const PartyCreation: React.FC = () => {
           ))}
         </div>
 
-
         <div className="text-center">
           <Button
             variant="primary"
@@ -95,6 +96,6 @@ export const PartyCreation: React.FC = () => {
       >
         {viewingCharacter && <CharacterSheet character={viewingCharacter} />}
       </Modal>
-    </div >
+    </div>
   );
 };

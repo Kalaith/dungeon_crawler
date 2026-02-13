@@ -21,8 +21,13 @@ function App() {
   const [ignoredFeatCharIds, setIgnoredFeatCharIds] = useState<string[]>([]);
 
   // Check for characters with pending feats
-  const characterWithPendingFeatIndex = party.findIndex(c => c && c.pendingFeatSelections > 0 && !ignoredFeatCharIds.includes(c.id));
-  const characterWithPendingFeat = characterWithPendingFeatIndex !== -1 ? party[characterWithPendingFeatIndex] : null;
+  const characterWithPendingFeatIndex = party.findIndex(
+    c => c && c.pendingFeatSelections > 0 && !ignoredFeatCharIds.includes(c.id)
+  );
+  const characterWithPendingFeat =
+    characterWithPendingFeatIndex !== -1
+      ? party[characterWithPendingFeatIndex]
+      : null;
 
   const handleCloseFeatModal = () => {
     if (characterWithPendingFeat) {

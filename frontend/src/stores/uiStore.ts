@@ -14,7 +14,7 @@ interface UIStore {
   hideMessage: () => void;
 }
 
-export const useUIStore = create<UIStore>((set) => ({
+export const useUIStore = create<UIStore>(set => ({
   // Initial state
   isCharacterModalOpen: false,
   currentSlot: -1,
@@ -22,23 +22,27 @@ export const useUIStore = create<UIStore>((set) => ({
   messageText: '',
 
   // Actions
-  openCharacterModal: (slot) => set({ 
-    isCharacterModalOpen: true, 
-    currentSlot: slot 
-  }),
+  openCharacterModal: slot =>
+    set({
+      isCharacterModalOpen: true,
+      currentSlot: slot,
+    }),
 
-  closeCharacterModal: () => set({ 
-    isCharacterModalOpen: false, 
-    currentSlot: -1 
-  }),
+  closeCharacterModal: () =>
+    set({
+      isCharacterModalOpen: false,
+      currentSlot: -1,
+    }),
 
-  showMessage: (text) => set({ 
-    isMessageModalOpen: true, 
-    messageText: text 
-  }),
+  showMessage: text =>
+    set({
+      isMessageModalOpen: true,
+      messageText: text,
+    }),
 
-  hideMessage: () => set({ 
-    isMessageModalOpen: false, 
-    messageText: '' 
-  })
+  hideMessage: () =>
+    set({
+      isMessageModalOpen: false,
+      messageText: '',
+    }),
 }));

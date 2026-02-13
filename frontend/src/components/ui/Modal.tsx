@@ -15,7 +15,7 @@ export const Modal: React.FC<ModalProps> = ({
   title,
   children,
   footer,
-  className = 'max-w-md'
+  className = 'max-w-md',
 }) => {
   if (!isOpen) return null;
 
@@ -25,7 +25,9 @@ export const Modal: React.FC<ModalProps> = ({
         className="absolute inset-0 bg-black/70 backdrop-blur"
         onClick={onClose}
       />
-      <div className={`relative bg-cream-100 dark:bg-charcoal-800 rounded-xl shadow-lg border border-gray-400/20 w-[90%] ${className} max-h-[90vh] overflow-hidden`}>
+      <div
+        className={`relative bg-cream-100 dark:bg-charcoal-800 rounded-xl shadow-lg border border-gray-400/20 w-[90%] ${className} max-h-[90vh] overflow-hidden`}
+      >
         <div className="flex justify-between items-center p-5 border-b border-gray-400/20">
           <h3 className="text-xl font-semibold text-slate-900 dark:text-gray-200 m-0">
             {title}
@@ -37,9 +39,7 @@ export const Modal: React.FC<ModalProps> = ({
             ×
           </button>
         </div>
-        <div className="p-5 overflow-y-auto max-h-[70vh]">
-          {children}
-        </div>
+        <div className="p-5 overflow-y-auto max-h-[70vh]">{children}</div>
         {footer && (
           <div className="flex justify-end gap-3 p-5 border-t border-gray-400/20">
             {footer}

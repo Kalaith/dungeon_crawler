@@ -16,7 +16,7 @@ export const useGameStore = create<GameStore>()(
     }),
     {
       name: 'dungeon-crawler-game',
-      partialize: (state) => ({
+      partialize: state => ({
         party: state.party,
         inventory: state.inventory,
         currentFloor: state.currentFloor,
@@ -24,16 +24,16 @@ export const useGameStore = create<GameStore>()(
         playerFacing: state.playerFacing,
         exploredMap: Array.from(state.exploredMap),
         stepCount: state.stepCount,
-        gameState: state.gameState
+        gameState: state.gameState,
       }),
       merge: (persistedState: unknown, currentState) => {
         const state = persistedState as Partial<GameStore> | null;
         return {
           ...currentState,
           ...(state || {}),
-          exploredMap: new Set(state?.exploredMap || ['1,1'])
+          exploredMap: new Set(state?.exploredMap || ['1,1']),
         };
-      }
+      },
     }
   )
 );

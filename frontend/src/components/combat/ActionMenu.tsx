@@ -7,10 +7,16 @@ import { AbilitySelector } from './AbilitySelector';
 
 interface ActionMenuProps {
   characterIndex: number;
-  onAction: (action: 'attack' | 'spell' | 'defend' | 'item' | 'row-switch' | 'ability', data?: unknown) => void;
+  onAction: (
+    action: 'attack' | 'spell' | 'defend' | 'item' | 'row-switch' | 'ability',
+    data?: unknown
+  ) => void;
 }
 
-export const ActionMenu: React.FC<ActionMenuProps> = ({ characterIndex, onAction }) => {
+export const ActionMenu: React.FC<ActionMenuProps> = ({
+  characterIndex,
+  onAction,
+}) => {
   const { party } = usePartyStore();
   const { currentActionEconomy, concentratingCharacterId } = useCombatStore();
   const [showSpellSelector, setShowSpellSelector] = useState(false);
@@ -23,7 +29,8 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ characterIndex, onAction
   const isUnconscious = character.derivedStats.HP.current <= 0;
 
   const hasSpells = character.spells && character.spells.length > 0;
-  const hasAbilities = character.class.abilities && character.class.abilities.length > 0;
+  const hasAbilities =
+    character.class.abilities && character.class.abilities.length > 0;
   const currentAP = character.derivedStats.AP.current;
   const isConcentrating = concentratingCharacterId === character.id;
 
@@ -45,20 +52,39 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ characterIndex, onAction
             {character.name}'s Turn
           </h4>
           <div className="text-sm font-mono text-cyan-400">
-            AP: {character.derivedStats.AP.current}/{character.derivedStats.AP.max}
+            AP: {character.derivedStats.AP.current}/
+            {character.derivedStats.AP.max}
           </div>
         </div>
 
         {/* Action Economy Display */}
         <div className="mb-3 p-2 bg-gray-50 dark:bg-gray-700 rounded text-xs">
           <div className="flex gap-2 justify-center">
-            <span className={currentActionEconomy.actionUsed ? 'text-gray-400 line-through' : 'text-green-600 dark:text-green-400 font-semibold'}>
+            <span
+              className={
+                currentActionEconomy.actionUsed
+                  ? 'text-gray-400 line-through'
+                  : 'text-green-600 dark:text-green-400 font-semibold'
+              }
+            >
               ⚡ Action
             </span>
-            <span className={currentActionEconomy.bonusActionUsed ? 'text-gray-400 line-through' : 'text-blue-600 dark:text-blue-400 font-semibold'}>
+            <span
+              className={
+                currentActionEconomy.bonusActionUsed
+                  ? 'text-gray-400 line-through'
+                  : 'text-blue-600 dark:text-blue-400 font-semibold'
+              }
+            >
               ⭐ Bonus
             </span>
-            <span className={currentActionEconomy.movementUsed ? 'text-gray-400 line-through' : 'text-yellow-600 dark:text-yellow-400 font-semibold'}>
+            <span
+              className={
+                currentActionEconomy.movementUsed
+                  ? 'text-gray-400 line-through'
+                  : 'text-yellow-600 dark:text-yellow-400 font-semibold'
+              }
+            >
               👟 Move
             </span>
           </div>
@@ -131,7 +157,10 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ characterIndex, onAction
         )}
 
         <div className="mt-3 text-xs text-gray-600 dark:text-gray-400 text-center">
-          Position: <span className="font-semibold capitalize">{character.position.row} Row</span>
+          Position:{' '}
+          <span className="font-semibold capitalize">
+            {character.position.row} Row
+          </span>
           {isConcentrating && (
             <span className="ml-2 text-yellow-600 dark:text-yellow-400">
               ⚠️ Concentrating

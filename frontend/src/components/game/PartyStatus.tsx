@@ -5,7 +5,9 @@ import { CharacterSheetModal } from '../party/CharacterSheetModal';
 
 export const PartyStatus: React.FC = () => {
   const { party } = usePartyStore();
-  const [selectedCharacterIndex, setSelectedCharacterIndex] = useState<number | null>(null);
+  const [selectedCharacterIndex, setSelectedCharacterIndex] = useState<
+    number | null
+  >(null);
 
   const partyMembers = party.filter(character => character !== null);
 
@@ -13,7 +15,8 @@ export const PartyStatus: React.FC = () => {
     return null;
   }
 
-  const selectedCharacter = selectedCharacterIndex !== null ? party[selectedCharacterIndex] : null;
+  const selectedCharacter =
+    selectedCharacterIndex !== null ? party[selectedCharacterIndex] : null;
 
   return (
     <>
@@ -23,7 +26,10 @@ export const PartyStatus: React.FC = () => {
             if (!character) return null;
 
             return (
-              <div key={index} className="min-w-[160px] md:min-w-0 h-full snap-center">
+              <div
+                key={index}
+                className="min-w-[160px] md:min-w-0 h-full snap-center"
+              >
                 <CharacterCard
                   character={character}
                   variant="detailed"

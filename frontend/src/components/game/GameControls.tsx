@@ -20,7 +20,7 @@ export const GameControls: React.FC = () => {
     onMoveBackward: moveBackward,
     onTurnLeft: turnLeft,
     onTurnRight: turnRight,
-    enabled: gameState === 'dungeon'
+    enabled: gameState === 'dungeon',
   });
 
   const handleExitDungeon = () => {
