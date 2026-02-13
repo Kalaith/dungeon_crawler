@@ -1,4 +1,3 @@
-
 import type { Character, CharacterClass } from '../types';
 import { gameConfig } from '../data/constants';
 

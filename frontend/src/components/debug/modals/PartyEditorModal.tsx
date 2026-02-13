@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { usePartyStore } from '../../../stores/usePartyStore';
 
@@ -175,4 +174,3 @@ export const PartyEditorModal: React.FC<PartyEditorModalProps> = ({
     </div>
   );
 };
-

@@ -1,4 +1,3 @@
-
 import { renderConfig } from '../data/constants';
 import type { FOEInstance, InteractiveTile } from '../types';
 import { foeData } from '../data/foes';
@@ -349,4 +348,3 @@ export class DungeonRenderer {
     this.ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
   }
 }
-

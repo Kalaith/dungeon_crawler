@@ -1,4 +1,3 @@
-
 import type { Character, Enemy, Attribute } from '../types';
 
 /**
@@ -229,4 +228,3 @@ export function hasPositionalAdvantage(
   // Ranged attacks from back row are normal
   return { advantage: false, disadvantage: false };
 }
-

@@ -1,4 +1,3 @@
-
 import { describe, it, expect } from 'vitest';
 import { checkImmunity, applyStatusEffect } from '../statusEffectUtils';
 import type {

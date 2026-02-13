@@ -1,4 +1,3 @@
-
 import type { GameData } from '../types';
 import { characterClasses } from './classes';
 import { craftingRecipes } from './crafting';
@@ -18,4 +17,3 @@ export const gameData: GameData = {
   },
   craftingRecipes,
 };
-

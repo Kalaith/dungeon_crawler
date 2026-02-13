@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import { usePartyStore } from '../stores/usePartyStore';
 import { useGameStateStore } from '../stores/useGameStateStore';
@@ -27,4 +26,3 @@ export const useGameOverCheck = () => {
     }
   }, [party, gameState, setGameState]);
 };
-

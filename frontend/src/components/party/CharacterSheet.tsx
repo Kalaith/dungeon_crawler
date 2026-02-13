@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { Character } from '../../types';
 import { StatDisplay } from '../ui/StatDisplay';
@@ -148,4 +147,3 @@ export const CharacterSheet: React.FC<CharacterSheetProps> = ({
     </div>
   );
 };
-

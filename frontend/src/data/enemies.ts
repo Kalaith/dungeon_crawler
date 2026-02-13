@@ -1,4 +1,3 @@
-
 import type { Ability, Enemy } from '../types';
 
 export const enemyAbilities: Record<string, Ability> = {

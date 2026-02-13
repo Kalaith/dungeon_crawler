@@ -1,4 +1,3 @@
-
 import { useCallback, useEffect, useRef } from 'react';
 import { useDungeonStore } from '../stores/useDungeonStore';
 import { useCombatStore } from '../stores/useCombatStore';
@@ -540,4 +539,3 @@ export const useDungeon = () => {
     interactWithTile,
   };
 };
-

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { Spell } from '../../types';
 import { getCastableSpells } from '../../data/spells';
@@ -151,4 +150,3 @@ export const SpellSelector: React.FC<SpellSelectorProps> = ({
     </div>
   );
 };
-

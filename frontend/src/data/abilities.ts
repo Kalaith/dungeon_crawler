@@ -1,4 +1,3 @@
-
 import type { Ability } from '../types';
 
 export const abilities: Record<string, Ability> = {
@@ -104,4 +103,3 @@ export const abilities: Record<string, Ability> = {
     unlockLevel: 4,
   },
 };
-

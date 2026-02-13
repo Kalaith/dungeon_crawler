@@ -1,4 +1,3 @@
-
 import { create } from 'zustand';
 import { gameData } from '../data/gameData';
 import { lootTables } from '../data/loot';
