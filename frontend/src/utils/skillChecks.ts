@@ -132,7 +132,7 @@ export function getDifficultyName(dc: number): string {
 /**
  * Standard DC values from the manual
  */
-export const DIFFICULTY_CLASSES = {
+export const difficultyClasses = {
     VERY_EASY: 5,
     EASY: 10,
     MEDIUM: 15,

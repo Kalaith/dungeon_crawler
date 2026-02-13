@@ -1,4 +1,4 @@
-import type { DungeonMap } from '../types';
+import type { DungeonMap, InteractiveTile } from '../types';
 
 /**
  * Get the color for a tile based on its type and explored status
@@ -9,7 +9,7 @@ export function getTileColor(
     y: number,
     dungeonMap: DungeonMap,
     exploredSet: Set<string>,
-    interactiveTiles: Record<string, any>
+    interactiveTiles: Record<string, InteractiveTile | undefined>
 ): string {
     const key = `${x},${y}`;
     const isExplored = exploredSet.has(key);

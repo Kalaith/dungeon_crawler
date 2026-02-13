@@ -4,7 +4,7 @@ import type { WorldMap } from '../types/world';
  * Initial World Map - Realm of Aventuria
  * Contains starting locations for the game
  */
-export const STARTING_WORLD_MAP: WorldMap = {
+export const startingWorldMap: WorldMap = {
     id: 'realm-of-aventuria',
     name: 'Realm of Aventuria',
     locations: [

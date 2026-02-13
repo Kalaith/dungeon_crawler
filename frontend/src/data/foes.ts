@@ -9,7 +9,7 @@ export interface FOE extends Enemy {
     color: string; // For minimap/view
 }
 
-export const FOE_DATA: Record<string, Omit<FOE, 'id' | 'hp' | 'maxHp' | 'statusEffects'>> = {
+export const foeData: Record<string, Omit<FOE, 'id' | 'hp' | 'maxHp' | 'statusEffects'>> = {
     'ragelope': {
         name: 'Ragelope',
         level: 5,
@@ -55,7 +55,7 @@ export const FOE_DATA: Record<string, Omit<FOE, 'id' | 'hp' | 'maxHp' | 'statusE
 };
 
 export const getFoeDefinition = (key: string): FOE => {
-    const def = FOE_DATA[key];
+    const def = foeData[key];
     if (!def) throw new Error(`FOE definition not found: ${key}`);
 
     return {

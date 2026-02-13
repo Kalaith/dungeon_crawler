@@ -1,10 +1,22 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import type { Mock } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BlacksmithService } from '../BlacksmithService';
-import { useGoldStore } from '../../stores/useGoldStore';
+import { useGoldStore } from '../../../stores/useGoldStore';
 
 // Mock the stores
-vi.mock('../../stores/useGoldStore');
+vi.mock('../../../stores/useGoldStore');
+
+type UseGoldStoreMock = Mock<
+    [],
+    {
+        gold: number;
+        subtractGold: (amount: number) => boolean;
+        canAfford: (amount: number) => boolean;
+    }
+>;
+
+const useGoldStoreMock = useGoldStore as unknown as UseGoldStoreMock;
 
 describe('BlacksmithService', () => {
     const mockOnClose = vi.fn();
@@ -12,7 +24,7 @@ describe('BlacksmithService', () => {
     beforeEach(() => {
         vi.clearAllMocks();
 
-        (useGoldStore as any).mockReturnValue({
+        useGoldStoreMock.mockReturnValue({
             gold: 100,
             subtractGold: vi.fn(() => true),
             canAfford: vi.fn(() => true),
@@ -41,7 +53,7 @@ describe('BlacksmithService', () => {
     it('should deduct gold on successful repair', () => {
         const mockSubtractGold = vi.fn(() => true);
 
-        (useGoldStore as any).mockReturnValue({
+        useGoldStoreMock.mockReturnValue({
             gold: 100,
             subtractGold: mockSubtractGold,
             canAfford: vi.fn(() => true),
@@ -58,7 +70,7 @@ describe('BlacksmithService', () => {
     it('should deduct gold on successful upgrade', () => {
         const mockSubtractGold = vi.fn(() => true);
 
-        (useGoldStore as any).mockReturnValue({
+        useGoldStoreMock.mockReturnValue({
             gold: 150,
             subtractGold: mockSubtractGold,
             canAfford: vi.fn(() => true),
@@ -79,7 +91,7 @@ describe('BlacksmithService', () => {
     it('should prevent repair when insufficient funds', () => {
         const mockSubtractGold = vi.fn();
 
-        (useGoldStore as any).mockReturnValue({
+        useGoldStoreMock.mockReturnValue({
             gold: 10,
             subtractGold: mockSubtractGold,
             canAfford: vi.fn(() => false),
@@ -97,7 +109,7 @@ describe('BlacksmithService', () => {
     it('should prevent upgrade when insufficient funds', () => {
         const mockSubtractGold = vi.fn();
 
-        (useGoldStore as any).mockReturnValue({
+        useGoldStoreMock.mockReturnValue({
             gold: 50,
             subtractGold: mockSubtractGold,
             canAfford: vi.fn(() => false),

@@ -1,6 +1,9 @@
-import type { Character } from '../types';
+import type { Attributes, Character, CharacterClass, Race } from '../types';
 import { calculateDerivedStats } from './characterCreation';
 import { initializeCharacterSkills } from './skillChecks';
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+    typeof value === 'object' && value !== null;
 
 // Helper to get class skill proficiencies (duplicated to avoid circular dependency)
 function getClassSkillProficiencies(classId: string): string[] {
@@ -29,74 +32,88 @@ function getClassSkillProficiencies(classId: string): string[] {
  * Migrates legacy character data to the current schema.
  * This function ensures that all required properties exist on a character object.
  */
-export function migrateCharacter(character: any): Character {
-    // If derivedStats is missing, calculate it from existing data
-    if (!character.derivedStats && character.class && character.attributes) {
-        console.log(`Migrating character ${character.name} - adding derivedStats`);
+export function migrateCharacter(character: unknown): Character {
+    if (!isRecord(character)) {
+        throw new Error('Invalid character payload');
+    }
 
-        const movementRate = character.race?.movementRate || 30;
-        character.derivedStats = calculateDerivedStats(
-            character.attributes,
-            character.class.baseStats,
-            movementRate
-        );
+    const c = character as Partial<Character> & Record<string, unknown>;
+
+    // If derivedStats is missing, calculate it from existing data
+    if (!c.derivedStats && c.class && c.attributes) {
+        console.log(`Migrating character ${c.name} - adding derivedStats`);
+
+        const race = c.race as Race | undefined;
+        const klass = c.class as CharacterClass | undefined;
+        const attributes = c.attributes as Attributes | undefined;
+
+        const movementRate = race?.movementRate ?? 30;
+
+        if (klass && attributes) {
+            c.derivedStats = calculateDerivedStats(
+                attributes,
+                klass.baseStats,
+                movementRate
+            );
+        }
     }
 
     // Ensure other required properties exist
-    if (!character.statusEffects) {
-        character.statusEffects = [];
+    if (!c.statusEffects) {
+        c.statusEffects = [];
     }
 
-    if (!character.position) {
-        character.position = { row: 'front', index: 0 };
+    if (!c.position) {
+        c.position = { row: 'front', index: 0 };
     }
 
-    if (character.alive === undefined) {
-        character.alive = true;
+    if (c.alive === undefined) {
+        c.alive = true;
     }
 
-    if (!character.equipment) {
-        character.equipment = {};
+    if (!c.equipment) {
+        c.equipment = {};
     }
 
-    if (!character.inventory) {
-        character.inventory = [];
+    if (!c.inventory) {
+        c.inventory = [];
     }
 
-    if (!character.spells) {
-        character.spells = [];
+    if (!c.spells) {
+        c.spells = [];
     }
 
     // Migrate skills to new format (all 51 skills)
-    if (!character.skills || character.skills.length === 0 || !character.skills[0]?.skillId) {
-        console.log(`Migrating character ${character.name} - initializing all 51 skills`);
+    if (!c.skills || c.skills.length === 0 || !(c.skills[0] && 'skillId' in (c.skills[0] as object))) {
+        console.log(`Migrating character ${c.name} - initializing all 51 skills`);
 
-        const proficientSkills = character.class?.id
-            ? getClassSkillProficiencies(character.class.id)
+        const klass = c.class as CharacterClass | undefined;
+        const proficientSkills = klass?.id
+            ? getClassSkillProficiencies(klass.id)
             : [];
 
-        character.skills = initializeCharacterSkills(proficientSkills);
+        c.skills = initializeCharacterSkills(proficientSkills);
     }
 
-    if (!character.feats) {
-        character.feats = [];
+    if (!c.feats) {
+        c.feats = [];
     }
 
-    if (character.gold === undefined) {
-        character.gold = 0;
+    if (c.gold === undefined) {
+        c.gold = 0;
     }
 
-    if (character.pendingFeatSelections === undefined) {
-        character.pendingFeatSelections = 0;
+    if (c.pendingFeatSelections === undefined) {
+        c.pendingFeatSelections = 0;
     }
 
-    return character as Character;
+    return c as Character;
 }
 
 /**
  * Migrates an array of characters (including null values)
  */
-export function migrateParty(party: (any | null)[]): (Character | null)[] {
+export function migrateParty(party: Array<unknown | null>): Array<Character | null> {
     return party.map(character => {
         if (character === null) return null;
         return migrateCharacter(character);

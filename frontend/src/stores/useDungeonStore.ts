@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Position, Direction, DungeonMap, FOEInstance, InteractiveTile } from '../types';
 import { generateDungeon } from '../utils/dungeonGenerator';
-import { GAME_CONFIG } from '../data/constants';
+import { gameConfig } from '../data/constants';
 import { logger } from '../utils/logger';
 
 interface DungeonStore {
@@ -75,13 +75,13 @@ export const useDungeonStore = create<DungeonStore>()(
             generateFloor: (floorNumber) => {
                 logger.info('🏗️ generateFloor called with floor:', floorNumber);
                 try {
-                    const { DEFAULT_WIDTH, DEFAULT_HEIGHT } = GAME_CONFIG.DUNGEON;
-                    const dungeonData = generateDungeon(DEFAULT_WIDTH, DEFAULT_HEIGHT, floorNumber);
+                    const { DEFAULT_WIDTH: defaultWidth, DEFAULT_HEIGHT: defaultHeight } = gameConfig.DUNGEON;
+                    const dungeonData = generateDungeon(defaultWidth, defaultHeight, floorNumber);
 
                     set({
                         currentDungeonMap: {
-                            width: DEFAULT_WIDTH,
-                            height: DEFAULT_HEIGHT,
+                            width: defaultWidth,
+                            height: defaultHeight,
                             floor: floorNumber,
                             layout: dungeonData.layout,
                             playerStart: dungeonData.playerStart,
@@ -142,10 +142,10 @@ export const useDungeonStore = create<DungeonStore>()(
                 Object.keys(newTiles).forEach(key => {
                     const tile = newTiles[key];
                     if (tile && tile.type === 'door') {
-                        newTiles[key] = { ...tile, state: 'open' } as any;
+                        newTiles[key] = { ...tile, state: 'open' };
                     }
                 });
-                return { interactiveTiles: newTiles as any };
+                return { interactiveTiles: newTiles };
             }),
 
             setFoes: (foes) => set({ foes }),

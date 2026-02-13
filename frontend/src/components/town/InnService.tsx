@@ -10,7 +10,7 @@ export const InnService: React.FC<InnServiceProps> = ({ onClose }) => {
     const { party, restParty } = usePartyStore();
     const [hasRested, setHasRested] = useState(false);
 
-    const ROOM_COST = 10; // Gold per night
+    const roomCost = 10; // Gold per night
 
     const handleRest = () => {
         // TODO: Deduct gold when economy system is implemented
@@ -65,7 +65,7 @@ export const InnService: React.FC<InnServiceProps> = ({ onClose }) => {
                                     </div>
                                     <div className="text-right">
                                         <p className="text-2xl font-bold text-gold-500">
-                                            {ROOM_COST} 💰
+                                            {roomCost} 💰
                                         </p>
                                         <p className="text-xs text-cyan-400">
                                             per night
@@ -118,7 +118,7 @@ export const InnService: React.FC<InnServiceProps> = ({ onClose }) => {
                                         onClick={handleRest}
                                         className="w-full"
                                     >
-                                        Rest for the Night ({ROOM_COST} Gold)
+                                        Rest for the Night ({roomCost} Gold)
                                     </Button>
                                 ) : (
                                     <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded">

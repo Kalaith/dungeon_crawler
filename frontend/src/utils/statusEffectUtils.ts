@@ -64,16 +64,17 @@ export const processStatusEffects = (
     target: Character | Enemy
 ): { damage: number; healing: number; message: string } => {
     let damage = 0;
-    let healing = 0;
+    const healing = 0;
     const messages: string[] = [];
 
     target.statusEffects.forEach(effect => {
         switch (effect.type) {
-            case 'poison':
+            case 'poison': {
                 const poisonDamage = effect.value || 5;
                 damage += poisonDamage;
                 messages.push(`${target.name} takes ${poisonDamage} poison damage!`);
                 break;
+            }
         }
     });
 

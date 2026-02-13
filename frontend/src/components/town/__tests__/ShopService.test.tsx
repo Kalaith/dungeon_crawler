@@ -1,12 +1,28 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import type { Mock } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ShopService } from '../ShopService';
-import { useGoldStore } from '../../stores/useGoldStore';
-import { useInventoryStore } from '../../stores/useInventoryStore';
+import { useGoldStore } from '../../../stores/useGoldStore';
+import { useInventoryStore } from '../../../stores/useInventoryStore';
+import type { Item } from '../../../types';
 
 // Mock the stores
-vi.mock('../../stores/useGoldStore');
-vi.mock('../../stores/useInventoryStore');
+vi.mock('../../../stores/useGoldStore');
+vi.mock('../../../stores/useInventoryStore');
+
+type UseGoldStoreMock = Mock<
+    [],
+    {
+        gold: number;
+        subtractGold: (amount: number) => boolean;
+        canAfford: (amount: number) => boolean;
+    }
+>;
+
+type UseInventoryStoreMock = Mock<[], { addItem: (item: Item) => void }>;
+
+const useGoldStoreMock = useGoldStore as unknown as UseGoldStoreMock;
+const useInventoryStoreMock = useInventoryStore as unknown as UseInventoryStoreMock;
 
 describe('ShopService', () => {
     const mockOnClose = vi.fn();
@@ -15,13 +31,13 @@ describe('ShopService', () => {
         vi.clearAllMocks();
 
         // Setup default mock implementations
-        (useGoldStore as any).mockReturnValue({
+        useGoldStoreMock.mockReturnValue({
             gold: 100,
             subtractGold: vi.fn(() => true),
             canAfford: vi.fn((amount: number) => amount <= 100),
         });
 
-        (useInventoryStore as any).mockReturnValue({
+        useInventoryStoreMock.mockReturnValue({
             addItem: vi.fn(),
         });
     });
@@ -46,13 +62,13 @@ describe('ShopService', () => {
         const mockSubtractGold = vi.fn(() => true);
         const mockAddItem = vi.fn();
 
-        (useGoldStore as any).mockReturnValue({
+        useGoldStoreMock.mockReturnValue({
             gold: 100,
             subtractGold: mockSubtractGold,
             canAfford: vi.fn(() => true),
         });
 
-        (useInventoryStore as any).mockReturnValue({
+        useInventoryStoreMock.mockReturnValue({
             addItem: mockAddItem,
         });
 
@@ -74,7 +90,7 @@ describe('ShopService', () => {
     });
 
     it('should prevent purchase when insufficient funds', () => {
-        (useGoldStore as any).mockReturnValue({
+        useGoldStoreMock.mockReturnValue({
             gold: 10,
             subtractGold: vi.fn(),
             canAfford: vi.fn(() => false),
@@ -91,7 +107,7 @@ describe('ShopService', () => {
     });
 
     it('should disable purchase button when cannot afford', () => {
-        (useGoldStore as any).mockReturnValue({
+        useGoldStoreMock.mockReturnValue({
             gold: 10,
             subtractGold: vi.fn(),
             canAfford: vi.fn(() => false),
@@ -109,7 +125,7 @@ describe('ShopService', () => {
     });
 
     it('should show warning when insufficient funds', () => {
-        (useGoldStore as any).mockReturnValue({
+        useGoldStoreMock.mockReturnValue({
             gold: 10,
             subtractGold: vi.fn(),
             canAfford: vi.fn(() => false),

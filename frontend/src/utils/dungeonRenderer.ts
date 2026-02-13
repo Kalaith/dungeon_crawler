@@ -1,6 +1,6 @@
-import { RENDER_CONFIG } from '../data/constants';
+import { renderConfig } from '../data/constants';
 import type { FOEInstance, InteractiveTile } from '../types';
-import { FOE_DATA } from '../data/foes';
+import { foeData } from '../data/foes';
 
 export interface DungeonSceneData {
     ahead: string;
@@ -33,19 +33,19 @@ export class DungeonRenderer {
         // Render Far Layer (Walls -> Objects -> FOEs)
         this.renderFarWalls(sceneData.farAhead);
         if (sceneData.objectFarAhead) {
-            this.renderObject(RENDER_CONFIG.GEOMETRY.R3, sceneData.objectFarAhead);
+            this.renderObject(renderConfig.GEOMETRY.R3, sceneData.objectFarAhead);
         }
         if (sceneData.foeFarAhead) {
-            this.renderFOE(RENDER_CONFIG.GEOMETRY.R3, sceneData.foeFarAhead);
+            this.renderFOE(renderConfig.GEOMETRY.R3, sceneData.foeFarAhead);
         }
 
         // Render Middle Layer
         this.renderMiddleSection(sceneData);
         if (sceneData.objectAhead) {
-            this.renderObject(RENDER_CONFIG.GEOMETRY.R2, sceneData.objectAhead);
+            this.renderObject(renderConfig.GEOMETRY.R2, sceneData.objectAhead);
         }
         if (sceneData.foeAhead) {
-            this.renderFOE(RENDER_CONFIG.GEOMETRY.R2, sceneData.foeAhead);
+            this.renderFOE(renderConfig.GEOMETRY.R2, sceneData.foeAhead);
         }
 
         // Render Near Layer
@@ -53,37 +53,37 @@ export class DungeonRenderer {
     }
 
     private clearCanvas(): void {
-        this.ctx.fillStyle = RENDER_CONFIG.COLORS.BACKGROUND;
+        this.ctx.fillStyle = renderConfig.COLORS.BACKGROUND;
         this.ctx.fillRect(0, 0, this.width, this.height);
     }
 
     private renderBackground(): void {
         // Ceiling
-        this.ctx.fillStyle = RENDER_CONFIG.COLORS.CEILING;
+        this.ctx.fillStyle = renderConfig.COLORS.CEILING;
         this.ctx.fillRect(0, 0, this.width, this.height / 2);
 
         // Floor
-        this.ctx.fillStyle = RENDER_CONFIG.COLORS.FLOOR;
+        this.ctx.fillStyle = renderConfig.COLORS.FLOOR;
         this.ctx.fillRect(0, this.height / 2, this.width, this.height / 2);
     }
 
     private renderFarWalls(tileType: string): void {
-        const { R3 } = RENDER_CONFIG.GEOMETRY;
+        const { R3 } = renderConfig.GEOMETRY;
 
         if (tileType === '#') {
-            this.drawRect(R3, RENDER_CONFIG.COLORS.WALL_FACE);
+            this.drawRect(R3, renderConfig.COLORS.WALL_FACE);
         } else if (tileType === '<') {
-            this.drawRect(R3, RENDER_CONFIG.COLORS.STAIRS_UP);
+            this.drawRect(R3, renderConfig.COLORS.STAIRS_UP);
         } else if (tileType === '>') {
-            this.drawRect(R3, RENDER_CONFIG.COLORS.STAIRS_DOWN);
+            this.drawRect(R3, renderConfig.COLORS.STAIRS_DOWN);
         } else if (tileType === '$') {
-            this.drawRect(R3, RENDER_CONFIG.COLORS.TREASURE);
+            this.drawRect(R3, renderConfig.COLORS.TREASURE);
         }
     }
 
     private renderMiddleSection(data: DungeonSceneData): void {
-        const { R2, R3 } = RENDER_CONFIG.GEOMETRY;
-        const { COLORS } = RENDER_CONFIG;
+        const { R2, R3 } = renderConfig.GEOMETRY;
+        const { COLORS } = renderConfig;
 
         if (data.ahead === '#') {
             // Main wall ahead
@@ -141,8 +141,8 @@ export class DungeonRenderer {
     }
 
     private renderNearSides(data: DungeonSceneData): void {
-        const { R1, R2 } = RENDER_CONFIG.GEOMETRY;
-        const { COLORS } = RENDER_CONFIG;
+        const { R1, R2 } = renderConfig.GEOMETRY;
+        const { COLORS } = renderConfig;
 
         // Left wall - extend to front wall if there's a wall ahead
         if (data.left === '#') {
@@ -210,7 +210,7 @@ export class DungeonRenderer {
     }
 
     private renderFOE(rect: { x: number, y: number, w: number, h: number }, foe: FOEInstance): void {
-        const foeDef = FOE_DATA[foe.defId];
+        const foeDef = foeData[foe.defId];
         const color = foeDef ? foeDef.color : 'red';
 
         // Draw FOE as a circle/blob
@@ -238,7 +238,7 @@ export class DungeonRenderer {
     private renderObject(rect: { x: number, y: number, w: number, h: number }, obj: InteractiveTile): void {
         if (obj.type === 'door') {
             if (obj.state === 'closed' || obj.state === 'locked') {
-                this.drawRect(rect, RENDER_CONFIG.COLORS.DOOR);
+                this.drawRect(rect, renderConfig.COLORS.DOOR);
                 // Draw knob/detail
                 this.ctx.fillStyle = 'black';
                 this.ctx.beginPath();
@@ -246,7 +246,7 @@ export class DungeonRenderer {
                 this.ctx.fill();
             } else {
                 // Open door - draw frame
-                this.ctx.strokeStyle = RENDER_CONFIG.COLORS.DOOR;
+                this.ctx.strokeStyle = renderConfig.COLORS.DOOR;
                 this.ctx.lineWidth = 4;
                 this.ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
             }
@@ -278,16 +278,16 @@ export class DungeonRenderer {
         }
         this.ctx.closePath();
         this.ctx.fill();
-        this.ctx.strokeStyle = RENDER_CONFIG.STROKE.COLOR;
-        this.ctx.lineWidth = RENDER_CONFIG.STROKE.WIDTH_THIN;
+        this.ctx.strokeStyle = renderConfig.STROKE.COLOR;
+        this.ctx.lineWidth = renderConfig.STROKE.WIDTH_THIN;
         this.ctx.stroke();
     }
 
     private drawRect(rect: { x: number, y: number, w: number, h: number }, color: string): void {
         this.ctx.fillStyle = color;
         this.ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
-        this.ctx.strokeStyle = RENDER_CONFIG.STROKE.COLOR;
-        this.ctx.lineWidth = RENDER_CONFIG.STROKE.WIDTH_THICK;
+        this.ctx.strokeStyle = renderConfig.STROKE.COLOR;
+        this.ctx.lineWidth = renderConfig.STROKE.WIDTH_THICK;
         this.ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
     }
 }

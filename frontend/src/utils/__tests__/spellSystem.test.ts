@@ -2,16 +2,14 @@ import { describe, it, expect } from 'vitest';
 import {
     getMaxSpellLevel,
     getClassSpellList,
-    getAvailableSpellsToLearn,
     getMaxKnownSpells,
     getMaxPreparedSpells,
     canLearnSpell,
     learnSpell,
-    prepareSpells,
     getCantrips,
     initializeCharacterSpells
 } from '../spellLearning';
-import { spells, getSpellsByLevel, getCastableSpells, AP_COSTS } from '../../data/spells';
+import { spells, getSpellsByLevel, getCastableSpells, apCosts } from '../../data/spells';
 import { checkConcentration, breakConcentration, startConcentration, isConcentrating } from '../concentrationMechanics';
 import type { Character } from '../../types';
 
@@ -263,7 +261,7 @@ describe('Spell Data', () => {
 
         it('should have correct AP costs', () => {
             spells.forEach(spell => {
-                expect(spell.apCost).toBe(AP_COSTS[spell.level]);
+                expect(spell.apCost).toBe(apCosts[spell.level]);
             });
         });
 

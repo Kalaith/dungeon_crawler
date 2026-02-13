@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { Character, Attribute, Item } from '../../types';
+import type { Character, Item } from '../../types';
 import { StatBar } from '../ui/StatBar';
 
 interface CharacterSheetModalProps {

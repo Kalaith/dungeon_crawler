@@ -1,13 +1,34 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import type { Mock } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { TempleService } from '../TempleService';
-import { useGoldStore } from '../../stores/useGoldStore';
-import { usePartyStore } from '../../stores/usePartyStore';
-import type { Character } from '../../types';
+import { useGoldStore } from '../../../stores/useGoldStore';
+import { usePartyStore } from '../../../stores/usePartyStore';
+import type { Character } from '../../../types';
 
 // Mock the stores
-vi.mock('../../stores/useGoldStore');
-vi.mock('../../stores/usePartyStore');
+vi.mock('../../../stores/useGoldStore');
+vi.mock('../../../stores/usePartyStore');
+
+type UseGoldStoreMock = Mock<
+    [],
+    {
+        gold: number;
+        subtractGold: (amount: number) => boolean;
+        canAfford: (amount: number) => boolean;
+    }
+>;
+
+type UsePartyStoreMock = Mock<
+    [],
+    {
+        party: Character[];
+        addCharacterToParty: (character: Character, slot: number) => void;
+    }
+>;
+
+const useGoldStoreMock = useGoldStore as unknown as UseGoldStoreMock;
+const usePartyStoreMock = usePartyStore as unknown as UsePartyStoreMock;
 
 describe('TempleService', () => {
     const mockOnClose = vi.fn();
@@ -30,7 +51,7 @@ describe('TempleService', () => {
         negativeAttributes: { SN: 0, AC: 0, CL: 0, AV: 0, NE: 0, CU: 0, VT: 0 },
         skills: [],
         feats: [],
-        equipment: { weapon: null, armor: null, shield: null, accessories: [] },
+        equipment: {},
         inventory: [],
         spells: [],
         gold: 0,
@@ -44,7 +65,7 @@ describe('TempleService', () => {
     beforeEach(() => {
         vi.clearAllMocks();
 
-        (useGoldStore as any).mockReturnValue({
+        useGoldStoreMock.mockReturnValue({
             gold: 100,
             subtractGold: vi.fn(() => true),
             canAfford: vi.fn(() => true),
@@ -55,13 +76,13 @@ describe('TempleService', () => {
         const mockSubtractGold = vi.fn();
         const deadChar = createMockCharacter(1, false);
 
-        (useGoldStore as any).mockReturnValue({
+        useGoldStoreMock.mockReturnValue({
             gold: 100,
             subtractGold: mockSubtractGold,
             canAfford: vi.fn(() => true),
         });
 
-        (usePartyStore as any).mockReturnValue({
+        usePartyStoreMock.mockReturnValue({
             party: [deadChar],
             addCharacterToParty: vi.fn(),
         });
@@ -79,13 +100,13 @@ describe('TempleService', () => {
         const mockSubtractGold = vi.fn(() => true);
         const deadChar = createMockCharacter(5, false);
 
-        (useGoldStore as any).mockReturnValue({
+        useGoldStoreMock.mockReturnValue({
             gold: 200,
             subtractGold: mockSubtractGold,
             canAfford: vi.fn(() => true),
         });
 
-        (usePartyStore as any).mockReturnValue({
+        usePartyStoreMock.mockReturnValue({
             party: [deadChar],
             addCharacterToParty: vi.fn(),
         });
@@ -103,13 +124,13 @@ describe('TempleService', () => {
         const mockSubtractGold = vi.fn();
         const deadChar = createMockCharacter(5, false);
 
-        (useGoldStore as any).mockReturnValue({
+        useGoldStoreMock.mockReturnValue({
             gold: 50,
             subtractGold: mockSubtractGold,
             canAfford: vi.fn(() => false),
         });
 
-        (usePartyStore as any).mockReturnValue({
+        usePartyStoreMock.mockReturnValue({
             party: [deadChar],
             addCharacterToParty: vi.fn(),
         });
@@ -126,7 +147,7 @@ describe('TempleService', () => {
     it('should calculate resurrection cost correctly', () => {
         const deadChar = createMockCharacter(3, false);
 
-        (usePartyStore as any).mockReturnValue({
+        usePartyStoreMock.mockReturnValue({
             party: [deadChar],
             addCharacterToParty: vi.fn(),
         });
@@ -140,7 +161,7 @@ describe('TempleService', () => {
     it('should show free for level 1', () => {
         const deadChar = createMockCharacter(1, false);
 
-        (usePartyStore as any).mockReturnValue({
+        usePartyStoreMock.mockReturnValue({
             party: [deadChar],
             addCharacterToParty: vi.fn(),
         });
@@ -154,7 +175,7 @@ describe('TempleService', () => {
         const mockAddCharacter = vi.fn();
         const deadChar = createMockCharacter(1, false);
 
-        (usePartyStore as any).mockReturnValue({
+        usePartyStoreMock.mockReturnValue({
             party: [deadChar],
             addCharacterToParty: mockAddCharacter,
         });

@@ -7,7 +7,7 @@ import { useUIStore } from '../stores/uiStore';
 import { useGameStateStore } from '../stores/useGameStateStore';
 import type { Character, Enemy } from '../types';
 import { calculateEffectiveStats } from '../utils/characterUtils';
-import { applyStatusEffect, processStatusEffects, updateStatusEffects, hasStatusEffect } from '../utils/statusEffectUtils';
+import { applyStatusEffect } from '../utils/statusEffectUtils';
 import { calculateLevelUp } from '../utils/progressionUtils';
 
 export const useCombat = () => {
@@ -406,7 +406,7 @@ export const useCombat = () => {
     return true;
   }, [party, updatePartyMember, updatePartyMemberHP, updateEnemyHP, addCombatLog, endCombat, currentEnemy, generateLoot]);
 
-  const handleCombatAction = useCallback((action: 'attack' | 'spell' | 'defend' | 'item' | 'row-switch' | 'ability' | 'escape', options?: any) => {
+  const handleCombatAction = useCallback((action: 'attack' | 'spell' | 'defend' | 'item' | 'row-switch' | 'ability' | 'escape', options?: { spell?: import('../types').Spell; abilityId?: string }) => {
     console.log('⚔️ COMBAT ACTION TRIGGERED:', action);
     const currentParticipant = combatTurnOrder[currentTurn];
 
@@ -471,7 +471,7 @@ export const useCombat = () => {
         // Use action
         useCombatStore.getState().useAction();
         break;
-      case 'row-switch':
+      case 'row-switch': {
         // Switch row (free movement action)
         const newRow: 'front' | 'back' = character.position.row === 'front' ? 'back' : 'front';
         if (characterIndex !== -1) {
@@ -488,6 +488,7 @@ export const useCombat = () => {
           useCombatStore.getState().useMovement();
         }
         break;
+      }
       case 'escape':
         if (Math.random() < 0.5) {
           addCombatLog('Successfully escaped!');

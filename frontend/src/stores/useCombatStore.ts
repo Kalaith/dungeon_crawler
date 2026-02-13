@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { Enemy, CombatParticipant, ActiveStatusEffect } from '../types';
-import { GAME_CONFIG } from '../data/constants';
+import { gameConfig } from '../data/constants';
 import { useGameStateStore } from './useGameStateStore';
 
 interface ActionEconomy {
@@ -121,7 +121,7 @@ export const useCombatStore = create<CombatStore>((set, get) => ({
 
     addCombatLog: (message) => set((state) => {
         const newLog = [...state.combatLog, message];
-        if (newLog.length > GAME_CONFIG.COMBAT.MAX_COMBAT_LOG_ENTRIES) {
+        if (newLog.length > gameConfig.COMBAT.MAX_COMBAT_LOG_ENTRIES) {
             newLog.shift();
         }
         return { combatLog: newLog };

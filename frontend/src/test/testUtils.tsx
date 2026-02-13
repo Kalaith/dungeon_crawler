@@ -2,9 +2,7 @@ import React, { type ReactElement } from 'react';
 import { render, type RenderOptions } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
-interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
-    // Add any custom options here if needed
-}
+type CustomRenderOptions = Omit<RenderOptions, 'wrapper'>;
 
 const customRender = (
     ui: ReactElement,

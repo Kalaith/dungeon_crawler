@@ -49,7 +49,7 @@ export const createCombatSlice: GameSliceCreator<CombatSlice> = (set, get) => ({
             const updatedParty = state.party.map((character) => {
                 if (character && character.alive) {
                     const newExp = character.exp + exp;
-                    let newExpToNext = character.expToNext - exp;
+                    const newExpToNext = character.expToNext - exp;
 
                     // Check for level up
                     if (newExpToNext <= 0) {

@@ -124,6 +124,18 @@ export interface CharacterSkill {
   proficient: boolean; // Whether character has proficiency in this skill
 }
 
+export type FeatEffects =
+  | {
+      type: 'stat_boost';
+      stat: Attribute | 'HP' | 'ST_or_DX' | 'INT_WIS_CHA';
+      value?: number;
+      valuePerLevel?: number;
+    }
+  | { type: 'asi' }
+  | { type: 'passive'; [key: string]: unknown }
+  | { type: 'active'; action: string; [key: string]: unknown }
+  | { type: 'resource'; resourceName: string; amount: number | 'proficiency'; [key: string]: unknown };
+
 export interface Feat {
   id: string;
   name: string;
@@ -133,7 +145,7 @@ export interface Feat {
     attributes?: Partial<Attributes>;
     feats?: string[];
   };
-  effects: any; // Define specific effects structure later
+  effects: FeatEffects;
 }
 
 export interface Spell {
@@ -307,7 +319,7 @@ export interface InteractiveTile {
 
 export interface FOEInstance {
   id: string;
-  defId: string; // Reference to FOE_DATA key
+  defId: string; // Reference to foeData key
   x: number;
   y: number;
   hp: number;

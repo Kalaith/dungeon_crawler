@@ -1,6 +1,6 @@
 import type { Position, FOEInstance, InteractiveTile } from '../types';
-import { getFoeDefinition, FOE_DATA } from '../data/foes';
-import { GAME_CONFIG } from '../data/constants';
+import { getFoeDefinition, foeData } from '../data/foes';
+import { gameConfig } from '../data/constants';
 
 interface Room {
     x: number;
@@ -58,7 +58,7 @@ export class DungeonGenerator {
         this.connectRooms();
 
         const stairsUp = this.floor > 1 ? this.placeStairsUp() : undefined;
-        const stairsDown = this.floor < GAME_CONFIG.DUNGEON.MAX_FLOORS ? this.placeStairsDown() : undefined;
+        const stairsDown = this.floor < gameConfig.DUNGEON.MAX_FLOORS ? this.placeStairsDown() : undefined;
         const treasureLocations = this.placeTreasure();
 
         this.placeDoors();
@@ -81,12 +81,16 @@ export class DungeonGenerator {
     }
 
     private placeRooms(): void {
-        const { MIN_ROOM_SIZE, MAX_ROOM_SIZE, MAX_ROOMS } = GAME_CONFIG.DUNGEON;
+        const {
+            MIN_ROOM_SIZE: minRoomSize,
+            MAX_ROOM_SIZE: maxRoomSize,
+            MAX_ROOMS: maxRooms
+        } = gameConfig.DUNGEON;
         const attempts = 200;
 
-        for (let i = 0; i < attempts && this.rooms.length < MAX_ROOMS; i++) {
-            const width = Math.floor(Math.random() * (MAX_ROOM_SIZE - MIN_ROOM_SIZE + 1)) + MIN_ROOM_SIZE;
-            const height = Math.floor(Math.random() * (MAX_ROOM_SIZE - MIN_ROOM_SIZE + 1)) + MIN_ROOM_SIZE;
+        for (let i = 0; i < attempts && this.rooms.length < maxRooms; i++) {
+            const width = Math.floor(Math.random() * (maxRoomSize - minRoomSize + 1)) + minRoomSize;
+            const height = Math.floor(Math.random() * (maxRoomSize - minRoomSize + 1)) + minRoomSize;
 
             // Ensure room is within bounds with 1 tile padding for walls
             const x = Math.floor(Math.random() * (this.width - width - 2)) + 1;
@@ -343,7 +347,7 @@ export class DungeonGenerator {
         if (this.floor < 2) return;
 
         const count = 1 + Math.floor(Math.random() * 2);
-        const foeKeys = Object.keys(FOE_DATA);
+        const foeKeys = Object.keys(foeData);
         if (foeKeys.length === 0) return;
 
         for (let i = 0; i < count; i++) {

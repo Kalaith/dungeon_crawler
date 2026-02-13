@@ -19,7 +19,7 @@ interface ShopItem {
     icon: string;
 }
 
-const SHOP_INVENTORY: ShopItem[] = [
+const shopInventory: ShopItem[] = [
     // Weapons
     { id: 'sword_iron', name: 'Iron Sword', description: '+2 damage', price: 50, category: 'weapons', icon: '⚔️' },
     { id: 'sword_steel', name: 'Steel Sword', description: '+4 damage', price: 150, category: 'weapons', icon: '🗡️' },
@@ -51,7 +51,7 @@ export const ShopService: React.FC<ShopServiceProps> = ({ onClose }) => {
     const [selectedCategory, setSelectedCategory] = useState<ShopCategory>('weapons');
     const [cart, setCart] = useState<Map<string, number>>(new Map());
 
-    const filteredItems = SHOP_INVENTORY.filter(item => item.category === selectedCategory);
+    const filteredItems = shopInventory.filter(item => item.category === selectedCategory);
 
     const addToCart = (itemId: string) => {
         setCart(prev => {
@@ -77,7 +77,7 @@ export const ShopService: React.FC<ShopServiceProps> = ({ onClose }) => {
     const getTotalCost = (): number => {
         let total = 0;
         cart.forEach((quantity, itemId) => {
-            const item = SHOP_INVENTORY.find(i => i.id === itemId);
+            const item = shopInventory.find(i => i.id === itemId);
             if (item) {
                 total += item.price * quantity;
             }
@@ -102,7 +102,7 @@ export const ShopService: React.FC<ShopServiceProps> = ({ onClose }) => {
 
         // Add items to inventory
         cart.forEach((quantity, itemId) => {
-            const shopItem = SHOP_INVENTORY.find(i => i.id === itemId);
+            const shopItem = shopInventory.find(i => i.id === itemId);
             if (shopItem) {
                 const item: Item = {
                     id: shopItem.id,
@@ -231,7 +231,7 @@ export const ShopService: React.FC<ShopServiceProps> = ({ onClose }) => {
                                 <>
                                     <div className="space-y-3 mb-4 max-h-96 overflow-y-auto">
                                         {Array.from(cart.entries()).map(([itemId, quantity]) => {
-                                            const item = SHOP_INVENTORY.find(i => i.id === itemId);
+                                            const item = shopInventory.find(i => i.id === itemId);
                                             if (!item) return null;
 
                                             return (

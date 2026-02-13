@@ -47,7 +47,7 @@ export const DebugPanel: React.FC = () => {
     } = usePartyStore();
 
     const { setGold } = useGoldStore();
-    const { gameState, setGameState, godMode, toggleGodMode } = useGameStateStore();
+    const { setGameState, godMode, toggleGodMode } = useGameStateStore();
     const { addItem } = useInventoryStore();
 
     const handleTriggerCombat = () => {

@@ -1,16 +1,16 @@
-import type { Character, DerivedStats, Attribute, CharacterSkill } from '../types';
+import type { Attribute, Character, CharacterClass, CharacterSkill, DerivedStats, Feat, NegativeAttributes, Race } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 import { initializeCharacterSkills } from './skillChecks';
 
 // Define the store interface needed for character creation
 interface CharacterCreationStoreData {
     name: string;
-    selectedRace: any;
-    selectedClass: any;
+    selectedRace: Race | null;
+    selectedClass: CharacterClass | null;
     attributes: Record<Attribute, number>;
-    negativeAttributes: any;
-    selectedSkills: any[]; // Legacy, not used anymore
-    selectedFeats: any[];
+    negativeAttributes: NegativeAttributes;
+    selectedSkills: string[]; // Legacy, not used anymore
+    selectedFeats: Feat[];
     portrait: string;
     selectedDeity: string | null;
     selectedBackground: string | null;

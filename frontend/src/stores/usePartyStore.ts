@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Character, ActiveStatusEffect, Item } from '../types';
-import { GAME_CONFIG } from '../data/constants';
+import type { ActiveStatusEffect, Attribute, Character, Feat, Item } from '../types';
+import { gameConfig } from '../data/constants';
 import { migrateParty } from '../utils/characterMigration';
 import { useGameStateStore } from './useGameStateStore';
 
@@ -18,7 +18,7 @@ interface PartyStore {
     equipItem: (characterIndex: number, item: Item, slot: keyof Character['equipment']) => void;
     addGoldToParty: (amount: number) => void;
     levelUpCharacter: (characterIndex: number) => void;
-    selectFeat: (characterIndex: number, feat: any, choice?: string) => void;
+    selectFeat: (characterIndex: number, feat: Feat, choice?: Attribute) => void;
     addXpToParty: (amount: number) => void;
     restParty: () => void;
     resetParty: () => void;
@@ -32,7 +32,7 @@ interface PartyStore {
 export const usePartyStore = create<PartyStore>()(
     persist(
         (set, get) => ({
-            party: Array(GAME_CONFIG.PARTY.MAX_SIZE).fill(null),
+            party: Array(gameConfig.PARTY.MAX_SIZE).fill(null),
 
             addCharacterToParty: (character, slot) => set((state) => {
                 const newParty = [...state.party];
@@ -206,24 +206,28 @@ export const usePartyStore = create<PartyStore>()(
                 const character = updatedParty[characterIndex];
                 if (!character) return { party: updatedParty };
 
-                let newAttributes = { ...character.attributes };
-                let newDerivedStats = { ...character.derivedStats };
+                const newAttributes = { ...character.attributes };
+                const newDerivedStats = { ...character.derivedStats };
 
                 // Apply immediate effects
                 if (feat.effects.type === 'stat_boost') {
                     if (feat.effects.stat === 'HP') {
                         // Tough feat
-                        const hpBoost = feat.effects.valuePerLevel * character.level;
+                        const hpBoost = (feat.effects.valuePerLevel || 0) * character.level;
                         newDerivedStats.HP.max += hpBoost;
                         newDerivedStats.HP.current += hpBoost;
                     } else if (choice && (feat.effects.stat === 'ST_or_DX' || feat.effects.stat === 'INT_WIS_CHA')) {
                         // Choice based stat boost
-                        if (newAttributes[choice as keyof typeof newAttributes] !== undefined) {
-                            newAttributes[choice as keyof typeof newAttributes] += feat.effects.value;
-                        }
-                    } else if (feat.effects.stat && newAttributes[feat.effects.stat as keyof typeof newAttributes] !== undefined) {
+                        const inc = typeof feat.effects.value === 'number' ? feat.effects.value : 0;
+                        newAttributes[choice] += inc;
+                    } else if (
+                        feat.effects.stat !== 'HP' &&
+                        feat.effects.stat !== 'ST_or_DX' &&
+                        feat.effects.stat !== 'INT_WIS_CHA'
+                    ) {
                         // Direct stat boost
-                        newAttributes[feat.effects.stat as keyof typeof newAttributes] += feat.effects.value;
+                        const inc = typeof feat.effects.value === 'number' ? feat.effects.value : 0;
+                        newAttributes[feat.effects.stat] += inc;
                     }
                 }
 
@@ -259,7 +263,7 @@ export const usePartyStore = create<PartyStore>()(
             }),
 
             resetParty: () => set({
-                party: Array(GAME_CONFIG.PARTY.MAX_SIZE).fill(null)
+                party: Array(gameConfig.PARTY.MAX_SIZE).fill(null)
             }),
 
             getPartyMembers: () => {

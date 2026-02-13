@@ -1,7 +1,7 @@
 import type { StaticGameData, DungeonMap } from '../types';
 import { characterClasses } from './classes';
 import { craftingRecipes } from './crafting';
-import { GAME_CONFIG } from './constants';
+import { gameConfig } from './constants';
 
 // Re-export everything for backward compatibility
 export * from './abilities';
@@ -13,7 +13,7 @@ export * from './constants';
 
 export const gameData: StaticGameData = {
   party_system: {
-    max_party_size: GAME_CONFIG.PARTY.MAX_SIZE,
+    max_party_size: gameConfig.PARTY.MAX_SIZE,
     character_classes: characterClasses
   },
   craftingRecipes

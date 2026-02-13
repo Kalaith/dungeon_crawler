@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { useDungeon } from '../../hooks/useDungeon';
 import { useDungeonStore } from '../../stores/useDungeonStore';
 import { DungeonRenderer } from '../../utils/dungeonRenderer';
-import { RENDER_CONFIG } from '../../data/constants';
+import { renderConfig } from '../../data/constants';
 
 export const DungeonView: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -86,8 +86,8 @@ export const DungeonView: React.FC = () => {
     <div className="relative w-full max-w-2xl mx-auto border-4 border-slate-700 rounded-lg overflow-hidden shadow-2xl">
       <canvas
         ref={canvasRef}
-        width={RENDER_CONFIG.VIEWPORT.WIDTH}
-        height={RENDER_CONFIG.VIEWPORT.HEIGHT}
+        width={renderConfig.VIEWPORT.WIDTH}
+        height={renderConfig.VIEWPORT.HEIGHT}
         className="w-full h-auto block bg-black"
       />
 

@@ -18,7 +18,7 @@ interface EquipmentItem {
 }
 
 // Mock equipment data - will be replaced with actual inventory system
-const MOCK_EQUIPMENT: EquipmentItem[] = [
+const mockEquipment: EquipmentItem[] = [
     { id: 'sword1', name: 'Iron Sword', type: 'Weapon', condition: 65, level: 1, icon: '⚔️' },
     { id: 'armor1', name: 'Leather Armor', type: 'Armor', condition: 80, level: 1, icon: '🛡️' },
     { id: 'bow1', name: 'Short Bow', type: 'Weapon', condition: 45, level: 1, icon: '🏹' },
@@ -178,7 +178,7 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({ onClose })
                                 </div>
                             ) : (
                                 <div className="space-y-4">
-                                    {MOCK_EQUIPMENT.map((item) => (
+                                    {mockEquipment.map((item) => (
                                         <div
                                             key={item.id}
                                             className="bg-etrian-700 rounded-lg p-4 border border-cyan-900/30"

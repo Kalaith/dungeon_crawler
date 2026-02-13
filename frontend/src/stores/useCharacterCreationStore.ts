@@ -77,14 +77,14 @@ export const useCharacterCreationStore = create<CharacterCreationState>((set) =>
         const oldVal = state.attributes[attr];
         const diff = value - oldVal;
         const newSum = currentSum + diff;
-        const MAX_POINTS = 100;
+        const maxPoints = 100;
 
-        if (newSum > MAX_POINTS && diff > 0) return state; // Cannot exceed max points
+        if (newSum > maxPoints && diff > 0) return state; // Cannot exceed max points
         if (value < 8 || value > 18) return state; // Hard limits
 
         return {
             attributes: { ...state.attributes, [attr]: value },
-            attributePointsRemaining: MAX_POINTS - newSum
+            attributePointsRemaining: maxPoints - newSum
         };
     }),
 
@@ -105,10 +105,10 @@ export const useCharacterCreationStore = create<CharacterCreationState>((set) =>
 
         // Calculate current positive attribute sum
         const currentSum = Object.values(state.attributes).reduce((a, b) => a + b, 0);
-        const MAX_POINTS = 100;
+        const maxPoints = 100;
 
         // New points remaining = old remaining + points gained from negative attributes
-        const newPointsRemaining = (MAX_POINTS - currentSum) + positivePointGain;
+        const newPointsRemaining = (maxPoints - currentSum) + positivePointGain;
 
         return {
             negativeAttributes: { ...state.negativeAttributes, [attr]: clampedValue },

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { usePartyStore } from '../../stores/usePartyStore';
 import { feats } from '../../data/feats';
-import type { Character, Feat } from '../../types';
+import type { Attribute, Character, Feat } from '../../types';
 
 interface FeatSelectionModalProps {
     characterIndex: number;
@@ -12,7 +12,7 @@ interface FeatSelectionModalProps {
 export const FeatSelectionModal: React.FC<FeatSelectionModalProps> = ({ characterIndex, character, onClose }) => {
     const { selectFeat } = usePartyStore();
     const [selectedFeat, setSelectedFeat] = useState<Feat | null>(null);
-    const [choice, setChoice] = useState<string | null>(null);
+    const [choice, setChoice] = useState<Attribute | null>(null);
 
     // Filter available feats
     const availableFeats = feats.filter(feat => {
@@ -24,9 +24,10 @@ export const FeatSelectionModal: React.FC<FeatSelectionModalProps> = ({ characte
             if (feat.prerequisites.level && character.level < feat.prerequisites.level) return false;
 
             if (feat.prerequisites.attributes) {
-                for (const [attr, val] of Object.entries(feat.prerequisites.attributes)) {
-                    // @ts-ignore - dynamic attribute access
-                    if (character.attributes[attr] < (val as number)) return false;
+                const reqAttrs = feat.prerequisites.attributes;
+                for (const attr of Object.keys(reqAttrs) as Attribute[]) {
+                    const required = reqAttrs[attr];
+                    if (typeof required === 'number' && character.attributes[attr] < required) return false;
                 }
             }
         }

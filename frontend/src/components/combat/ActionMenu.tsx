@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { usePartyStore } from '../../stores/usePartyStore';
 import { useCombatStore } from '../../stores/useCombatStore';
-import type { Spell } from '../../types';
+import type { ClassAbility, Spell } from '../../types';
 import { SpellSelector } from './SpellSelector';
 import { AbilitySelector } from './AbilitySelector';
 
 interface ActionMenuProps {
   characterIndex: number;
-  onAction: (action: 'attack' | 'spell' | 'defend' | 'item' | 'row-switch', data?: unknown) => void;
+  onAction: (action: 'attack' | 'spell' | 'defend' | 'item' | 'row-switch' | 'ability', data?: unknown) => void;
 }
 
 export const ActionMenu: React.FC<ActionMenuProps> = ({ characterIndex, onAction }) => {
@@ -32,8 +32,8 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ characterIndex, onAction
     setShowSpellSelector(false);
   };
 
-  const handleAbilityUse = (ability: any) => {
-    onAction('spell', { abilityId: ability.id });
+  const handleAbilityUse = (ability: ClassAbility) => {
+    onAction('ability', { abilityId: ability.id });
     setShowAbilitySelector(false);
   };
 

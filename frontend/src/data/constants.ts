@@ -3,7 +3,7 @@
  * All magic numbers and configuration values should be defined here
  */
 
-export const GAME_CONFIG = {
+export const gameConfig = {
     PARTY: {
         MAX_SIZE: 6,
         MIN_SIZE: 1,
@@ -38,7 +38,7 @@ export const GAME_CONFIG = {
     },
 } as const;
 
-export const RENDER_CONFIG = {
+export const renderConfig = {
     VIEWPORT: {
         WIDTH: 400,
         HEIGHT: 300,
@@ -71,7 +71,7 @@ export const RENDER_CONFIG = {
     },
 } as const;
 
-export const LOOT_CONFIG = {
+export const lootConfig = {
     COMMON_DROP_CHANCE: 0.6,
     RARE_DROP_CHANCE: 0.3,
     EPIC_DROP_CHANCE: 0.1,
@@ -80,7 +80,7 @@ export const LOOT_CONFIG = {
     GOLD_LEVEL_MULTIPLIER: 5,
 } as const;
 
-export const ENCOUNTER_CONFIG = {
+export const encounterConfig = {
     BASE_ENCOUNTER_CHANCE: 0.15,
     ENCOUNTER_CHANCE_PER_STEP: 0.05,
     MAX_ENCOUNTER_CHANCE: 0.5,
@@ -90,7 +90,7 @@ export const ENCOUNTER_CONFIG = {
 /**
  * UI-related constants
  */
-export const UI_CONFIG = {
+export const uiConfig = {
     MINIMAP: {
         TILE_SIZE: 8,
         PADDING: 4,

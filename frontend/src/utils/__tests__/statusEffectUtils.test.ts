@@ -1,5 +1,5 @@
 import { checkImmunity, applyStatusEffect } from '../statusEffectUtils';
-import { Character, Race, CharacterClass } from '../../types';
+import type { Character, CharacterClass, Race, StatusEffect } from '../../types';
 
 describe('statusEffectUtils', () => {
     const mockRace: Race = {
@@ -67,7 +67,8 @@ describe('statusEffectUtils', () => {
     });
 
     it('should apply buff to an Android', () => {
-        const effects = applyStatusEffect(mockCharacter, { type: 'buff_str', duration: 3, value: 5 } as any);
+        const buff: StatusEffect = { type: 'buff_str', duration: 3, value: 5 };
+        const effects = applyStatusEffect(mockCharacter, buff);
         expect(effects).toHaveLength(1);
         expect(effects[0].type).toBe('buff_str');
     });

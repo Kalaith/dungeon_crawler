@@ -507,7 +507,7 @@ export function getSkillsByCategory(category: SkillCategory): SkillDefinition[] 
 }
 
 // All skill categories in order
-export const SKILL_CATEGORIES: SkillCategory[] = [
+export const skillCategories: SkillCategory[] = [
     'Combat',
     'Body',
     'Social',

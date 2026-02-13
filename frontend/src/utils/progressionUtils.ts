@@ -1,13 +1,16 @@
 import type { Character, CharacterClass } from '../types';
-import { GAME_CONFIG } from '../data/constants';
+import { gameConfig } from '../data/constants';
 
 /**
  * Calculates the experience required to reach a specific level
  * Formula: BASE * GROWTH_RATE^(level - 1)
  */
 export const calculateExpRequirement = (level: number): number => {
-    const { BASE_EXP_REQUIREMENT, EXP_GROWTH_RATE } = GAME_CONFIG.PROGRESSION;
-    return Math.floor(BASE_EXP_REQUIREMENT * Math.pow(EXP_GROWTH_RATE, level - 1));
+    const {
+        BASE_EXP_REQUIREMENT: baseExpRequirement,
+        EXP_GROWTH_RATE: expGrowthRate
+    } = gameConfig.PROGRESSION;
+    return Math.floor(baseExpRequirement * Math.pow(expGrowthRate, level - 1));
 };
 
 /**
@@ -44,7 +47,7 @@ export const calculateLevelUp = (
     expGained: number
 ): { character: Character; leveledUp: boolean; levelsGained: number } => {
     let updatedCharacter = { ...character };
-    let newExp = updatedCharacter.exp + expGained;
+    const newExp = updatedCharacter.exp + expGained;
     let newExpToNext = updatedCharacter.expToNext - expGained;
     let levelsGained = 0;
 
@@ -53,11 +56,11 @@ export const calculateLevelUp = (
         const newLevel = updatedCharacter.level + 1;
 
         // Check max level
-        if (newLevel > GAME_CONFIG.PROGRESSION.MAX_LEVEL) {
+        if (newLevel > gameConfig.PROGRESSION.MAX_LEVEL) {
             return {
                 character: {
                     ...updatedCharacter,
-                    level: GAME_CONFIG.PROGRESSION.MAX_LEVEL,
+                    level: gameConfig.PROGRESSION.MAX_LEVEL,
                     exp: newExp,
                     expToNext: 0,
                 },

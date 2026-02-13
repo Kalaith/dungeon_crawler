@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useInventoryStore } from '../../../stores/useInventoryStore';
 import { lootTables } from '../../../data/loot';
-import type { Item } from '../../../types';
 
 interface ItemSpawnerModalProps {
     isOpen: boolean;

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { WorldMap, WorldLocation, TravelState } from '../types/world';
-import { STARTING_WORLD_MAP } from '../data/worldMap';
+import { startingWorldMap } from '../data/worldMap';
 
 interface WorldStore {
     worldMap: WorldMap;
@@ -30,7 +30,7 @@ interface WorldStore {
 export const useWorldStore = create<WorldStore>()(
     persist(
         (set, get) => ({
-            worldMap: STARTING_WORLD_MAP,
+            worldMap: startingWorldMap,
             currentLocationId: 'millhaven', // Start in Millhaven
             travelState: null,
 
@@ -187,7 +187,7 @@ export const useWorldStore = create<WorldStore>()(
             }),
 
             resetWorld: () => set({
-                worldMap: STARTING_WORLD_MAP,
+                worldMap: startingWorldMap,
                 currentLocationId: 'millhaven',
                 travelState: null
             })

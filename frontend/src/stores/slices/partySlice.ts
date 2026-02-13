@@ -1,4 +1,4 @@
-import type { Character, Item } from '../../types';
+import type { Character, CraftingRecipe, Item } from '../../types';
 import { gameData, lootTables } from '../../data/gameData';
 import type { GameSliceCreator, PartySlice } from './types';
 
@@ -64,7 +64,7 @@ export const createPartySlice: GameSliceCreator<PartySlice> = (set, get) => ({
     craftItem: (recipeId) => {
         const state = get();
         const { craftingRecipes } = gameData;
-        const recipe = craftingRecipes.find((r: any) => r.id === recipeId);
+        const recipe = craftingRecipes.find((r: CraftingRecipe) => r.id === recipeId);
 
         if (!recipe) return false;
 
@@ -84,7 +84,7 @@ export const createPartySlice: GameSliceCreator<PartySlice> = (set, get) => ({
             return { ...char, gold: char.gold - deduction };
         });
 
-        let newInventory = [...state.inventory];
+        const newInventory = [...state.inventory];
         for (const mat of recipe.materials) {
             let removed = 0;
             for (let i = newInventory.length - 1; i >= 0; i--) {
@@ -210,7 +210,7 @@ export const createPartySlice: GameSliceCreator<PartySlice> = (set, get) => ({
         const updatedParty = state.party.map((character) => {
             if (character && character.alive) {
                 const newExp = character.exp + amount;
-                let newExpToNext = character.expToNext - amount;
+                const newExpToNext = character.expToNext - amount;
 
                 if (newExpToNext <= 0) {
                     const newLevel = character.level + 1;

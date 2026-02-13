@@ -1,13 +1,34 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import type { Mock } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { HealerService } from '../HealerService';
-import { useGoldStore } from '../../stores/useGoldStore';
-import { usePartyStore } from '../../stores/usePartyStore';
-import type { Character } from '../../types';
+import { useGoldStore } from '../../../stores/useGoldStore';
+import { usePartyStore } from '../../../stores/usePartyStore';
+import type { Character } from '../../../types';
 
 // Mock the stores
-vi.mock('../../stores/useGoldStore');
-vi.mock('../../stores/usePartyStore');
+vi.mock('../../../stores/useGoldStore');
+vi.mock('../../../stores/usePartyStore');
+
+type UseGoldStoreMock = Mock<
+    [],
+    {
+        gold: number;
+        subtractGold: (amount: number) => boolean;
+        canAfford: (amount: number) => boolean;
+    }
+>;
+
+type UsePartyStoreMock = Mock<
+    [],
+    {
+        party: Character[];
+        addCharacterToParty: (character: Character, slot: number) => void;
+    }
+>;
+
+const useGoldStoreMock = useGoldStore as unknown as UseGoldStoreMock;
+const usePartyStoreMock = usePartyStore as unknown as UsePartyStoreMock;
 
 describe('HealerService', () => {
     const mockOnClose = vi.fn();
@@ -30,7 +51,7 @@ describe('HealerService', () => {
         negativeAttributes: { SN: 0, AC: 0, CL: 0, AV: 0, NE: 0, CU: 0, VT: 0 },
         skills: [],
         feats: [],
-        equipment: { weapon: null, armor: null, shield: null, accessories: [] },
+        equipment: {},
         inventory: [],
         spells: [],
         gold: 0,
@@ -44,13 +65,13 @@ describe('HealerService', () => {
     beforeEach(() => {
         vi.clearAllMocks();
 
-        (useGoldStore as any).mockReturnValue({
+        useGoldStoreMock.mockReturnValue({
             gold: 100,
             subtractGold: vi.fn(() => true),
             canAfford: vi.fn(() => true),
         });
 
-        (usePartyStore as any).mockReturnValue({
+        usePartyStoreMock.mockReturnValue({
             party: [mockCharacter],
             addCharacterToParty: vi.fn(),
         });
@@ -73,13 +94,13 @@ describe('HealerService', () => {
         const mockSubtractGold = vi.fn(() => true);
         const mockAddCharacter = vi.fn();
 
-        (useGoldStore as any).mockReturnValue({
+        useGoldStoreMock.mockReturnValue({
             gold: 100,
             subtractGold: mockSubtractGold,
             canAfford: vi.fn(() => true),
         });
 
-        (usePartyStore as any).mockReturnValue({
+        usePartyStoreMock.mockReturnValue({
             party: [mockCharacter],
             addCharacterToParty: mockAddCharacter,
         });
@@ -96,7 +117,7 @@ describe('HealerService', () => {
     it('should prevent healing when insufficient funds', () => {
         const mockSubtractGold = vi.fn();
 
-        (useGoldStore as any).mockReturnValue({
+        useGoldStoreMock.mockReturnValue({
             gold: 10,
             subtractGold: mockSubtractGold,
             canAfford: vi.fn(() => false),
@@ -114,7 +135,7 @@ describe('HealerService', () => {
     it('should restore HP and AP to max on heal', () => {
         const mockAddCharacter = vi.fn();
 
-        (usePartyStore as any).mockReturnValue({
+        usePartyStoreMock.mockReturnValue({
             party: [mockCharacter],
             addCharacterToParty: mockAddCharacter,
         });

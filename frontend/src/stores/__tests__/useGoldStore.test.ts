@@ -17,7 +17,7 @@ describe('useGoldStore', () => {
 
     describe('Add Gold', () => {
         it('should add gold correctly', () => {
-            const { addGold, gold } = useGoldStore.getState();
+            const { addGold } = useGoldStore.getState();
             addGold(50);
             expect(useGoldStore.getState().gold).toBe(150);
         });

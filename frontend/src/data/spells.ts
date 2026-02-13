@@ -5,7 +5,7 @@ import type { Spell } from '../types';
 export const allSpells: Spell[] = spellsData as Spell[];
 
 // AP Cost by spell level (for reference)
-export const AP_COSTS: Record<number, number> = {
+export const apCosts: Record<number, number> = {
     0: 0,   // Cantrips
     1: 3,   // Updated to match manual
     2: 6,
@@ -19,7 +19,7 @@ export const AP_COSTS: Record<number, number> = {
 };
 
 // Class name mapping (our class names -> spell database class names)
-const CLASS_NAME_MAP: Record<string, string> = {
+const classNameMap: Record<string, string> = {
     'wizard': 'Magician',
     'magician': 'Magician',
     'cleric': 'Cleric',
@@ -36,7 +36,7 @@ const CLASS_NAME_MAP: Record<string, string> = {
  * Get spells available to a specific class
  */
 export function getSpellsByClass(className: string): Spell[] {
-    const mappedName = CLASS_NAME_MAP[className.toLowerCase()] || className;
+    const mappedName = classNameMap[className.toLowerCase()] || className;
     return allSpells.filter(spell => spell.classes.includes(mappedName));
 }
 
@@ -46,7 +46,7 @@ export function getSpellsByClass(className: string): Spell[] {
 export function getSpellsByLevel(level: number, className?: string): Spell[] {
     let spells = allSpells.filter(spell => spell.level === level);
     if (className) {
-        const mappedName = CLASS_NAME_MAP[className.toLowerCase()] || className;
+        const mappedName = classNameMap[className.toLowerCase()] || className;
         spells = spells.filter(spell => spell.classes.includes(mappedName));
     }
     return spells;
@@ -65,7 +65,7 @@ export function getCantrips(className?: string): Spell[] {
 export function getCombatSpells(className?: string): Spell[] {
     let spells = allSpells.filter(spell => spell.combat_usable);
     if (className) {
-        const mappedName = CLASS_NAME_MAP[className.toLowerCase()] || className;
+        const mappedName = classNameMap[className.toLowerCase()] || className;
         spells = spells.filter(spell => spell.classes.includes(mappedName));
     }
     return spells;

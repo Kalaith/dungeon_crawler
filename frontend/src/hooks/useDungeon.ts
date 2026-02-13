@@ -5,7 +5,7 @@ import { usePartyStore } from '../stores/usePartyStore';
 import { useInventoryStore } from '../stores/useInventoryStore';
 import { useProgressionStore } from '../stores/useProgressionStore';
 import { useUIStore } from '../stores/uiStore';
-import { FOE_DATA } from '../data/foes';
+import { foeData } from '../data/foes';
 import { enemies } from '../data/enemies';
 import type { Direction, Position, CombatParticipant, Enemy } from '../types';
 
@@ -31,7 +31,7 @@ export const useDungeon = () => {
   } = useDungeonStore();
 
   const { inCombat, startCombat } = useCombatStore();
-  const { addGoldToParty, getAlivePartyMembers, party } = usePartyStore();
+  const { addGoldToParty, getAlivePartyMembers } = usePartyStore();
   const { addItemsToInventory } = useInventoryStore();
   const { generateLoot } = useProgressionStore();
   const { showMessage } = useUIStore();
@@ -92,7 +92,7 @@ export const useDungeon = () => {
     const foe = foes.find(f => f.x === pos.x && f.y === pos.y);
     if (foe) {
       // Trigger combat with FOE
-      const foeDef = FOE_DATA[foe.defId];
+      const foeDef = foeData[foe.defId];
       if (foeDef) {
         // Prepare combat participants
         const partyMembers = getAlivePartyMembers();
