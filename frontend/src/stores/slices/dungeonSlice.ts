@@ -1,10 +1,7 @@
 import { generateDungeon } from '../../utils/dungeonGenerator';
 import type { GameSliceCreator, DungeonSlice } from './types';
 
-export const createDungeonSlice: GameSliceCreator<DungeonSlice> = (
-  set,
-  get
-) => ({
+export const createDungeonSlice: GameSliceCreator<DungeonSlice> = (set, get) => ({
   currentFloor: 1,
   playerPosition: { x: 1, y: 1 },
   playerFacing: 0,
@@ -47,9 +44,7 @@ export const createDungeonSlice: GameSliceCreator<DungeonSlice> = (
         currentFloor: floorNumber,
         playerPosition: dungeonData.playerStart,
         playerFacing: 0,
-        exploredMap: new Set([
-          `${dungeonData.playerStart.x},${dungeonData.playerStart.y}`,
-        ]),
+        exploredMap: new Set([`${dungeonData.playerStart.x},${dungeonData.playerStart.y}`]),
       });
       console.log('✅ State updated with new dungeon');
     } catch (error) {
@@ -59,8 +54,7 @@ export const createDungeonSlice: GameSliceCreator<DungeonSlice> = (
 
   changeFloor: direction => {
     const state = get();
-    const newFloor =
-      direction === 'up' ? state.currentFloor - 1 : state.currentFloor + 1;
+    const newFloor = direction === 'up' ? state.currentFloor - 1 : state.currentFloor + 1;
 
     if (newFloor < 1) return; // Can't go above floor 1
 

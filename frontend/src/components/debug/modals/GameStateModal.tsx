@@ -9,10 +9,7 @@ interface GameStateModalProps {
   onClose: () => void;
 }
 
-export const GameStateModal: React.FC<GameStateModalProps> = ({
-  isOpen,
-  onClose,
-}) => {
+export const GameStateModal: React.FC<GameStateModalProps> = ({ isOpen, onClose }) => {
   const { gameState, godMode } = useGameStateStore();
   const { party } = usePartyStore();
   const { gold } = useGoldStore();
@@ -26,9 +23,7 @@ export const GameStateModal: React.FC<GameStateModalProps> = ({
     partySize: party.filter(p => p !== null).length,
     gold,
     inventoryCount: items.length,
-    partyLevels: party
-      .map(p => (p ? `${p.name} (Lvl ${p.level})` : null))
-      .filter(Boolean),
+    partyLevels: party.map(p => (p ? `${p.name} (Lvl ${p.level})` : null)).filter(Boolean),
   };
 
   return (

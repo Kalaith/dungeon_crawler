@@ -7,20 +7,14 @@ interface MainLayoutProps {
   messageLog?: React.ReactNode; // Optional message log overlay or panel
 }
 
-export const MainLayout: React.FC<MainLayoutProps> = ({
-  children,
-  statusPanel,
-  messageLog,
-}) => {
+export const MainLayout: React.FC<MainLayoutProps> = ({ children, statusPanel, messageLog }) => {
   const showSidebar = statusPanel || messageLog;
 
   return (
     <div className="h-screen w-screen bg-etrian-900 p-2 flex flex-col md:flex-row gap-2 overflow-hidden">
       {/* Main Viewport (Top on mobile, Left on desktop) */}
       <div className="flex-1 min-h-0 relative w-full md:h-full">
-        <GameFrame className="h-full w-full shadow-lg shadow-black/50">
-          {children}
-        </GameFrame>
+        <GameFrame className="h-full w-full shadow-lg shadow-black/50">{children}</GameFrame>
       </div>
 
       {/* Status Panel & Message Log (Bottom on mobile, Right on desktop) */}

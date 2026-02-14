@@ -9,10 +9,7 @@ export interface FOE extends Enemy {
   color: string; // For minimap/view
 }
 
-export const foeData: Record<
-  string,
-  Omit<FOE, 'id' | 'hp' | 'maxHp' | 'statusEffects'>
-> = {
+export const foeData: Record<string, Omit<FOE, 'id' | 'hp' | 'maxHp' | 'statusEffects'>> = {
   ragelope: {
     name: 'Ragelope',
     level: 5,

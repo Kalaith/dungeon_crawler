@@ -17,14 +17,11 @@ export const OverworldMap: React.FC = () => {
   } = useWorldStore();
 
   const { setGameState } = useGameStateStore();
-  const [selectedLocation, setSelectedLocation] =
-    useState<WorldLocation | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<WorldLocation | null>(null);
   const [showingDungeonEntrance, setShowingDungeonEntrance] = useState(false);
 
   const currentLocation = getCurrentLocation();
-  const connectedLocations = currentLocationId
-    ? getConnectedLocations(currentLocationId)
-    : [];
+  const connectedLocations = currentLocationId ? getConnectedLocations(currentLocationId) : [];
 
   // If showing dungeon entrance, render that instead
   if (showingDungeonEntrance && currentLocation?.type === 'dungeon') {
@@ -93,8 +90,7 @@ export const OverworldMap: React.FC = () => {
           </h1>
           {currentLocation && (
             <p className="text-lg text-slate-600 dark:text-gray-400">
-              Currently at:{' '}
-              <span className="font-semibold">{currentLocation.name}</span>
+              Currently at: <span className="font-semibold">{currentLocation.name}</span>
             </p>
           )}
         </div>
@@ -106,9 +102,7 @@ export const OverworldMap: React.FC = () => {
             {worldMap.locations.map(location => {
               const discovered = isLocationDiscovered(location.id);
               const isCurrent = location.id === currentLocationId;
-              const isConnected = connectedLocations.some(
-                loc => loc.id === location.id
-              );
+              const isConnected = connectedLocations.some(loc => loc.id === location.id);
               const isSelected = selectedLocation?.id === location.id;
 
               if (!discovered) return null;
@@ -117,11 +111,7 @@ export const OverworldMap: React.FC = () => {
                 <div
                   key={location.id}
                   className={`absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer transition-all ${
-                    isCurrent
-                      ? 'scale-125 z-20'
-                      : isSelected
-                        ? 'scale-110 z-10'
-                        : 'z-0'
+                    isCurrent ? 'scale-125 z-20' : isSelected ? 'scale-110 z-10' : 'z-0'
                   }`}
                   style={{
                     left: `${(location.position.x / 1000) * 100}%`,
@@ -130,12 +120,8 @@ export const OverworldMap: React.FC = () => {
                   onClick={() => handleLocationClick(location)}
                 >
                   {/* Location marker */}
-                  <div
-                    className={`relative ${isCurrent ? 'animate-pulse' : ''}`}
-                  >
-                    <div
-                      className={`text-4xl ${isCurrent ? 'drop-shadow-lg' : ''}`}
-                    >
+                  <div className={`relative ${isCurrent ? 'animate-pulse' : ''}`}>
+                    <div className={`text-4xl ${isCurrent ? 'drop-shadow-lg' : ''}`}>
                       {getLocationIcon(location.type)}
                     </div>
 
@@ -160,12 +146,9 @@ export const OverworldMap: React.FC = () => {
                     )}
 
                     {/* Dungeon completion indicator */}
-                    {location.type === 'dungeon' &&
-                      location.dungeonData?.completed && (
-                        <div className="absolute -top-1 -right-1 text-lg">
-                          ✅
-                        </div>
-                      )}
+                    {location.type === 'dungeon' && location.dungeonData?.completed && (
+                      <div className="absolute -top-1 -right-1 text-lg">✅</div>
+                    )}
                   </div>
                 </div>
               );
@@ -177,16 +160,11 @@ export const OverworldMap: React.FC = () => {
               style={{ zIndex: -1 }}
             >
               {worldMap.connections.map((conn, idx) => {
-                const fromLoc = worldMap.locations.find(
-                  l => l.id === conn.from
-                );
+                const fromLoc = worldMap.locations.find(l => l.id === conn.from);
                 const toLoc = worldMap.locations.find(l => l.id === conn.to);
 
                 if (!fromLoc || !toLoc) return null;
-                if (
-                  !isLocationDiscovered(fromLoc.id) ||
-                  !isLocationDiscovered(toLoc.id)
-                )
+                if (!isLocationDiscovered(fromLoc.id) || !isLocationDiscovered(toLoc.id))
                   return null;
 
                 const x1 = (fromLoc.position.x / 1000) * 100;
@@ -217,8 +195,7 @@ export const OverworldMap: React.FC = () => {
             <div className="flex items-start justify-between mb-4">
               <div>
                 <h2 className="text-2xl font-bold text-slate-900 dark:text-gray-200 mb-2">
-                  {getLocationIcon(selectedLocation.type)}{' '}
-                  {selectedLocation.name}
+                  {getLocationIcon(selectedLocation.type)} {selectedLocation.name}
                 </h2>
                 <p className="text-sm text-slate-600 dark:text-gray-400 capitalize">
                   {selectedLocation.type}
@@ -232,24 +209,19 @@ export const OverworldMap: React.FC = () => {
               </button>
             </div>
 
-            <p className="text-slate-700 dark:text-gray-300 mb-4">
-              {selectedLocation.description}
-            </p>
+            <p className="text-slate-700 dark:text-gray-300 mb-4">{selectedLocation.description}</p>
 
             {/* Dungeon-specific info */}
             {selectedLocation.dungeonData && (
               <div className="bg-red-50 dark:bg-red-900/20 rounded-lg p-4 mb-4">
                 <p className="text-sm text-slate-700 dark:text-gray-300">
-                  <strong>Floors:</strong> {selectedLocation.dungeonData.floors}{' '}
-                  |<strong> Difficulty:</strong>{' '}
-                  {selectedLocation.dungeonData.difficulty}/10 |
+                  <strong>Floors:</strong> {selectedLocation.dungeonData.floors} |
+                  <strong> Difficulty:</strong> {selectedLocation.dungeonData.difficulty}/10 |
                   <strong> Recommended Level:</strong>{' '}
                   {selectedLocation.dungeonData.recommendedLevel}
                 </p>
                 {selectedLocation.dungeonData.completed && (
-                  <p className="text-sm text-green-600 dark:text-green-400 mt-2">
-                    ✅ Completed
-                  </p>
+                  <p className="text-sm text-green-600 dark:text-green-400 mt-2">✅ Completed</p>
                 )}
               </div>
             )}
@@ -259,8 +231,7 @@ export const OverworldMap: React.FC = () => {
               <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mb-4">
                 <p className="text-sm text-slate-700 dark:text-gray-300 mb-2">
                   <strong>Size:</strong> {selectedLocation.townData.size} |
-                  <strong> Population:</strong>{' '}
-                  {selectedLocation.townData.population}
+                  <strong> Population:</strong> {selectedLocation.townData.population}
                 </p>
                 <p className="text-xs text-slate-600 dark:text-gray-400">
                   Services: {selectedLocation.townData.services.join(', ')}
@@ -274,25 +245,15 @@ export const OverworldMap: React.FC = () => {
                 <Button variant="primary" onClick={handleEnterLocation}>
                   Enter {selectedLocation.type === 'town' ? 'Town' : 'Dungeon'}
                 </Button>
-              ) : connectedLocations.some(
-                  loc => loc.id === selectedLocation.id
-                ) ? (
-                <Button
-                  variant="primary"
-                  onClick={() => handleTravelTo(selectedLocation)}
-                >
+              ) : connectedLocations.some(loc => loc.id === selectedLocation.id) ? (
+                <Button variant="primary" onClick={() => handleTravelTo(selectedLocation)}>
                   Travel Here
                 </Button>
               ) : (
-                <p className="text-sm text-gray-500 italic">
-                  Not connected to current location
-                </p>
+                <p className="text-sm text-gray-500 italic">Not connected to current location</p>
               )}
 
-              <Button
-                variant="outline"
-                onClick={() => setSelectedLocation(null)}
-              >
+              <Button variant="outline" onClick={() => setSelectedLocation(null)}>
                 Close
               </Button>
             </div>
@@ -302,15 +263,10 @@ export const OverworldMap: React.FC = () => {
         {/* Current Location Actions */}
         {currentLocation && !selectedLocation && (
           <div className="bg-etrian-800 rounded-xl p-6 shadow-lg border border-cyan-900/50">
-            <h3 className="text-lg font-semibold text-gold-500 mb-4">
-              Available Actions
-            </h3>
+            <h3 className="text-lg font-semibold text-gold-500 mb-4">Available Actions</h3>
             <div className="flex gap-3">
               <Button variant="primary" onClick={handleEnterLocation}>
-                Enter{' '}
-                {currentLocation.type === 'town'
-                  ? 'Town'
-                  : currentLocation.name}
+                Enter {currentLocation.type === 'town' ? 'Town' : currentLocation.name}
               </Button>
 
               {connectedLocations.length > 0 && (

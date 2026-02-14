@@ -64,9 +64,7 @@ export const useCombat = () => {
             updatePartyMember(index, updatedCharacter);
 
             if (leveledUp) {
-              addCombatLog(
-                `${character.name} gained ${levelsGained} level(s)!`
-              );
+              addCombatLog(`${character.name} gained ${levelsGained} level(s)!`);
               levelUps.push({
                 characterId: character.id,
                 name: character.name,
@@ -137,10 +135,7 @@ export const useCombat = () => {
         targetDef = stats.derivedStats.AC;
       }
 
-      const damage = Math.max(
-        1,
-        attackerStr - targetDef + Math.floor(Math.random() * 5)
-      );
+      const damage = Math.max(1, attackerStr - targetDef + Math.floor(Math.random() * 5));
 
       // Handle HP update based on target type
       let currentHp = 0;
@@ -157,9 +152,7 @@ export const useCombat = () => {
       const attackerName = attacker.name || 'Enemy';
       const targetName = target.name || 'Party member';
 
-      addCombatLog(
-        `${attackerName} attacks ${targetName} for ${damage} damage!`
-      );
+      addCombatLog(`${attackerName} attacks ${targetName} for ${damage} damage!`);
 
       if (target === currentEnemy) {
         // Update enemy HP
@@ -178,9 +171,7 @@ export const useCombat = () => {
         }
       } else {
         // Update party member HP
-        const characterIndex = party.findIndex(
-          c => c && c.name === target.name
-        );
+        const characterIndex = party.findIndex(c => c && c.name === target.name);
         if (characterIndex >= 0) {
           updatePartyMemberHP(characterIndex, newHp);
           if (newHp <= 0) {
@@ -189,15 +180,7 @@ export const useCombat = () => {
         }
       }
     },
-    [
-      currentEnemy,
-      addCombatLog,
-      endCombat,
-      generateLoot,
-      updateEnemyHP,
-      updatePartyMemberHP,
-      party,
-    ]
+    [currentEnemy, addCombatLog, endCombat, generateLoot, updateEnemyHP, updatePartyMemberHP, party]
   );
 
   const enemyAction = useCallback(() => {
@@ -206,13 +189,9 @@ export const useCombat = () => {
       return;
     }
 
-    const aliveParty = party.filter(
-      (c): c is Character => c !== null && c.alive
-    );
+    const aliveParty = party.filter((c): c is Character => c !== null && c.alive);
     if (aliveParty.length === 0) {
-      console.log(
-        '⚠️ No alive party members for enemy to attack - Triggering Game Over'
-      );
+      console.log('⚠️ No alive party members for enemy to attack - Triggering Game Over');
       addCombatLog('All party members are defeated!');
       showMessage('Game Over! All party members have fallen.');
       endCombat(false);
@@ -228,16 +207,12 @@ export const useCombat = () => {
     try {
       // Enemy AI: 40% chance to use ability if available
       const useAbility =
-        currentEnemy.abilities &&
-        currentEnemy.abilities.length > 0 &&
-        Math.random() < 0.4;
+        currentEnemy.abilities && currentEnemy.abilities.length > 0 && Math.random() < 0.4;
 
       if (useAbility && currentEnemy.abilities) {
         // Pick a random ability
         const ability =
-          currentEnemy.abilities[
-            Math.floor(Math.random() * currentEnemy.abilities.length)
-          ];
+          currentEnemy.abilities[Math.floor(Math.random() * currentEnemy.abilities.length)];
         console.log('👹 Enemy using ability:', ability.name);
 
         if (ability && ability.damage) {
@@ -248,9 +223,7 @@ export const useCombat = () => {
             return;
           }
           const target = validTargets.reduce((lowest, current) =>
-            current.derivedStats.HP.current < lowest.derivedStats.HP.current
-              ? current
-              : lowest
+            current.derivedStats.HP.current < lowest.derivedStats.HP.current ? current : lowest
           );
 
           // Calculate effective stats for target to get AC
@@ -258,12 +231,8 @@ export const useCombat = () => {
           const targetAC = targetStats.derivedStats.AC;
           const enemyST = currentEnemy.attributes?.ST || 10; // Fallback if attributes missing
 
-          const baseDamage = Math.max(
-            1,
-            enemyST - targetAC + Math.floor(Math.random() * 5)
-          );
-          const multiplier =
-            typeof ability.damage === 'number' ? ability.damage : 1;
+          const baseDamage = Math.max(1, enemyST - targetAC + Math.floor(Math.random() * 5));
+          const multiplier = typeof ability.damage === 'number' ? ability.damage : 1;
           const abilityDamage = Math.floor(baseDamage * multiplier);
           const newHp = target.derivedStats.HP.current - abilityDamage;
 
@@ -271,9 +240,7 @@ export const useCombat = () => {
             `${currentEnemy.name} uses ${ability.name} on ${target.name} for ${abilityDamage} damage!`
           );
 
-          const characterIndex = party.findIndex(
-            c => c && c.name === target.name
-          );
+          const characterIndex = party.findIndex(c => c && c.name === target.name);
           if (characterIndex >= 0) {
             updatePartyMemberHP(characterIndex, newHp);
 
@@ -291,20 +258,14 @@ export const useCombat = () => {
         } else if (ability && ability.heal) {
           // Heal ability - heal self
           const healAmount = parseInt(ability.heal as string) || 10;
-          const newHp = Math.min(
-            currentEnemy.maxHp,
-            currentEnemy.hp + healAmount
-          );
+          const newHp = Math.min(currentEnemy.maxHp, currentEnemy.hp + healAmount);
           updateEnemyHP(newHp);
-          addCombatLog(
-            `${currentEnemy.name} uses ${ability.name} and heals ${healAmount} HP!`
-          );
+          addCombatLog(`${currentEnemy.name} uses ${ability.name} and heals ${healAmount} HP!`);
         }
       } else {
         // Basic attack on random target
         console.log('👹 Enemy performing basic attack');
-        const target =
-          aliveParty[Math.floor(Math.random() * aliveParty.length)];
+        const target = aliveParty[Math.floor(Math.random() * aliveParty.length)];
         if (target) {
           performAttack(currentEnemy, target);
         }
@@ -317,9 +278,7 @@ export const useCombat = () => {
     // Always schedule next turn
     setTimeout(() => {
       console.log('👹 Enemy action complete, checking party status...');
-      const stillAlive = party.filter(
-        (c): c is Character => c !== null && c.alive
-      );
+      const stillAlive = party.filter((c): c is Character => c !== null && c.alive);
 
       if (stillAlive.length === 0) {
         console.log('💀 All party members defeated - GAME OVER');
@@ -351,8 +310,7 @@ export const useCombat = () => {
     console.log('Processing turn for participant:', {
       index: currentTurn,
       type: currentParticipant?.type,
-      name:
-        currentParticipant?.character?.name || currentParticipant?.enemy?.name,
+      name: currentParticipant?.character?.name || currentParticipant?.enemy?.name,
     });
 
     if (!currentParticipant) {
@@ -397,16 +355,10 @@ export const useCombat = () => {
   ]);
 
   const castSpell = useCallback(
-    (
-      caster: Character,
-      spell: import('../types').Spell,
-      target: Character | Enemy
-    ) => {
+    (caster: Character, spell: import('../types').Spell, target: Character | Enemy) => {
       // 1. Check AP Cost
       if (caster.derivedStats.AP.current < spell.ap_cost) {
-        addCombatLog(
-          `${caster.name} doesn't have enough AP to cast ${spell.name}!`
-        );
+        addCombatLog(`${caster.name} doesn't have enough AP to cast ${spell.name}!`);
         return false;
       }
 
@@ -517,14 +469,7 @@ export const useCombat = () => {
 
   const handleCombatAction = useCallback(
     (
-      action:
-        | 'attack'
-        | 'spell'
-        | 'defend'
-        | 'item'
-        | 'row-switch'
-        | 'ability'
-        | 'escape',
+      action: 'attack' | 'spell' | 'defend' | 'item' | 'row-switch' | 'ability' | 'escape',
       options?: { spell?: import('../types').Spell; abilityId?: string }
     ) => {
       console.log('⚔️ COMBAT ACTION TRIGGERED:', action);
@@ -557,9 +502,7 @@ export const useCombat = () => {
           break;
         case 'ability':
           if (options?.abilityId && characterIndex !== -1) {
-            const ability = character.class.abilities.find(
-              a => a.id === options.abilityId
-            );
+            const ability = character.class.abilities.find(a => a.id === options.abilityId);
             if (
               ability &&
               character.derivedStats &&
@@ -601,8 +544,7 @@ export const useCombat = () => {
           break;
         case 'row-switch': {
           // Switch row (free movement action)
-          const newRow: 'front' | 'back' =
-            character.position.row === 'front' ? 'back' : 'front';
+          const newRow: 'front' | 'back' = character.position.row === 'front' ? 'back' : 'front';
           if (characterIndex !== -1) {
             const updatedCharacter = {
               ...character,

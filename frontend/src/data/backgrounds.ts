@@ -24,18 +24,12 @@ export const backgrounds: Background[] = [
       'You spent years learning the lore of the multiverse. You are well-read and knowledgeable.',
     skillProficiencies: ['Arcana', 'History'],
     startingGold: 10,
-    equipment: [
-      'Bottle of ink',
-      'Quill',
-      'Small knife',
-      'Letter from dead colleague',
-    ],
+    equipment: ['Bottle of ink', 'Quill', 'Small knife', 'Letter from dead colleague'],
   },
   {
     id: 'criminal',
     name: 'Criminal',
-    description:
-      'You are an experienced criminal with a history of breaking the law.',
+    description: 'You are an experienced criminal with a history of breaking the law.',
     skillProficiencies: ['Deception', 'Stealth'],
     startingGold: 15,
     equipment: ['Crowbar', 'Dark common clothes', 'Belt pouch'],
@@ -70,16 +64,10 @@ export const backgrounds: Background[] = [
   {
     id: 'sage',
     name: 'Sage',
-    description:
-      'You are a seeker of knowledge, dedicated to scholarly pursuits.',
+    description: 'You are a seeker of knowledge, dedicated to scholarly pursuits.',
     skillProficiencies: ['Arcana', 'History'],
     startingGold: 10,
-    equipment: [
-      'Bottle of ink',
-      'Quill',
-      'Small knife',
-      'Letter from dead colleague',
-    ],
+    equipment: ['Bottle of ink', 'Quill', 'Small knife', 'Letter from dead colleague'],
   },
   {
     id: 'outlander',
@@ -88,11 +76,6 @@ export const backgrounds: Background[] = [
       'You grew up in the wilds, far from civilization. You are at home in the wilderness.',
     skillProficiencies: ['Athletics', 'Survival'],
     startingGold: 10,
-    equipment: [
-      'Staff',
-      'Hunting trap',
-      'Trophy from animal',
-      'Travelers clothes',
-    ],
+    equipment: ['Staff', 'Hunting trap', 'Trophy from animal', 'Travelers clothes'],
   },
 ];

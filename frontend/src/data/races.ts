@@ -83,8 +83,7 @@ export const races: Race[] = [
       {
         id: 'darkvision',
         name: 'Darkvision',
-        description:
-          'See in dim light within 60 feet as if it were bright light',
+        description: 'See in dim light within 60 feet as if it were bright light',
         unlockLevel: 1,
         target: 'self',
       },
@@ -106,8 +105,7 @@ export const races: Race[] = [
       {
         id: 'dwarven_resilience',
         name: 'Dwarven Resilience',
-        description:
-          'Resistance to poison damage and advantage on saving throws against poison',
+        description: 'Resistance to poison damage and advantage on saving throws against poison',
         unlockLevel: 1,
         target: 'self',
       },
@@ -181,8 +179,7 @@ export const races: Race[] = [
       {
         id: 'arctic_endurance',
         name: 'Arctic Endurance',
-        description:
-          'Advantage on Constitution saves against environmental hazards',
+        description: 'Advantage on Constitution saves against environmental hazards',
         unlockLevel: 1,
         target: 'self',
       },
@@ -248,8 +245,7 @@ export const races: Race[] = [
       {
         id: 'lucky',
         name: 'Lucky',
-        description:
-          'Reroll natural 1s on attack rolls, ability checks, or saving throws',
+        description: 'Reroll natural 1s on attack rolls, ability checks, or saving throws',
         unlockLevel: 1,
         target: 'self',
       },
@@ -291,16 +287,14 @@ export const races: Race[] = [
       {
         id: 'artificers_lore',
         name: "Artificer's Lore",
-        description:
-          'Proficiency in History checks related to magic items and technology',
+        description: 'Proficiency in History checks related to magic items and technology',
         unlockLevel: 1,
         target: 'self',
       },
       {
         id: 'darkvision',
         name: 'Darkvision',
-        description:
-          'See in dim light within 60 feet as if it were bright light',
+        description: 'See in dim light within 60 feet as if it were bright light',
         unlockLevel: 1,
         target: 'self',
       },
@@ -321,8 +315,7 @@ export const races: Race[] = [
       {
         id: 'draconic_ancestry',
         name: 'Draconic Ancestry',
-        description:
-          'Choose a dragon type, gain resistance to associated damage type',
+        description: 'Choose a dragon type, gain resistance to associated damage type',
         unlockLevel: 1,
         target: 'self',
       },
@@ -351,8 +344,7 @@ export const races: Race[] = [
       {
         id: 'darkvision',
         name: 'Darkvision',
-        description:
-          'See in dim light within 60 feet as if it were bright light',
+        description: 'See in dim light within 60 feet as if it were bright light',
         unlockLevel: 1,
         target: 'self',
       },
@@ -366,8 +358,7 @@ export const races: Race[] = [
       {
         id: 'infernal_legacy',
         name: 'Infernal Legacy',
-        description:
-          'Know Thaumaturgy cantrip, can cast Hellish Rebuke and Darkness',
+        description: 'Know Thaumaturgy cantrip, can cast Hellish Rebuke and Darkness',
         unlockLevel: 1,
         target: 'self',
       },
@@ -404,8 +395,7 @@ export const races: Race[] = [
       {
         id: 'darkvision',
         name: 'Darkvision',
-        description:
-          'See in dim light within 60 feet as if it were bright light',
+        description: 'See in dim light within 60 feet as if it were bright light',
         unlockLevel: 1,
         target: 'self',
       },
@@ -460,8 +450,7 @@ export const races: Race[] = [
       {
         id: 'flight',
         name: 'Flight',
-        description:
-          'Can fly at 50ft speed when not wearing medium or heavy armor.',
+        description: 'Can fly at 50ft speed when not wearing medium or heavy armor.',
         unlockLevel: 1,
         target: 'self',
       },
@@ -488,8 +477,7 @@ export const races: Race[] = [
       {
         id: 'shapechanger',
         name: 'Shapechanger',
-        description:
-          'Change appearance and voice to any Medium humanoid seen before.',
+        description: 'Change appearance and voice to any Medium humanoid seen before.',
         unlockLevel: 1,
         target: 'self',
       },
@@ -507,8 +495,7 @@ export const races: Race[] = [
   {
     id: 'plasmoid',
     name: 'Plasmoid',
-    description:
-      'Amorphous beings of ooze. Can alter their shape and squeeze through tiny gaps.',
+    description: 'Amorphous beings of ooze. Can alter their shape and squeeze through tiny gaps.',
     attributeModifiers: {
       ST: 1,
       CO: 1,
@@ -553,8 +540,7 @@ export const races: Race[] = [
       {
         id: 'magic_resistance',
         name: 'Magic Resistance',
-        description:
-          'Advantage on saving throws against spells and magical effects.',
+        description: 'Advantage on saving throws against spells and magical effects.',
         unlockLevel: 1,
         target: 'self',
       },
@@ -568,8 +554,7 @@ export const races: Race[] = [
       {
         id: 'innate_spellcasting',
         name: 'Innate Spellcasting',
-        description:
-          'Know Poison Spray, Animal Friendship (snakes), and Suggestion.',
+        description: 'Know Poison Spray, Animal Friendship (snakes), and Suggestion.',
         unlockLevel: 1,
         target: 'self',
       },
@@ -590,8 +575,7 @@ export const races: Race[] = [
       {
         id: 'charge',
         name: 'Charge',
-        description:
-          'Move 30ft then hit with melee attack to deal extra damage.',
+        description: 'Move 30ft then hit with melee attack to deal extra damage.',
         unlockLevel: 1,
         target: 'enemy',
       },
@@ -634,8 +618,7 @@ export const races: Race[] = [
       {
         id: 'surprise_attack',
         name: 'Surprise Attack',
-        description:
-          "Deal extra 2d6 damage if you hit a creature that hasn't taken a turn yet.",
+        description: "Deal extra 2d6 damage if you hit a creature that hasn't taken a turn yet.",
         unlockLevel: 1,
         target: 'enemy',
       },
@@ -653,8 +636,7 @@ export const races: Race[] = [
   {
     id: 'loxodon',
     name: 'Loxodon',
-    description:
-      'Elephant-like humanoids known for their serenity, wisdom, and immense strength.',
+    description: 'Elephant-like humanoids known for their serenity, wisdom, and immense strength.',
     attributeModifiers: {
       CO: 2,
       WD: 1,
@@ -670,16 +652,14 @@ export const races: Race[] = [
       {
         id: 'trunk',
         name: 'Trunk',
-        description:
-          'Can grasp things, lift objects, and make unarmed strikes.',
+        description: 'Can grasp things, lift objects, and make unarmed strikes.',
         unlockLevel: 1,
         target: 'self',
       },
       {
         id: 'loxodon_serenity',
         name: 'Loxodon Serenity',
-        description:
-          'Advantage on saving throws against being charmed or frightened.',
+        description: 'Advantage on saving throws against being charmed or frightened.',
         unlockLevel: 1,
         target: 'self',
       },
@@ -690,8 +670,7 @@ export const races: Race[] = [
   {
     id: 'eladrin',
     name: 'Eladrin',
-    description:
-      'Elves of the Feywild, their moods and forms shifting like the seasons.',
+    description: 'Elves of the Feywild, their moods and forms shifting like the seasons.',
     attributeModifiers: {
       DX: 2,
       CH: 1,
@@ -729,16 +708,14 @@ export const races: Race[] = [
       {
         id: 'astral_knowledge',
         name: 'Astral Knowledge',
-        description:
-          'Gain proficiency in one skill and one weapon/tool of choice after a rest.',
+        description: 'Gain proficiency in one skill and one weapon/tool of choice after a rest.',
         unlockLevel: 1,
         target: 'self',
       },
       {
         id: 'psionics',
         name: 'Psionics',
-        description:
-          'Cast Mage Hand (invisible), Jump, and Misty Step using psionics.',
+        description: 'Cast Mage Hand (invisible), Jump, and Misty Step using psionics.',
         unlockLevel: 1,
         target: 'self',
       },
@@ -829,8 +806,7 @@ export const races: Race[] = [
       {
         id: 'firbolg_magic',
         name: 'Firbolg Magic',
-        description:
-          'Cast Detect Magic and Disguise Self. Turn invisible for one turn.',
+        description: 'Cast Detect Magic and Disguise Self. Turn invisible for one turn.',
         unlockLevel: 1,
         target: 'self',
       },
@@ -865,16 +841,14 @@ export const races: Race[] = [
       {
         id: 'pack_tactics',
         name: 'Pack Tactics',
-        description:
-          'Advantage on attacks if an ally is within 5ft of the target.',
+        description: 'Advantage on attacks if an ally is within 5ft of the target.',
         unlockLevel: 1,
         target: 'self',
       },
       {
         id: 'sunlight_sensitivity',
         name: 'Sunlight Sensitivity',
-        description:
-          'Disadvantage on attacks and perception in direct sunlight.',
+        description: 'Disadvantage on attacks and perception in direct sunlight.',
         unlockLevel: 1,
         target: 'self',
       },
@@ -885,8 +859,7 @@ export const races: Race[] = [
   {
     id: 'thri_kreen',
     name: 'Thri-Kreen',
-    description:
-      'Insectile nomads from arid lands. Have four arms and telepathy.',
+    description: 'Insectile nomads from arid lands. Have four arms and telepathy.',
     attributeModifiers: {
       DX: 2,
       WD: 1,
@@ -895,8 +868,7 @@ export const races: Race[] = [
       {
         id: 'secondary_arms',
         name: 'Secondary Arms',
-        description:
-          'Two smaller arms can manipulate light objects and weapons.',
+        description: 'Two smaller arms can manipulate light objects and weapons.',
         unlockLevel: 1,
         target: 'self',
       },
@@ -921,8 +893,7 @@ export const races: Race[] = [
   {
     id: 'autognome',
     name: 'Autognome',
-    description:
-      'Mechanical gnomes built for specific purposes. Durable and precise.',
+    description: 'Mechanical gnomes built for specific purposes. Durable and precise.',
     attributeModifiers: {
       IT: 2,
       CO: 1,
@@ -956,8 +927,7 @@ export const races: Race[] = [
   {
     id: 'giff',
     name: 'Giff',
-    description:
-      'Hippo-folk spacefarers with a love for firearms and explosives.',
+    description: 'Hippo-folk spacefarers with a love for firearms and explosives.',
     attributeModifiers: {
       ST: 2,
       CO: 1,
@@ -980,8 +950,7 @@ export const races: Race[] = [
       {
         id: 'damage_dealer',
         name: 'Damage Dealer',
-        description:
-          'Reroll 1s on damage dice with melee weapons and firearms.',
+        description: 'Reroll 1s on damage dice with melee weapons and firearms.',
         unlockLevel: 1,
         target: 'self',
       },
@@ -992,8 +961,7 @@ export const races: Race[] = [
   {
     id: 'hadozee',
     name: 'Hadozee',
-    description:
-      'Simian shipmates capable of gliding. Agile climbers and deckhands.',
+    description: 'Simian shipmates capable of gliding. Agile climbers and deckhands.',
     attributeModifiers: {
       DX: 2,
       CO: 1,
@@ -1027,8 +995,7 @@ export const races: Race[] = [
   {
     id: 'astral_elf',
     name: 'Astral Elf',
-    description:
-      'Elves who have lived in the Astral Sea for eons. Ageless and magical.',
+    description: 'Elves who have lived in the Astral Sea for eons. Ageless and magical.',
     attributeModifiers: {
       DX: 2,
       IT: 1,
@@ -1037,8 +1004,7 @@ export const races: Race[] = [
       {
         id: 'astral_fire',
         name: 'Astral Fire',
-        description:
-          'Know one cantrip from: Sacred Flame, Dancing Lights, or Light.',
+        description: 'Know one cantrip from: Sacred Flame, Dancing Lights, or Light.',
         unlockLevel: 1,
         target: 'self',
       },
@@ -1052,8 +1018,7 @@ export const races: Race[] = [
       {
         id: 'astral_trance',
         name: 'Astral Trance',
-        description:
-          'Gain proficiency in one skill and one weapon/tool after a rest.',
+        description: 'Gain proficiency in one skill and one weapon/tool after a rest.',
         unlockLevel: 1,
         target: 'self',
       },
@@ -1082,8 +1047,7 @@ export const races: Race[] = [
       {
         id: 'aquatic_adaptation',
         name: 'Aquatic Adaptation',
-        description:
-          'Swim speed equal to land speed. Advantage on Athletics checks in water.',
+        description: 'Swim speed equal to land speed. Advantage on Athletics checks in water.',
         unlockLevel: 1,
         target: 'self',
       },
@@ -1094,8 +1058,7 @@ export const races: Race[] = [
   {
     id: 'catfolk',
     name: 'Catfolk',
-    description:
-      'Feline humanoids known for their curiosity, agility, and keen senses.',
+    description: 'Feline humanoids known for their curiosity, agility, and keen senses.',
     attributeModifiers: {
       DX: 2,
       CH: 1,
@@ -1130,8 +1093,7 @@ export const races: Race[] = [
   {
     id: 'fetchling',
     name: 'Fetchling',
-    description:
-      'Shadow-touched humanoids from the Shadow Plane. Masters of stealth and darkness.',
+    description: 'Shadow-touched humanoids from the Shadow Plane. Masters of stealth and darkness.',
     attributeModifiers: {
       DX: 2,
       WD: 1,
@@ -1159,8 +1121,7 @@ export const races: Race[] = [
   {
     id: 'gnoll',
     name: 'Gnoll',
-    description:
-      'Hyena-like humanoids known for their pack tactics and ferocity in battle.',
+    description: 'Hyena-like humanoids known for their pack tactics and ferocity in battle.',
     attributeModifiers: {
       ST: 2,
       CO: 1,
@@ -1170,8 +1131,7 @@ export const races: Race[] = [
       {
         id: 'pack_tactics',
         name: 'Pack Tactics',
-        description:
-          'Advantage on attacks when an ally is within 5ft of target.',
+        description: 'Advantage on attacks when an ally is within 5ft of target.',
         unlockLevel: 1,
         target: 'self',
       },
@@ -1185,8 +1145,7 @@ export const races: Race[] = [
       {
         id: 'rampage',
         name: 'Rampage',
-        description:
-          'Move up to half speed as bonus action after reducing enemy to 0 HP.',
+        description: 'Move up to half speed as bonus action after reducing enemy to 0 HP.',
         unlockLevel: 1,
         target: 'self',
       },
@@ -1197,8 +1156,7 @@ export const races: Race[] = [
   {
     id: 'grippli',
     name: 'Grippli',
-    description:
-      'Frog-like humanoids from tropical jungles. Excellent climbers and jumpers.',
+    description: 'Frog-like humanoids from tropical jungles. Excellent climbers and jumpers.',
     attributeModifiers: {
       DX: 2,
       WD: 1,
@@ -1255,8 +1213,7 @@ export const races: Race[] = [
   {
     id: 'kitsune',
     name: 'Kitsune',
-    description:
-      'Fox-like humanoids with shapeshifting abilities and natural cunning.',
+    description: 'Fox-like humanoids with shapeshifting abilities and natural cunning.',
     attributeModifiers: {
       CH: 2,
       DX: 1,
@@ -1319,8 +1276,7 @@ export const races: Race[] = [
   {
     id: 'orc',
     name: 'Orc',
-    description:
-      'Powerful warrior humanoids known for their strength and endurance.',
+    description: 'Powerful warrior humanoids known for their strength and endurance.',
     attributeModifiers: {
       ST: 2,
       CO: 1,
@@ -1348,8 +1304,7 @@ export const races: Race[] = [
   {
     id: 'ratfolk',
     name: 'Ratfolk',
-    description:
-      'Rat-like humanoids known for their adaptability and resourcefulness.',
+    description: 'Rat-like humanoids known for their adaptability and resourcefulness.',
     attributeModifiers: {
       DX: 2,
       IT: 1,
@@ -1377,8 +1332,7 @@ export const races: Race[] = [
   {
     id: 'tengu',
     name: 'Tengu',
-    description:
-      'Crow-like humanoids with natural curiosity and talent for swordplay.',
+    description: 'Crow-like humanoids with natural curiosity and talent for swordplay.',
     attributeModifiers: {
       DX: 2,
       WD: 1,
@@ -1406,8 +1360,7 @@ export const races: Race[] = [
   {
     id: 'vanara',
     name: 'Vanara',
-    description:
-      'Monkey-like humanoids known for their agility and mischievous nature.',
+    description: 'Monkey-like humanoids known for their agility and mischievous nature.',
     attributeModifiers: {
       DX: 2,
       WD: 1,
@@ -1435,8 +1388,7 @@ export const races: Race[] = [
   {
     id: 'vishkanya',
     name: 'Vishkanya',
-    description:
-      'Snake-like humanoids with natural poison resistance and venomous abilities.',
+    description: 'Snake-like humanoids with natural poison resistance and venomous abilities.',
     attributeModifiers: {
       DX: 2,
       CH: 1,
@@ -1446,8 +1398,7 @@ export const races: Race[] = [
       {
         id: 'poison_resistance',
         name: 'Poison Resistance',
-        description:
-          'Resistance to poison damage. Advantage on saves vs poison.',
+        description: 'Resistance to poison damage. Advantage on saves vs poison.',
         unlockLevel: 1,
         target: 'self',
       },
@@ -1465,8 +1416,7 @@ export const races: Race[] = [
   {
     id: 'wayang',
     name: 'Wayang',
-    description:
-      'Shadowy humanoids from the Shadow Plane with affinity for darkness and illusion.',
+    description: 'Shadowy humanoids from the Shadow Plane with affinity for darkness and illusion.',
     attributeModifiers: {
       DX: 2,
       IT: 1,
@@ -1513,16 +1463,14 @@ export const races: Race[] = [
       {
         id: 'constructed',
         name: 'Constructed',
-        description:
-          "Immune to disease and poison. Don't need to eat or breathe.",
+        description: "Immune to disease and poison. Don't need to eat or breathe.",
         unlockLevel: 1,
         target: 'self',
       },
       {
         id: 'emotionally_unaware',
         name: 'Emotionally Unaware',
-        description:
-          'Disadvantage on Insight checks but advantage on saves vs emotion effects.',
+        description: 'Disadvantage on Insight checks but advantage on saves vs emotion effects.',
         unlockLevel: 1,
         target: 'self',
       },
@@ -1533,8 +1481,7 @@ export const races: Race[] = [
   {
     id: 'automaton',
     name: 'Automaton',
-    description:
-      'Mechanical humanoids housing mortal souls. Blend of magic and technology.',
+    description: 'Mechanical humanoids housing mortal souls. Blend of magic and technology.',
     attributeModifiers: {
       ST: 2,
       CO: 1,
@@ -1562,8 +1509,7 @@ export const races: Race[] = [
   {
     id: 'conrasu',
     name: 'Conrasu',
-    description:
-      'Plant-like humanoids who are guardians of the natural order and cosmic balance.',
+    description: 'Plant-like humanoids who are guardians of the natural order and cosmic balance.',
     attributeModifiers: {
       CO: 2,
       WD: 1,
@@ -1591,8 +1537,7 @@ export const races: Race[] = [
   {
     id: 'fleshwarp',
     name: 'Fleshwarp',
-    description:
-      'Mutated humanoids twisted by dark magic or aberrant experiments.',
+    description: 'Mutated humanoids twisted by dark magic or aberrant experiments.',
     attributeModifiers: {
       ST: 2,
       CO: 1,
@@ -1620,8 +1565,7 @@ export const races: Race[] = [
   {
     id: 'gathlain',
     name: 'Gathlain',
-    description:
-      'Tree-like fey humanoids with butterfly wings. Guardians of forests and nature.',
+    description: 'Tree-like fey humanoids with butterfly wings. Guardians of forests and nature.',
     attributeModifiers: {
       DX: 2,
       CH: 1,
@@ -1649,8 +1593,7 @@ export const races: Race[] = [
   {
     id: 'ghoran',
     name: 'Ghoran',
-    description:
-      'Plant-based humanoids created by ancient druids. Photosynthetic and resilient.',
+    description: 'Plant-based humanoids created by ancient druids. Photosynthetic and resilient.',
     attributeModifiers: {
       CO: 2,
       WD: 1,
@@ -1660,8 +1603,7 @@ export const races: Race[] = [
       {
         id: 'photosynthesis',
         name: 'Photosynthesis',
-        description:
-          'Can subsist on sunlight and water. Regain 1 HP per hour in sunlight.',
+        description: 'Can subsist on sunlight and water. Regain 1 HP per hour in sunlight.',
         unlockLevel: 1,
         target: 'self',
       },
@@ -1679,8 +1621,7 @@ export const races: Race[] = [
   {
     id: 'leshy',
     name: 'Leshy',
-    description:
-      'Small plant spirits inhabiting plant bodies. Guardians of nature.',
+    description: 'Small plant spirits inhabiting plant bodies. Guardians of nature.',
     attributeModifiers: {
       WD: 2,
       CO: 1,
@@ -1697,8 +1638,7 @@ export const races: Race[] = [
       {
         id: 'seedpod',
         name: 'Seedpod',
-        description:
-          'Leave behind a seedpod when killed that can grow into new leshy.',
+        description: 'Leave behind a seedpod when killed that can grow into new leshy.',
         unlockLevel: 1,
         target: 'self',
       },
@@ -1744,8 +1684,7 @@ export const races: Race[] = [
   {
     id: 'strix',
     name: 'Strix',
-    description:
-      'Owl-like humanoids with dark wings. Nocturnal hunters and fierce warriors.',
+    description: 'Owl-like humanoids with dark wings. Nocturnal hunters and fierce warriors.',
     attributeModifiers: {
       DX: 2,
       ST: 1,
@@ -1780,8 +1719,7 @@ export const races: Race[] = [
   {
     id: 'anadi',
     name: 'Anadi',
-    description:
-      'Spider-like humanoids who can shift between humanoid and spider forms.',
+    description: 'Spider-like humanoids who can shift between humanoid and spider forms.',
     attributeModifiers: {
       DX: 2,
       WD: 1,
@@ -1809,8 +1747,7 @@ export const races: Race[] = [
   {
     id: 'aasimar',
     name: 'Aasimar',
-    description:
-      'Angelic humanoids descended from celestial beings. Radiate divine light.',
+    description: 'Angelic humanoids descended from celestial beings. Radiate divine light.',
     attributeModifiers: {
       CH: 2,
       WD: 1,
@@ -1845,8 +1782,7 @@ export const races: Race[] = [
   {
     id: 'dhampir',
     name: 'Dhampir',
-    description:
-      'Vampire-descended humanoids. Living beings with vampiric traits.',
+    description: 'Vampire-descended humanoids. Living beings with vampiric traits.',
     attributeModifiers: {
       DX: 2,
       CH: 1,
@@ -1881,8 +1817,7 @@ export const races: Race[] = [
   {
     id: 'drow',
     name: 'Drow',
-    description:
-      'Dark elves from the Underdark. Masters of shadow magic and intrigue.',
+    description: 'Dark elves from the Underdark. Masters of shadow magic and intrigue.',
     attributeModifiers: {
       DX: 2,
       CH: 1,
@@ -1899,16 +1834,14 @@ export const races: Race[] = [
       {
         id: 'drow_magic',
         name: 'Drow Magic',
-        description:
-          'Know Dancing Lights cantrip. Cast Faerie Fire and Darkness.',
+        description: 'Know Dancing Lights cantrip. Cast Faerie Fire and Darkness.',
         unlockLevel: 1,
         target: 'self',
       },
       {
         id: 'sunlight_sensitivity',
         name: 'Sunlight Sensitivity',
-        description:
-          'Disadvantage on attacks and perception in direct sunlight.',
+        description: 'Disadvantage on attacks and perception in direct sunlight.',
         unlockLevel: 1,
         target: 'self',
       },
@@ -1919,8 +1852,7 @@ export const races: Race[] = [
   {
     id: 'duergar',
     name: 'Duergar',
-    description:
-      'Gray dwarves from the Underdark. Psionically gifted and resistant to magic.',
+    description: 'Gray dwarves from the Underdark. Psionically gifted and resistant to magic.',
     attributeModifiers: {
       ST: 2,
       CO: 1,
@@ -1944,8 +1876,7 @@ export const races: Race[] = [
       {
         id: 'enlarge',
         name: 'Enlarge',
-        description:
-          'Grow to Large size, increasing strength once per long rest.',
+        description: 'Grow to Large size, increasing strength once per long rest.',
         unlockLevel: 3,
         target: 'self',
       },

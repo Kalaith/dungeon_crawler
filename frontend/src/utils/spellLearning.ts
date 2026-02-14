@@ -86,27 +86,20 @@ export function getAvailableSpellsToLearn(character: Character): Spell[] {
 
   // Filter by max spell level and exclude already known spells
   const knownSpellIds = character.spells.map(s => s.id);
-  return classSpells.filter(
-    spell => spell.level <= maxLevel && !knownSpellIds.includes(spell.id)
-  );
+  return classSpells.filter(spell => spell.level <= maxLevel && !knownSpellIds.includes(spell.id));
 }
 
 /**
  * Calculate number of spells a character can know (for Known casters)
  */
 export function getMaxKnownSpells(character: Character): number {
-  if (
-    !character.class.spellcasting ||
-    character.class.spellcasting.type !== 'known'
-  ) {
+  if (!character.class.spellcasting || character.class.spellcasting.type !== 'known') {
     return 0;
   }
 
   // Simplified formula: level + spellcasting modifier
   const spellcastingAbility = character.class.spellcasting.ability;
-  const abilityMod = Math.floor(
-    (character.attributes[spellcastingAbility] - 10) / 2
-  );
+  const abilityMod = Math.floor((character.attributes[spellcastingAbility] - 10) / 2);
 
   return Math.max(1, character.level + abilityMod);
 }
@@ -115,18 +108,13 @@ export function getMaxKnownSpells(character: Character): number {
  * Calculate number of spells a character can prepare (for Prepared casters)
  */
 export function getMaxPreparedSpells(character: Character): number {
-  if (
-    !character.class.spellcasting ||
-    character.class.spellcasting.type !== 'prepared'
-  ) {
+  if (!character.class.spellcasting || character.class.spellcasting.type !== 'prepared') {
     return 0;
   }
 
   // Simplified formula: level + spellcasting modifier (minimum 1)
   const spellcastingAbility = character.class.spellcasting.ability;
-  const abilityMod = Math.floor(
-    (character.attributes[spellcastingAbility] - 10) / 2
-  );
+  const abilityMod = Math.floor((character.attributes[spellcastingAbility] - 10) / 2);
 
   return Math.max(1, character.level + abilityMod);
 }
@@ -178,14 +166,8 @@ export function learnSpell(character: Character, spell: Spell): Character {
 /**
  * Prepare spells for the day (for Prepared casters)
  */
-export function prepareSpells(
-  character: Character,
-  spellIds: string[]
-): Character {
-  if (
-    !character.class.spellcasting ||
-    character.class.spellcasting.type !== 'prepared'
-  ) {
+export function prepareSpells(character: Character, spellIds: string[]): Character {
+  if (!character.class.spellcasting || character.class.spellcasting.type !== 'prepared') {
     return character;
   }
 

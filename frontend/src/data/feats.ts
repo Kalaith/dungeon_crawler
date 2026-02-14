@@ -105,8 +105,7 @@ export const feats: Feat[] = [
   {
     id: 'ability_score_improvement',
     name: 'Ability Score Improvement',
-    description:
-      'You increase one ability score by 2 or two ability scores by 1.',
+    description: 'You increase one ability score by 2 or two ability scores by 1.',
     prerequisites: { level: 4 },
     effects: {
       type: 'asi',

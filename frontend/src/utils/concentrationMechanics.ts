@@ -4,10 +4,7 @@ import { performSavingThrow } from './combatMechanics';
 /**
  * Check if a character breaks concentration when taking damage
  */
-export function checkConcentration(
-  character: Character,
-  damage: number
-): boolean {
+export function checkConcentration(character: Character, damage: number): boolean {
   if (!character.concentratingOn) {
     return true; // Not concentrating, so no check needed
   }
@@ -34,10 +31,7 @@ export function breakConcentration(character: Character): Character {
 /**
  * Start concentrating on a spell
  */
-export function startConcentration(
-  character: Character,
-  spellId: string
-): Character {
+export function startConcentration(character: Character, spellId: string): Character {
   return {
     ...character,
     concentratingOn: spellId,

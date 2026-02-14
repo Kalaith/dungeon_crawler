@@ -56,14 +56,8 @@ export interface PartySlice {
   addXpToParty: (amount: number) => void;
   addGoldToParty: (amount: number) => void;
   updatePartyMemberHP: (characterIndex: number, newHp: number) => void;
-  applyStatusEffectToPartyMember: (
-    characterIndex: number,
-    effects: ActiveStatusEffect[]
-  ) => void;
-  updatePartyMemberStatusEffects: (
-    characterIndex: number,
-    effects: ActiveStatusEffect[]
-  ) => void;
+  applyStatusEffectToPartyMember: (characterIndex: number, effects: ActiveStatusEffect[]) => void;
+  updatePartyMemberStatusEffects: (characterIndex: number, effects: ActiveStatusEffect[]) => void;
 }
 
 export interface CombatSlice {
@@ -79,11 +73,7 @@ export interface CombatSlice {
   clearCombatLog: () => void;
   nextTurn: () => void;
   resetTurnOrder: () => void;
-  useAbility: (
-    characterIndex: number,
-    abilityId: string,
-    targetIndex?: number
-  ) => void;
+  useAbility: (characterIndex: number, abilityId: string, targetIndex?: number) => void;
   updateEnemyHP: (newHp: number) => void;
   applyStatusEffectToEnemy: (effects: ActiveStatusEffect[]) => void;
   updateEnemyStatusEffects: (effects: ActiveStatusEffect[]) => void;
@@ -91,9 +81,4 @@ export interface CombatSlice {
 
 export type GameStore = GeneralSlice & DungeonSlice & PartySlice & CombatSlice;
 
-export type GameSliceCreator<T> = StateCreator<
-  GameStore,
-  [['zustand/persist', unknown]],
-  [],
-  T
->;
+export type GameSliceCreator<T> = StateCreator<GameStore, [['zustand/persist', unknown]], [], T>;

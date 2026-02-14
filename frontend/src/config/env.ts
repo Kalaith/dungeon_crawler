@@ -9,8 +9,7 @@ interface EnvironmentConfig {
 
 const validateEnvironment = (): EnvironmentConfig => {
   // Default to localhost if not set, or throw if strict validation is needed
-  const apiBaseUrl =
-    import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
   const environment = import.meta.env.VITE_ENVIRONMENT || 'development';
 
   return {
@@ -18,9 +17,7 @@ const validateEnvironment = (): EnvironmentConfig => {
     environment: environment as EnvironmentConfig['environment'],
     features: {
       enableAnalytics: import.meta.env.VITE_ENABLE_ANALYTICS === 'true',
-      enableDebugMode:
-        import.meta.env.VITE_DEBUG_MODE === 'true' ||
-        environment === 'development',
+      enableDebugMode: import.meta.env.VITE_DEBUG_MODE === 'true' || environment === 'development',
     },
   };
 };

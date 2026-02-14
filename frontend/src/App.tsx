@@ -25,9 +25,7 @@ function App() {
     c => c && c.pendingFeatSelections > 0 && !ignoredFeatCharIds.includes(c.id)
   );
   const characterWithPendingFeat =
-    characterWithPendingFeatIndex !== -1
-      ? party[characterWithPendingFeatIndex]
-      : null;
+    characterWithPendingFeatIndex !== -1 ? party[characterWithPendingFeatIndex] : null;
 
   const handleCloseFeatModal = () => {
     if (characterWithPendingFeat) {

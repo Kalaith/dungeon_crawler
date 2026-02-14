@@ -22,20 +22,15 @@ export const AbilitySelector: React.FC<AbilitySelectorProps> = ({
   onCancel,
 }) => {
   // Filter abilities available at current level
-  const availableAbilities = abilities.filter(
-    ability => ability.level <= currentLevel
-  );
+  const availableAbilities = abilities.filter(ability => ability.level <= currentLevel);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
         <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Use Ability
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Use Ability</h2>
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Available AP:{' '}
-            <span className="font-bold text-indigo-600">{currentAP}</span>
+            Available AP: <span className="font-bold text-indigo-600">{currentAP}</span>
           </p>
         </div>
 

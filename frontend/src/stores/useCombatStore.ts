@@ -85,16 +85,13 @@ export const useCombatStore = create<CombatStore>((set, get) => ({
       id: enemy.id,
       type: 'enemy',
       enemy: enemy,
-      initiative:
-        enemy.derivedStats.Initiative + Math.floor(Math.random() * 20) + 1, // d20 + Init
+      initiative: enemy.derivedStats.Initiative + Math.floor(Math.random() * 20) + 1, // d20 + Init
       status: 'active',
     };
 
     // Combine and sort by initiative
     const allParticipants = [...participants, enemyParticipant];
-    const sortedParticipants = allParticipants.sort(
-      (a, b) => b.initiative - a.initiative
-    );
+    const sortedParticipants = allParticipants.sort((a, b) => b.initiative - a.initiative);
 
     set({
       inCombat: true,
@@ -135,8 +132,7 @@ export const useCombatStore = create<CombatStore>((set, get) => ({
 
   nextTurn: () =>
     set(state => {
-      const nextTurnIndex =
-        (state.currentTurn + 1) % state.combatTurnOrder.length;
+      const nextTurnIndex = (state.currentTurn + 1) % state.combatTurnOrder.length;
       return {
         currentTurn: nextTurnIndex,
         // Reset action economy for new turn
@@ -150,9 +146,7 @@ export const useCombatStore = create<CombatStore>((set, get) => ({
     }),
 
   resetTurnOrder: participants => {
-    const sortedParticipants = [...participants].sort(
-      (a, b) => b.initiative - a.initiative
-    );
+    const sortedParticipants = [...participants].sort((a, b) => b.initiative - a.initiative);
     set({ combatTurnOrder: sortedParticipants, currentTurn: 0 });
   },
 

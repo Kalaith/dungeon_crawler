@@ -12,9 +12,10 @@ interface CharacterCreationWizardProps {
   onCancel: () => void;
 }
 
-export const CharacterCreationWizard: React.FC<
-  CharacterCreationWizardProps
-> = ({ onFinish, onCancel }) => {
+export const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = ({
+  onFinish,
+  onCancel,
+}) => {
   const store = useCharacterCreationStore();
 
   const handleNext = () => {
@@ -47,13 +48,9 @@ export const CharacterCreationWizard: React.FC<
 
   const renderStep1 = () => (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
-        Step 1: Identity
-      </h2>
+      <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Step 1: Identity</h2>
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-          Name
-        </label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
         <input
           type="text"
           value={store.name}
@@ -81,9 +78,7 @@ export const CharacterCreationWizard: React.FC<
 
   const renderStep2 = () => (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
-        Step 2: Race
-      </h2>
+      <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Step 2: Race</h2>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {races
           .filter(race => !race.isNpcOnly)
@@ -109,9 +104,7 @@ export const CharacterCreationWizard: React.FC<
 
   const renderStep3 = () => (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
-        Step 3: Class
-      </h2>
+      <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Step 3: Class</h2>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {characterClasses.map(cls => (
           <div
@@ -152,9 +145,7 @@ export const CharacterCreationWizard: React.FC<
 
     return (
       <div className="space-y-4">
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
-          Step 4: Attributes
-        </h2>
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Step 4: Attributes</h2>
         <div className="flex space-x-4 mb-4">
           <button
             onClick={() => store.setGenerationMethod('point-buy')}
@@ -195,8 +186,7 @@ export const CharacterCreationWizard: React.FC<
             Negative Attributes
           </h3>
           <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-            Higher values represent stronger flaws. Range: 2-8 for new
-            characters.
+            Higher values represent stronger flaws. Range: 2-8 for new characters.
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {negativeAttrKeys.map(attr => (
@@ -212,12 +202,7 @@ export const CharacterCreationWizard: React.FC<
                   min={2}
                   max={8}
                   value={store.negativeAttributes[attr]}
-                  onChange={e =>
-                    store.setNegativeAttribute(
-                      attr,
-                      parseInt(e.target.value) || 2
-                    )
-                  }
+                  onChange={e => store.setNegativeAttribute(attr, parseInt(e.target.value) || 2)}
                   disabled={store.generationMethod !== 'point-buy'}
                   className="w-full px-2 py-1 text-center border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-200 disabled:cursor-not-allowed"
                 />
@@ -230,13 +215,11 @@ export const CharacterCreationWizard: React.FC<
           <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
             <div className="text-center mb-2">
               <span className="text-sm font-medium">Points Remaining: </span>
-              <span className="font-bold text-lg">
-                {store.attributePointsRemaining}
-              </span>
+              <span className="font-bold text-lg">{store.attributePointsRemaining}</span>
             </div>
             <p className="text-xs text-gray-600 dark:text-gray-400 text-center">
-              Increase negative attributes to gain bonus positive points (every
-              2 points in flaws = 1 bonus point)
+              Increase negative attributes to gain bonus positive points (every 2 points in flaws =
+              1 bonus point)
             </p>
           </div>
         )}
@@ -246,20 +229,14 @@ export const CharacterCreationWizard: React.FC<
 
   const renderStep5 = () => (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
-        Step 5: Feats
-      </h2>
-      <p className="text-gray-600 dark:text-gray-400">
-        Select a feat for your character.
-      </p>
+      <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Step 5: Feats</h2>
+      <p className="text-gray-600 dark:text-gray-400">Select a feat for your character.</p>
       <div className="grid grid-cols-1 gap-4">
         {feats.map(feat => {
           const isSelected = store.selectedFeats.some(f => f.id === feat.id);
           // Basic prerequisite check (level 1 only for now)
           const isAvailable =
-            !feat.prerequisites ||
-            !feat.prerequisites.level ||
-            feat.prerequisites.level <= 1;
+            !feat.prerequisites || !feat.prerequisites.level || feat.prerequisites.level <= 1;
 
           if (!isAvailable) return null;
 
@@ -271,11 +248,7 @@ export const CharacterCreationWizard: React.FC<
             >
               <div className="flex justify-between items-start">
                 <h3 className="font-bold">{feat.name}</h3>
-                {isSelected && (
-                  <span className="text-indigo-600 text-sm font-bold">
-                    Selected
-                  </span>
-                )}
+                {isSelected && <span className="text-indigo-600 text-sm font-bold">Selected</span>}
               </div>
               <p className="text-sm text-gray-600">{feat.description}</p>
             </div>
@@ -287,9 +260,7 @@ export const CharacterCreationWizard: React.FC<
 
   const renderStep6 = () => (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
-        Step 6: Review
-      </h2>
+      <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Step 6: Review</h2>
       <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
         <div className="flex items-center space-x-4 mb-6">
           <div className="h-16 w-16 bg-gray-200 rounded-full"></div>
@@ -309,10 +280,7 @@ export const CharacterCreationWizard: React.FC<
                 <div key={attr} className="flex justify-between">
                   <span>{attr}:</span>
                   <span>
-                    {val +
-                      (store.selectedRace?.attributeModifiers[
-                        attr as Attribute
-                      ] || 0)}
+                    {val + (store.selectedRace?.attributeModifiers[attr as Attribute] || 0)}
                   </span>
                 </div>
               ))}

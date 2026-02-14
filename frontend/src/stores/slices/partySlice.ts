@@ -69,16 +69,11 @@ export const createPartySlice: GameSliceCreator<PartySlice> = (set, get) => ({
   craftItem: recipeId => {
     const state = get();
     const { craftingRecipes } = gameData;
-    const recipe = craftingRecipes.find(
-      (r: CraftingRecipe) => r.id === recipeId
-    );
+    const recipe = craftingRecipes.find((r: CraftingRecipe) => r.id === recipeId);
 
     if (!recipe) return false;
 
-    const totalGold = state.party.reduce(
-      (sum, char) => sum + (char ? char.gold : 0),
-      0
-    );
+    const totalGold = state.party.reduce((sum, char) => sum + (char ? char.gold : 0), 0);
     if (totalGold < recipe.goldCost) return false;
 
     for (const mat of recipe.materials) {
@@ -115,16 +110,13 @@ export const createPartySlice: GameSliceCreator<PartySlice> = (set, get) => ({
 
   getPartyMembers: () => {
     const state = get();
-    return state.party.filter(
-      (character): character is Character => character !== null
-    );
+    return state.party.filter((character): character is Character => character !== null);
   },
 
   getAlivePartyMembers: () => {
     const state = get();
     return state.party.filter(
-      (character): character is Character =>
-        character !== null && character.alive
+      (character): character is Character => character !== null && character.alive
     );
   },
 
@@ -170,8 +162,7 @@ export const createPartySlice: GameSliceCreator<PartySlice> = (set, get) => ({
     if (roll < 0.6) {
       const commonItems = lootTables['common'];
       if (commonItems && commonItems.length > 0) {
-        const item =
-          commonItems[Math.floor(Math.random() * commonItems.length)];
+        const item = commonItems[Math.floor(Math.random() * commonItems.length)];
         if (item) items.push(item);
       }
     } else if (roll < 0.85) {
@@ -212,30 +203,14 @@ export const createPartySlice: GameSliceCreator<PartySlice> = (set, get) => ({
       },
       attributes: {
         ...character.attributes,
-        ST:
-          character.attributes.ST +
-          (character.class.primaryAttributes.includes('ST') ? 1 : 0),
-        CO:
-          character.attributes.CO +
-          (character.class.primaryAttributes.includes('CO') ? 1 : 0),
-        DX:
-          character.attributes.DX +
-          (character.class.primaryAttributes.includes('DX') ? 1 : 0),
-        AG:
-          character.attributes.AG +
-          (character.class.primaryAttributes.includes('AG') ? 1 : 0),
-        IT:
-          character.attributes.IT +
-          (character.class.primaryAttributes.includes('IT') ? 1 : 0),
-        IN:
-          character.attributes.IN +
-          (character.class.primaryAttributes.includes('IN') ? 1 : 0),
-        WD:
-          character.attributes.WD +
-          (character.class.primaryAttributes.includes('WD') ? 1 : 0),
-        CH:
-          character.attributes.CH +
-          (character.class.primaryAttributes.includes('CH') ? 1 : 0),
+        ST: character.attributes.ST + (character.class.primaryAttributes.includes('ST') ? 1 : 0),
+        CO: character.attributes.CO + (character.class.primaryAttributes.includes('CO') ? 1 : 0),
+        DX: character.attributes.DX + (character.class.primaryAttributes.includes('DX') ? 1 : 0),
+        AG: character.attributes.AG + (character.class.primaryAttributes.includes('AG') ? 1 : 0),
+        IT: character.attributes.IT + (character.class.primaryAttributes.includes('IT') ? 1 : 0),
+        IN: character.attributes.IN + (character.class.primaryAttributes.includes('IN') ? 1 : 0),
+        WD: character.attributes.WD + (character.class.primaryAttributes.includes('WD') ? 1 : 0),
+        CH: character.attributes.CH + (character.class.primaryAttributes.includes('CH') ? 1 : 0),
       },
     };
 
@@ -319,9 +294,7 @@ export const createPartySlice: GameSliceCreator<PartySlice> = (set, get) => ({
         if (character) {
           return {
             ...character,
-            gold:
-              character.gold +
-              Math.floor(amount / state.getPartyMembers().length),
+            gold: character.gold + Math.floor(amount / state.getPartyMembers().length),
           };
         }
         return character;
@@ -340,10 +313,7 @@ export const createPartySlice: GameSliceCreator<PartySlice> = (set, get) => ({
             ...character.derivedStats,
             HP: {
               ...character.derivedStats.HP,
-              current: Math.max(
-                0,
-                Math.min(character.derivedStats.HP.max, newHp)
-              ),
+              current: Math.max(0, Math.min(character.derivedStats.HP.max, newHp)),
             },
           },
           alive: newHp > 0,

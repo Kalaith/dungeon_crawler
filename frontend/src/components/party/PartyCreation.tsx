@@ -10,24 +10,14 @@ import { Button } from '../ui/Button';
 import type { Character } from '../../types';
 
 export const PartyCreation: React.FC = () => {
-  const {
-    party,
-    canStartAdventure,
-    addCharacterToParty,
-    removeCharacterFromParty,
-  } = usePartyStore();
+  const { party, canStartAdventure, addCharacterToParty, removeCharacterFromParty } =
+    usePartyStore();
   const { setGameState } = useGameStateStore();
 
-  const {
-    isCharacterModalOpen,
-    currentSlot,
-    openCharacterModal,
-    closeCharacterModal,
-  } = useUIStore();
+  const { isCharacterModalOpen, currentSlot, openCharacterModal, closeCharacterModal } =
+    useUIStore();
 
-  const [viewingCharacter, setViewingCharacter] = useState<Character | null>(
-    null
-  );
+  const [viewingCharacter, setViewingCharacter] = useState<Character | null>(null);
 
   const handleStartAdventure = () => {
     setGameState('overworld');

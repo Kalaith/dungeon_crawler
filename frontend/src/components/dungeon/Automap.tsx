@@ -5,17 +5,9 @@ import { getTileColor } from '../../utils/automapRenderer';
 import { Button } from '../ui/Button';
 
 export const Automap: React.FC = () => {
-  const { currentDungeonMap, exploredMap, playerPosition, interactiveTiles } =
-    useDungeonStore();
-  const {
-    isOpen,
-    zoom,
-    panOffset,
-    closeAutomap,
-    setZoom,
-    setPan,
-    centerOnPlayer,
-  } = useAutomapStore();
+  const { currentDungeonMap, exploredMap, playerPosition, interactiveTiles } = useDungeonStore();
+  const { isOpen, zoom, panOffset, closeAutomap, setZoom, setPan, centerOnPlayer } =
+    useAutomapStore();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // Handle keyboard shortcuts
@@ -88,32 +80,16 @@ export const Automap: React.FC = () => {
     // Draw tiles
     for (let y = 0; y < currentDungeonMap.height; y++) {
       for (let x = 0; x < currentDungeonMap.width; x++) {
-        const color = getTileColor(
-          x,
-          y,
-          currentDungeonMap,
-          exploredMap,
-          interactiveTiles
-        );
+        const color = getTileColor(x, y, currentDungeonMap, exploredMap, interactiveTiles);
 
         ctx.fillStyle = color;
-        ctx.fillRect(
-          offsetX + x * cellSize,
-          offsetY + y * cellSize,
-          cellSize,
-          cellSize
-        );
+        ctx.fillRect(offsetX + x * cellSize, offsetY + y * cellSize, cellSize, cellSize);
 
         // Draw grid lines for better visibility
         if (zoom >= 0.8) {
           ctx.strokeStyle = '#333333';
           ctx.lineWidth = 0.5;
-          ctx.strokeRect(
-            offsetX + x * cellSize,
-            offsetY + y * cellSize,
-            cellSize,
-            cellSize
-          );
+          ctx.strokeRect(offsetX + x * cellSize, offsetY + y * cellSize, cellSize, cellSize);
         }
       }
     }
@@ -133,15 +109,7 @@ export const Automap: React.FC = () => {
       ctx.closePath();
       ctx.fill();
     }
-  }, [
-    isOpen,
-    currentDungeonMap,
-    exploredMap,
-    playerPosition,
-    interactiveTiles,
-    zoom,
-    panOffset,
-  ]);
+  }, [isOpen, currentDungeonMap, exploredMap, playerPosition, interactiveTiles, zoom, panOffset]);
 
   if (!isOpen || !currentDungeonMap) return null;
 
@@ -160,10 +128,7 @@ export const Automap: React.FC = () => {
 
         {/* Canvas */}
         <div className="flex-1 flex items-center justify-center mb-4 overflow-hidden">
-          <canvas
-            ref={canvasRef}
-            className="border-2 border-cyan-500/30 rounded"
-          />
+          <canvas ref={canvasRef} className="border-2 border-cyan-500/30 rounded" />
         </div>
 
         {/* Controls */}
@@ -216,21 +181,13 @@ export const Automap: React.FC = () => {
 
           {/* Zoom Controls */}
           <div className="flex items-center gap-2">
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => setZoom(zoom - 0.2)}
-            >
+            <Button variant="secondary" size="sm" onClick={() => setZoom(zoom - 0.2)}>
               −
             </Button>
             <span className="text-cyan-100 text-sm min-w-[60px] text-center">
               {Math.round(zoom * 100)}%
             </span>
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => setZoom(zoom + 0.2)}
-            >
+            <Button variant="secondary" size="sm" onClick={() => setZoom(zoom + 0.2)}>
               +
             </Button>
           </div>

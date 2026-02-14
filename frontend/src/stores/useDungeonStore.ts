@@ -1,12 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type {
-  Position,
-  Direction,
-  DungeonMap,
-  FOEInstance,
-  InteractiveTile,
-} from '../types';
+import type { Position, Direction, DungeonMap, FOEInstance, InteractiveTile } from '../types';
 import { generateDungeon } from '../utils/dungeonGenerator';
 import { gameConfig } from '../data/constants';
 import { logger } from '../utils/logger';
@@ -42,10 +36,7 @@ interface DungeonStore {
 
   // Interactive Tile Actions
   setInteractiveTiles: (tiles: Record<string, InteractiveTile>) => void;
-  updateInteractiveTile: (
-    tileId: string,
-    updates: Partial<InteractiveTile>
-  ) => void;
+  updateInteractiveTile: (tileId: string, updates: Partial<InteractiveTile>) => void;
 }
 
 export const useDungeonStore = create<DungeonStore>()(
@@ -71,8 +62,7 @@ export const useDungeonStore = create<DungeonStore>()(
           return { exploredMap: newExplored };
         }),
 
-      incrementStepCount: () =>
-        set(state => ({ stepCount: state.stepCount + 1 })),
+      incrementStepCount: () => set(state => ({ stepCount: state.stepCount + 1 })),
 
       decrementEncounterCounter: () =>
         set(state => ({
@@ -88,13 +78,8 @@ export const useDungeonStore = create<DungeonStore>()(
       generateFloor: floorNumber => {
         logger.info('🏗️ generateFloor called with floor:', floorNumber);
         try {
-          const { DEFAULT_WIDTH: defaultWidth, DEFAULT_HEIGHT: defaultHeight } =
-            gameConfig.DUNGEON;
-          const dungeonData = generateDungeon(
-            defaultWidth,
-            defaultHeight,
-            floorNumber
-          );
+          const { DEFAULT_WIDTH: defaultWidth, DEFAULT_HEIGHT: defaultHeight } = gameConfig.DUNGEON;
+          const dungeonData = generateDungeon(defaultWidth, defaultHeight, floorNumber);
 
           set({
             currentDungeonMap: {
@@ -111,9 +96,7 @@ export const useDungeonStore = create<DungeonStore>()(
             currentFloor: floorNumber,
             playerPosition: dungeonData.playerStart,
             playerFacing: 0,
-            exploredMap: new Set([
-              `${dungeonData.playerStart.x},${dungeonData.playerStart.y}`,
-            ]),
+            exploredMap: new Set([`${dungeonData.playerStart.x},${dungeonData.playerStart.y}`]),
             foes: dungeonData.foes || [],
             interactiveTiles: dungeonData.interactiveTiles || {},
           });
@@ -125,8 +108,7 @@ export const useDungeonStore = create<DungeonStore>()(
 
       changeFloor: direction => {
         const state = get();
-        const newFloor =
-          direction === 'up' ? state.currentFloor - 1 : state.currentFloor + 1;
+        const newFloor = direction === 'up' ? state.currentFloor - 1 : state.currentFloor + 1;
 
         if (newFloor < 1) return;
 
@@ -178,9 +160,7 @@ export const useDungeonStore = create<DungeonStore>()(
 
       updateFoe: (foeId, updates) =>
         set(state => ({
-          foes: state.foes.map(f =>
-            f.id === foeId ? { ...f, ...updates } : f
-          ),
+          foes: state.foes.map(f => (f.id === foeId ? { ...f, ...updates } : f)),
         })),
 
       removeFoe: foeId =>

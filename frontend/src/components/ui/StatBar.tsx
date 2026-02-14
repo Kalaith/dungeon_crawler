@@ -43,9 +43,7 @@ export const StatBar: React.FC<StatBarProps> = ({
   return (
     <div className={className}>
       {showLabel && label && (
-        <div className="text-xs mb-1 text-slate-600 dark:text-gray-400">
-          {label}
-        </div>
+        <div className="text-xs mb-1 text-slate-600 dark:text-gray-400">{label}</div>
       )}
       <div
         className={`bg-gray-400/15 dark:bg-gray-400/15 rounded-full overflow-hidden ${heightClasses[height]}`}
@@ -54,9 +52,7 @@ export const StatBar: React.FC<StatBarProps> = ({
           className={`h-full transition-all duration-300 ${color === 'custom' ? '' : colorClasses[color]}`}
           style={{
             width: `${percent}%`,
-            ...(color === 'custom' && customColor
-              ? { backgroundColor: customColor }
-              : {}),
+            ...(color === 'custom' && customColor ? { backgroundColor: customColor } : {}),
           }}
         />
       </div>

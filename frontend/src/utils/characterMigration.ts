@@ -9,23 +9,10 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 function getClassSkillProficiencies(classId: string): string[] {
   const proficiencyMap: Record<string, string[]> = {
     warrior: ['swords', 'axes', 'cutting_weapons', 'self_control', 'tactics'],
-    rogue: [
-      'stealth',
-      'hide',
-      'locks',
-      'pickpocket',
-      'perception',
-      'pointed_weapons',
-    ],
+    rogue: ['stealth', 'hide', 'locks', 'pickpocket', 'perception', 'pointed_weapons'],
     wizard: ['arcane_lore', 'read_write', 'ancient_tongues', 'history'],
     cleric: ['ritual', 'treat_wounds', 'treat_disease', 'convert', 'history'],
-    ranger: [
-      'track',
-      'survival',
-      'animal_lore',
-      'herb_lore',
-      'missile_weapons',
-    ],
+    ranger: ['track', 'survival', 'animal_lore', 'herb_lore', 'missile_weapons'],
     paladin: ['swords', 'ritual', 'convert', 'self_control', 'ride'],
     barbarian: ['axes', 'two_handed_swords', 'survival', 'track', 'swim'],
     bard: ['instrument', 'convert', 'seduce', 'human_nature', 'tongues'],
@@ -34,14 +21,7 @@ function getClassSkillProficiencies(classId: string): string[] {
     sorcerer: ['arcane_lore', 'convert', 'seduce'],
     warlock: ['arcane_lore', 'lie', 'human_nature', 'ritual'],
     jester: ['instrument', 'dance', 'lie', 'seduce', 'cheat', 'human_nature'],
-    hunter: [
-      'track',
-      'survival',
-      'animal_lore',
-      'stealth',
-      'missile_weapons',
-      'perception',
-    ],
+    hunter: ['track', 'survival', 'animal_lore', 'stealth', 'missile_weapons', 'perception'],
     magician: ['arcane_lore', 'alchemy', 'herb_lore', 'read_write'],
   };
 
@@ -70,11 +50,7 @@ export function migrateCharacter(character: unknown): Character {
     const movementRate = race?.movementRate ?? 30;
 
     if (klass && attributes) {
-      c.derivedStats = calculateDerivedStats(
-        attributes,
-        klass.baseStats,
-        movementRate
-      );
+      c.derivedStats = calculateDerivedStats(attributes, klass.baseStats, movementRate);
     }
   }
 
@@ -112,9 +88,7 @@ export function migrateCharacter(character: unknown): Character {
     console.log(`Migrating character ${c.name} - initializing all 51 skills`);
 
     const klass = c.class as CharacterClass | undefined;
-    const proficientSkills = klass?.id
-      ? getClassSkillProficiencies(klass.id)
-      : [];
+    const proficientSkills = klass?.id ? getClassSkillProficiencies(klass.id) : [];
 
     c.skills = initializeCharacterSkills(proficientSkills);
   }
@@ -137,9 +111,7 @@ export function migrateCharacter(character: unknown): Character {
 /**
  * Migrates an array of characters (including null values)
  */
-export function migrateParty(
-  party: Array<unknown | null>
-): Array<Character | null> {
+export function migrateParty(party: Array<unknown | null>): Array<Character | null> {
   return party.map(character => {
     if (character === null) return null;
     return migrateCharacter(character);

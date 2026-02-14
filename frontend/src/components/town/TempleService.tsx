@@ -24,9 +24,7 @@ export const TempleService: React.FC<TempleServiceProps> = ({ onClose }) => {
     const cost = getResurrectionCost(character);
 
     if (cost > 0 && !canAfford(cost)) {
-      alert(
-        `Insufficient funds! You need ${cost} gold but only have ${gold} gold.`
-      );
+      alert(`Insufficient funds! You need ${cost} gold but only have ${gold} gold.`);
       return;
     }
 
@@ -66,32 +64,20 @@ export const TempleService: React.FC<TempleServiceProps> = ({ onClose }) => {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="text-6xl mb-4">⛪</div>
-          <h1 className="text-4xl font-bold text-gold-500 mb-2">
-            Temple of Light
-          </h1>
-          <p className="text-lg text-cyan-100">
-            Divine healing and resurrection services
-          </p>
+          <h1 className="text-4xl font-bold text-gold-500 mb-2">Temple of Light</h1>
+          <p className="text-lg text-cyan-100">Divine healing and resurrection services</p>
           <div className="mt-4 p-3 bg-etrian-800 border border-gold-500/30 rounded-lg inline-block">
-            <p className="text-sm font-semibold text-gold-500">
-              💰 Your Gold: {gold}
-            </p>
+            <p className="text-sm font-semibold text-gold-500">💰 Your Gold: {gold}</p>
           </div>
         </div>
 
         {/* Services Info */}
         <div className="bg-etrian-800 rounded-xl p-6 shadow-lg border border-cyan-900/50 mb-6">
-          <h2 className="text-xl font-semibold text-gold-500 mb-4">
-            Temple Services
-          </h2>
+          <h2 className="text-xl font-semibold text-gold-500 mb-4">Temple Services</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div className="bg-etrian-700 rounded-lg p-4 border border-cyan-900/30">
-              <h3 className="font-bold text-purple-400 mb-2">
-                ⚰️ Resurrection
-              </h3>
-              <p className="text-cyan-100 mb-2">
-                Bring fallen party members back to life
-              </p>
+              <h3 className="font-bold text-purple-400 mb-2">⚰️ Resurrection</h3>
+              <p className="text-cyan-100 mb-2">Bring fallen party members back to life</p>
               <p className="text-xs text-cyan-400">
                 Cost: Free for Level 1, then 50 gold per level above 1
               </p>
@@ -99,9 +85,7 @@ export const TempleService: React.FC<TempleServiceProps> = ({ onClose }) => {
             </div>
             <div className="bg-etrian-700 rounded-lg p-4 border border-cyan-900/30">
               <h3 className="font-bold text-blue-400 mb-2">✨ Blessing</h3>
-              <p className="text-cyan-100 mb-2">
-                Receive divine blessings for your journey
-              </p>
+              <p className="text-cyan-100 mb-2">Receive divine blessings for your journey</p>
               <p className="text-xs text-cyan-400">Coming Soon</p>
             </div>
           </div>
@@ -110,9 +94,7 @@ export const TempleService: React.FC<TempleServiceProps> = ({ onClose }) => {
         {/* Resurrection Section */}
         {deadMembers.length > 0 ? (
           <div className="bg-etrian-800 rounded-xl p-6 shadow-lg border border-cyan-900/50 mb-6">
-            <h2 className="text-xl font-semibold text-gold-500 mb-4">
-              Fallen Heroes
-            </h2>
+            <h2 className="text-xl font-semibold text-gold-500 mb-4">Fallen Heroes</h2>
             <div className="space-y-4">
               {deadMembers.map(character => {
                 const cost = getResurrectionCost(character);
@@ -123,26 +105,18 @@ export const TempleService: React.FC<TempleServiceProps> = ({ onClose }) => {
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
-                        <h3 className="text-lg font-bold text-gold-500">
-                          {character.name}
-                        </h3>
+                        <h3 className="text-lg font-bold text-gold-500">{character.name}</h3>
                         <p className="text-sm text-cyan-400">
-                          Level {character.level} {character.race.name}{' '}
-                          {character.class.name}
+                          Level {character.level} {character.race.name} {character.class.name}
                         </p>
                         <p className="text-xs text-red-400 mt-1">💀 Deceased</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm text-cyan-400 mb-2">
-                          Resurrection Cost
-                        </p>
+                        <p className="text-sm text-cyan-400 mb-2">Resurrection Cost</p>
                         <p className="text-2xl font-bold text-purple-400 mb-3">
                           {cost === 0 ? 'Free' : `${cost} 💰`}
                         </p>
-                        <Button
-                          variant="primary"
-                          onClick={() => handleResurrect(character)}
-                        >
+                        <Button variant="primary" onClick={() => handleResurrect(character)}>
                           Resurrect
                         </Button>
                       </div>
@@ -154,21 +128,15 @@ export const TempleService: React.FC<TempleServiceProps> = ({ onClose }) => {
           </div>
         ) : (
           <div className="bg-green-900/30 rounded-xl p-8 shadow-lg border border-green-500/30 mb-6 text-center">
-            <p className="text-lg text-green-400">
-              ✅ All party members are alive and well!
-            </p>
-            <p className="text-sm text-green-300 mt-2">
-              May the gods continue to watch over you.
-            </p>
+            <p className="text-lg text-green-400">✅ All party members are alive and well!</p>
+            <p className="text-sm text-green-300 mt-2">May the gods continue to watch over you.</p>
           </div>
         )}
 
         {/* Living Party Members - Blessing Section */}
         {partyMembers.filter(c => c.alive).length > 0 && (
           <div className="bg-etrian-800 rounded-xl p-6 shadow-lg border border-cyan-900/50 mb-6">
-            <h2 className="text-xl font-semibold text-gold-500 mb-4">
-              Request Blessings
-            </h2>
+            <h2 className="text-xl font-semibold text-gold-500 mb-4">Request Blessings</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {partyMembers
                 .filter(c => c.alive)
@@ -179,20 +147,12 @@ export const TempleService: React.FC<TempleServiceProps> = ({ onClose }) => {
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <h3 className="font-bold text-gold-500">
-                          {character.name}
-                        </h3>
+                        <h3 className="font-bold text-gold-500">{character.name}</h3>
                         <p className="text-xs text-cyan-400">
-                          Level {character.level} {character.race.name}{' '}
-                          {character.class.name}
+                          Level {character.level} {character.race.name} {character.class.name}
                         </p>
                       </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={handleBless}
-                        disabled
-                      >
+                      <Button variant="outline" size="sm" onClick={handleBless} disabled>
                         Bless
                       </Button>
                     </div>

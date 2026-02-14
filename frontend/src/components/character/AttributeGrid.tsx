@@ -27,16 +27,7 @@ export const AttributeGrid: React.FC<AttributeGridProps> = ({
   maxValue = 18,
   className = '',
 }) => {
-  const attributeList: Attribute[] = [
-    'ST',
-    'CO',
-    'DX',
-    'AG',
-    'IT',
-    'IN',
-    'WD',
-    'CH',
-  ];
+  const attributeList: Attribute[] = ['ST', 'CO', 'DX', 'AG', 'IT', 'IN', 'WD', 'CH'];
 
   const handleIncrement = (attr: Attribute) => {
     if (editable && onAttributeChange && attributes[attr] < maxValue) {
@@ -62,9 +53,7 @@ export const AttributeGrid: React.FC<AttributeGridProps> = ({
             key={attr}
             className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded"
           >
-            <span className="font-bold w-8 text-gray-900 dark:text-white">
-              {attr}
-            </span>
+            <span className="font-bold w-8 text-gray-900 dark:text-white">{attr}</span>
 
             <div className="flex items-center space-x-2">
               {editable && (

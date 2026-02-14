@@ -7,9 +7,7 @@ import type { Item, LootDrop } from '../types';
 interface ProgressionStore {
   // Actions
   generateLoot: (enemyLevel: number) => LootDrop;
-  getRecipe: (
-    recipeId: string
-  ) => import('../types').CraftingRecipe | undefined;
+  getRecipe: (recipeId: string) => import('../types').CraftingRecipe | undefined;
 }
 
 export const useProgressionStore = create<ProgressionStore>(() => ({

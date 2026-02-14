@@ -47,8 +47,7 @@ export const SKILLS: SkillDefinition[] = [
     category: 'Combat',
     primaryAttribute: 'DX',
     secondaryAttributes: ['AG'],
-    description:
-      'Includes epee, rapier, foil, as well as all knives and daggers.',
+    description: 'Includes epee, rapier, foil, as well as all knives and daggers.',
     maxIncreasePerLevel: 1,
   },
   {
@@ -77,8 +76,7 @@ export const SKILLS: SkillDefinition[] = [
     category: 'Combat',
     primaryAttribute: 'ST',
     secondaryAttributes: ['AG'],
-    description:
-      'Used for spears and pole arms, but also for quarterstaves and double fleurs.',
+    description: 'Used for spears and pole arms, but also for quarterstaves and double fleurs.',
     maxIncreasePerLevel: 1,
   },
   {
@@ -97,8 +95,7 @@ export const SKILLS: SkillDefinition[] = [
     category: 'Combat',
     primaryAttribute: 'DX',
     secondaryAttributes: ['AG', 'IN'],
-    description:
-      'Most common types are the various types of bows and the crossbow.',
+    description: 'Most common types are the various types of bows and the crossbow.',
     maxIncreasePerLevel: 1,
   },
   {
@@ -107,8 +104,7 @@ export const SKILLS: SkillDefinition[] = [
     category: 'Combat',
     primaryAttribute: 'DX',
     secondaryAttributes: ['ST'],
-    description:
-      'Includes all javelins, throwing knives, throwing stars, and throwing hatchets.',
+    description: 'Includes all javelins, throwing knives, throwing stars, and throwing hatchets.',
     maxIncreasePerLevel: 1,
   },
 
@@ -149,8 +145,7 @@ export const SKILLS: SkillDefinition[] = [
     category: 'Body',
     primaryAttribute: 'AG',
     secondaryAttributes: ['CH', 'ST'],
-    description:
-      'Ability to ride horseback during daring maneuvers without falling.',
+    description: 'Ability to ride horseback during daring maneuvers without falling.',
     maxIncreasePerLevel: 2,
   },
   {
@@ -240,8 +235,7 @@ export const SKILLS: SkillDefinition[] = [
     category: 'Social',
     primaryAttribute: 'CH',
     secondaryAttributes: ['CO', 'WD'],
-    description:
-      'Good hagglers can get discounts of up to 50% from merchants in markets.',
+    description: 'Good hagglers can get discounts of up to 50% from merchants in markets.',
     maxIncreasePerLevel: 2,
   },
   {
@@ -280,8 +274,7 @@ export const SKILLS: SkillDefinition[] = [
     category: 'Social',
     primaryAttribute: 'IN',
     secondaryAttributes: ['WD', 'IN'],
-    description:
-      'Helps characters estimate the value of artifacts and other useful items.',
+    description: 'Helps characters estimate the value of artifacts and other useful items.',
     maxIncreasePerLevel: 2,
   },
 
@@ -312,8 +305,7 @@ export const SKILLS: SkillDefinition[] = [
     category: 'Nature',
     primaryAttribute: 'IN',
     secondaryAttributes: ['WD', 'IN'],
-    description:
-      'Well-honed sense of direction useful in wilderness and down in dungeons.',
+    description: 'Well-honed sense of direction useful in wilderness and down in dungeons.',
     maxIncreasePerLevel: 2,
   },
   {
@@ -410,8 +402,7 @@ export const SKILLS: SkillDefinition[] = [
     category: 'Lore',
     primaryAttribute: 'IT',
     secondaryAttributes: ['WD', 'WD', 'DX'],
-    description:
-      'Ability to read and write your native tongue. Quite a rare skill.',
+    description: 'Ability to read and write your native tongue. Quite a rare skill.',
     maxIncreasePerLevel: 3,
   },
   {
@@ -442,8 +433,7 @@ export const SKILLS: SkillDefinition[] = [
     category: 'Craftsmanship',
     primaryAttribute: 'CH',
     secondaryAttributes: ['CO', 'IN'],
-    description:
-      'Used to tame and train animals such as horses, hounds, or falcons.',
+    description: 'Used to tame and train animals such as horses, hounds, or falcons.',
     maxIncreasePerLevel: 2,
   },
   {
@@ -481,8 +471,7 @@ export const SKILLS: SkillDefinition[] = [
     category: 'Craftsmanship',
     primaryAttribute: 'IN',
     secondaryAttributes: ['CO', 'WD'],
-    description:
-      'Essential healing skill for dealing with poisoned characters.',
+    description: 'Essential healing skill for dealing with poisoned characters.',
     maxIncreasePerLevel: 2,
   },
   {
@@ -533,8 +522,7 @@ export const SKILLS: SkillDefinition[] = [
     category: 'Intuitive',
     primaryAttribute: 'IN',
     secondaryAttributes: ['WD', 'IN'],
-    description:
-      'Provides warning of immediate danger posed by ambush or trap.',
+    description: 'Provides warning of immediate danger posed by ambush or trap.',
     maxIncreasePerLevel: 1,
   },
   {
@@ -555,9 +543,7 @@ export function getSkillById(id: string): SkillDefinition | undefined {
 }
 
 // Helper function to get skills by category
-export function getSkillsByCategory(
-  category: SkillCategory
-): SkillDefinition[] {
+export function getSkillsByCategory(category: SkillCategory): SkillDefinition[] {
   return SKILLS.filter(skill => skill.category === category);
 }
 

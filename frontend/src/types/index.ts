@@ -300,14 +300,7 @@ export interface Equipment {
 export interface Item {
   id: string;
   name: string;
-  type:
-    | 'weapon'
-    | 'armor'
-    | 'shield'
-    | 'accessory'
-    | 'consumable'
-    | 'material'
-    | 'key';
+  type: 'weapon' | 'armor' | 'shield' | 'accessory' | 'consumable' | 'material' | 'key';
   category?: 'weapons' | 'armor' | 'potions' | 'items'; // For shop categorization
   rarity: 'common' | 'rare' | 'epic' | 'legendary';
   stats?: Partial<Attributes & { HP: number; AP: number; AC: number }>;

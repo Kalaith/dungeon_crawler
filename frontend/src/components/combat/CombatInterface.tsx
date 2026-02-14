@@ -29,12 +29,8 @@ export const CombatInterface: React.FC = () => {
     let charIndex = party.findIndex(p => p?.id === charId);
 
     if (charIndex === -1) {
-      console.warn(
-        `⚠️ Character ID ${charId} not found in party, trying name match...`
-      );
-      charIndex = party.findIndex(
-        p => p?.name === currentParticipant.character!.name
-      );
+      console.warn(`⚠️ Character ID ${charId} not found in party, trying name match...`);
+      charIndex = party.findIndex(p => p?.name === currentParticipant.character!.name);
     }
 
     if (charIndex !== -1) {
@@ -79,9 +75,7 @@ export const CombatInterface: React.FC = () => {
                   </div>
                 )
               )}
-              {!currentParticipant && (
-                <div className="text-gray-500">Processing turn...</div>
-              )}
+              {!currentParticipant && <div className="text-gray-500">Processing turn...</div>}
             </div>
           )}
         </div>

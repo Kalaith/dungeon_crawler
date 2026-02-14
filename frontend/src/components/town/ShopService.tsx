@@ -160,13 +160,10 @@ const shopInventory: ShopItem[] = [
 export const ShopService: React.FC<ShopServiceProps> = ({ onClose }) => {
   const { gold, subtractGold, canAfford } = useGoldStore();
   const { addItem } = useInventoryStore();
-  const [selectedCategory, setSelectedCategory] =
-    useState<ShopCategory>('weapons');
+  const [selectedCategory, setSelectedCategory] = useState<ShopCategory>('weapons');
   const [cart, setCart] = useState<Map<string, number>>(new Map());
 
-  const filteredItems = shopInventory.filter(
-    item => item.category === selectedCategory
-  );
+  const filteredItems = shopInventory.filter(item => item.category === selectedCategory);
 
   const addToCart = (itemId: string) => {
     setCart(prev => {
@@ -204,9 +201,7 @@ export const ShopService: React.FC<ShopServiceProps> = ({ onClose }) => {
     const total = getTotalCost();
 
     if (!canAfford(total)) {
-      alert(
-        `Insufficient funds! You need ${total} gold but only have ${gold} gold.`
-      );
+      alert(`Insufficient funds! You need ${total} gold but only have ${gold} gold.`);
       return;
     }
 
@@ -236,17 +231,14 @@ export const ShopService: React.FC<ShopServiceProps> = ({ onClose }) => {
           rarity: 'common',
           value: shopItem.price,
           description: shopItem.description,
-          stackable:
-            shopItem.category === 'potions' || shopItem.category === 'items',
+          stackable: shopItem.category === 'potions' || shopItem.category === 'items',
           icon: shopItem.icon,
         };
         addItem(item, quantity);
       }
     });
 
-    alert(
-      `Purchase complete! Spent ${total} gold.\nRemaining gold: ${gold - total}`
-    );
+    alert(`Purchase complete! Spent ${total} gold.\nRemaining gold: ${gold - total}`);
     setCart(new Map());
   };
 
@@ -263,9 +255,7 @@ export const ShopService: React.FC<ShopServiceProps> = ({ onClose }) => {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="text-6xl mb-4">🛒</div>
-          <h1 className="text-4xl font-bold text-gold-500 mb-2">
-            General Store
-          </h1>
+          <h1 className="text-4xl font-bold text-gold-500 mb-2">General Store</h1>
           <p className="text-lg text-cyan-100">
             Buy equipment, potions, and supplies for your adventures
           </p>
@@ -308,24 +298,14 @@ export const ShopService: React.FC<ShopServiceProps> = ({ onClose }) => {
                       <div className="flex items-center gap-3">
                         <span className="text-3xl">{item.icon}</span>
                         <div>
-                          <h3 className="font-bold text-cyan-100">
-                            {item.name}
-                          </h3>
-                          <p className="text-xs text-cyan-400">
-                            {item.description}
-                          </p>
+                          <h3 className="font-bold text-cyan-100">{item.name}</h3>
+                          <p className="text-xs text-cyan-400">{item.description}</p>
                         </div>
                       </div>
                     </div>
                     <div className="flex items-center justify-between mt-3">
-                      <p className="text-lg font-bold text-gold-500">
-                        {item.price} 💰
-                      </p>
-                      <Button
-                        variant="primary"
-                        size="sm"
-                        onClick={() => addToCart(item.id)}
-                      >
+                      <p className="text-lg font-bold text-gold-500">{item.price} 💰</p>
+                      <Button variant="primary" size="sm" onClick={() => addToCart(item.id)}>
                         Add to Cart
                       </Button>
                     </div>
@@ -338,21 +318,15 @@ export const ShopService: React.FC<ShopServiceProps> = ({ onClose }) => {
           {/* Shopping Cart */}
           <div className="lg:col-span-1">
             <div className="bg-etrian-800 rounded-xl p-6 shadow-lg border border-cyan-900/50 sticky top-8">
-              <h2 className="text-xl font-semibold text-gold-500 mb-4">
-                🛒 Shopping Cart
-              </h2>
+              <h2 className="text-xl font-semibold text-gold-500 mb-4">🛒 Shopping Cart</h2>
 
               {/* Gold Display */}
               <div className="mb-4 p-3 bg-etrian-900 border border-gold-500/30 rounded-lg">
-                <p className="text-sm font-semibold text-gold-500">
-                  💰 Your Gold: {gold}
-                </p>
+                <p className="text-sm font-semibold text-gold-500">💰 Your Gold: {gold}</p>
               </div>
 
               {cart.size === 0 ? (
-                <p className="text-center text-cyan-400 py-8">
-                  Your cart is empty
-                </p>
+                <p className="text-center text-cyan-400 py-8">Your cart is empty</p>
               ) : (
                 <>
                   <div className="space-y-3 mb-4 max-h-96 overflow-y-auto">
@@ -369,12 +343,8 @@ export const ShopService: React.FC<ShopServiceProps> = ({ onClose }) => {
                             <div className="flex items-center gap-2">
                               <span className="text-xl">{item.icon}</span>
                               <div>
-                                <p className="font-semibold text-sm text-cyan-100">
-                                  {item.name}
-                                </p>
-                                <p className="text-xs text-cyan-400">
-                                  {item.price} 💰 each
-                                </p>
+                                <p className="font-semibold text-sm text-cyan-100">{item.name}</p>
+                                <p className="text-xs text-cyan-400">{item.price} 💰 each</p>
                               </div>
                             </div>
                           </div>
@@ -408,9 +378,7 @@ export const ShopService: React.FC<ShopServiceProps> = ({ onClose }) => {
                   <div className="border-t border-cyan-900/30 pt-4 mb-4">
                     <div className="flex items-center justify-between mb-4">
                       <p className="text-lg font-bold text-cyan-100">Total:</p>
-                      <p className="text-2xl font-bold text-gold-500">
-                        {getTotalCost()} 💰
-                      </p>
+                      <p className="text-2xl font-bold text-gold-500">{getTotalCost()} 💰</p>
                     </div>
                     <Button
                       variant="primary"
@@ -419,9 +387,7 @@ export const ShopService: React.FC<ShopServiceProps> = ({ onClose }) => {
                       disabled={!canAfford(getTotalCost())}
                       className="w-full"
                     >
-                      {canAfford(getTotalCost())
-                        ? 'Purchase'
-                        : 'Insufficient Funds'}
+                      {canAfford(getTotalCost()) ? 'Purchase' : 'Insufficient Funds'}
                     </Button>
                   </div>
                 </>
@@ -430,8 +396,8 @@ export const ShopService: React.FC<ShopServiceProps> = ({ onClose }) => {
               {!canAfford(getTotalCost()) && cart.size > 0 && (
                 <div className="mt-4 p-3 bg-red-900/30 border border-red-500/30 rounded-lg">
                   <p className="text-xs text-red-400">
-                    ⚠️ <strong>Insufficient Funds!</strong> You need{' '}
-                    {getTotalCost() - gold} more gold.
+                    ⚠️ <strong>Insufficient Funds!</strong> You need {getTotalCost() - gold} more
+                    gold.
                   </p>
                 </div>
               )}

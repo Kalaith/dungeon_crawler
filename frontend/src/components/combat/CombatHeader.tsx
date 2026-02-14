@@ -16,16 +16,10 @@ export const CombatHeader: React.FC = () => {
       <div className="flex justify-center gap-2 flex-wrap">
         {combatTurnOrder.map((participant, index) => {
           const name =
-            participant.type === 'party'
-              ? participant.character?.name
-              : participant.enemy?.name;
+            participant.type === 'party' ? participant.character?.name : participant.enemy?.name;
 
           return (
-            <TurnOrderBadge
-              key={index}
-              name={name || 'Unknown'}
-              isActive={index === currentTurn}
-            />
+            <TurnOrderBadge key={index} name={name || 'Unknown'} isActive={index === currentTurn} />
           );
         })}
       </div>

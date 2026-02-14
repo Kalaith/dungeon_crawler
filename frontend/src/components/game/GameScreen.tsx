@@ -57,12 +57,7 @@ export const GameScreen: React.FC = () => {
 
       {/* Automap Toggle Button */}
       <div className="absolute top-4 left-4">
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={toggleAutomap}
-          title="Toggle Automap (M)"
-        >
+        <Button variant="secondary" size="sm" onClick={toggleAutomap} title="Toggle Automap (M)">
           🗺️
         </Button>
       </div>

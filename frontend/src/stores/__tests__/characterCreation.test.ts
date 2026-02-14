@@ -27,9 +27,7 @@ describe('Character Creation Store', () => {
       const human = races.find(r => r.id === 'human');
       if (human) {
         useCharacterCreationStore.getState().setRace(human);
-        expect(useCharacterCreationStore.getState().selectedRace).toEqual(
-          human
-        );
+        expect(useCharacterCreationStore.getState().selectedRace).toEqual(human);
       }
     });
 
@@ -37,9 +35,7 @@ describe('Character Creation Store', () => {
       const warrior = characterClasses.find(c => c.id === 'warrior');
       if (warrior) {
         useCharacterCreationStore.getState().setClass(warrior);
-        expect(useCharacterCreationStore.getState().selectedClass).toEqual(
-          warrior
-        );
+        expect(useCharacterCreationStore.getState().selectedClass).toEqual(warrior);
       }
     });
 
@@ -54,9 +50,7 @@ describe('Character Creation Store', () => {
 
   describe('Point-Buy System', () => {
     it('should start with 20 points', () => {
-      expect(
-        useCharacterCreationStore.getState().attributePointsRemaining
-      ).toBe(20);
+      expect(useCharacterCreationStore.getState().attributePointsRemaining).toBe(20);
     });
 
     it('should initialize all attributes to 10', () => {
@@ -72,28 +66,23 @@ describe('Character Creation Store', () => {
     });
 
     it('should increase attribute and decrease points', () => {
-      const initialPoints =
-        useCharacterCreationStore.getState().attributePointsRemaining;
+      const initialPoints = useCharacterCreationStore.getState().attributePointsRemaining;
       useCharacterCreationStore.getState().setAttribute('ST', 11);
 
       expect(useCharacterCreationStore.getState().attributes.ST).toBe(11);
-      expect(
-        useCharacterCreationStore.getState().attributePointsRemaining
-      ).toBeLessThan(initialPoints);
+      expect(useCharacterCreationStore.getState().attributePointsRemaining).toBeLessThan(
+        initialPoints
+      );
     });
 
     it('should not allow attributes below 8', () => {
       useCharacterCreationStore.getState().setAttribute('ST', 7);
-      expect(
-        useCharacterCreationStore.getState().attributes.ST
-      ).toBeGreaterThanOrEqual(8);
+      expect(useCharacterCreationStore.getState().attributes.ST).toBeGreaterThanOrEqual(8);
     });
 
     it('should not allow attributes above 18', () => {
       useCharacterCreationStore.getState().setAttribute('ST', 19);
-      expect(
-        useCharacterCreationStore.getState().attributes.ST
-      ).toBeLessThanOrEqual(18);
+      expect(useCharacterCreationStore.getState().attributes.ST).toBeLessThanOrEqual(18);
     });
 
     it('should not allow spending more points than available', () => {
@@ -103,9 +92,9 @@ describe('Character Creation Store', () => {
       store.setAttribute('DX', 15);
       store.setAttribute('AG', 15);
 
-      expect(
-        useCharacterCreationStore.getState().attributePointsRemaining
-      ).toBeGreaterThanOrEqual(0);
+      expect(useCharacterCreationStore.getState().attributePointsRemaining).toBeGreaterThanOrEqual(
+        0
+      );
     });
   });
 
@@ -131,9 +120,7 @@ describe('Character Creation Store', () => {
 
     it('should set background', () => {
       useCharacterCreationStore.getState().setBackground('Soldier');
-      expect(useCharacterCreationStore.getState().selectedBackground).toBe(
-        'Soldier'
-      );
+      expect(useCharacterCreationStore.getState().selectedBackground).toBe('Soldier');
     });
   });
 

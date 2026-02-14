@@ -53,9 +53,7 @@ const mockEquipment: EquipmentItem[] = [
   },
 ];
 
-export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({
-  onClose,
-}) => {
+export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({ onClose }) => {
   const { gold, subtractGold, canAfford } = useGoldStore();
   const [selectedService, setSelectedService] = useState<ServiceType>('repair');
 
@@ -72,9 +70,7 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({
     const cost = getRepairCost(item);
 
     if (!canAfford(cost)) {
-      alert(
-        `Insufficient funds! You need ${cost} gold but only have ${gold} gold.`
-      );
+      alert(`Insufficient funds! You need ${cost} gold but only have ${gold} gold.`);
       return;
     }
 
@@ -84,18 +80,14 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({
       return;
     }
 
-    alert(
-      `Repair complete! Spent ${cost} gold\n\n${item.name} restored to 100% condition.`
-    );
+    alert(`Repair complete! Spent ${cost} gold\n\n${item.name} restored to 100% condition.`);
   };
 
   const handleUpgrade = (item: EquipmentItem) => {
     const cost = getUpgradeCost(item);
 
     if (!canAfford(cost)) {
-      alert(
-        `Insufficient funds! You need ${cost} gold but only have ${gold} gold.`
-      );
+      alert(`Insufficient funds! You need ${cost} gold but only have ${gold} gold.`);
       return;
     }
 
@@ -129,16 +121,10 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({
         {/* Header */}
         <div className="text-center mb-8">
           <div className="text-6xl mb-4">⚒️</div>
-          <h1 className="text-4xl font-bold text-gold-500 mb-2">
-            Blacksmith's Forge
-          </h1>
-          <p className="text-lg text-cyan-100">
-            Repair, upgrade, and forge equipment
-          </p>
+          <h1 className="text-4xl font-bold text-gold-500 mb-2">Blacksmith's Forge</h1>
+          <p className="text-lg text-cyan-100">Repair, upgrade, and forge equipment</p>
           <div className="mt-4 p-3 bg-etrian-800 border border-gold-500/30 rounded-lg inline-block">
-            <p className="text-sm font-semibold text-gold-500">
-              💰 Your Gold: {gold}
-            </p>
+            <p className="text-sm font-semibold text-gold-500">💰 Your Gold: {gold}</p>
           </div>
         </div>
 
@@ -146,9 +132,7 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({
           {/* Service Selection */}
           <div className="lg:col-span-1">
             <div className="bg-etrian-800 rounded-xl p-6 shadow-lg border border-cyan-900/50 sticky top-8">
-              <h2 className="text-xl font-semibold text-gold-500 mb-4">
-                Services
-              </h2>
+              <h2 className="text-xl font-semibold text-gold-500 mb-4">Services</h2>
 
               <div className="space-y-3">
                 <button
@@ -161,9 +145,7 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({
                 >
                   <div className="text-2xl mb-1">🔧</div>
                   <div className="font-bold">Repair</div>
-                  <div className="text-xs opacity-80">
-                    Restore equipment condition
-                  </div>
+                  <div className="text-xs opacity-80">Restore equipment condition</div>
                 </button>
 
                 <button
@@ -176,9 +158,7 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({
                 >
                   <div className="text-2xl mb-1">⬆️</div>
                   <div className="font-bold">Upgrade</div>
-                  <div className="text-xs opacity-80">
-                    Enhance equipment power
-                  </div>
+                  <div className="text-xs opacity-80">Enhance equipment power</div>
                 </button>
 
                 <button
@@ -195,8 +175,8 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({
 
               <div className="mt-6 p-3 bg-etrian-900 border border-gold-500/30 rounded-lg">
                 <p className="text-xs text-gold-500">
-                  💡 <strong>Tip:</strong> Keep your equipment in good condition
-                  for maximum effectiveness!
+                  💡 <strong>Tip:</strong> Keep your equipment in good condition for maximum
+                  effectiveness!
                 </p>
               </div>
             </div>
@@ -214,9 +194,7 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({
               {selectedService === 'forge' ? (
                 <div className="text-center py-12">
                   <div className="text-6xl mb-4">🔨</div>
-                  <p className="text-lg text-cyan-100 mb-2">
-                    Forge System Coming Soon
-                  </p>
+                  <p className="text-lg text-cyan-100 mb-2">Forge System Coming Soon</p>
                   <p className="text-sm text-cyan-400">
                     Craft powerful equipment from raw materials
                   </p>
@@ -233,9 +211,7 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({
                         <div className="flex items-start gap-3 flex-1">
                           <span className="text-4xl">{item.icon}</span>
                           <div className="flex-1">
-                            <h3 className="font-bold text-lg text-gold-500">
-                              {item.name}
-                            </h3>
+                            <h3 className="font-bold text-lg text-gold-500">{item.name}</h3>
                             <p className="text-sm text-cyan-400">
                               {item.type} • Level {item.level}
                             </p>
@@ -243,14 +219,11 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({
                             {selectedService === 'repair' && (
                               <div className="mt-2">
                                 <div className="flex items-center gap-2 mb-1">
-                                  <span className="text-xs text-cyan-400">
-                                    Condition:
-                                  </span>
+                                  <span className="text-xs text-cyan-400">Condition:</span>
                                   <span
                                     className={`text-sm font-bold ${getConditionColor(item.condition)}`}
                                   >
-                                    {item.condition}% (
-                                    {getConditionLabel(item.condition)})
+                                    {item.condition}% ({getConditionLabel(item.condition)})
                                   </span>
                                 </div>
                                 <div className="w-full bg-etrian-900 rounded-full h-2">
@@ -274,9 +247,7 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({
                         <div className="text-right ml-4">
                           {selectedService === 'repair' && (
                             <>
-                              <p className="text-sm text-cyan-400 mb-2">
-                                Repair Cost
-                              </p>
+                              <p className="text-sm text-cyan-400 mb-2">Repair Cost</p>
                               <p className="text-xl font-bold text-gold-500 mb-3">
                                 {getRepairCost(item)} 💰
                               </p>
@@ -286,17 +257,13 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({
                                 onClick={() => handleRepair(item)}
                                 disabled={item.condition === 100}
                               >
-                                {item.condition === 100
-                                  ? 'Fully Repaired'
-                                  : 'Repair'}
+                                {item.condition === 100 ? 'Fully Repaired' : 'Repair'}
                               </Button>
                             </>
                           )}
                           {selectedService === 'upgrade' && (
                             <>
-                              <p className="text-sm text-cyan-400 mb-2">
-                                Upgrade Cost
-                              </p>
+                              <p className="text-sm text-cyan-400 mb-2">Upgrade Cost</p>
                               <p className="text-xl font-bold text-gold-500 mb-3">
                                 {getUpgradeCost(item)} 💰
                               </p>
@@ -319,8 +286,8 @@ export const BlacksmithService: React.FC<BlacksmithServiceProps> = ({
               {selectedService !== 'forge' && (
                 <div className="mt-6 p-4 bg-etrian-900 border border-gold-500/30 rounded-lg">
                   <p className="text-xs text-gold-500">
-                    🛠️ <strong>Note:</strong> Mock equipment shown for
-                    demonstration. Real inventory integration coming soon!
+                    🛠️ <strong>Note:</strong> Mock equipment shown for demonstration. Real inventory
+                    integration coming soon!
                   </p>
                 </div>
               )}

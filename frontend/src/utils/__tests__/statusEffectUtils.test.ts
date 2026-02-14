@@ -1,11 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { checkImmunity, applyStatusEffect } from '../statusEffectUtils';
-import type {
-  Character,
-  CharacterClass,
-  Race,
-  StatusEffect,
-} from '../../types';
+import type { Character, CharacterClass, Race, StatusEffect } from '../../types';
 
 describe('statusEffectUtils', () => {
   const mockRace: Race = {

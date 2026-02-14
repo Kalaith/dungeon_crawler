@@ -6,15 +6,9 @@ import { renderConfig } from '../../data/constants';
 
 export const DungeonView: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { getTileAhead, getTileFarAhead, getTileLeft, getTileRight, getTile } =
-    useDungeon();
-  const {
-    playerPosition,
-    playerFacing,
-    currentDungeonMap,
-    foes,
-    interactiveTiles,
-  } = useDungeonStore();
+  const { getTileAhead, getTileFarAhead, getTileLeft, getTileRight, getTile } = useDungeon();
+  const { playerPosition, playerFacing, currentDungeonMap, foes, interactiveTiles } =
+    useDungeonStore();
 
   // Helper function to get direction vectors
   const getDirectionVector = (direction: number): [number, number] => {
@@ -57,9 +51,7 @@ export const DungeonView: React.FC = () => {
     const foeFarAhead = foes.find(f => f.x === farAheadX && f.y === farAheadY);
 
     // Find visible Objects
-    const objectAhead = Object.values(interactiveTiles).find(
-      t => t.x === aheadX && t.y === aheadY
-    );
+    const objectAhead = Object.values(interactiveTiles).find(t => t.x === aheadX && t.y === aheadY);
     const objectFarAhead = Object.values(interactiveTiles).find(
       t => t.x === farAheadX && t.y === farAheadY
     );

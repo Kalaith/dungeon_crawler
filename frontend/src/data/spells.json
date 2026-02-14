@@ -1336,16 +1336,7 @@
     "ap_cost": 3,
     "combat_usable": true,
     "description": "For the duration, you sense the presence of magic within 30 feet of you. If you sense magic in this way, you can use your action to see a faint aura around any visible creature or object in the area that bears magic, and you learn its school of magic, if any. The spell can penetrate most barriers, but it is blocked by 1 foot of stone, 1 inch of common metal, a thin sheet of lead, or 3 feet of wood or dirt.",
-    "classes": [
-      "Bard",
-      "Cleric",
-      "Druid",
-      "Magician",
-      "Paladin",
-      "Ranger",
-      "Warlock",
-      "Sorcerer"
-    ],
+    "classes": ["Bard", "Cleric", "Druid", "Magician", "Paladin", "Ranger", "Warlock", "Sorcerer"],
     "aoe": "30 sphere"
   },
   {
@@ -1457,15 +1448,7 @@
     "ap_cost": 10,
     "combat_usable": true,
     "description": "Choose one creature, object, or magical effect within range. Any spell of 3rd level or lower on the target ends. For each spell of 4th level or higher on the target, make an ability check using your spellcasting ability. The DC equals 10 + the spell's level. On a successful check, the spell ends.",
-    "classes": [
-      "Bard",
-      "Cleric",
-      "Druid",
-      "Magician",
-      "Paladin",
-      "Warlock",
-      "Sorcerer"
-    ],
+    "classes": ["Bard", "Cleric", "Druid", "Magician", "Paladin", "Warlock", "Sorcerer"],
     "higher_level": "When you cast this spell using a spell slot of 4th level or higher, you automatically end the effects of a spell on the target if the spell's level is equal to or less than the level of the spell slot you used."
   },
   {

@@ -46,18 +46,12 @@ export const useTurnProcessor = (processTurn: () => void) => {
     const character = currentParticipant.character as Character;
 
     // Skip unconscious party members
-    if (
-      !character.alive ||
-      !character.derivedStats ||
-      character.derivedStats.HP.current <= 0
-    ) {
+    if (!character.alive || !character.derivedStats || character.derivedStats.HP.current <= 0) {
       // Check if all party members are unconscious before skipping
       const alivePartyMembers = combatTurnOrder.filter(p => {
         if (p.type === 'party') {
           const char = p.character as Character;
-          return (
-            char.alive && char.derivedStats && char.derivedStats.HP.current > 0
-          );
+          return char.alive && char.derivedStats && char.derivedStats.HP.current > 0;
         }
         return false;
       });

@@ -25,10 +25,7 @@ export function getProficiencyBonus(level: number): number {
  * Calculate the total modifier for a skill check
  * Returns: attribute modifier + proficiency bonus (if proficient) + skill value
  */
-export function calculateSkillModifier(
-  character: Character,
-  skillId: string
-): number {
+export function calculateSkillModifier(character: Character, skillId: string): number {
   const skillDef = getSkillById(skillId);
   if (!skillDef) return 0;
 
@@ -40,9 +37,7 @@ export function calculateSkillModifier(
   const attributeMod = getAttributeModifier(primaryAttrValue);
 
   // Get proficiency bonus if proficient
-  const proficiencyBonus = characterSkill.proficient
-    ? getProficiencyBonus(character.level)
-    : 0;
+  const proficiencyBonus = characterSkill.proficient ? getProficiencyBonus(character.level) : 0;
 
   // Total = attribute modifier + proficiency + skill value
   return attributeMod + proficiencyBonus + characterSkill.value;
@@ -103,9 +98,7 @@ export function performSkillCheck(
 
   const modifier = calculateSkillModifier(character, skillId);
   const advantage =
-    forceAdvantage !== undefined
-      ? forceAdvantage
-      : hasAdvantage(character, skillId);
+    forceAdvantage !== undefined ? forceAdvantage : hasAdvantage(character, skillId);
   const roll = rollD20(advantage);
   const total = roll + modifier;
 
@@ -148,9 +141,7 @@ export const difficultyClasses = {
  * Initialize all skills for a new character
  * Returns an array of CharacterSkill objects with base values
  */
-export function initializeCharacterSkills(
-  proficientSkillIds: string[] = []
-): CharacterSkill[] {
+export function initializeCharacterSkills(proficientSkillIds: string[] = []): CharacterSkill[] {
   return SKILLS.map(skill => ({
     skillId: skill.id,
     value: 0, // Base value, can be modified during character creation

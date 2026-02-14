@@ -50,11 +50,7 @@ export const CombatVictoryScreen: React.FC = () => {
                     }`}
                   >
                     <span>
-                      {item.type === 'weapon'
-                        ? '⚔️'
-                        : item.type === 'armor'
-                          ? '🛡️'
-                          : '📦'}
+                      {item.type === 'weapon' ? '⚔️' : item.type === 'armor' ? '🛡️' : '📦'}
                     </span>
                     <span className="font-bold">{item.name}</span>
                   </div>
@@ -66,14 +62,12 @@ export const CombatVictoryScreen: React.FC = () => {
           {/* Level Ups */}
           {victoryData.levelUps.length > 0 && (
             <div className="bg-green-900/20 p-6 rounded-lg border-2 border-green-500/50 animate-pulse">
-              <h3 className="text-2xl text-green-400 mb-4 font-bold uppercase">
-                Level Up!
-              </h3>
+              <h3 className="text-2xl text-green-400 mb-4 font-bold uppercase">Level Up!</h3>
               <div className="space-y-2">
                 {victoryData.levelUps.map((levelup, i) => (
                   <div key={i} className="text-xl text-stone-200">
-                    <span className="font-bold text-white">{levelup.name}</span>{' '}
-                    gained {levelup.levelsGained} level(s)!
+                    <span className="font-bold text-white">{levelup.name}</span> gained{' '}
+                    {levelup.levelsGained} level(s)!
                   </div>
                 ))}
               </div>

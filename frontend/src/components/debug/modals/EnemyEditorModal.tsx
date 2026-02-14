@@ -6,10 +6,7 @@ interface EnemyEditorModalProps {
   onClose: () => void;
 }
 
-export const EnemyEditorModal: React.FC<EnemyEditorModalProps> = ({
-  isOpen,
-  onClose,
-}) => {
+export const EnemyEditorModal: React.FC<EnemyEditorModalProps> = ({ isOpen, onClose }) => {
   const { currentEnemy, updateEnemyHP } = useCombatStore();
   const [hp, setHp] = useState(0);
 
@@ -26,9 +23,7 @@ export const EnemyEditorModal: React.FC<EnemyEditorModalProps> = ({
       <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[110]">
         <div className="bg-gray-900 border border-gray-700 p-6 rounded-lg shadow-xl w-96 max-w-full text-center">
           <h3 className="text-xl font-bold text-white mb-2">No Active Enemy</h3>
-          <p className="text-gray-400 mb-4">
-            You must be in combat to edit enemy stats.
-          </p>
+          <p className="text-gray-400 mb-4">You must be in combat to edit enemy stats.</p>
           <button
             onClick={onClose}
             className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded"
@@ -49,9 +44,7 @@ export const EnemyEditorModal: React.FC<EnemyEditorModalProps> = ({
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[110]">
       <div className="bg-gray-900 border border-gray-700 p-6 rounded-lg shadow-xl w-96 max-w-full">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-bold text-white">
-            Edit Enemy: {currentEnemy.name}
-          </h3>
+          <h3 className="text-xl font-bold text-white">Edit Enemy: {currentEnemy.name}</h3>
           <button onClick={onClose} className="text-gray-400 hover:text-white">
             ✕
           </button>

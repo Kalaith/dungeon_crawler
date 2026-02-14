@@ -6,12 +6,8 @@ interface PartyEditorModalProps {
   onClose: () => void;
 }
 
-export const PartyEditorModal: React.FC<PartyEditorModalProps> = ({
-  isOpen,
-  onClose,
-}) => {
-  const { party, updatePartyMember, updatePartyMemberHP, updatePartyMemberAP } =
-    usePartyStore();
+export const PartyEditorModal: React.FC<PartyEditorModalProps> = ({ isOpen, onClose }) => {
+  const { party, updatePartyMember, updatePartyMemberHP, updatePartyMemberAP } = usePartyStore();
   const [selectedMemberIndex, setSelectedMemberIndex] = useState<number>(-1);
   const [editValues, setEditValues] = useState<{
     hp: number;
@@ -20,9 +16,7 @@ export const PartyEditorModal: React.FC<PartyEditorModalProps> = ({
     gold: number;
   }>({ hp: 0, ap: 0, level: 1, gold: 0 });
 
-  const activeMembers = party
-    .map((c, i) => ({ c, i }))
-    .filter(m => m.c !== null);
+  const activeMembers = party.map((c, i) => ({ c, i })).filter(m => m.c !== null);
 
   useEffect(() => {
     if (isOpen) {
@@ -73,9 +67,7 @@ export const PartyEditorModal: React.FC<PartyEditorModalProps> = ({
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm text-gray-400 mb-1">
-              Select Character
-            </label>
+            <label className="block text-sm text-gray-400 mb-1">Select Character</label>
             <select
               className="w-full bg-gray-800 border border-gray-600 text-white rounded p-2"
               value={selectedMemberIndex}
@@ -93,9 +85,7 @@ export const PartyEditorModal: React.FC<PartyEditorModalProps> = ({
             <>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm text-gray-400 mb-1">
-                    Current HP
-                  </label>
+                  <label className="block text-sm text-gray-400 mb-1">Current HP</label>
                   <input
                     type="number"
                     value={editValues.hp}
@@ -109,9 +99,7 @@ export const PartyEditorModal: React.FC<PartyEditorModalProps> = ({
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-gray-400 mb-1">
-                    Current AP
-                  </label>
+                  <label className="block text-sm text-gray-400 mb-1">Current AP</label>
                   <input
                     type="number"
                     value={editValues.ap}
@@ -128,9 +116,7 @@ export const PartyEditorModal: React.FC<PartyEditorModalProps> = ({
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm text-gray-400 mb-1">
-                    Level
-                  </label>
+                  <label className="block text-sm text-gray-400 mb-1">Level</label>
                   <input
                     type="number"
                     value={editValues.level}
@@ -144,9 +130,7 @@ export const PartyEditorModal: React.FC<PartyEditorModalProps> = ({
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-gray-400 mb-1">
-                    Gold
-                  </label>
+                  <label className="block text-sm text-gray-400 mb-1">Gold</label>
                   <input
                     type="number"
                     value={editValues.gold}

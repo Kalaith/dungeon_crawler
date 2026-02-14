@@ -38,9 +38,7 @@ export const useWorldStore = create<WorldStore>()(
       getCurrentLocation: () => {
         const { worldMap, currentLocationId } = get();
         if (!currentLocationId) return null;
-        return (
-          worldMap.locations.find(loc => loc.id === currentLocationId) || null
-        );
+        return worldMap.locations.find(loc => loc.id === currentLocationId) || null;
       },
 
       getLocation: (locationId: string) => {
@@ -74,9 +72,7 @@ export const useWorldStore = create<WorldStore>()(
       // Actions
       setCurrentLocation: (locationId: string) =>
         set(state => {
-          const location = state.worldMap.locations.find(
-            loc => loc.id === locationId
-          );
+          const location = state.worldMap.locations.find(loc => loc.id === locationId);
           if (!location) {
             console.error(`Location ${locationId} not found`);
             return state;
@@ -88,10 +84,7 @@ export const useWorldStore = create<WorldStore>()(
               currentLocationId: locationId,
               worldMap: {
                 ...state.worldMap,
-                discoveredLocations: [
-                  ...state.worldMap.discoveredLocations,
-                  locationId,
-                ],
+                discoveredLocations: [...state.worldMap.discoveredLocations, locationId],
               },
             };
           }
@@ -108,10 +101,7 @@ export const useWorldStore = create<WorldStore>()(
           return {
             worldMap: {
               ...state.worldMap,
-              discoveredLocations: [
-                ...state.worldMap.discoveredLocations,
-                locationId,
-              ],
+              discoveredLocations: [...state.worldMap.discoveredLocations, locationId],
             },
           };
         }),
@@ -173,9 +163,7 @@ export const useWorldStore = create<WorldStore>()(
               to: toId,
               progress: 0,
               timeElapsed: 0,
-              encountersRemaining: Math.floor(
-                Math.random() * connection.dangerLevel
-              ),
+              encountersRemaining: Math.floor(Math.random() * connection.dangerLevel),
             },
           };
         }),

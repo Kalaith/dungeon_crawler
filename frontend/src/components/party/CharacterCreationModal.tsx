@@ -15,12 +15,7 @@ export const CharacterCreationModal: React.FC<CharacterCreationModalProps> = ({
   onCreateCharacter,
 }) => {
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title="Create Character"
-      className="max-w-4xl"
-    >
+    <Modal isOpen={isOpen} onClose={onClose} title="Create Character" className="max-w-4xl">
       <CharacterCreationWizard
         onFinish={character => {
           onCreateCharacter(character);

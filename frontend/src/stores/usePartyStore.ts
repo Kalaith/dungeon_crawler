@@ -1,12 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type {
-  ActiveStatusEffect,
-  Attribute,
-  Character,
-  Feat,
-  Item,
-} from '../types';
+import type { ActiveStatusEffect, Attribute, Character, Feat, Item } from '../types';
 import { gameConfig } from '../data/constants';
 import { migrateParty } from '../utils/characterMigration';
 import { useGameStateStore } from './useGameStateStore';
@@ -19,19 +13,9 @@ interface PartyStore {
   removeCharacterFromParty: (slot: number) => void;
   updatePartyMemberHP: (characterIndex: number, newHp: number) => void;
   updatePartyMemberAP: (characterIndex: number, newAp: number) => void;
-  updatePartyMemberStatusEffects: (
-    characterIndex: number,
-    effects: ActiveStatusEffect[]
-  ) => void;
-  updatePartyMember: (
-    characterIndex: number,
-    updates: Partial<Character>
-  ) => void;
-  equipItem: (
-    characterIndex: number,
-    item: Item,
-    slot: keyof Character['equipment']
-  ) => void;
+  updatePartyMemberStatusEffects: (characterIndex: number, effects: ActiveStatusEffect[]) => void;
+  updatePartyMember: (characterIndex: number, updates: Partial<Character>) => void;
+  equipItem: (characterIndex: number, item: Item, slot: keyof Character['equipment']) => void;
   addGoldToParty: (amount: number) => void;
   levelUpCharacter: (characterIndex: number) => void;
   selectFeat: (characterIndex: number, feat: Feat, choice?: Attribute) => void;
@@ -84,10 +68,7 @@ export const usePartyStore = create<PartyStore>()(
                 ...character.derivedStats,
                 HP: {
                   ...character.derivedStats.HP,
-                  current: Math.max(
-                    0,
-                    Math.min(character.derivedStats.HP.max, newHp)
-                  ),
+                  current: Math.max(0, Math.min(character.derivedStats.HP.max, newHp)),
                 },
               },
               alive: newHp > 0,
@@ -107,10 +88,7 @@ export const usePartyStore = create<PartyStore>()(
                 ...character.derivedStats,
                 AP: {
                   ...character.derivedStats.AP,
-                  current: Math.max(
-                    0,
-                    Math.min(character.derivedStats.AP.max, newAp)
-                  ),
+                  current: Math.max(0, Math.min(character.derivedStats.AP.max, newAp)),
                 },
               },
             };
@@ -164,9 +142,7 @@ export const usePartyStore = create<PartyStore>()(
 
       addGoldToParty: amount =>
         set(state => {
-          const partyMembers = state.party.filter(
-            (c): c is Character => c !== null
-          );
+          const partyMembers = state.party.filter((c): c is Character => c !== null);
           if (partyMembers.length === 0) return state;
 
           const goldPerMember = Math.floor(amount / partyMembers.length);
@@ -197,8 +173,7 @@ export const usePartyStore = create<PartyStore>()(
             ...character,
             level: newLevel,
             expToNext: nextLevelExp,
-            pendingFeatSelections:
-              character.pendingFeatSelections + (grantsFeat ? 1 : 0),
+            pendingFeatSelections: character.pendingFeatSelections + (grantsFeat ? 1 : 0),
             derivedStats: {
               ...character.derivedStats,
               HP: {
@@ -265,26 +240,19 @@ export const usePartyStore = create<PartyStore>()(
           if (feat.effects.type === 'stat_boost') {
             if (feat.effects.stat === 'HP') {
               // Tough feat
-              const hpBoost =
-                (feat.effects.valuePerLevel || 0) * character.level;
+              const hpBoost = (feat.effects.valuePerLevel || 0) * character.level;
               newDerivedStats.HP.max += hpBoost;
               newDerivedStats.HP.current += hpBoost;
             } else if (
               choice &&
-              (feat.effects.stat === 'ST_or_DX' ||
-                feat.effects.stat === 'INT_WIS_CHA')
+              (feat.effects.stat === 'ST_or_DX' || feat.effects.stat === 'INT_WIS_CHA')
             ) {
               // Choice based stat boost
-              const inc =
-                typeof feat.effects.value === 'number' ? feat.effects.value : 0;
+              const inc = typeof feat.effects.value === 'number' ? feat.effects.value : 0;
               newAttributes[choice] += inc;
-            } else if (
-              feat.effects.stat !== 'ST_or_DX' &&
-              feat.effects.stat !== 'INT_WIS_CHA'
-            ) {
+            } else if (feat.effects.stat !== 'ST_or_DX' && feat.effects.stat !== 'INT_WIS_CHA') {
               // Direct stat boost
-              const inc =
-                typeof feat.effects.value === 'number' ? feat.effects.value : 0;
+              const inc = typeof feat.effects.value === 'number' ? feat.effects.value : 0;
               newAttributes[feat.effects.stat] += inc;
             }
           }
@@ -292,10 +260,7 @@ export const usePartyStore = create<PartyStore>()(
           updatedParty[characterIndex] = {
             ...character,
             feats: [...character.feats, feat],
-            pendingFeatSelections: Math.max(
-              0,
-              character.pendingFeatSelections - 1
-            ),
+            pendingFeatSelections: Math.max(0, character.pendingFeatSelections - 1),
             attributes: newAttributes,
             derivedStats: newDerivedStats,
           };
@@ -335,16 +300,13 @@ export const usePartyStore = create<PartyStore>()(
 
       getPartyMembers: () => {
         const state = get();
-        return state.party.filter(
-          (character): character is Character => character !== null
-        );
+        return state.party.filter((character): character is Character => character !== null);
       },
 
       getAlivePartyMembers: () => {
         const state = get();
         return state.party.filter(
-          (character): character is Character =>
-            character !== null && character.alive
+          (character): character is Character => character !== null && character.alive
         );
       },
 

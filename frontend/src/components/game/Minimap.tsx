@@ -3,8 +3,7 @@ import { useDungeonStore } from '../../stores/useDungeonStore';
 
 export const Minimap: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { playerPosition, playerFacing, exploredMap, currentDungeonMap } =
-    useDungeonStore();
+  const { playerPosition, playerFacing, exploredMap, currentDungeonMap } = useDungeonStore();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -83,9 +82,7 @@ export const Minimap: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center p-4 bg-cream-100 dark:bg-charcoal-800 rounded-lg border border-gray-400/20">
-      <h4 className="text-base font-medium mb-3 text-slate-900 dark:text-gray-200">
-        Automap
-      </h4>
+      <h4 className="text-base font-medium mb-3 text-slate-900 dark:text-gray-200">Automap</h4>
       <canvas
         ref={canvasRef}
         width={200}

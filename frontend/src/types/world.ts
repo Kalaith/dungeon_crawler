@@ -49,12 +49,7 @@ export interface TownData {
   hasBlacksmith: boolean;
 }
 
-export type TownServiceType =
-  | 'inn'
-  | 'shop'
-  | 'temple'
-  | 'healer'
-  | 'blacksmith';
+export type TownServiceType = 'inn' | 'shop' | 'temple' | 'healer' | 'blacksmith';
 
 export interface TownService {
   type: TownServiceType;

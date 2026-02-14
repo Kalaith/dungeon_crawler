@@ -1,9 +1,4 @@
-import type {
-  Character,
-  Enemy,
-  ActiveStatusEffect,
-  StatusEffect,
-} from '../types';
+import type { Character, Enemy, ActiveStatusEffect, StatusEffect } from '../types';
 
 /**
  * Applies a status effect to a character or enemy
@@ -93,9 +88,7 @@ export const processStatusEffects = (
 /**
  * Decrements status effect durations and removes expired effects
  */
-export const updateStatusEffects = (
-  target: Character | Enemy
-): ActiveStatusEffect[] => {
+export const updateStatusEffects = (target: Character | Enemy): ActiveStatusEffect[] => {
   return target.statusEffects
     .map(effect => ({
       ...effect,
@@ -117,10 +110,7 @@ export const hasStatusEffect = (
 /**
  * Gets the total stat modification from buffs
  */
-export const getStatModifier = (
-  target: Character | Enemy,
-  stat: 'str' | 'def' | 'agi'
-): number => {
+export const getStatModifier = (target: Character | Enemy, stat: 'str' | 'def' | 'agi'): number => {
   let modifier = 0;
 
   target.statusEffects.forEach(effect => {
@@ -135,9 +125,7 @@ export const getStatModifier = (
 /**
  * Gets a display-friendly name for a status effect
  */
-export const getStatusEffectName = (
-  type: ActiveStatusEffect['type']
-): string => {
+export const getStatusEffectName = (type: ActiveStatusEffect['type']): string => {
   const names: Partial<Record<ActiveStatusEffect['type'], string>> = {
     poison: 'Poisoned',
     disease: 'Diseased',

@@ -6,15 +6,9 @@ interface GameFrameProps {
   title?: string;
 }
 
-export const GameFrame: React.FC<GameFrameProps> = ({
-  children,
-  className = '',
-  title,
-}) => {
+export const GameFrame: React.FC<GameFrameProps> = ({ children, className = '', title }) => {
   return (
-    <div
-      className={`relative bg-etrian-800/95 border border-cyan-500 p-1 ${className}`}
-    >
+    <div className={`relative bg-etrian-800/95 border border-cyan-500 p-1 ${className}`}>
       {/* Inner Border Container */}
       <div className="relative h-full w-full border border-cyan-900/50 p-2 md:p-4">
         {/* Optional Title */}

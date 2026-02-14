@@ -4,8 +4,7 @@ export const characterClasses: CharacterClass[] = [
   {
     id: 'warrior',
     name: 'Warrior',
-    description:
-      'A master of martial combat, skilled with a variety of weapons and armor.',
+    description: 'A master of martial combat, skilled with a variety of weapons and armor.',
     baseStats: { HP: 10, AP: 0 },
     growthRates: { HP: 10, AP: 0 },
     primaryAttributes: ['ST', 'CO'],
@@ -29,8 +28,7 @@ export const characterClasses: CharacterClass[] = [
   {
     id: 'rogue',
     name: 'Rogue',
-    description:
-      'A scoundrel who uses stealth and trickery to overcome obstacles and enemies.',
+    description: 'A scoundrel who uses stealth and trickery to overcome obstacles and enemies.',
     baseStats: { HP: 8, AP: 0 },
     growthRates: { HP: 8, AP: 0 },
     primaryAttributes: ['DX', 'IT'],
@@ -59,8 +57,7 @@ export const characterClasses: CharacterClass[] = [
   {
     id: 'wizard',
     name: 'Wizard',
-    description:
-      'A scholarly magic-user capable of manipulating the structures of reality.',
+    description: 'A scholarly magic-user capable of manipulating the structures of reality.',
     baseStats: { HP: 6, AP: 10 },
     growthRates: { HP: 6, AP: 4 }, // AP growth needs to be balanced
     primaryAttributes: ['IT', 'WD'],
@@ -82,18 +79,12 @@ export const characterClasses: CharacterClass[] = [
       ability: 'IT',
       type: 'prepared',
     },
-    startingEquipment: [
-      'Quarterstaff',
-      'Component pouch',
-      "Scholar's pack",
-      'Spellbook',
-    ],
+    startingEquipment: ['Quarterstaff', 'Component pouch', "Scholar's pack", 'Spellbook'],
   },
   {
     id: 'cleric',
     name: 'Cleric',
-    description:
-      'A priestly champion who wields divine magic in service of a higher power.',
+    description: 'A priestly champion who wields divine magic in service of a higher power.',
     baseStats: { HP: 8, AP: 8 },
     growthRates: { HP: 8, AP: 3 },
     primaryAttributes: ['WD', 'CH'],
@@ -115,13 +106,7 @@ export const characterClasses: CharacterClass[] = [
       ability: 'WD',
       type: 'prepared',
     },
-    startingEquipment: [
-      'Scale mail',
-      'Shield',
-      'Mace',
-      'Holy symbol',
-      "Priest's pack",
-    ],
+    startingEquipment: ['Scale mail', 'Shield', 'Mace', 'Holy symbol', "Priest's pack"],
   },
   {
     id: 'ranger',
@@ -140,8 +125,7 @@ export const characterClasses: CharacterClass[] = [
       {
         id: 'favored_enemy',
         name: 'Favored Enemy',
-        description:
-          'Advantage on tracking and recalling info about certain enemies.',
+        description: 'Advantage on tracking and recalling info about certain enemies.',
         level: 1,
         type: 'passive',
       },
@@ -150,13 +134,7 @@ export const characterClasses: CharacterClass[] = [
       ability: 'WD',
       type: 'known',
     },
-    startingEquipment: [
-      'Scale mail',
-      'Longbow',
-      '20 arrows',
-      'Longsword',
-      "Explorer's pack",
-    ],
+    startingEquipment: ['Scale mail', 'Longbow', '20 arrows', 'Longsword', "Explorer's pack"],
   },
   {
     id: 'paladin',
@@ -183,19 +161,12 @@ export const characterClasses: CharacterClass[] = [
       ability: 'CH',
       type: 'prepared',
     },
-    startingEquipment: [
-      'Chain mail',
-      'Shield',
-      'Longsword',
-      'Holy symbol',
-      "Explorer's pack",
-    ],
+    startingEquipment: ['Chain mail', 'Shield', 'Longsword', 'Holy symbol', "Explorer's pack"],
   },
   {
     id: 'barbarian',
     name: 'Barbarian',
-    description:
-      'A fierce warrior of primitive background who can enter a battle rage.',
+    description: 'A fierce warrior of primitive background who can enter a battle rage.',
     baseStats: { HP: 12, AP: 0 },
     growthRates: { HP: 12, AP: 0 },
     primaryAttributes: ['ST', 'CO'],
@@ -214,19 +185,12 @@ export const characterClasses: CharacterClass[] = [
         type: 'active',
       },
     ],
-    startingEquipment: [
-      'Greataxe',
-      'Handaxe',
-      'Handaxe',
-      'Javelin (4)',
-      "Explorer's pack",
-    ],
+    startingEquipment: ['Greataxe', 'Handaxe', 'Handaxe', 'Javelin (4)', "Explorer's pack"],
   },
   {
     id: 'bard',
     name: 'Bard',
-    description:
-      'An inspiring magician whose power echoes the music of creation.',
+    description: 'An inspiring magician whose power echoes the music of creation.',
     baseStats: { HP: 8, AP: 8 },
     growthRates: { HP: 8, AP: 4 },
     primaryAttributes: ['CH', 'DX'],
@@ -248,12 +212,7 @@ export const characterClasses: CharacterClass[] = [
       ability: 'CH',
       type: 'known',
     },
-    startingEquipment: [
-      'Leather armor',
-      'Rapier',
-      'Lute',
-      "Entertainer's pack",
-    ],
+    startingEquipment: ['Leather armor', 'Rapier', 'Lute', "Entertainer's pack"],
   },
   {
     id: 'druid',
@@ -327,8 +286,7 @@ export const characterClasses: CharacterClass[] = [
   {
     id: 'sorcerer',
     name: 'Sorcerer',
-    description:
-      'A spellcaster who draws on inherent magic from a gift or bloodline.',
+    description: 'A spellcaster who draws on inherent magic from a gift or bloodline.',
     baseStats: { HP: 6, AP: 10 },
     growthRates: { HP: 6, AP: 4 },
     primaryAttributes: ['CH', 'CO'],
@@ -350,18 +308,12 @@ export const characterClasses: CharacterClass[] = [
       ability: 'CH',
       type: 'known',
     },
-    startingEquipment: [
-      'Light crossbow',
-      '20 bolts',
-      'Component pouch',
-      "Dungeoneer's pack",
-    ],
+    startingEquipment: ['Light crossbow', '20 bolts', 'Component pouch', "Dungeoneer's pack"],
   },
   {
     id: 'warlock',
     name: 'Warlock',
-    description:
-      'A wielder of magic that is derived from a bargain with an extraplanar entity.',
+    description: 'A wielder of magic that is derived from a bargain with an extraplanar entity.',
     baseStats: { HP: 8, AP: 8 },
     growthRates: { HP: 8, AP: 3 },
     primaryAttributes: ['CH', 'WD'],
@@ -394,8 +346,7 @@ export const characterClasses: CharacterClass[] = [
   {
     id: 'jester',
     name: 'Jester',
-    description:
-      'A wanderer and entertainer who uses wit, charm, and agility to survive.',
+    description: 'A wanderer and entertainer who uses wit, charm, and agility to survive.',
     baseStats: { HP: 8, AP: 0 },
     growthRates: { HP: 8, AP: 0 },
     primaryAttributes: ['IN', 'CH', 'DX'],
@@ -413,12 +364,7 @@ export const characterClasses: CharacterClass[] = [
         type: 'active',
       },
     ],
-    startingEquipment: [
-      'Leather armor',
-      'Rapier',
-      'Disguise kit',
-      "Entertainer's pack",
-    ],
+    startingEquipment: ['Leather armor', 'Rapier', 'Disguise kit', "Entertainer's pack"],
   },
   {
     id: 'hunter',
@@ -452,8 +398,7 @@ export const characterClasses: CharacterClass[] = [
   {
     id: 'magician',
     name: 'Magician',
-    description:
-      'A hybrid spellcaster who blends arcane magic with alchemical knowledge.',
+    description: 'A hybrid spellcaster who blends arcane magic with alchemical knowledge.',
     baseStats: { HP: 6, AP: 10 },
     growthRates: { HP: 6, AP: 4 },
     primaryAttributes: ['IN', 'DX', 'IT'],

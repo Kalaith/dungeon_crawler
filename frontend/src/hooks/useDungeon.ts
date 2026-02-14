@@ -69,26 +69,20 @@ export const useDungeon = () => {
     [currentDungeonMap]
   );
 
-  const getDirectionVector = useCallback(
-    (direction: Direction): [number, number] => {
-      const directions: [number, number][] = [
-        [0, -1],
-        [1, 0],
-        [0, 1],
-        [-1, 0],
-      ]; // N, E, S, W
-      return directions[direction];
-    },
-    []
-  );
+  const getDirectionVector = useCallback((direction: Direction): [number, number] => {
+    const directions: [number, number][] = [
+      [0, -1],
+      [1, 0],
+      [0, 1],
+      [-1, 0],
+    ]; // N, E, S, W
+    return directions[direction];
+  }, []);
 
   const getTileInDirection = useCallback(
     (direction: Direction, distance: number = 1): string => {
       const [dx, dy] = getDirectionVector(direction);
-      return getTile(
-        playerPosition.x + dx * distance,
-        playerPosition.y + dy * distance
-      );
+      return getTile(playerPosition.x + dx * distance, playerPosition.y + dy * distance);
     },
     [playerPosition, getDirectionVector, getTile]
   );
@@ -172,8 +166,7 @@ export const useDungeon = () => {
       if (Math.random() > 0.5) return;
 
       const directions: Direction[] = [0, 1, 2, 3];
-      const randomDir =
-        directions[Math.floor(Math.random() * directions.length)];
+      const randomDir = directions[Math.floor(Math.random() * directions.length)];
       const [dx, dy] = getDirectionVector(randomDir);
       const newX = foe.x + dx;
       const newY = foe.y + dy;
@@ -181,9 +174,7 @@ export const useDungeon = () => {
       // Check bounds and walls
       if (getTile(newX, newY) === '.') {
         // Check if another FOE is there
-        if (
-          !newFoes.some(f => f.id !== foe.id && f.x === newX && f.y === newY)
-        ) {
+        if (!newFoes.some(f => f.id !== foe.id && f.x === newX && f.y === newY)) {
           foe.x = newX;
           foe.y = newY;
           foe.facing = randomDir;
@@ -200,14 +191,7 @@ export const useDungeon = () => {
         return;
       }
     }
-  }, [
-    foes,
-    getDirectionVector,
-    getTile,
-    setFoes,
-    checkForFoeCollision,
-    playerPosition,
-  ]);
+  }, [foes, getDirectionVector, getTile, setFoes, checkForFoeCollision, playerPosition]);
 
   const interactWithTile = useCallback(() => {
     const tileId = Object.keys(interactiveTiles).find(key => {
@@ -223,9 +207,7 @@ export const useDungeon = () => {
         addGoldToParty(loot.gold);
         if (loot.items.length > 0) addItemsToInventory(loot.items);
 
-        showMessage(
-          `Gathered: ${loot.gold} gold${loot.items.length > 0 ? ' and items' : ''}`
-        );
+        showMessage(`Gathered: ${loot.gold} gold${loot.items.length > 0 ? ' and items' : ''}`);
         updateInteractiveTile(tileId, { state: 'depleted' });
       }
     }
@@ -316,20 +298,15 @@ export const useDungeon = () => {
           setTimeout(() => {
             // Scale enemies by floor
             const floorEnemies = enemies.filter(
-              e =>
-                e.level <= currentFloor + 1 &&
-                e.level >= Math.max(1, currentFloor - 2)
+              e => e.level <= currentFloor + 1 && e.level >= Math.max(1, currentFloor - 2)
             );
             // Fallback if no specific level enemies found
-            const availableEnemies =
-              floorEnemies.length > 0 ? floorEnemies : enemies;
+            const availableEnemies = floorEnemies.length > 0 ? floorEnemies : enemies;
 
             if (availableEnemies.length > 0) {
               // Create a random enemy instance
               const enemyDef =
-                availableEnemies[
-                  Math.floor(Math.random() * availableEnemies.length)
-                ];
+                availableEnemies[Math.floor(Math.random() * availableEnemies.length)];
 
               if (enemyDef) {
                 const enemy: Enemy = {
@@ -375,9 +352,7 @@ export const useDungeon = () => {
 
         showMessage(`You found ${loot.gold} gold!`);
         if (loot.items.length > 0) {
-          showMessage(
-            `You also found: ${loot.items.map(i => i.name).join(', ')}`
-          );
+          showMessage(`You also found: ${loot.items.map(i => i.name).join(', ')}`);
         }
       }
     }
@@ -442,18 +417,13 @@ export const useDungeon = () => {
           // For now, just reset to avoid immediate loop, but ideally trigger combat
           setTimeout(() => {
             const floorEnemies = enemies.filter(
-              e =>
-                e.level <= currentFloor + 1 &&
-                e.level >= Math.max(1, currentFloor - 2)
+              e => e.level <= currentFloor + 1 && e.level >= Math.max(1, currentFloor - 2)
             );
-            const availableEnemies =
-              floorEnemies.length > 0 ? floorEnemies : enemies;
+            const availableEnemies = floorEnemies.length > 0 ? floorEnemies : enemies;
 
             if (availableEnemies.length > 0) {
               const enemyDef =
-                availableEnemies[
-                  Math.floor(Math.random() * availableEnemies.length)
-                ];
+                availableEnemies[Math.floor(Math.random() * availableEnemies.length)];
 
               if (enemyDef) {
                 const enemy: Enemy = {

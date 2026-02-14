@@ -59,9 +59,7 @@ export class DungeonGenerator {
 
     const stairsUp = this.floor > 1 ? this.placeStairsUp() : undefined;
     const stairsDown =
-      this.floor < gameConfig.DUNGEON.MAX_FLOORS
-        ? this.placeStairsDown()
-        : undefined;
+      this.floor < gameConfig.DUNGEON.MAX_FLOORS ? this.placeStairsDown() : undefined;
     const treasureLocations = this.placeTreasure();
 
     this.placeDoors();
@@ -92,12 +90,8 @@ export class DungeonGenerator {
     const attempts = 200;
 
     for (let i = 0; i < attempts && this.rooms.length < maxRooms; i++) {
-      const width =
-        Math.floor(Math.random() * (maxRoomSize - minRoomSize + 1)) +
-        minRoomSize;
-      const height =
-        Math.floor(Math.random() * (maxRoomSize - minRoomSize + 1)) +
-        minRoomSize;
+      const width = Math.floor(Math.random() * (maxRoomSize - minRoomSize + 1)) + minRoomSize;
+      const height = Math.floor(Math.random() * (maxRoomSize - minRoomSize + 1)) + minRoomSize;
 
       // Ensure room is within bounds with 1 tile padding for walls
       const x = Math.floor(Math.random() * (this.width - width - 2)) + 1;
@@ -291,14 +285,12 @@ export class DungeonGenerator {
       // Check top edge
       for (let x = room.x; x < room.x + room.width; x++) {
         if (this.isCorridor(x, room.y - 1)) this.addDoor(x, room.y);
-        if (this.isCorridor(x, room.y + room.height))
-          this.addDoor(x, room.y + room.height - 1);
+        if (this.isCorridor(x, room.y + room.height)) this.addDoor(x, room.y + room.height - 1);
       }
       // Check side edges
       for (let y = room.y; y < room.y + room.height; y++) {
         if (this.isCorridor(room.x - 1, y)) this.addDoor(room.x, y);
-        if (this.isCorridor(room.x + room.width, y))
-          this.addDoor(room.x + room.width - 1, y);
+        if (this.isCorridor(room.x + room.width, y)) this.addDoor(room.x + room.width - 1, y);
       }
     }
   }
@@ -405,21 +397,11 @@ export class DungeonGenerator {
   }
 
   private isValid(x: number, y: number): boolean {
-    return (
-      x >= 0 &&
-      x < this.width &&
-      y >= 0 &&
-      y < this.height &&
-      this.grid[y] !== undefined
-    );
+    return x >= 0 && x < this.width && y >= 0 && y < this.height && this.grid[y] !== undefined;
   }
 }
 
-export const generateDungeon = (
-  width: number,
-  height: number,
-  floor: number
-) => {
+export const generateDungeon = (width: number, height: number, floor: number) => {
   let generator = new DungeonGenerator(width, height, floor);
   let data = generator.generate();
   let attempts = 0;

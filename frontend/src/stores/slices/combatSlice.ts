@@ -130,9 +130,7 @@ export const createCombatSlice: GameSliceCreator<CombatSlice> = (set, get) => ({
           if (char && totalGold > 0) {
             return {
               ...char,
-              gold:
-                char.gold +
-                Math.floor(totalGold / state.getPartyMembers().length),
+              gold: char.gold + Math.floor(totalGold / state.getPartyMembers().length),
             };
           }
           return char;
@@ -146,10 +144,7 @@ export const createCombatSlice: GameSliceCreator<CombatSlice> = (set, get) => ({
           currentTurn: 0,
           party: finalParty,
           inventory: newInventory,
-          combatLog: [
-            ...state.combatLog,
-            `Victory! Gained ${exp} XP and ${totalGold} Gold.`,
-          ],
+          combatLog: [...state.combatLog, `Victory! Gained ${exp} XP and ${totalGold} Gold.`],
         };
       }
 
@@ -171,8 +166,7 @@ export const createCombatSlice: GameSliceCreator<CombatSlice> = (set, get) => ({
 
   nextTurn: () =>
     set(state => {
-      const nextTurnIndex =
-        (state.currentTurn + 1) % state.combatTurnOrder.length;
+      const nextTurnIndex = (state.currentTurn + 1) % state.combatTurnOrder.length;
       return { currentTurn: nextTurnIndex };
     }),
 

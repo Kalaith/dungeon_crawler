@@ -13,11 +13,7 @@ export const DungeonEntrance: React.FC = () => {
 
   const currentLocation = getCurrentLocation();
 
-  if (
-    !currentLocation ||
-    currentLocation.type !== 'dungeon' ||
-    !currentLocation.dungeonData
-  ) {
+  if (!currentLocation || currentLocation.type !== 'dungeon' || !currentLocation.dungeonData) {
     return null;
   }
 
@@ -47,9 +43,7 @@ export const DungeonEntrance: React.FC = () => {
           <h1 className="text-4xl font-bold text-slate-900 dark:text-gray-200 mb-2">
             {currentLocation.name}
           </h1>
-          <p className="text-slate-600 dark:text-gray-400">
-            {currentLocation.description}
-          </p>
+          <p className="text-slate-600 dark:text-gray-400">{currentLocation.description}</p>
         </div>
 
         {/* Dungeon Info */}
@@ -74,9 +68,7 @@ export const DungeonEntrance: React.FC = () => {
             </div>
 
             <div>
-              <p className="text-slate-600 dark:text-gray-400">
-                Recommended Level
-              </p>
+              <p className="text-slate-600 dark:text-gray-400">Recommended Level</p>
               <p className="text-lg font-bold text-slate-900 dark:text-gray-200">
                 Level {dungeonData.recommendedLevel}
               </p>
@@ -103,24 +95,16 @@ export const DungeonEntrance: React.FC = () => {
         {!dungeonData.completed && (
           <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4 mb-6">
             <p className="text-sm text-yellow-800 dark:text-yellow-200">
-              ⚠️ <strong>Warning:</strong> Make sure your party is well-prepared
-              before entering. Bring healing items, check your equipment, and
-              ensure everyone is at full health.
+              ⚠️ <strong>Warning:</strong> Make sure your party is well-prepared before entering.
+              Bring healing items, check your equipment, and ensure everyone is at full health.
             </p>
           </div>
         )}
 
         {/* Actions */}
         <div className="flex gap-4">
-          <Button
-            variant="primary"
-            size="lg"
-            onClick={handleEnterDungeon}
-            className="flex-1"
-          >
-            {dungeonData.currentFloor > 1
-              ? 'Continue Exploration'
-              : 'Enter Dungeon'}
+          <Button variant="primary" size="lg" onClick={handleEnterDungeon} className="flex-1">
+            {dungeonData.currentFloor > 1 ? 'Continue Exploration' : 'Enter Dungeon'}
           </Button>
 
           <Button variant="outline" size="lg" onClick={handleReturnToOverworld}>

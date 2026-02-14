@@ -85,23 +85,10 @@ export function applyRacialModifiers(
 function getClassSkillProficiencies(classId: string): string[] {
   const proficiencyMap: Record<string, string[]> = {
     warrior: ['swords', 'axes', 'cutting_weapons', 'self_control', 'tactics'],
-    rogue: [
-      'stealth',
-      'hide',
-      'locks',
-      'pickpocket',
-      'perception',
-      'pointed_weapons',
-    ],
+    rogue: ['stealth', 'hide', 'locks', 'pickpocket', 'perception', 'pointed_weapons'],
     wizard: ['arcane_lore', 'read_write', 'ancient_tongues', 'history'],
     cleric: ['ritual', 'treat_wounds', 'treat_disease', 'convert', 'history'],
-    ranger: [
-      'track',
-      'survival',
-      'animal_lore',
-      'herb_lore',
-      'missile_weapons',
-    ],
+    ranger: ['track', 'survival', 'animal_lore', 'herb_lore', 'missile_weapons'],
     paladin: ['swords', 'ritual', 'convert', 'self_control', 'ride'],
     barbarian: ['axes', 'two_handed_swords', 'survival', 'track', 'swim'],
     bard: ['instrument', 'convert', 'seduce', 'human_nature', 'tongues'],
@@ -110,14 +97,7 @@ function getClassSkillProficiencies(classId: string): string[] {
     sorcerer: ['arcane_lore', 'convert', 'seduce'],
     warlock: ['arcane_lore', 'lie', 'human_nature', 'ritual'],
     jester: ['instrument', 'dance', 'lie', 'seduce', 'cheat', 'human_nature'],
-    hunter: [
-      'track',
-      'survival',
-      'animal_lore',
-      'stealth',
-      'missile_weapons',
-      'perception',
-    ],
+    hunter: ['track', 'survival', 'animal_lore', 'stealth', 'missile_weapons', 'perception'],
     magician: ['arcane_lore', 'alchemy', 'herb_lore', 'read_write'],
   };
 
@@ -127,13 +107,9 @@ function getClassSkillProficiencies(classId: string): string[] {
 /**
  * Create a complete character object from wizard store data
  */
-export function createCharacterFromWizardData(
-  store: CharacterCreationStoreData
-): Character {
+export function createCharacterFromWizardData(store: CharacterCreationStoreData): Character {
   if (!store.selectedRace || !store.selectedClass) {
-    throw new Error(
-      'Race and class must be selected before creating character'
-    );
+    throw new Error('Race and class must be selected before creating character');
   }
 
   // Calculate final attributes including racial modifiers
@@ -153,8 +129,7 @@ export function createCharacterFromWizardData(
   const proficientSkills = getClassSkillProficiencies(store.selectedClass.id);
 
   // Initialize all 51 skills with proficiencies
-  const characterSkills: CharacterSkill[] =
-    initializeCharacterSkills(proficientSkills);
+  const characterSkills: CharacterSkill[] = initializeCharacterSkills(proficientSkills);
 
   const newCharacter: Character = {
     id: uuidv4(),

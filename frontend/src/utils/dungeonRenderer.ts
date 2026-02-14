@@ -239,10 +239,7 @@ export class DungeonRenderer {
     }
   }
 
-  private renderFOE(
-    rect: { x: number; y: number; w: number; h: number },
-    foe: FOEInstance
-  ): void {
+  private renderFOE(rect: { x: number; y: number; w: number; h: number }, foe: FOEInstance): void {
     const foeDef = foeData[foe.defId];
     const color = foeDef ? foeDef.color : 'red';
 
@@ -263,20 +260,8 @@ export class DungeonRenderer {
     // Assuming facing player for now
     this.ctx.fillStyle = 'white';
     this.ctx.beginPath();
-    this.ctx.arc(
-      centerX - radius / 3,
-      centerY - radius / 4,
-      radius / 4,
-      0,
-      Math.PI * 2
-    );
-    this.ctx.arc(
-      centerX + radius / 3,
-      centerY - radius / 4,
-      radius / 4,
-      0,
-      Math.PI * 2
-    );
+    this.ctx.arc(centerX - radius / 3, centerY - radius / 4, radius / 4, 0, Math.PI * 2);
+    this.ctx.arc(centerX + radius / 3, centerY - radius / 4, radius / 4, 0, Math.PI * 2);
     this.ctx.fill();
   }
 
@@ -290,13 +275,7 @@ export class DungeonRenderer {
         // Draw knob/detail
         this.ctx.fillStyle = 'black';
         this.ctx.beginPath();
-        this.ctx.arc(
-          rect.x + rect.w * 0.8,
-          rect.y + rect.h / 2,
-          rect.w * 0.05,
-          0,
-          Math.PI * 2
-        );
+        this.ctx.arc(rect.x + rect.w * 0.8, rect.y + rect.h / 2, rect.w * 0.05, 0, Math.PI * 2);
         this.ctx.fill();
       } else {
         // Open door - draw frame
@@ -337,10 +316,7 @@ export class DungeonRenderer {
     this.ctx.stroke();
   }
 
-  private drawRect(
-    rect: { x: number; y: number; w: number; h: number },
-    color: string
-  ): void {
+  private drawRect(rect: { x: number; y: number; w: number; h: number }, color: string): void {
     this.ctx.fillStyle = color;
     this.ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
     this.ctx.strokeStyle = renderConfig.STROKE.COLOR;

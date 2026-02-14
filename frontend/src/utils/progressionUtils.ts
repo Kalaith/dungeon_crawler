@@ -6,10 +6,8 @@ import { gameConfig } from '../data/constants';
  * Formula: BASE * GROWTH_RATE^(level - 1)
  */
 export const calculateExpRequirement = (level: number): number => {
-  const {
-    BASE_EXP_REQUIREMENT: baseExpRequirement,
-    EXP_GROWTH_RATE: expGrowthRate,
-  } = gameConfig.PROGRESSION;
+  const { BASE_EXP_REQUIREMENT: baseExpRequirement, EXP_GROWTH_RATE: expGrowthRate } =
+    gameConfig.PROGRESSION;
   return Math.floor(baseExpRequirement * Math.pow(expGrowthRate, level - 1));
 };
 
@@ -36,9 +34,7 @@ const applyLevelUpBonuses = (
     def: (character.def ?? 0) + growth.def,
     agi: (character.agi ?? 0) + growth.agi,
     luc: (character.luc ?? 0) + growth.luc,
-    abilities: character.class.abilities.filter(
-      a => (a.unlockLevel ?? a.level) <= newLevel
-    ),
+    abilities: character.class.abilities.filter(a => (a.unlockLevel ?? a.level) <= newLevel),
   };
 };
 

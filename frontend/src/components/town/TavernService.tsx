@@ -40,20 +40,15 @@ const generateRandomCharacter = (): Character => {
   ];
 
   // Pick random race and class from available options
-  const simpleRaces = races.filter(r =>
-    ['human', 'dwarf', 'halfling', 'green_elf'].includes(r.id)
-  );
+  const simpleRaces = races.filter(r => ['human', 'dwarf', 'halfling', 'green_elf'].includes(r.id));
   const simpleClasses = characterClasses.filter(c =>
     ['warrior', 'wizard', 'rogue', 'cleric'].includes(c.id)
   );
 
-  const randomRace =
-    simpleRaces[Math.floor(Math.random() * simpleRaces.length)] || races[0];
+  const randomRace = simpleRaces[Math.floor(Math.random() * simpleRaces.length)] || races[0];
   const randomClass =
-    simpleClasses[Math.floor(Math.random() * simpleClasses.length)] ||
-    characterClasses[0];
-  const randomName =
-    names[Math.floor(Math.random() * names.length)] || 'Adventurer';
+    simpleClasses[Math.floor(Math.random() * simpleClasses.length)] || characterClasses[0];
+  const randomName = names[Math.floor(Math.random() * names.length)] || 'Adventurer';
 
   // Generate random attributes (8-14 range for balanced characters)
   const generateRandomStat = () => Math.floor(Math.random() * 7) + 8;
@@ -93,12 +88,8 @@ const generateRandomCharacter = (): Character => {
 
 export const TavernService: React.FC<TavernServiceProps> = ({ onClose }) => {
   const { party, addCharacterToParty } = usePartyStore();
-  const [availableCharacters, setAvailableCharacters] = useState<Character[]>(
-    []
-  );
-  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(
-    null
-  );
+  const [availableCharacters, setAvailableCharacters] = useState<Character[]>([]);
+  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
 
   // Generate 3 random characters on mount and when refreshing
   useEffect(() => {
@@ -153,12 +144,8 @@ export const TavernService: React.FC<TavernServiceProps> = ({ onClose }) => {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="text-6xl mb-4">🍺</div>
-          <h1 className="text-4xl font-bold text-gold-500 mb-2">
-            The Adventurer's Tavern
-          </h1>
-          <p className="text-lg text-cyan-100">
-            Recruit brave souls to join your party
-          </p>
+          <h1 className="text-4xl font-bold text-gold-500 mb-2">The Adventurer's Tavern</h1>
+          <p className="text-lg text-cyan-100">Recruit brave souls to join your party</p>
         </div>
 
         {/* Party Status */}
@@ -172,9 +159,7 @@ export const TavernService: React.FC<TavernServiceProps> = ({ onClose }) => {
         {/* Available Characters */}
         <div className="bg-etrian-800 rounded-xl p-8 shadow-lg border border-cyan-900/50 mb-6">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-semibold text-gold-500">
-              Available Adventurers
-            </h2>
+            <h2 className="text-2xl font-semibold text-gold-500">Available Adventurers</h2>
             <Button
               variant="outline"
               onClick={refreshCharacters}
@@ -221,24 +206,16 @@ export const TavernService: React.FC<TavernServiceProps> = ({ onClose }) => {
                   {/* Stats Preview */}
                   <div className="grid grid-cols-2 gap-2 text-xs mb-4">
                     <div className="bg-red-900/30 rounded p-2 border border-red-500/30">
-                      <p className="text-red-400">
-                        HP: {character.derivedStats.HP.max}
-                      </p>
+                      <p className="text-red-400">HP: {character.derivedStats.HP.max}</p>
                     </div>
                     <div className="bg-blue-900/30 rounded p-2 border border-blue-500/30">
-                      <p className="text-blue-400">
-                        AP: {character.derivedStats.AP.max}
-                      </p>
+                      <p className="text-blue-400">AP: {character.derivedStats.AP.max}</p>
                     </div>
                     <div className="bg-green-900/30 rounded p-2 border border-green-500/30">
-                      <p className="text-green-400">
-                        AC: {character.derivedStats.AC}
-                      </p>
+                      <p className="text-green-400">AC: {character.derivedStats.AC}</p>
                     </div>
                     <div className="bg-purple-900/30 rounded p-2 border border-purple-500/30">
-                      <p className="text-purple-400">
-                        Init: +{character.derivedStats.Initiative}
-                      </p>
+                      <p className="text-purple-400">Init: +{character.derivedStats.Initiative}</p>
                     </div>
                   </div>
 
@@ -271,51 +248,35 @@ export const TavernService: React.FC<TavernServiceProps> = ({ onClose }) => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
               <div>
                 <p className="text-cyan-400">Strength</p>
-                <p className="font-semibold text-cyan-100">
-                  {selectedCharacter.attributes.ST}
-                </p>
+                <p className="font-semibold text-cyan-100">{selectedCharacter.attributes.ST}</p>
               </div>
               <div>
                 <p className="text-cyan-400">Constitution</p>
-                <p className="font-semibold text-cyan-100">
-                  {selectedCharacter.attributes.CO}
-                </p>
+                <p className="font-semibold text-cyan-100">{selectedCharacter.attributes.CO}</p>
               </div>
               <div>
                 <p className="text-cyan-400">Dexterity</p>
-                <p className="font-semibold text-cyan-100">
-                  {selectedCharacter.attributes.DX}
-                </p>
+                <p className="font-semibold text-cyan-100">{selectedCharacter.attributes.DX}</p>
               </div>
               <div>
                 <p className="text-cyan-400">Agility</p>
-                <p className="font-semibold text-cyan-100">
-                  {selectedCharacter.attributes.AG}
-                </p>
+                <p className="font-semibold text-cyan-100">{selectedCharacter.attributes.AG}</p>
               </div>
               <div>
                 <p className="text-cyan-400">Intelligence</p>
-                <p className="font-semibold text-cyan-100">
-                  {selectedCharacter.attributes.IT}
-                </p>
+                <p className="font-semibold text-cyan-100">{selectedCharacter.attributes.IT}</p>
               </div>
               <div>
                 <p className="text-cyan-400">Intuition</p>
-                <p className="font-semibold text-cyan-100">
-                  {selectedCharacter.attributes.IN}
-                </p>
+                <p className="font-semibold text-cyan-100">{selectedCharacter.attributes.IN}</p>
               </div>
               <div>
                 <p className="text-cyan-400">Wisdom</p>
-                <p className="font-semibold text-cyan-100">
-                  {selectedCharacter.attributes.WD}
-                </p>
+                <p className="font-semibold text-cyan-100">{selectedCharacter.attributes.WD}</p>
               </div>
               <div>
                 <p className="text-cyan-400">Charisma</p>
-                <p className="font-semibold text-cyan-100">
-                  {selectedCharacter.attributes.CH}
-                </p>
+                <p className="font-semibold text-cyan-100">{selectedCharacter.attributes.CH}</p>
               </div>
             </div>
           </div>

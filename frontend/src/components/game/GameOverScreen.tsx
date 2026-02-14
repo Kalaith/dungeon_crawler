@@ -41,8 +41,7 @@ export const GameOverScreen: React.FC = () => {
         </h1>
 
         <p className="text-lg mb-8 text-parchment-300">
-          Your party has fallen in the depths of the dungeon. Their story ends
-          here...
+          Your party has fallen in the depths of the dungeon. Their story ends here...
         </p>
 
         <Button

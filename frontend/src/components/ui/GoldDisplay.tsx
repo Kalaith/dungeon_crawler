@@ -6,10 +6,7 @@ interface GoldDisplayProps {
   className?: string;
 }
 
-export const GoldDisplay: React.FC<GoldDisplayProps> = ({
-  size = 'md',
-  className = '',
-}) => {
+export const GoldDisplay: React.FC<GoldDisplayProps> = ({ size = 'md', className = '' }) => {
   const { gold } = useGoldStore();
 
   const sizeClasses = {

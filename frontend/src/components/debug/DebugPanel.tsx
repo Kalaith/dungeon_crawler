@@ -27,8 +27,7 @@ export const DebugPanel: React.FC = () => {
   const [showEnemyEditor, setShowEnemyEditor] = useState(false);
   const [showPartyEditor, setShowPartyEditor] = useState(false);
 
-  const { startCombat, endCombat, currentEnemy, updateEnemyHP, inCombat } =
-    useCombatStore();
+  const { startCombat, endCombat, currentEnemy, updateEnemyHP, inCombat } = useCombatStore();
 
   const {
     party,
@@ -57,8 +56,7 @@ export const DebugPanel: React.FC = () => {
               id: c.id,
               type: 'party' as const,
               character: c,
-              initiative:
-                c.derivedStats.Initiative + Math.floor(Math.random() * 20) + 1,
+              initiative: c.derivedStats.Initiative + Math.floor(Math.random() * 20) + 1,
               status: 'active' as const,
             }
           : null
@@ -80,8 +78,7 @@ export const DebugPanel: React.FC = () => {
               id: c.id,
               type: 'party' as const,
               character: c,
-              initiative:
-                c.derivedStats.Initiative + Math.floor(Math.random() * 20) + 1,
+              initiative: c.derivedStats.Initiative + Math.floor(Math.random() * 20) + 1,
               status: 'active' as const,
             }
           : null
@@ -130,11 +127,7 @@ export const DebugPanel: React.FC = () => {
   };
 
   const handleClearAllData = () => {
-    if (
-      confirm(
-        '⚠️ This will clear ALL game data and reload the page. Are you sure?'
-      )
-    ) {
+    if (confirm('⚠️ This will clear ALL game data and reload the page. Are you sure?')) {
       // Clear all localStorage
       localStorage.removeItem('dungeon-crawler-game');
       localStorage.removeItem('dungeon-crawler-party');
@@ -293,10 +286,7 @@ export const DebugPanel: React.FC = () => {
       <div className="fixed top-0 right-0 h-full w-80 bg-gray-900 text-white shadow-xl overflow-y-auto z-50 border-l border-gray-700">
         <div className="p-4 border-b border-gray-700 flex justify-between items-center">
           <h2 className="text-xl font-bold">Debug Panel</h2>
-          <button
-            onClick={() => setIsOpen(false)}
-            className="text-gray-400 hover:text-white"
-          >
+          <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white">
             ✕
           </button>
         </div>
@@ -447,8 +437,7 @@ export const DebugPanel: React.FC = () => {
                 Open All Doors
               </button>
               <div className="text-xs text-gray-400 mt-2">
-                Steps until encounter:{' '}
-                {useDungeonStore.getState().stepsUntilEncounter}
+                Steps until encounter: {useDungeonStore.getState().stepsUntilEncounter}
               </div>
             </div>
           </section>
@@ -519,22 +508,10 @@ export const DebugPanel: React.FC = () => {
       </div>
 
       {/* Modals */}
-      <GameStateModal
-        isOpen={showGameState}
-        onClose={() => setShowGameState(false)}
-      />
-      <ItemSpawnerModal
-        isOpen={showItemSpawner}
-        onClose={() => setShowItemSpawner(false)}
-      />
-      <EnemyEditorModal
-        isOpen={showEnemyEditor}
-        onClose={() => setShowEnemyEditor(false)}
-      />
-      <PartyEditorModal
-        isOpen={showPartyEditor}
-        onClose={() => setShowPartyEditor(false)}
-      />
+      <GameStateModal isOpen={showGameState} onClose={() => setShowGameState(false)} />
+      <ItemSpawnerModal isOpen={showItemSpawner} onClose={() => setShowItemSpawner(false)} />
+      <EnemyEditorModal isOpen={showEnemyEditor} onClose={() => setShowEnemyEditor(false)} />
+      <PartyEditorModal isOpen={showPartyEditor} onClose={() => setShowPartyEditor(false)} />
     </>
   );
 };

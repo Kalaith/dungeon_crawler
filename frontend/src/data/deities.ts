@@ -41,8 +41,7 @@ export const deities: Deity[] = [
     name: 'Rondra',
     alignment: 'Lawful Good',
     domains: ['War', 'Strength'],
-    description:
-      'Goddess of battle, honor, and courage. Patron of warriors and paladins.',
+    description: 'Goddess of battle, honor, and courage. Patron of warriors and paladins.',
     favoredWeapon: 'Longsword',
     symbol: 'Flaming sword',
   },
@@ -51,8 +50,7 @@ export const deities: Deity[] = [
     name: 'Hesinde',
     alignment: 'Lawful Neutral',
     domains: ['Knowledge', 'Magic'],
-    description:
-      'Goddess of wisdom, magic, and knowledge. Patron of wizards and scholars.',
+    description: 'Goddess of wisdom, magic, and knowledge. Patron of wizards and scholars.',
     favoredWeapon: 'Staff',
     symbol: 'Open book',
   },
@@ -61,8 +59,7 @@ export const deities: Deity[] = [
     name: 'Peraine',
     alignment: 'Neutral Good',
     domains: ['Life', 'Nature'],
-    description:
-      'Goddess of agriculture, healing, and nature. Patron of druids and healers.',
+    description: 'Goddess of agriculture, healing, and nature. Patron of druids and healers.',
     favoredWeapon: 'Sickle',
     symbol: 'Sheaf of wheat',
   },
@@ -91,8 +88,7 @@ export const deities: Deity[] = [
     name: 'Firun',
     alignment: 'Neutral Good',
     domains: ['Nature', 'Tempest'],
-    description:
-      'God of winter, hunting, and the wilderness. Patron of rangers and hunters.',
+    description: 'God of winter, hunting, and the wilderness. Patron of rangers and hunters.',
     favoredWeapon: 'Spear',
     symbol: 'Snowflake',
   },

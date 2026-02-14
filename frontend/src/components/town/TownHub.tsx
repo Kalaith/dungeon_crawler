@@ -9,14 +9,7 @@ import { HealerService } from './HealerService';
 import { ShopService } from './ShopService';
 import { BlacksmithService } from './BlacksmithService';
 
-type ServiceId =
-  | 'inn'
-  | 'tavern'
-  | 'shop'
-  | 'temple'
-  | 'healer'
-  | 'blacksmith'
-  | null;
+type ServiceId = 'inn' | 'tavern' | 'shop' | 'temple' | 'healer' | 'blacksmith' | null;
 
 export const TownHub: React.FC = () => {
   const { getCurrentLocation } = useWorldStore();
@@ -25,11 +18,7 @@ export const TownHub: React.FC = () => {
 
   const currentLocation = getCurrentLocation();
 
-  if (
-    !currentLocation ||
-    currentLocation.type !== 'town' ||
-    !currentLocation.townData
-  ) {
+  if (!currentLocation || currentLocation.type !== 'town' || !currentLocation.townData) {
     return null;
   }
 
@@ -119,25 +108,19 @@ export const TownHub: React.FC = () => {
           <p className="text-lg text-cyan-100 capitalize">
             {townData.size} • Population: {townData.population}
           </p>
-          <p className="text-sm text-cyan-400 mt-2">
-            {currentLocation.description}
-          </p>
+          <p className="text-sm text-cyan-400 mt-2">{currentLocation.description}</p>
         </div>
 
         {/* Services Grid */}
         <div className="bg-etrian-800 rounded-xl p-6 shadow-lg border border-cyan-900/50 mb-6">
-          <h2 className="text-2xl font-semibold text-gold-500 mb-6 text-center">
-            Town Services
-          </h2>
+          <h2 className="text-2xl font-semibold text-gold-500 mb-6 text-center">Town Services</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {services.map(service => (
               <button
                 key={service.id}
                 disabled={!service.available}
-                onClick={() =>
-                  service.available && handleServiceClick(service.id)
-                }
+                onClick={() => service.available && handleServiceClick(service.id)}
                 className={`p-4 rounded-lg border-2 transition-all ${
                   service.available
                     ? 'bg-etrian-700 border-cyan-900 hover:border-cyan-400 hover:bg-etrian-600 cursor-pointer'
@@ -145,12 +128,8 @@ export const TownHub: React.FC = () => {
                 }`}
               >
                 <div className="text-5xl mb-3 text-center">{service.icon}</div>
-                <h3 className="text-xl font-bold text-gold-500 mb-2">
-                  {service.name}
-                </h3>
-                <p className="text-sm text-cyan-100 text-center">
-                  {service.description}
-                </p>
+                <h3 className="text-xl font-bold text-gold-500 mb-2">{service.name}</h3>
+                <p className="text-sm text-cyan-100 text-center">{service.description}</p>
                 {!service.available && (
                   <p className="text-xs text-red-500 text-center mt-2">
                     Not available in this town
@@ -176,27 +155,19 @@ export const TownHub: React.FC = () => {
 
         {/* Town Info Panel */}
         <div className="mt-6 bg-etrian-800 rounded-xl p-6 shadow-lg border border-cyan-900/50">
-          <h3 className="text-lg font-semibold text-gold-500 mb-3">
-            About {currentLocation.name}
-          </h3>
+          <h3 className="text-lg font-semibold text-gold-500 mb-3">About {currentLocation.name}</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
               <p className="text-cyan-400">Type</p>
-              <p className="font-semibold text-cyan-100 capitalize">
-                {townData.size}
-              </p>
+              <p className="font-semibold text-cyan-100 capitalize">{townData.size}</p>
             </div>
             <div>
               <p className="text-cyan-400">Population</p>
-              <p className="font-semibold text-cyan-100">
-                {townData.population}
-              </p>
+              <p className="font-semibold text-cyan-100">{townData.population}</p>
             </div>
             <div>
               <p className="text-cyan-400">Services</p>
-              <p className="font-semibold text-cyan-100">
-                {townData.services.length}
-              </p>
+              <p className="font-semibold text-cyan-100">{townData.services.length}</p>
             </div>
             <div>
               <p className="text-cyan-400">Safety</p>

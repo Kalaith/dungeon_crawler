@@ -164,11 +164,7 @@ describe('Combat Mechanics', () => {
 
     it('should double weapon dice on critical hit', () => {
       mockRandom(0.5);
-      const result = calculateWeaponDamage(
-        mockCharacter,
-        { count: 1, sides: 8 },
-        true
-      );
+      const result = calculateWeaponDamage(mockCharacter, { count: 1, sides: 8 }, true);
 
       expect(result.isCritical).toBe(true);
       // Should roll 2d8 + 3 (ST mod)
@@ -190,11 +186,7 @@ describe('Combat Mechanics', () => {
       } as Character;
 
       mockRandom(0); // Roll of 1
-      const result = calculateWeaponDamage(
-        weakCharacter,
-        { count: 1, sides: 4 },
-        false
-      );
+      const result = calculateWeaponDamage(weakCharacter, { count: 1, sides: 4 }, false);
 
       expect(result.damage).toBe(1); // Should not go below 1
     });

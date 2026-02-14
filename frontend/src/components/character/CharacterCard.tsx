@@ -32,17 +32,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 }) => {
   // Defensive check for derivedStats (handles legacy character data)
   if (!character.derivedStats) {
-    console.warn(
-      `Character ${character.name} is missing derivedStats. This may be legacy data.`
-    );
+    console.warn(`Character ${character.name} is missing derivedStats. This may be legacy data.`);
     return (
       <div className="bg-red-100 dark:bg-red-900/20 border-2 border-red-500 rounded-lg p-4">
-        <p className="text-red-800 dark:text-red-200 font-semibold">
-          Invalid Character Data
-        </p>
+        <p className="text-red-800 dark:text-red-200 font-semibold">Invalid Character Data</p>
         <p className="text-sm text-red-600 dark:text-red-300">
-          {character.name} is missing required stats. Please recreate this
-          character.
+          {character.name} is missing required stats. Please recreate this character.
         </p>
       </div>
     );
@@ -68,21 +63,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     >
       <div className={variant === 'compact' ? 'w-full' : ''}>
         {/* Header: Name and Class */}
-        <div
-          className={
-            variant === 'compact'
-              ? 'mb-3'
-              : 'flex justify-between items-center mb-2'
-          }
-        >
+        <div className={variant === 'compact' ? 'mb-3' : 'flex justify-between items-center mb-2'}>
           <div
             className={`font-semibold text-gold-500 ${variant === 'compact' ? 'text-lg mb-2' : 'text-sm'}`}
           >
             {character.name}
           </div>
-          <div
-            className={`text-xs text-cyan-400 ${variant === 'compact' ? 'mb-3' : ''}`}
-          >
+          <div className={`text-xs text-cyan-400 ${variant === 'compact' ? 'mb-3' : ''}`}>
             {variant === 'compact'
               ? `${character.race.name} ${character.class.name}`
               : character.class.name}
@@ -116,13 +103,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           {/* HP/AP Values */}
           <div className={variant === 'compact' ? '' : 'flex justify-between'}>
             <span>
-              HP: {character.derivedStats.HP.current}/
-              {character.derivedStats.HP.max}
+              HP: {character.derivedStats.HP.current}/{character.derivedStats.HP.max}
             </span>
             {variant === 'detailed' && (
               <span>
-                AP: {character.derivedStats.AP.current}/
-                {character.derivedStats.AP.max}
+                AP: {character.derivedStats.AP.current}/{character.derivedStats.AP.max}
               </span>
             )}
           </div>
@@ -130,8 +115,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           {variant === 'compact' && (
             <>
               <div>
-                AP: {character.derivedStats.AP.current}/
-                {character.derivedStats.AP.max}
+                AP: {character.derivedStats.AP.current}/{character.derivedStats.AP.max}
               </div>
               <div>
                 ST: {character.attributes.ST} CO: {character.attributes.CO}

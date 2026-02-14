@@ -25,21 +25,13 @@ export const FeatSelectionModal: React.FC<FeatSelectionModalProps> = ({
 
     // Check prerequisites
     if (feat.prerequisites) {
-      if (
-        feat.prerequisites.level &&
-        character.level < feat.prerequisites.level
-      )
-        return false;
+      if (feat.prerequisites.level && character.level < feat.prerequisites.level) return false;
 
       if (feat.prerequisites.attributes) {
         const reqAttrs = feat.prerequisites.attributes;
         for (const attr of Object.keys(reqAttrs) as Attribute[]) {
           const required = reqAttrs[attr];
-          if (
-            typeof required === 'number' &&
-            character.attributes[attr] < required
-          )
-            return false;
+          if (typeof required === 'number' && character.attributes[attr] < required) return false;
         }
       }
     }
@@ -60,8 +52,7 @@ export const FeatSelectionModal: React.FC<FeatSelectionModalProps> = ({
           Select a Feat for {character.name}
         </h2>
         <p className="mb-6 text-gray-400">
-          Level {character.level} Reached! Choose a new feat to enhance your
-          abilities.
+          Level {character.level} Reached! Choose a new feat to enhance your abilities.
         </p>
 
         <div className="grid grid-cols-1 gap-4 mb-6">
@@ -78,10 +69,7 @@ export const FeatSelectionModal: React.FC<FeatSelectionModalProps> = ({
                 <h3 className="font-bold text-lg text-gray-200">{feat.name}</h3>
                 {feat.prerequisites && (
                   <span className="text-xs text-gray-500 bg-gray-800 px-2 py-1 rounded">
-                    Req:{' '}
-                    {feat.prerequisites.level
-                      ? `Lvl ${feat.prerequisites.level}`
-                      : ''}
+                    Req: {feat.prerequisites.level ? `Lvl ${feat.prerequisites.level}` : ''}
                     {feat.prerequisites.attributes
                       ? ` ${Object.keys(feat.prerequisites.attributes).join(', ')}`
                       : ''}
@@ -93,8 +81,7 @@ export const FeatSelectionModal: React.FC<FeatSelectionModalProps> = ({
               {/* Choice UI if selected */}
               {selectedFeat?.id === feat.id &&
                 feat.effects.type === 'stat_boost' &&
-                (feat.effects.stat === 'ST_or_DX' ||
-                  feat.effects.stat === 'INT_WIS_CHA') && (
+                (feat.effects.stat === 'ST_or_DX' || feat.effects.stat === 'INT_WIS_CHA') && (
                   <div className="mt-3 p-3 bg-gray-800 rounded border border-gray-600">
                     <p className="text-sm font-bold mb-2 text-cyan-300">
                       Choose Attribute to Increase:

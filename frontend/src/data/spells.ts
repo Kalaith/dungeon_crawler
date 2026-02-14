@@ -8,17 +8,15 @@ const slugifySpellName = (name: string): string =>
     .replace(/[^a-z0-9]+/g, '_')
     .replace(/^_+|_+$/g, '');
 
-export const allSpells: Spell[] = (spellsData as Omit<Spell, 'id'>[]).map(
-  spell => ({
-    ...spell,
-    id: slugifySpellName(spell.name),
-    apCost: spell.ap_cost,
-    castingTime: spell.casting_time,
-    damageType: spell.damage_type,
-    savingThrow: spell.save_type,
-    attackRoll: spell.attack_type === 'melee' || spell.attack_type === 'ranged',
-  })
-);
+export const allSpells: Spell[] = (spellsData as Omit<Spell, 'id'>[]).map(spell => ({
+  ...spell,
+  id: slugifySpellName(spell.name),
+  apCost: spell.ap_cost,
+  castingTime: spell.casting_time,
+  damageType: spell.damage_type,
+  savingThrow: spell.save_type,
+  attackRoll: spell.attack_type === 'melee' || spell.attack_type === 'ranged',
+}));
 export const spells = allSpells;
 
 // AP Cost by spell level (for reference)
@@ -91,10 +89,7 @@ export function getCombatSpells(className?: string): Spell[] {
 /**
  * Get spells a character can currently cast (has enough AP)
  */
-export function getCastableSpells(
-  availableSpells: Spell[],
-  currentAP: number
-): Spell[] {
+export function getCastableSpells(availableSpells: Spell[], currentAP: number): Spell[] {
   return availableSpells.filter(spell => spell.ap_cost <= currentAP);
 }
 
@@ -139,10 +134,7 @@ export function getSpellCountByLevel(): Record<number, number> {
 /**
  * Calculate spell damage for a given cast level
  */
-export function getSpellDamage(
-  spell: Spell,
-  castAtLevel: number
-): string | null {
+export function getSpellDamage(spell: Spell, castAtLevel: number): string | null {
   if (!spell.damage_dice) return null;
 
   // Find the appropriate damage for the cast level
@@ -163,10 +155,7 @@ export function getSpellDamage(
 /**
  * Calculate spell healing for a given cast level
  */
-export function getSpellHealing(
-  spell: Spell,
-  castAtLevel: number
-): string | null {
+export function getSpellHealing(spell: Spell, castAtLevel: number): string | null {
   if (!spell.heal_dice) return null;
 
   const levels = Object.keys(spell.heal_dice)
@@ -186,10 +175,7 @@ export function getSpellHealing(
 /**
  * Get spells available to a character based on class and level
  */
-export function getAvailableSpells(
-  className: string,
-  characterLevel: number
-): Spell[] {
+export function getAvailableSpells(className: string, characterLevel: number): Spell[] {
   const classSpells = getSpellsByClass(className);
   const maxSpellLevel = Math.min(Math.ceil(characterLevel / 2), 9);
   return classSpells.filter(spell => spell.level <= maxSpellLevel);

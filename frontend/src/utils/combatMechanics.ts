@@ -131,9 +131,7 @@ export function calculateWeaponDamage(
  */
 export function calculateSpellSaveDC(caster: Character): number {
   const spellcastingAbility = caster.class.spellcasting?.ability || 'IT';
-  const abilityModifier = getAttributeModifier(
-    caster.attributes[spellcastingAbility]
-  );
+  const abilityModifier = getAttributeModifier(caster.attributes[spellcastingAbility]);
   const proficiency = caster.derivedStats.Proficiency;
 
   return 8 + proficiency + abilityModifier;
@@ -144,9 +142,7 @@ export function calculateSpellSaveDC(caster: Character): number {
  */
 export function calculateSpellAttackBonus(caster: Character): number {
   const spellcastingAbility = caster.class.spellcasting?.ability || 'IT';
-  const abilityModifier = getAttributeModifier(
-    caster.attributes[spellcastingAbility]
-  );
+  const abilityModifier = getAttributeModifier(caster.attributes[spellcastingAbility]);
   const proficiency = caster.derivedStats.Proficiency;
 
   return proficiency + abilityModifier;
@@ -177,10 +173,7 @@ export function performSavingThrow(
 
   // Check if proficient in this saving throw
   let proficiency = 0;
-  if (
-    'class' in character &&
-    character.class.proficiencies.savingThrows.includes(attribute)
-  ) {
+  if ('class' in character && character.class.proficiencies.savingThrows.includes(attribute)) {
     proficiency = character.derivedStats.Proficiency;
   }
 

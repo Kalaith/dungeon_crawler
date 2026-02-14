@@ -7,20 +7,14 @@ interface ItemSpawnerModalProps {
   onClose: () => void;
 }
 
-export const ItemSpawnerModal: React.FC<ItemSpawnerModalProps> = ({
-  isOpen,
-  onClose,
-}) => {
+export const ItemSpawnerModal: React.FC<ItemSpawnerModalProps> = ({ isOpen, onClose }) => {
   const { addItem } = useInventoryStore();
   const [selectedItemId, setSelectedItemId] = useState<string>('');
   const [quantity, setQuantity] = useState(1);
 
   if (!isOpen) return null;
 
-  const allItems = [
-    ...(lootTables['common'] || []),
-    ...(lootTables['rare'] || []),
-  ];
+  const allItems = [...(lootTables['common'] || []), ...(lootTables['rare'] || [])];
 
   const handleSpawn = () => {
     const item = allItems.find(i => i.id === selectedItemId);
@@ -44,9 +38,7 @@ export const ItemSpawnerModal: React.FC<ItemSpawnerModalProps> = ({
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm text-gray-400 mb-1">
-              Select Item
-            </label>
+            <label className="block text-sm text-gray-400 mb-1">Select Item</label>
             <select
               className="w-full bg-gray-800 border border-gray-600 text-white rounded p-2"
               value={selectedItemId}

@@ -9,12 +9,7 @@ import {
   getCantrips,
   initializeCharacterSpells,
 } from '../spellLearning';
-import {
-  spells,
-  getSpellsByLevel,
-  getCastableSpells,
-  apCosts,
-} from '../../data/spells';
+import { spells, getSpellsByLevel, getCastableSpells, apCosts } from '../../data/spells';
 import {
   checkConcentration,
   breakConcentration,

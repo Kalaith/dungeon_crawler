@@ -9,10 +9,7 @@ interface CharacterSheetModalProps {
 
 type Tab = 'stats' | 'equipment' | 'inventory' | 'abilities';
 
-export const CharacterSheetModal: React.FC<CharacterSheetModalProps> = ({
-  character,
-  onClose,
-}) => {
+export const CharacterSheetModal: React.FC<CharacterSheetModalProps> = ({ character, onClose }) => {
   const [activeTab, setActiveTab] = useState<Tab>('stats');
 
   const renderTabs = () => (
@@ -59,8 +56,7 @@ export const CharacterSheetModal: React.FC<CharacterSheetModalProps> = ({
             <div className="flex justify-between text-sm mb-1">
               <span className="text-gray-400">Health Points</span>
               <span className="text-white">
-                {character.derivedStats.HP.current} /{' '}
-                {character.derivedStats.HP.max}
+                {character.derivedStats.HP.current} / {character.derivedStats.HP.max}
               </span>
             </div>
             <StatBar
@@ -73,8 +69,7 @@ export const CharacterSheetModal: React.FC<CharacterSheetModalProps> = ({
             <div className="flex justify-between text-sm mb-1">
               <span className="text-gray-400">Astral Points</span>
               <span className="text-white">
-                {character.derivedStats.AP.current} /{' '}
-                {character.derivedStats.AP.max}
+                {character.derivedStats.AP.current} / {character.derivedStats.AP.max}
               </span>
             </div>
             <StatBar
@@ -92,9 +87,7 @@ export const CharacterSheetModal: React.FC<CharacterSheetModalProps> = ({
             </div>
             <div className="bg-gray-900 p-2 rounded text-center">
               <div className="text-xs text-gray-500 uppercase">Armor Class</div>
-              <div className="text-xl font-bold text-blue-400">
-                {character.derivedStats.AC}
-              </div>
+              <div className="text-xl font-bold text-blue-400">{character.derivedStats.AC}</div>
             </div>
             <div className="bg-gray-900 p-2 rounded text-center">
               <div className="text-xs text-gray-500 uppercase">Proficiency</div>
@@ -117,10 +110,7 @@ export const CharacterSheetModal: React.FC<CharacterSheetModalProps> = ({
         <h3 className="text-lg font-bold text-red-400 mb-3">Flaws</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {Object.entries(character.negativeAttributes).map(([attr, val]) => (
-            <div
-              key={attr}
-              className="flex justify-between items-center bg-gray-900 p-2 rounded"
-            >
+            <div key={attr} className="flex justify-between items-center bg-gray-900 p-2 rounded">
               <span className="text-xs text-gray-400">{attr}</span>
               <span className="font-mono font-bold text-red-300">{val}</span>
             </div>
@@ -135,24 +125,15 @@ export const CharacterSheetModal: React.FC<CharacterSheetModalProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Left Column: Weapons & Armor */}
         <div className="space-y-4">
-          <EquipmentSlot
-            label="Main Hand"
-            item={character.equipment.mainHand}
-          />
+          <EquipmentSlot label="Main Hand" item={character.equipment.mainHand} />
           <EquipmentSlot label="Off Hand" item={character.equipment.offHand} />
           <EquipmentSlot label="Armor" item={character.equipment.armor} />
           <EquipmentSlot label="Head" item={character.equipment.head} />
         </div>
         {/* Right Column: Accessories */}
         <div className="space-y-4">
-          <EquipmentSlot
-            label="Accessory 1"
-            item={character.equipment.accessory1}
-          />
-          <EquipmentSlot
-            label="Accessory 2"
-            item={character.equipment.accessory2}
-          />
+          <EquipmentSlot label="Accessory 1" item={character.equipment.accessory1} />
+          <EquipmentSlot label="Accessory 2" item={character.equipment.accessory2} />
         </div>
       </div>
     </div>
@@ -163,9 +144,7 @@ export const CharacterSheetModal: React.FC<CharacterSheetModalProps> = ({
       <span className="text-sm text-gray-500 font-medium">{label}</span>
       {item ? (
         <div className="flex items-center gap-2">
-          <span className={`font-bold ${getRarityColor(item.rarity)}`}>
-            {item.name}
-          </span>
+          <span className={`font-bold ${getRarityColor(item.rarity)}`}>{item.name}</span>
           {/* Tooltip or details could go here */}
         </div>
       ) : (
@@ -187,10 +166,7 @@ export const CharacterSheetModal: React.FC<CharacterSheetModalProps> = ({
         <tbody className="divide-y divide-gray-700">
           {character.inventory.length === 0 ? (
             <tr>
-              <td
-                colSpan={3}
-                className="px-4 py-8 text-center text-gray-500 italic"
-              >
+              <td colSpan={3} className="px-4 py-8 text-center text-gray-500 italic">
                 Inventory is empty
               </td>
             </tr>
@@ -198,19 +174,13 @@ export const CharacterSheetModal: React.FC<CharacterSheetModalProps> = ({
             character.inventory.map((item, idx) => (
               <tr key={`${item.id}-${idx}`} className="hover:bg-gray-700/50">
                 <td className="px-4 py-3 font-medium text-white">
-                  <span className={getRarityColor(item.rarity)}>
-                    {item.name}
-                  </span>
+                  <span className={getRarityColor(item.rarity)}>{item.name}</span>
                   {item.quantity && item.quantity > 1 && (
                     <span className="text-gray-400 ml-2">x{item.quantity}</span>
                   )}
                 </td>
-                <td className="px-4 py-3 text-gray-400 capitalize">
-                  {item.type}
-                </td>
-                <td className="px-4 py-3 text-right text-yellow-500">
-                  {item.value} G
-                </td>
+                <td className="px-4 py-3 text-gray-400 capitalize">{item.type}</td>
+                <td className="px-4 py-3 text-right text-yellow-500">{item.value} G</td>
               </tr>
             ))
           )}
@@ -272,9 +242,7 @@ export const CharacterSheetModal: React.FC<CharacterSheetModalProps> = ({
                 className="bg-gray-800 p-3 rounded border border-gray-700"
               >
                 <div className="flex justify-between items-center mb-1">
-                  <span className="font-bold text-purple-200">
-                    {spell.name}
-                  </span>
+                  <span className="font-bold text-purple-200">{spell.name}</span>
                   <span className="text-xs bg-purple-900/50 text-purple-300 px-2 py-0.5 rounded">
                     {spell.ap_cost} AP
                   </span>
@@ -322,13 +290,10 @@ export const CharacterSheetModal: React.FC<CharacterSheetModalProps> = ({
               )}
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-white">
-                {character.name}
-              </h2>
+              <h2 className="text-2xl font-bold text-white">{character.name}</h2>
               <div className="text-cyan-400 flex items-center gap-2">
                 <span>
-                  Level {character.level} {character.race.name}{' '}
-                  {character.class.name}
+                  Level {character.level} {character.race.name} {character.class.name}
                 </span>
                 <span className="text-gray-600">•</span>
                 <span className="text-yellow-500">{character.gold} Gold</span>
@@ -342,12 +307,7 @@ export const CharacterSheetModal: React.FC<CharacterSheetModalProps> = ({
             onClick={onClose}
             className="text-gray-400 hover:text-white transition-colors p-2"
           >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"

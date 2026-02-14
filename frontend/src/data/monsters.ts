@@ -125,8 +125,7 @@ export const monsters: Enemy[] = [
       {
         id: 'aggressive',
         name: 'Aggressive',
-        description:
-          'Can move up to its speed toward a hostile creature as a bonus action.',
+        description: 'Can move up to its speed toward a hostile creature as a bonus action.',
         level: 1,
         type: 'passive',
       },
@@ -273,10 +272,7 @@ export const monsters: Enemy[] = [
 /**
  * Get monsters by level range
  */
-export function getMonstersByLevel(
-  minLevel: number,
-  maxLevel: number
-): Enemy[] {
+export function getMonstersByLevel(minLevel: number, maxLevel: number): Enemy[] {
   return monsters.filter(m => m.level >= minLevel && m.level <= maxLevel);
 }
 
