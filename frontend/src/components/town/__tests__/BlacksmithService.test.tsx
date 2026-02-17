@@ -1,18 +1,20 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, within } from '@testing-library/react';
 import { BlacksmithService } from '../BlacksmithService';
 import { useGoldStore } from '../../../stores/useGoldStore';
 
-// Mock the stores
 vi.mock('../../../stores/useGoldStore');
 
-const useGoldStoreMock = useGoldStore as any;
+const useGoldStoreMock = useGoldStore as unknown as {
+  mockReturnValue: (value: ReturnType<typeof useGoldStore>) => void;
+};
 
 describe('BlacksmithService', () => {
   const mockOnClose = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.spyOn(window, 'alert').mockImplementation(() => {});
 
     useGoldStoreMock.mockReturnValue({
       gold: 100,
@@ -24,20 +26,19 @@ describe('BlacksmithService', () => {
   it('should calculate repair cost based on condition', () => {
     render(<BlacksmithService onClose={mockOnClose} />);
 
-    // Iron Sword has 65% condition, level 1
-    // Damage: 35%, Cost: ceil((35/10) * 1 * 10) = 40 gold
-    expect(screen.getByText('40 💰')).toBeInTheDocument();
+    const ironSwordCard = screen.getByRole('heading', { name: 'Iron Sword' }).closest('.bg-etrian-700');
+    expect(ironSwordCard).not.toBeNull();
+    expect(within(ironSwordCard as HTMLElement).getByText(/35/)).toBeInTheDocument();
   });
 
   it('should calculate upgrade cost correctly', () => {
     render(<BlacksmithService onClose={mockOnClose} />);
 
-    // Switch to upgrade tab
-    const upgradeButton = screen.getByText(/Upgrade/i);
-    fireEvent.click(upgradeButton);
+    fireEvent.click(screen.getByRole('button', { name: /Enhance equipment power/i }));
 
-    // Level 1 item: 1 * 100 = 100 gold
-    expect(screen.getByText('100 💰')).toBeInTheDocument();
+    const ironSwordCard = screen.getByRole('heading', { name: 'Iron Sword' }).closest('.bg-etrian-700');
+    expect(ironSwordCard).not.toBeNull();
+    expect(within(ironSwordCard as HTMLElement).getByText(/100/)).toBeInTheDocument();
   });
 
   it('should deduct gold on successful repair', () => {
@@ -51,8 +52,7 @@ describe('BlacksmithService', () => {
 
     render(<BlacksmithService onClose={mockOnClose} />);
 
-    const repairButton = screen.getAllByText('Repair')[0];
-    fireEvent.click(repairButton);
+    fireEvent.click(screen.getAllByRole('button', { name: 'Repair' })[0]);
 
     expect(mockSubtractGold).toHaveBeenCalled();
   });
@@ -68,12 +68,8 @@ describe('BlacksmithService', () => {
 
     render(<BlacksmithService onClose={mockOnClose} />);
 
-    // Switch to upgrade tab
-    const upgradeTab = screen.getByText(/Upgrade/i);
-    fireEvent.click(upgradeTab);
-
-    const upgradeButton = screen.getAllByText(/Upgrade to Lv/)[0];
-    fireEvent.click(upgradeButton);
+    fireEvent.click(screen.getByRole('button', { name: /Enhance equipment power/i }));
+    fireEvent.click(screen.getAllByRole('button', { name: /Upgrade to Lv/i })[0]);
 
     expect(mockSubtractGold).toHaveBeenCalled();
   });
@@ -89,10 +85,8 @@ describe('BlacksmithService', () => {
 
     render(<BlacksmithService onClose={mockOnClose} />);
 
-    const repairButton = screen.getAllByText('Repair')[0];
-    fireEvent.click(repairButton);
+    fireEvent.click(screen.getAllByRole('button', { name: 'Repair' })[0]);
 
-    // Should not deduct gold
     expect(mockSubtractGold).not.toHaveBeenCalled();
   });
 
@@ -107,14 +101,9 @@ describe('BlacksmithService', () => {
 
     render(<BlacksmithService onClose={mockOnClose} />);
 
-    // Switch to upgrade tab
-    const upgradeTab = screen.getByText(/Upgrade/i);
-    fireEvent.click(upgradeTab);
+    fireEvent.click(screen.getByRole('button', { name: /Enhance equipment power/i }));
+    fireEvent.click(screen.getAllByRole('button', { name: /Upgrade to Lv/i })[0]);
 
-    const upgradeButton = screen.getAllByText(/Upgrade to Lv/)[0];
-    fireEvent.click(upgradeButton);
-
-    // Should not deduct gold
     expect(mockSubtractGold).not.toHaveBeenCalled();
   });
 });

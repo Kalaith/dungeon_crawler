@@ -5,12 +5,15 @@ import { useGoldStore } from '../../../stores/useGoldStore';
 import { usePartyStore } from '../../../stores/usePartyStore';
 import type { Character } from '../../../types';
 
-// Mock the stores
 vi.mock('../../../stores/useGoldStore');
 vi.mock('../../../stores/usePartyStore');
 
-const useGoldStoreMock = useGoldStore as any;
-const usePartyStoreMock = usePartyStore as any;
+const useGoldStoreMock = useGoldStore as unknown as {
+  mockReturnValue: (value: ReturnType<typeof useGoldStore>) => void;
+};
+const usePartyStoreMock = usePartyStore as unknown as {
+  mockReturnValue: (value: ReturnType<typeof usePartyStore>) => void;
+};
 
 describe('HealerService', () => {
   const mockOnClose = vi.fn();
@@ -73,6 +76,7 @@ describe('HealerService', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.spyOn(window, 'alert').mockImplementation(() => {});
 
     useGoldStoreMock.mockReturnValue({
       gold: 100,
@@ -93,10 +97,7 @@ describe('HealerService', () => {
 
   it('should calculate healing cost correctly', () => {
     render(<HealerService onClose={mockOnClose} />);
-
-    // HP missing: 20, AP missing: 15
-    // Cost: 20 * 1 + 15 * 2 = 50 gold
-    expect(screen.getByText(/50 💰/i)).toBeInTheDocument();
+    expect(screen.getByText(/Heal:\s*50/i)).toBeInTheDocument();
   });
 
   it('should deduct gold on successful heal', () => {
@@ -116,8 +117,7 @@ describe('HealerService', () => {
 
     render(<HealerService onClose={mockOnClose} />);
 
-    const healButton = screen.getByText('Restore HP/AP');
-    fireEvent.click(healButton);
+    fireEvent.click(screen.getByRole('button', { name: 'Restore HP/AP' }));
 
     expect(mockSubtractGold).toHaveBeenCalled();
     expect(mockAddCharacter).toHaveBeenCalled();
@@ -134,10 +134,8 @@ describe('HealerService', () => {
 
     render(<HealerService onClose={mockOnClose} />);
 
-    const healButton = screen.getByText('Restore HP/AP');
-    fireEvent.click(healButton);
+    fireEvent.click(screen.getByRole('button', { name: 'Restore HP/AP' }));
 
-    // Should not deduct gold
     expect(mockSubtractGold).not.toHaveBeenCalled();
   });
 
@@ -151,8 +149,7 @@ describe('HealerService', () => {
 
     render(<HealerService onClose={mockOnClose} />);
 
-    const healButton = screen.getByText('Restore HP/AP');
-    fireEvent.click(healButton);
+    fireEvent.click(screen.getByRole('button', { name: 'Restore HP/AP' }));
 
     expect(mockAddCharacter).toHaveBeenCalledWith(
       expect.objectContaining({

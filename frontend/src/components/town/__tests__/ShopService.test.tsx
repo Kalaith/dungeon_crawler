@@ -3,22 +3,24 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { ShopService } from '../ShopService';
 import { useGoldStore } from '../../../stores/useGoldStore';
 import { useInventoryStore } from '../../../stores/useInventoryStore';
-import type { Item } from '../../../types';
 
-// Mock the stores
 vi.mock('../../../stores/useGoldStore');
 vi.mock('../../../stores/useInventoryStore');
 
-const useGoldStoreMock = useGoldStore as any;
-const useInventoryStoreMock = useInventoryStore as any;
+const useGoldStoreMock = useGoldStore as unknown as {
+  mockReturnValue: (value: ReturnType<typeof useGoldStore>) => void;
+};
+const useInventoryStoreMock = useInventoryStore as unknown as {
+  mockReturnValue: (value: ReturnType<typeof useInventoryStore>) => void;
+};
 
 describe('ShopService', () => {
   const mockOnClose = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.spyOn(window, 'alert').mockImplementation(() => {});
 
-    // Setup default mock implementations
     useGoldStoreMock.mockReturnValue({
       gold: 100,
       subtractGold: vi.fn(() => true),
@@ -38,12 +40,10 @@ describe('ShopService', () => {
   it('should calculate cart total correctly', () => {
     render(<ShopService onClose={mockOnClose} />);
 
-    // Add an item to cart (Iron Sword costs 50 gold)
-    const addButton = screen.getAllByText('Add to Cart')[0];
-    fireEvent.click(addButton);
+    fireEvent.click(screen.getAllByRole('button', { name: 'Add to Cart' })[0]);
 
-    // Check total is displayed
-    expect(screen.getByText(/50/)).toBeInTheDocument();
+    const totalLabel = screen.getByText('Total:');
+    expect(totalLabel.parentElement).toHaveTextContent('50');
   });
 
   it('should deduct gold and add items on successful purchase', () => {
@@ -62,18 +62,10 @@ describe('ShopService', () => {
 
     render(<ShopService onClose={mockOnClose} />);
 
-    // Add item to cart
-    const addButton = screen.getAllByText('Add to Cart')[0];
-    fireEvent.click(addButton);
+    fireEvent.click(screen.getAllByRole('button', { name: 'Add to Cart' })[0]);
+    fireEvent.click(screen.getByRole('button', { name: 'Purchase' }));
 
-    // Purchase
-    const purchaseButton = screen.getByText('Purchase');
-    fireEvent.click(purchaseButton);
-
-    // Verify gold was deducted
     expect(mockSubtractGold).toHaveBeenCalled();
-
-    // Verify item was added to inventory
     expect(mockAddItem).toHaveBeenCalled();
   });
 
@@ -86,11 +78,8 @@ describe('ShopService', () => {
 
     render(<ShopService onClose={mockOnClose} />);
 
-    // Add expensive item to cart
-    const addButton = screen.getAllByText('Add to Cart')[0];
-    fireEvent.click(addButton);
+    fireEvent.click(screen.getAllByRole('button', { name: 'Add to Cart' })[0]);
 
-    // Purchase button should show insufficient funds
     expect(screen.getByText('Insufficient Funds')).toBeInTheDocument();
   });
 
@@ -103,12 +92,9 @@ describe('ShopService', () => {
 
     render(<ShopService onClose={mockOnClose} />);
 
-    // Add item to cart
-    const addButton = screen.getAllByText('Add to Cart')[0];
-    fireEvent.click(addButton);
+    fireEvent.click(screen.getAllByRole('button', { name: 'Add to Cart' })[0]);
 
-    // Purchase button should be disabled
-    const purchaseButton = screen.getByText('Insufficient Funds');
+    const purchaseButton = screen.getByRole('button', { name: 'Insufficient Funds' });
     expect(purchaseButton).toBeDisabled();
   });
 
@@ -121,11 +107,8 @@ describe('ShopService', () => {
 
     render(<ShopService onClose={mockOnClose} />);
 
-    // Add item to cart
-    const addButton = screen.getAllByText('Add to Cart')[0];
-    fireEvent.click(addButton);
+    fireEvent.click(screen.getAllByRole('button', { name: 'Add to Cart' })[0]);
 
-    // Should show warning
     expect(screen.getByText(/Insufficient Funds!/i)).toBeInTheDocument();
   });
 });

@@ -9,8 +9,12 @@ import type { Character } from '../../../types';
 vi.mock('../../../stores/useGoldStore');
 vi.mock('../../../stores/usePartyStore');
 
-const useGoldStoreMock = useGoldStore as any;
-const usePartyStoreMock = usePartyStore as any;
+const useGoldStoreMock = useGoldStore as unknown as {
+  mockReturnValue: (value: ReturnType<typeof useGoldStore>) => void;
+};
+const usePartyStoreMock = usePartyStore as unknown as {
+  mockReturnValue: (value: ReturnType<typeof usePartyStore>) => void;
+};
 
 describe('TempleService', () => {
   const mockOnClose = vi.fn();

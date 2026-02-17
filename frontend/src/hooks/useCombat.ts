@@ -19,7 +19,6 @@ export const useCombat = () => {
     nextTurn,
     endCombat: endCombatStore,
     updateEnemyHP,
-    updateEnemyStatusEffects,
     setVictoryData,
   } = useCombatStore();
 
@@ -345,13 +344,7 @@ export const useCombat = () => {
     combatTurnOrder,
     currentTurn,
     enemyAction,
-    addCombatLog,
-    updatePartyMemberHP,
-    updateEnemyHP,
-    updatePartyMemberStatusEffects,
-    updateEnemyStatusEffects,
     currentEnemy,
-    nextTurn,
   ]);
 
   const castSpell = useCallback(
@@ -587,11 +580,8 @@ export const useCombat = () => {
       addCombatLog,
       endCombat,
       nextTurn,
-      generateLoot,
       party,
       updatePartyMember,
-      updateEnemyHP,
-      updatePartyMemberHP,
       castSpell,
     ]
   );

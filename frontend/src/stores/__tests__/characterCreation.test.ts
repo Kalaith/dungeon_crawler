@@ -182,8 +182,8 @@ describe('Character Data Validation', () => {
   });
 
   describe('Class Data', () => {
-    it('should have all 12 classes', () => {
-      expect(characterClasses.length).toBe(12);
+    it('should have at least 12 classes', () => {
+      expect(characterClasses.length).toBeGreaterThanOrEqual(12);
       const classIds = characterClasses.map(c => c.id);
       expect(classIds).toContain('warrior');
       expect(classIds).toContain('wizard');

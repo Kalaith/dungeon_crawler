@@ -151,7 +151,7 @@ export const useDungeon = () => {
       }
       return false;
     },
-    [foes, getAlivePartyMembers, showMessage, startCombat]
+    [foes, getAlivePartyMembers, startCombat]
   );
 
   const moveFoes = useCallback(() => {
@@ -478,7 +478,6 @@ export const useDungeon = () => {
     resetEncounterCounter,
     currentFloor,
     getAlivePartyMembers,
-    showMessage,
     startCombat,
   ]);
 
