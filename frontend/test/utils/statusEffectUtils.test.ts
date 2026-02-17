@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { checkImmunity, applyStatusEffect } from '../statusEffectUtils';
-import type { Character, CharacterClass, Race, StatusEffect } from '../../types';
+import { checkImmunity, applyStatusEffect } from '../../src/utils/statusEffectUtils';
+import type { Character, CharacterClass, Race, StatusEffect } from '../../src/types';
 
 describe('statusEffectUtils', () => {
   const mockRace: Race = {
@@ -87,3 +87,5 @@ describe('statusEffectUtils', () => {
     expect(effects[0].type).toBe('buff_str');
   });
 });
+
+

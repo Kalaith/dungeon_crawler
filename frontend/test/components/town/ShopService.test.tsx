@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { ShopService } from '../ShopService';
-import { useGoldStore } from '../../../stores/useGoldStore';
-import { useInventoryStore } from '../../../stores/useInventoryStore';
+import { ShopService } from '../../../src/components/town/ShopService';
+import { useGoldStore } from '../../../src/stores/useGoldStore';
+import { useInventoryStore } from '../../../src/stores/useInventoryStore';
 
-vi.mock('../../../stores/useGoldStore');
-vi.mock('../../../stores/useInventoryStore');
+vi.mock('../../../src/stores/useGoldStore');
+vi.mock('../../../src/stores/useInventoryStore');
 
 const useGoldStoreMock = useGoldStore as unknown as {
   mockReturnValue: (value: ReturnType<typeof useGoldStore>) => void;
@@ -112,3 +112,5 @@ describe('ShopService', () => {
     expect(screen.getByText(/Insufficient Funds!/i)).toBeInTheDocument();
   });
 });
+
+

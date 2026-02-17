@@ -12,8 +12,8 @@ import {
   performSavingThrow,
   calculateAC,
   hasPositionalAdvantage,
-} from '../combatMechanics';
-import type { Character } from '../../types';
+} from '../../src/utils/combatMechanics';
+import type { Character } from '../../src/types';
 
 // Mock Math.random for predictable tests
 const mockRandom = (value: number) => {
@@ -322,3 +322,5 @@ describe('Combat Mechanics', () => {
     });
   });
 });
+
+

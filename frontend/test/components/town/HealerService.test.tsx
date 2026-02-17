@@ -1,12 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { HealerService } from '../HealerService';
-import { useGoldStore } from '../../../stores/useGoldStore';
-import { usePartyStore } from '../../../stores/usePartyStore';
-import type { Character } from '../../../types';
+import { HealerService } from '../../../src/components/town/HealerService';
+import { useGoldStore } from '../../../src/stores/useGoldStore';
+import { usePartyStore } from '../../../src/stores/usePartyStore';
+import type { Character } from '../../../src/types';
 
-vi.mock('../../../stores/useGoldStore');
-vi.mock('../../../stores/usePartyStore');
+vi.mock('../../../src/stores/useGoldStore');
+vi.mock('../../../src/stores/usePartyStore');
 
 const useGoldStoreMock = useGoldStore as unknown as {
   mockReturnValue: (value: ReturnType<typeof useGoldStore>) => void;
@@ -162,3 +162,5 @@ describe('HealerService', () => {
     );
   });
 });
+
+

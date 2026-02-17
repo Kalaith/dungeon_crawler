@@ -8,15 +8,15 @@ import {
   learnSpell,
   getCantrips,
   initializeCharacterSpells,
-} from '../spellLearning';
-import { spells, getSpellsByLevel, getCastableSpells, apCosts } from '../../data/spells';
+} from '../../src/utils/spellLearning';
+import { spells, getSpellsByLevel, getCastableSpells, apCosts } from '../../src/data/spells';
 import {
   checkConcentration,
   breakConcentration,
   startConcentration,
   isConcentrating,
-} from '../concentrationMechanics';
-import type { Character } from '../../types';
+} from '../../src/utils/concentrationMechanics';
+import type { Character } from '../../src/types';
 
 describe('Spell Learning System', () => {
   describe('Max Spell Level', () => {
@@ -370,3 +370,5 @@ describe('Concentration Mechanics', () => {
     });
   });
 });
+
+

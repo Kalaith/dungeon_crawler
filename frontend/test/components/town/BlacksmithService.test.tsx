@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, within } from '@testing-library/react';
-import { BlacksmithService } from '../BlacksmithService';
-import { useGoldStore } from '../../../stores/useGoldStore';
+import { BlacksmithService } from '../../../src/components/town/BlacksmithService';
+import { useGoldStore } from '../../../src/stores/useGoldStore';
 
-vi.mock('../../../stores/useGoldStore');
+vi.mock('../../../src/stores/useGoldStore');
 
 const useGoldStoreMock = useGoldStore as unknown as {
   mockReturnValue: (value: ReturnType<typeof useGoldStore>) => void;
@@ -107,3 +107,5 @@ describe('BlacksmithService', () => {
     expect(mockSubtractGold).not.toHaveBeenCalled();
   });
 });
+
+

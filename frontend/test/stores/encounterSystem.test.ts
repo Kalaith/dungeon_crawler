@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { useDungeonStore } from '../useDungeonStore';
+import { useDungeonStore } from '../../src/stores/useDungeonStore';
 
 describe('Encounter System', () => {
   beforeEach(() => {
@@ -44,3 +44,5 @@ describe('Encounter System', () => {
     }
   });
 });
+
+

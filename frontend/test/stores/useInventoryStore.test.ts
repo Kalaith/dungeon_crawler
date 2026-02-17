@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { useInventoryStore } from '../useInventoryStore';
-import type { Item } from '../../types';
+import { useInventoryStore } from '../../src/stores/useInventoryStore';
+import type { Item } from '../../src/types';
 
 describe('useInventoryStore', () => {
   beforeEach(() => {
@@ -216,3 +216,5 @@ describe('useInventoryStore', () => {
     });
   });
 });
+
+

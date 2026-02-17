@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { useCharacterCreationStore } from '../useCharacterCreationStore';
-import { races } from '../../data/races';
-import { characterClasses } from '../../data/classes';
+import { useCharacterCreationStore } from '../../src/stores/useCharacterCreationStore';
+import { races } from '../../src/data/races';
+import { characterClasses } from '../../src/data/classes';
 
 describe('Character Creation Store', () => {
   beforeEach(() => {
@@ -244,3 +244,5 @@ describe('Character Data Validation', () => {
     });
   });
 });
+
+

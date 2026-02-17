@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { calculateExpRequirement, calculateLevelUp, distributeExperience } from './progressionUtils';
-import type { Character, CharacterClass } from '../types';
+import { calculateExpRequirement, calculateLevelUp, distributeExperience } from '../../src/utils/progressionUtils';
+import type { Character, CharacterClass } from '../../src/types';
 
 // Helper to create a mock character class
 const createMockClass = (): CharacterClass => ({
@@ -125,3 +125,4 @@ describe('Progression Utils', () => {
         });
     });
 });
+

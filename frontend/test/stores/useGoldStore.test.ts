@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { useGoldStore } from '../useGoldStore';
+import { useGoldStore } from '../../src/stores/useGoldStore';
 
 describe('useGoldStore', () => {
   beforeEach(() => {
@@ -116,3 +116,5 @@ describe('useGoldStore', () => {
     });
   });
 });
+
+
