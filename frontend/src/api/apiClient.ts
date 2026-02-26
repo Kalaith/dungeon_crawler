@@ -1,102 +1,63 @@
-import { env } from '../config/env';
+import axios from 'axios';
+import { useAuthStore } from '../stores/authStore';
 
-export interface ApiResponse<T> {
-  data: T;
-  success: boolean;
-  message?: string;
-}
+// Determine the base URL from the environment or use a relative path
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
-export interface ApiError {
-  message: string;
-  status?: number;
-  code?: string;
-}
-
-class ApiClient {
-  private baseURL: string;
-
-  constructor(baseURL: string) {
-    this.baseURL = baseURL;
-  }
-
-  async get<T>(endpoint: string): Promise<ApiResponse<T>> {
-    const response = await fetch(`${this.baseURL}${endpoint}`, {
-      method: 'GET',
-      headers: {
+/**
+ * Standardized Web Hatchery Axios Instance
+ * Automatically handles Bearer tokens and 401 Unauthorized redirects.
+ */
+export const apiClient = axios.create({
+    baseURL: BASE_URL,
+    headers: {
         'Content-Type': 'application/json',
-      },
-    });
+    },
+});
 
-    if (!response.ok) {
-      const error: ApiError = {
-        message: `HTTP ${response.status}: ${response.statusText}`,
-        status: response.status,
-      };
-      throw error;
+// Request Interceptor: Attach Auth Token
+apiClient.interceptors.request.use(
+    (config) => {
+        // We intentionally interact directly with localStorage here to avoid
+        // reactivity issues or circular dependencies when initializing Axios outside of React.
+        try {
+            const authStorageStr = localStorage.getItem('auth-storage');
+            if (authStorageStr) {
+                const authData = JSON.parse(authStorageStr);
+                // Zustand persist wraps state in a `state` object
+                const token = authData?.state?.token;
+                if (token) {
+                    config.headers.Authorization = `Bearer ${token}`;
+                }
+            }
+        } catch (error) {
+            console.warn('Failed to parse auth token from local storage', error);
+        }
+
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
     }
+);
 
-    return response.json();
-  }
+// Response Interceptor: Handle 401s and standardize errors
+apiClient.interceptors.response.use(
+    (response) => {
+        return response;
+    },
+    (error) => {
+        // Intercept 401 Unauthorized and redirect to central login
+        if (error.response?.status === 401) {
+            const loginUrl =
+                error.response?.data?.login_url ||
+                import.meta.env.VITE_WEB_HATCHERY_LOGIN_URL;
 
-  async post<T>(endpoint: string, data?: unknown): Promise<ApiResponse<T>> {
-    const response = await fetch(`${this.baseURL}${endpoint}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      const error: ApiError = {
-        message: `HTTP ${response.status}: ${response.statusText}`,
-        status: response.status,
-      };
-      throw error;
+            if (loginUrl) {
+                // Update the Zustand store to trigger the login UI state
+                useAuthStore.getState().setLoginUrl(loginUrl);
+            }
+        }
+        return Promise.reject(error);
     }
-
-    return response.json();
-  }
-
-  async put<T>(endpoint: string, data?: unknown): Promise<ApiResponse<T>> {
-    const response = await fetch(`${this.baseURL}${endpoint}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      const error: ApiError = {
-        message: `HTTP ${response.status}: ${response.statusText}`,
-        status: response.status,
-      };
-      throw error;
-    }
-
-    return response.json();
-  }
-
-  async delete<T>(endpoint: string): Promise<ApiResponse<T>> {
-    const response = await fetch(`${this.baseURL}${endpoint}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      const error: ApiError = {
-        message: `HTTP ${response.status}: ${response.statusText}`,
-        status: response.status,
-      };
-      throw error;
-    }
-
-    return response.json();
-  }
-}
-
-// Export singleton instance
-export const apiClient = new ApiClient(env.apiBaseUrl);
+);
