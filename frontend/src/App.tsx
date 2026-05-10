@@ -11,9 +11,13 @@ import { MainLayout } from './components/layout/MainLayout';
 import { PartyStatus } from './components/game/PartyStatus';
 import { CombatLog } from './components/combat/CombatLog';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { usePartyStore } from './stores/usePartyStore';
 import { FeatSelectionModal } from './components/party/FeatSelectionModal';
+import {
+  loadDungeonCrawlerBackendState,
+  startDungeonCrawlerBackendSync,
+} from './stores/backendSync';
 
 function App() {
   const { gameState } = useGameStateStore();
@@ -32,6 +36,26 @@ function App() {
       setIgnoredFeatCharIds(prev => [...prev, characterWithPendingFeat.id]);
     }
   };
+
+  useEffect(() => {
+    let stopSync: (() => void) | null = null;
+    let cancelled = false;
+
+    void loadDungeonCrawlerBackendState()
+      .catch(error => {
+        console.error('Failed to load Dungeon Crawler backend state:', error);
+      })
+      .finally(() => {
+        if (!cancelled) {
+          stopSync = startDungeonCrawlerBackendSync();
+        }
+      });
+
+    return () => {
+      cancelled = true;
+      stopSync?.();
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-etrian-900 text-cyan-100 font-sans selection:bg-cyan-500 selection:text-white">
